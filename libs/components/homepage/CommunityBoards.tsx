@@ -4,6 +4,10 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Stack, Typography } from '@mui/material';
 import CommunityCard from './CommunityCard';
 import { BoardArticle } from '../../types/board-article/board-article';
+import { useQuery } from '@apollo/client';
+import { GET_BOARD_ARTICLES } from '../../../apollo/user/query';
+import { T } from '../../types/common';
+import { BoardArticleCategory } from '../../enums/board-article.enum';
 
 const CommunityBoards = () => {
 	const device = useDeviceDetect();
@@ -16,6 +20,33 @@ const CommunityBoards = () => {
 	const [freeArticles, setFreeArticles] = useState<BoardArticle[]>([]);
 
 	/** APOLLO REQUESTS **/
+	const {
+		loading: getNewArticleLoading,
+		data: getNewArticleData,
+		error: getNewArticleError,
+		refetch: getNewArticleRefetch,
+	} = useQuery(GET_BOARD_ARTICLES, {
+		fetchPolicy: 'network-only',
+		variables: { input: { ...searchCommunity, limit: 6, search: { articleCategory: BoardArticleCategory.NEWS } } },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setNewsArticles(data?.getBoardArticles?.list);
+		},
+	});
+
+	const {
+		loading: getFreeArticlesLoading,
+		data: getFreeArticleData,
+		error: getFreeArticleError,
+		refetch: getFreeArticleRefetch,
+	} = useQuery(GET_BOARD_ARTICLES, {
+		fetchPolicy: 'network-only',
+		variables: { input: { ...searchCommunity, limit: 3, search: { articleCategory: BoardArticleCategory.FREE } } },
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			setFreeArticles(data?.getBoardArticles?.list);
+		},
+	});
 
 	if (device === 'mobile') {
 		return <div>COMMUNITY BOARDS (MOBILE)</div>;
