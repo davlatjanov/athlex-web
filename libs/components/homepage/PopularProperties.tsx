@@ -9,8 +9,8 @@ import PopularPropertyCard from './PopularPropertyCard';
 import { Property } from '../../types/property/property';
 import Link from 'next/link';
 import { PropertiesInquiry } from '../../types/property/property.input';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
 import { useQuery } from '@apollo/client';
+import { GET_PROPERTIES } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 
 interface PopularPropertiesProps {
@@ -23,6 +23,7 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 	const [popularProperties, setPopularProperties] = useState<Property[]>([]);
 
 	/** APOLLO REQUESTS **/
+
 	const {
 		loading: getPropertiesLoading,
 		data: getPropertiesData,
