@@ -84,6 +84,8 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		},
 	});
 
+	console.log('searchFilter:', searchFilter);
+
 	const {
 		loading: getPropertiesLoading,
 		data: getPropertiesData,
