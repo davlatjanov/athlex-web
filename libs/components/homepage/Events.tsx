@@ -2,93 +2,96 @@ import React from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 
-interface EventData {
-	eventTitle: string;
-	city: string;
-	description: string;
-	imageSrc: string;
-}
-const eventsData: EventData[] = [
+const gymEvents = [
 	{
-		eventTitle: 'Paradise City Theme Park',
-		city: 'Incheon',
-		description:
-			'Experience magic and wonder in Incheon with a visit to the night-themed indoor theme park Wonderbox at Paradise City!',
-		imageSrc: '/img/events/INCHEON.webp',
+		title: 'Iron Classic Championship',
+		category: 'COMPETITION',
+		date: 'MAR 15',
+		location: 'Los Angeles, CA',
+		desc: 'The biggest natural bodybuilding championship of the year. Open to all Athlex members. Cash prizes and trophies.',
+		gradient: 'linear-gradient(160deg, #1a0505 0%, #3d0f0f 80%, #1a0505 100%)',
 	},
 	{
-		eventTitle: 'Taebaeksan Snow Festival',
-		city: 'Seoul',
-		description: 'If you have the opportunity to travel to South Korea, do not miss the Taebaeksan Snow Festival!',
-		imageSrc: '/img/events/SEOUL.webp',
+		title: "Beginner's Boot Camp",
+		category: 'WORKSHOP',
+		date: 'APR 02',
+		location: 'Online — Zoom',
+		desc: 'A 3-day intensive workshop for beginners. Learn the fundamentals of training, nutrition, and recovery.',
+		gradient: 'linear-gradient(160deg, #05051a 0%, #0f0f3d 80%, #05051a 100%)',
 	},
 	{
-		eventTitle: 'Suseong Lake Event',
-		city: 'Daegu',
-		description: 'The Suseong Lake Festival is a culture and arts festival held alongside Suseongmot Lake!',
-		imageSrc: '/img/events/DAEGU.webp',
+		title: 'CrossFit Open 2025',
+		category: 'COMPETITION',
+		date: 'APR 20',
+		location: 'New York, NY',
+		desc: 'Join thousands of athletes worldwide in the annual CrossFit Open. Register through Athlex and track your scores.',
+		gradient: 'linear-gradient(160deg, #0a1a05 0%, #1a3d0f 80%, #0a1a05 100%)',
 	},
 	{
-		eventTitle: 'Sand Festival',
-		city: 'Busan',
-		description:
-			'Haeundae Sand Festival, the nation’s largest eco-friendly exhibition on sand, is held at Haeundae Beach!',
-		imageSrc: '/img/events/BUSAN.webp',
+		title: 'Nutrition & Performance Summit',
+		category: 'SEMINAR',
+		date: 'MAY 10',
+		location: 'Chicago, IL',
+		desc: 'Industry experts share cutting-edge research on sports nutrition, supplementation, and performance optimization.',
+		gradient: 'linear-gradient(160deg, #1a0a05 0%, #3d200f 80%, #1a0a05 100%)',
 	},
 ];
-
-const EventCard = ({ event }: { event: EventData }) => {
-	const device = useDeviceDetect();
-
-	if (device === 'mobile') {
-		return <div>EVENT CARD</div>;
-	} else {
-		return (
-			<Stack
-				className="event-card"
-				style={{
-					backgroundImage: `url(${event?.imageSrc})`,
-					backgroundSize: 'cover',
-					backgroundPosition: 'center',
-					backgroundRepeat: 'no-repeat',
-				}}
-			>
-				<Box component={'div'} className={'info'}>
-					<strong>{event?.city}</strong>
-					<span>{event?.eventTitle}</span>
-				</Box>
-				<Box component={'div'} className={'more'}>
-					<span>{event?.description}</span>
-				</Box>
-			</Stack>
-		);
-	}
-};
 
 const Events = () => {
 	const device = useDeviceDetect();
 
 	if (device === 'mobile') {
-		return <div>EVENT CARD</div>;
-	} else {
 		return (
-			<Stack className={'events'}>
+			<Stack className={'gym-events'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
-						<Box component={'div'} className={'left'}>
-							<span className={'white'}>Events</span>
-							<p className={'white'}>Events waiting your attention!</p>
-						</Box>
+						<span className={'section-label'}>UPCOMING</span>
+						<h2>Events</h2>
 					</Stack>
-					<Stack className={'card-wrapper'}>
-						{eventsData.map((event: EventData) => {
-							return <EventCard event={event} key={event?.eventTitle} />;
-						})}
+					<Stack className={'event-cards'}>
+						{gymEvents.map((event) => (
+							<Box key={event.title} className={'event-card'} style={{ background: event.gradient }}>
+								<div className={'event-top'}>
+									<span className={'event-category'}>{event.category}</span>
+									<span className={'event-date'}>{event.date}</span>
+								</div>
+								<strong className={'event-title'}>{event.title}</strong>
+								<span className={'event-location'}>📍 {event.location}</span>
+							</Box>
+						))}
 					</Stack>
 				</Stack>
 			</Stack>
 		);
 	}
+
+	return (
+		<Stack className={'gym-events'}>
+			<Stack className={'container'}>
+				<Stack className={'info-box'}>
+					<Box component={'div'} className={'left'}>
+						<span className={'section-label'}>UPCOMING EVENTS</span>
+						<h2 className={'white'}>Events & Competitions</h2>
+						<p className={'white'}>Don&apos;t miss what&apos;s coming next</p>
+					</Box>
+				</Stack>
+				<Stack className={'event-cards'}>
+					{gymEvents.map((event) => (
+						<Box key={event.title} className={'event-card'} style={{ background: event.gradient }}>
+							<div className={'event-top'}>
+								<span className={'event-category'}>{event.category}</span>
+								<span className={'event-date'}>{event.date}</span>
+							</div>
+							<strong className={'event-title'}>{event.title}</strong>
+							<span className={'event-location'}>📍 {event.location}</span>
+							<p className={'event-desc'}>{event.desc}</p>
+							<button className={'btn-event'}>Learn More</button>
+						</Box>
+					))}
+				</Stack>
+			</Stack>
+		</Stack>
+	);
 };
 
 export default Events;

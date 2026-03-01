@@ -4,8 +4,7 @@ import Head from 'next/head';
 import Top from '../Top';
 import Footer from '../Footer';
 import { Stack } from '@mui/material';
-import FiberContainer from '../common/FiberContainer';
-import HeaderFilter from '../homepage/HeaderFilter';
+import HeroSection from '../homepage/HeroSection';
 import { userVar } from '../../../apollo/store';
 import { useReactiveVar } from '@apollo/client';
 import { getJwtToken, updateUserInfo } from '../../auth';
@@ -17,7 +16,7 @@ import 'swiper/css/navigation';
 const withLayoutMain = (Component: any) => {
 	return (props: any) => {
 		const device = useDeviceDetect();
-		const user = useReactiveVar(userVar);
+		useReactiveVar(userVar);
 
 		/** LIFECYCLES **/
 		useEffect(() => {
@@ -25,24 +24,23 @@ const withLayoutMain = (Component: any) => {
 			if (jwt) updateUserInfo(jwt);
 		}, []);
 
-		/** HANDLERS **/
-
 		if (device == 'mobile') {
 			return (
 				<>
 					<Head>
-						<title>Nestar</title>
-						<meta name={'title'} content={`Nestar`} />
+						<title>Athlex — Premium Fitness Programs & Expert Trainers</title>
+						<meta name={'description'} content={'Find top-rated fitness programs, expert personal trainers, and a supportive gym community on Athlex.'} />
+						<meta name={'keywords'} content={'gym, fitness programs, personal trainers, workout, muscle gain, weight loss, athlex'} />
+						<meta property={'og:title'} content={'Athlex — Forge Your Limits'} />
+						<meta property={'og:description'} content={'Premium training programs and expert coaches on Athlex.'} />
 					</Head>
 					<Stack id="mobile-wrap">
 						<Stack id={'top'}>
 							<Top />
 						</Stack>
-
 						<Stack id={'main'}>
 							<Component {...props} />
 						</Stack>
-
 						<Stack id={'footer'}>
 							<Footer />
 						</Stack>
@@ -53,8 +51,11 @@ const withLayoutMain = (Component: any) => {
 			return (
 				<>
 					<Head>
-						<title>Nestar</title>
-						<meta name={'title'} content={`Nestar`} />
+						<title>Athlex — Premium Fitness Programs & Expert Trainers</title>
+						<meta name={'description'} content={'Find top-rated fitness programs, expert personal trainers, and a supportive gym community on Athlex.'} />
+						<meta name={'keywords'} content={'gym, fitness programs, personal trainers, workout, muscle gain, weight loss, athlex'} />
+						<meta property={'og:title'} content={'Athlex — Forge Your Limits'} />
+						<meta property={'og:description'} content={'Premium training programs and expert coaches on Athlex.'} />
 					</Head>
 					<Stack id="pc-wrap">
 						<Stack id={'top'}>
@@ -62,10 +63,7 @@ const withLayoutMain = (Component: any) => {
 						</Stack>
 
 						<Stack className={'header-main'}>
-							<FiberContainer />
-							<Stack className={'container'}>
-								<HeaderFilter />
-							</Stack>
+							<HeroSection />
 						</Stack>
 
 						<Stack id={'main'}>

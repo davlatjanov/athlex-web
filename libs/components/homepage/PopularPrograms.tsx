@@ -1,134 +1,122 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
-import PopularPropertyCard from './PopularProgramCard';
-import { Property } from '../../types/property/property';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, Pagination } from 'swiper';
 import Link from 'next/link';
-import { PropertiesInquiry } from '../../types/property/property.input';
-import { useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
-import { T } from '../../types/common';
 
-interface PopularPropertiesProps {
-	initialInput: PropertiesInquiry;
-}
+const popularPrograms = [
+	{ id: '1', name: 'The 6-Week Shred', type: 'WEIGHT LOSS', level: 'INTERMEDIATE', duration: 6, price: 34, views: 12400, members: 2100, gradient: 'linear-gradient(160deg, #0a1a0a 0%, #1a3d1a 100%)' },
+	{ id: '2', name: 'Beginner Strength Foundation', type: 'STRENGTH', level: 'BEGINNER', duration: 8, price: 0, views: 10800, members: 3200, gradient: 'linear-gradient(160deg, #0a0a1a 0%, #1a1a3d 100%)' },
+	{ id: '3', name: 'Body Recomposition Pro', type: 'FUNCTIONAL', level: 'INTERMEDIATE', duration: 12, price: 59, views: 9600, members: 1540, gradient: 'linear-gradient(160deg, #1a0a0a 0%, #2d1a1a 100%)' },
+	{ id: '4', name: 'Morning Mobility Flow', type: 'MOBILITY', level: 'BEGINNER', duration: 4, price: 0, views: 8900, members: 4100, gradient: 'linear-gradient(160deg, #0a1a1a 0%, #1a2d2d 100%)' },
+	{ id: '5', name: 'Powerlifting Prep', type: 'STRENGTH', level: 'ADVANCED', duration: 16, price: 79, views: 7800, members: 890, gradient: 'linear-gradient(160deg, #1a1a0a 0%, #2d2d1a 100%)' },
+	{ id: '6', name: 'Cardio Kickstarter', type: 'CARDIO', level: 'BEGINNER', duration: 4, price: 15, views: 7200, members: 2780, gradient: 'linear-gradient(160deg, #1a0a1a 0%, #2d1a2d 100%)' },
+	{ id: '7', name: 'Yoga for Athletes', type: 'YOGA', level: 'INTERMEDIATE', duration: 6, price: 29, views: 6500, members: 1230, gradient: 'linear-gradient(160deg, #0f1a0a 0%, #1a2d12 100%)' },
+];
 
-const PopularProperties = (props: PopularPropertiesProps) => {
-	const { initialInput } = props;
+const PopularPrograms = () => {
 	const device = useDeviceDetect();
-	const [popularProperties, setPopularProperties] = useState<Property[]>([]);
-
-	/** APOLLO REQUESTS **/
-
-	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
-	} = useQuery(GET_PROPERTIES, {
-		fetchPolicy: 'cache-and-network',
-		variables: { input: initialInput },
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setPopularProperties(data?.getProperties?.list);
-		},
-	});
-
-	/** HANDLERS **/
-
-	if (!popularProperties) return null;
 
 	if (device === 'mobile') {
 		return (
-			<Stack className={'popular-properties'}>
+			<Stack className={'popular-programs'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
-						<span>Popular properties</span>
+						<span className={'section-label'}>POPULAR</span>
+						<h2>Popular Programs</h2>
 					</Stack>
 					<Stack className={'card-box'}>
-						<Swiper
-							className={'popular-property-swiper'}
-							slidesPerView={'auto'}
-							centeredSlides={true}
-							spaceBetween={25}
-							modules={[Autoplay]}
-						>
-							{popularProperties.map((property: Property) => {
-								return (
-									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularPropertyCard property={property} />
-									</SwiperSlide>
-								);
-							})}
+						<Swiper className={'program-swiper'} slidesPerView={'auto'} centeredSlides spaceBetween={25} modules={[Autoplay]}>
+							{popularPrograms.map((prog) => (
+								<SwiperSlide key={prog.id} className={'program-slide'}>
+									<Link href={`/programs/${prog.id}`}>
+										<Box className={'program-card popular-card'}>
+											<div className={'card-img'} style={{ background: prog.gradient }}>
+												<span className={'type-badge'}>{prog.type}</span>
+												<span className={'price-tag'}>{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
+											</div>
+											<div className={'card-body'}>
+												<strong className={'card-title'}>{prog.name}</strong>
+												<div className={'card-meta'}>
+													<span className={'level-badge'}>{prog.level}</span>
+													<span className={'duration'}>{prog.duration}W</span>
+												</div>
+												<div className={'card-footer'}>
+													<span className={'views'}>👁 {(prog.views / 1000).toFixed(1)}K</span>
+													<span className={'card-members'}>👤 {prog.members}</span>
+												</div>
+											</div>
+										</Box>
+									</Link>
+								</SwiperSlide>
+							))}
 						</Swiper>
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	} else {
-		return (
-			<Stack className={'popular-properties'}>
-				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<Box component={'div'} className={'left'}>
-							<span>Popular properties</span>
-							<p>Popularity is based on views</p>
-						</Box>
-						<Box component={'div'} className={'right'}>
-							<div className={'more-box'}>
-								<Link href={'/property'}>
-									<span>See All Categories</span>
-								</Link>
-								<img src="/img/icons/rightup.svg" alt="" />
-							</div>
-						</Box>
-					</Stack>
-					<Stack className={'card-box'}>
-						<Swiper
-							className={'popular-property-swiper'}
-							slidesPerView={'auto'}
-							spaceBetween={25}
-							modules={[Autoplay, Navigation, Pagination]}
-							navigation={{
-								nextEl: '.swiper-popular-next',
-								prevEl: '.swiper-popular-prev',
-							}}
-							pagination={{
-								el: '.swiper-popular-pagination',
-							}}
-						>
-							{popularProperties.map((property: Property) => {
-								return (
-									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularPropertyCard property={property} />
-									</SwiperSlide>
-								);
-							})}
-						</Swiper>
-					</Stack>
-					<Stack className={'pagination-box'}>
-						<WestIcon className={'swiper-popular-prev'} />
-						<div className={'swiper-popular-pagination'}></div>
-						<EastIcon className={'swiper-popular-next'} />
 					</Stack>
 				</Stack>
 			</Stack>
 		);
 	}
+
+	return (
+		<Stack className={'popular-programs'}>
+			<Stack className={'container'}>
+				<Stack className={'info-box'}>
+					<Box component={'div'} className={'left'}>
+						<span className={'section-label'}>MOST VIEWED</span>
+						<h2>Popular Programs</h2>
+						<p>Ranked by total views</p>
+					</Box>
+					<Box component={'div'} className={'right'}>
+						<div className={'pagination-box'}>
+							<WestIcon className={'swiper-popular-prev'} />
+							<div className={'swiper-popular-pagination'} />
+							<EastIcon className={'swiper-popular-next'} />
+						</div>
+						<Link href={'/programs'}>
+							<span className={'see-all-link'}>See All →</span>
+						</Link>
+					</Box>
+				</Stack>
+				<Stack className={'card-box'}>
+					<Swiper
+						className={'program-swiper'}
+						slidesPerView={'auto'}
+						spaceBetween={20}
+						modules={[Autoplay, Navigation, Pagination]}
+						navigation={{ nextEl: '.swiper-popular-next', prevEl: '.swiper-popular-prev' }}
+						pagination={{ el: '.swiper-popular-pagination' }}
+					>
+						{popularPrograms.map((prog) => (
+							<SwiperSlide key={prog.id} className={'program-slide'}>
+								<Link href={`/programs/${prog.id}`}>
+									<Box className={'program-card popular-card'}>
+										<div className={'card-img'} style={{ background: prog.gradient }}>
+											<span className={'type-badge'}>{prog.type}</span>
+											<span className={'price-tag'}>{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
+										</div>
+										<div className={'card-body'}>
+											<strong className={'card-title'}>{prog.name}</strong>
+											<div className={'card-meta'}>
+												<span className={'level-badge'}>{prog.level}</span>
+												<span className={'duration'}>{prog.duration} Weeks</span>
+											</div>
+											<div className={'card-footer'}>
+												<span className={'views'}>👁 {(prog.views / 1000).toFixed(1)}K views</span>
+												<span className={'card-members'}>👤 {prog.members}</span>
+											</div>
+										</div>
+									</Box>
+								</Link>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</Stack>
+			</Stack>
+		</Stack>
+	);
 };
 
-PopularProperties.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 7,
-		sort: 'propertyViews',
-		direction: 'DESC',
-		search: {},
-	},
-};
-
-export default PopularProperties;
+export default PopularPrograms;

@@ -175,8 +175,123 @@ body::-webkit-scrollbar {
 		position: relative;
 		width: 100%;
 		height: 860px;
-		background-image: url('/img/banner/header1.svg');
-		background-size: cover;
+		background: linear-gradient(135deg, #0a0a0a 0%, #1a0505 40%, #0a0505 70%, #0a0a0a 100%);
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 200px;
+			background: linear-gradient(to bottom, transparent, #0a0a0a);
+			z-index: 1;
+			pointer-events: none;
+		}
+
+		.hero-content-wrapper {
+			position: relative;
+			z-index: 2;
+			flex-direction: column;
+			justify-content: center;
+			padding-top: 87px;
+
+			.hero-inner {
+				display: flex;
+				flex-direction: column;
+				max-width: 700px;
+
+				.hero-eyebrow {
+					display: block;
+					margin-bottom: 16px;
+					color: #E92C28;
+					font-family: $font;
+					font-size: 12px;
+					font-weight: 700;
+					letter-spacing: 5px;
+					text-transform: uppercase;
+				}
+
+				.hero-title {
+					color: #ffffff;
+					font-family: $font;
+					font-size: 82px;
+					font-weight: 900;
+					line-height: 0.95;
+					text-transform: uppercase;
+					letter-spacing: -2px;
+					margin: 0 0 24px;
+
+					.hero-accent {
+						color: #E92C28;
+						display: block;
+					}
+				}
+
+				.hero-desc {
+					color: #aaaaaa;
+					font-family: $font;
+					font-size: 17px;
+					line-height: 1.7;
+					max-width: 520px;
+					margin: 0 0 36px;
+				}
+
+				.hero-cta {
+					display: flex;
+					flex-direction: row;
+					gap: 16px;
+					margin-bottom: 32px;
+
+					.btn-primary {
+						padding: 16px 36px;
+						background: #E92C28;
+						color: #fff;
+						font-family: $font;
+						font-size: 15px;
+						font-weight: 700;
+						letter-spacing: 1px;
+						text-transform: uppercase;
+						border: 2px solid #E92C28;
+						border-radius: 6px;
+						cursor: pointer;
+						transition: background 0.2s, transform 0.2s;
+						&:hover { background: #ff3d39; border-color: #ff3d39; transform: translateY(-2px); }
+					}
+
+					.btn-outline {
+						padding: 16px 36px;
+						background: transparent;
+						color: #ffffff;
+						font-family: $font;
+						font-size: 15px;
+						font-weight: 700;
+						letter-spacing: 1px;
+						text-transform: uppercase;
+						border: 2px solid rgba(255,255,255,0.2);
+						border-radius: 6px;
+						cursor: pointer;
+						transition: border-color 0.2s, color 0.2s, transform 0.2s;
+						&:hover { border-color: #E92C28; color: #E92C28; transform: translateY(-2px); }
+					}
+				}
+
+				.hero-badges {
+					display: flex;
+					gap: 24px;
+					span {
+						color: #666666;
+						font-family: $font;
+						font-size: 13px;
+						font-weight: 500;
+					}
+				}
+			}
+		}
+
 		.container {
 			position: relative;
 			margin-top: 20px;

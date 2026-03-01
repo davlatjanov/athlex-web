@@ -1,144 +1,123 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
-import TopPropertyCard from './TopProgramCard';
-import { PropertiesInquiry } from '../../types/property/property.input';
-import { Property } from '../../types/property/property';
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
-import { T } from '../../types/common';
-import { Message } from '../../enums/common.enum';
-import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
+import Link from 'next/link';
 
-interface TopPropertiesProps {
-	initialInput: PropertiesInquiry;
-}
+const topPrograms = [
+	{ id: '1', name: 'Elite Mass Protocol', type: 'MASS GAIN', level: 'ADVANCED', duration: 16, price: 89, rank: 1, rating: 4.9, gradient: 'linear-gradient(160deg, #1a0505 0%, #3d0f0f 100%)' },
+	{ id: '2', name: 'Total Body Transformation', type: 'FUNCTIONAL', level: 'INTERMEDIATE', duration: 12, price: 69, rank: 2, rating: 4.8, gradient: 'linear-gradient(160deg, #050a1a 0%, #0f1a3d 100%)' },
+	{ id: '3', name: 'Olympic Strength Base', type: 'STRENGTH', level: 'ADVANCED', duration: 20, price: 99, rank: 3, rating: 4.9, gradient: 'linear-gradient(160deg, #0a0a0a 0%, #1f1f1f 100%)' },
+	{ id: '4', name: 'Rapid Fat Loss System', type: 'WEIGHT LOSS', level: 'INTERMEDIATE', duration: 8, price: 49, rank: 4, rating: 4.7, gradient: 'linear-gradient(160deg, #0a1a05 0%, #1a3d0f 100%)' },
+	{ id: '5', name: 'Advanced Yoga & Breath', type: 'YOGA', level: 'ADVANCED', duration: 10, price: 55, rank: 5, rating: 4.8, gradient: 'linear-gradient(160deg, #05101a 0%, #0f203d 100%)' },
+	{ id: '6', name: 'Recovery & Rebuild', type: 'REHABILITATION', level: 'BEGINNER', duration: 6, price: 39, rank: 6, rating: 4.9, gradient: 'linear-gradient(160deg, #1a1005 0%, #3d250f 100%)' },
+	{ id: '7', name: 'Sport Performance Edge', type: 'FUNCTIONAL', level: 'ADVANCED', duration: 14, price: 75, rank: 7, rating: 4.7, gradient: 'linear-gradient(160deg, #100a1a 0%, #1a123d 100%)' },
+	{ id: '8', name: 'Beginner Blueprint', type: 'STRENGTH', level: 'BEGINNER', duration: 8, price: 0, rank: 8, rating: 4.8, gradient: 'linear-gradient(160deg, #0a0a1a 0%, #151530 100%)' },
+];
 
-const TopProperties = (props: TopPropertiesProps) => {
-	const { initialInput } = props;
+const TopPrograms = () => {
 	const device = useDeviceDetect();
-	const [topProperties, setTopProperties] = useState<Property[]>([]);
-
-	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
-
-	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
-	} = useQuery(GET_PROPERTIES, {
-		fetchPolicy: 'cache-and-network',
-		variables: { input: initialInput },
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setTopProperties(data?.getProperties?.list);
-		},
-	});
-	/** HANDLERS **/
-	const likePropertyHandler = async (user: T, id: string) => {
-		try {
-			if (!id) return;
-			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-
-			//execute likeTargetMutation
-			await likeTargetProperty({ variables: { input: id } });
-			//execute getPropertiesRefetch
-			await getPropertiesRefetch({ input: initialInput });
-
-			await sweetTopSmallSuccessAlert('success', 800);
-		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err.message);
-			sweetMixinErrorAlert(err.message).then();
-		}
-	};
 
 	if (device === 'mobile') {
 		return (
-			<Stack className={'top-properties'}>
+			<Stack className={'top-programs'}>
 				<Stack className={'container'}>
 					<Stack className={'info-box'}>
-						<span>Top properties</span>
+						<span className={'section-label'}>TOP RATED</span>
+						<h2>Top Programs</h2>
 					</Stack>
 					<Stack className={'card-box'}>
-						<Swiper
-							className={'top-property-swiper'}
-							slidesPerView={'auto'}
-							centeredSlides={true}
-							spaceBetween={15}
-							modules={[Autoplay]}
-						>
-							{topProperties.map((property: Property) => {
-								return (
-									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										{/*	<TopPropertyCard property={property} /> */}
-									</SwiperSlide>
-								);
-							})}
-						</Swiper>
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	} else {
-		return (
-			<Stack className={'top-properties'}>
-				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<Box component={'div'} className={'left'}>
-							<span>Top properties</span>
-							<p>Check out our Top Properties</p>
-						</Box>
-						<Box component={'div'} className={'right'}>
-							<div className={'pagination-box'}>
-								<WestIcon className={'swiper-top-prev'} />
-								<div className={'swiper-top-pagination'}></div>
-								<EastIcon className={'swiper-top-next'} />
-							</div>
-						</Box>
-					</Stack>
-					<Stack className={'card-box'}>
-						<Swiper
-							className={'top-property-swiper'}
-							slidesPerView={'auto'}
-							spaceBetween={15}
-							modules={[Autoplay, Navigation, Pagination]}
-							navigation={{
-								nextEl: '.swiper-top-next',
-								prevEl: '.swiper-top-prev',
-							}}
-							pagination={{
-								el: '.swiper-top-pagination',
-							}}
-						>
-							{topProperties.map((property: Property) => {
-								return (
-									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										<TopPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
-									</SwiperSlide>
-								);
-							})}
+						<Swiper className={'program-swiper'} slidesPerView={'auto'} centeredSlides spaceBetween={15} modules={[Autoplay]}>
+							{topPrograms.map((prog) => (
+								<SwiperSlide key={prog.id} className={'program-slide'}>
+									<Link href={`/programs/${prog.id}`}>
+										<Box className={'program-card top-card'}>
+											<div className={'card-img'} style={{ background: prog.gradient }}>
+												<span className={'rank-badge'}>#{prog.rank}</span>
+												<span className={'price-tag'}>{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
+											</div>
+											<div className={'card-body'}>
+												<strong className={'card-title'}>{prog.name}</strong>
+												<div className={'card-meta'}>
+													<span className={'type-badge small'}>{prog.type}</span>
+													<span className={'rating'}>★ {prog.rating}</span>
+												</div>
+												<div className={'card-footer'}>
+													<span className={'level-badge'}>{prog.level}</span>
+													<span className={'duration'}>{prog.duration}W</span>
+												</div>
+											</div>
+										</Box>
+									</Link>
+								</SwiperSlide>
+							))}
 						</Swiper>
 					</Stack>
 				</Stack>
 			</Stack>
 		);
 	}
+
+	return (
+		<Stack className={'top-programs'}>
+			<Stack className={'container'}>
+				<Stack className={'info-box'}>
+					<Box component={'div'} className={'left'}>
+						<span className={'section-label'}>TOP RATED</span>
+						<h2>Top Programs</h2>
+						<p>Our highest-ranked training programs</p>
+					</Box>
+					<Box component={'div'} className={'right'}>
+						<div className={'pagination-box'}>
+							<WestIcon className={'swiper-top-prev'} />
+							<div className={'swiper-top-pagination'} />
+							<EastIcon className={'swiper-top-next'} />
+						</div>
+						<Link href={'/programs'}>
+							<span className={'see-all-link'}>See All →</span>
+						</Link>
+					</Box>
+				</Stack>
+				<Stack className={'card-box'}>
+					<Swiper
+						className={'program-swiper'}
+						slidesPerView={'auto'}
+						spaceBetween={20}
+						modules={[Autoplay, Navigation, Pagination]}
+						navigation={{ nextEl: '.swiper-top-next', prevEl: '.swiper-top-prev' }}
+						pagination={{ el: '.swiper-top-pagination' }}
+					>
+						{topPrograms.map((prog) => (
+							<SwiperSlide key={prog.id} className={'program-slide'}>
+								<Link href={`/programs/${prog.id}`}>
+									<Box className={'program-card top-card'}>
+										<div className={'card-img'} style={{ background: prog.gradient }}>
+											<span className={'rank-badge'}>#{prog.rank}</span>
+											<span className={'price-tag'}>{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
+										</div>
+										<div className={'card-body'}>
+											<strong className={'card-title'}>{prog.name}</strong>
+											<div className={'card-meta'}>
+												<span className={'type-badge small'}>{prog.type}</span>
+												<span className={'rating'}>★ {prog.rating}</span>
+											</div>
+											<div className={'card-footer'}>
+												<span className={'level-badge'}>{prog.level}</span>
+												<span className={'duration'}>{prog.duration} Weeks</span>
+											</div>
+										</div>
+									</Box>
+								</Link>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				</Stack>
+			</Stack>
+		</Stack>
+	);
 };
 
-TopProperties.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 8,
-		sort: 'propertyRank',
-		direction: 'DESC',
-		search: {},
-	},
-};
-
-export default TopProperties;
+export default TopPrograms;
