@@ -33,14 +33,14 @@ const Home: NextPage = () => {
 				<ProgramCategories />
 				<TrendPrograms />
 				<PopularPrograms />
-				<Advertisement />
+				{/* <Advertisement /> */}
 				<TopPrograms />
 				<TopTrainers />
 				<AICoachTeaser />
 				<FeaturedProducts />
 				<MembershipPlans />
 				<Events />
-				<CommunityBoards />
+				{/* <CommunityBoards /> */}
 			</Stack>
 		);
 	} else {
@@ -50,14 +50,14 @@ const Home: NextPage = () => {
 				<ProgramCategories />
 				<TrendPrograms />
 				<PopularPrograms />
-				<Advertisement />
+				{/* <Advertisement /> */}
 				<TopPrograms />
 				<TopTrainers />
 				<AICoachTeaser />
 				<FeaturedProducts />
 				<MembershipPlans />
 				<Events />
-				<CommunityBoards />
+				{/* <CommunityBoards /> */}
 			</Stack>
 		);
 	}

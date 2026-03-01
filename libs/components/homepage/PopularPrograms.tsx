@@ -6,15 +6,16 @@ import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import Link from 'next/link';
+import ProgramCard from './ProgramCard';
 
 const popularPrograms = [
-	{ id: '1', name: 'The 6-Week Shred', type: 'WEIGHT LOSS', level: 'INTERMEDIATE', duration: 6, price: 34, views: 12400, members: 2100, gradient: 'linear-gradient(160deg, #0a1a0a 0%, #1a3d1a 100%)' },
-	{ id: '2', name: 'Beginner Strength Foundation', type: 'STRENGTH', level: 'BEGINNER', duration: 8, price: 0, views: 10800, members: 3200, gradient: 'linear-gradient(160deg, #0a0a1a 0%, #1a1a3d 100%)' },
-	{ id: '3', name: 'Body Recomposition Pro', type: 'FUNCTIONAL', level: 'INTERMEDIATE', duration: 12, price: 59, views: 9600, members: 1540, gradient: 'linear-gradient(160deg, #1a0a0a 0%, #2d1a1a 100%)' },
-	{ id: '4', name: 'Morning Mobility Flow', type: 'MOBILITY', level: 'BEGINNER', duration: 4, price: 0, views: 8900, members: 4100, gradient: 'linear-gradient(160deg, #0a1a1a 0%, #1a2d2d 100%)' },
-	{ id: '5', name: 'Powerlifting Prep', type: 'STRENGTH', level: 'ADVANCED', duration: 16, price: 79, views: 7800, members: 890, gradient: 'linear-gradient(160deg, #1a1a0a 0%, #2d2d1a 100%)' },
-	{ id: '6', name: 'Cardio Kickstarter', type: 'CARDIO', level: 'BEGINNER', duration: 4, price: 15, views: 7200, members: 2780, gradient: 'linear-gradient(160deg, #1a0a1a 0%, #2d1a2d 100%)' },
-	{ id: '7', name: 'Yoga for Athletes', type: 'YOGA', level: 'INTERMEDIATE', duration: 6, price: 29, views: 6500, members: 1230, gradient: 'linear-gradient(160deg, #0f1a0a 0%, #1a2d12 100%)' },
+	{ id: '1', name: 'The 6-Week Shred', type: 'WEIGHT LOSS', level: 'INTERMEDIATE', duration: 6, price: 34, views: 12400, likes: 520, members: 2100, gradient: 'linear-gradient(160deg, #0a1a0a 0%, #1a3d1a 100%)' },
+	{ id: '2', name: 'Beginner Strength Foundation', type: 'STRENGTH', level: 'BEGINNER', duration: 8, price: 0, views: 10800, likes: 680, members: 3200, gradient: 'linear-gradient(160deg, #0a0a1a 0%, #1a1a3d 100%)' },
+	{ id: '3', name: 'Body Recomposition Pro', type: 'FUNCTIONAL', level: 'INTERMEDIATE', duration: 12, price: 59, views: 9600, likes: 410, members: 1540, gradient: 'linear-gradient(160deg, #1a0a0a 0%, #2d1a1a 100%)' },
+	{ id: '4', name: 'Morning Mobility Flow', type: 'MOBILITY', level: 'BEGINNER', duration: 4, price: 0, views: 8900, likes: 760, members: 4100, gradient: 'linear-gradient(160deg, #0a1a1a 0%, #1a2d2d 100%)' },
+	{ id: '5', name: 'Powerlifting Prep', type: 'STRENGTH', level: 'ADVANCED', duration: 16, price: 79, views: 7800, likes: 290, members: 890, gradient: 'linear-gradient(160deg, #1a1a0a 0%, #2d2d1a 100%)' },
+	{ id: '6', name: 'Cardio Kickstarter', type: 'CARDIO', level: 'BEGINNER', duration: 4, price: 15, views: 7200, likes: 540, members: 2780, gradient: 'linear-gradient(160deg, #1a0a1a 0%, #2d1a2d 100%)' },
+	{ id: '7', name: 'Yoga for Athletes', type: 'YOGA', level: 'INTERMEDIATE', duration: 6, price: 29, views: 6500, likes: 330, members: 1230, gradient: 'linear-gradient(160deg, #0f1a0a 0%, #1a2d12 100%)' },
 ];
 
 const PopularPrograms = () => {
@@ -32,25 +33,7 @@ const PopularPrograms = () => {
 						<Swiper className={'program-swiper'} slidesPerView={'auto'} centeredSlides spaceBetween={25} modules={[Autoplay]}>
 							{popularPrograms.map((prog) => (
 								<SwiperSlide key={prog.id} className={'program-slide'}>
-									<Link href={`/programs/${prog.id}`}>
-										<Box className={'program-card popular-card'}>
-											<div className={'card-img'} style={{ background: prog.gradient }}>
-												<span className={'type-badge'}>{prog.type}</span>
-												<span className={'price-tag'}>{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
-											</div>
-											<div className={'card-body'}>
-												<strong className={'card-title'}>{prog.name}</strong>
-												<div className={'card-meta'}>
-													<span className={'level-badge'}>{prog.level}</span>
-													<span className={'duration'}>{prog.duration}W</span>
-												</div>
-												<div className={'card-footer'}>
-													<span className={'views'}>👁 {(prog.views / 1000).toFixed(1)}K</span>
-													<span className={'card-members'}>👤 {prog.members}</span>
-												</div>
-											</div>
-										</Box>
-									</Link>
+									<ProgramCard {...prog} />
 								</SwiperSlide>
 							))}
 						</Swiper>
@@ -91,25 +74,7 @@ const PopularPrograms = () => {
 					>
 						{popularPrograms.map((prog) => (
 							<SwiperSlide key={prog.id} className={'program-slide'}>
-								<Link href={`/programs/${prog.id}`}>
-									<Box className={'program-card popular-card'}>
-										<div className={'card-img'} style={{ background: prog.gradient }}>
-											<span className={'type-badge'}>{prog.type}</span>
-											<span className={'price-tag'}>{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
-										</div>
-										<div className={'card-body'}>
-											<strong className={'card-title'}>{prog.name}</strong>
-											<div className={'card-meta'}>
-												<span className={'level-badge'}>{prog.level}</span>
-												<span className={'duration'}>{prog.duration} Weeks</span>
-											</div>
-											<div className={'card-footer'}>
-												<span className={'views'}>👁 {(prog.views / 1000).toFixed(1)}K views</span>
-												<span className={'card-members'}>👤 {prog.members}</span>
-											</div>
-										</div>
-									</Box>
-								</Link>
+								<ProgramCard {...prog} />
 							</SwiperSlide>
 						))}
 					</Swiper>
