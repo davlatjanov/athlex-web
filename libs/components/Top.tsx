@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -21,14 +21,12 @@ import { REACT_APP_API_URL } from '../config';
 const Top = () => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
-	const { t, i18n } = useTranslation('common');
+	const { t } = useTranslation('common');
 	const router = useRouter();
 	const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
 	const [lang, setLang] = useState<string | null>('en');
 	const drop = Boolean(anchorEl2);
 	const [colorChange, setColorChange] = useState(false);
-	const [anchorEl, setAnchorEl] = React.useState<any | HTMLElement>(null);
-	let open = Boolean(anchorEl);
 	const [bgColor, setBgColor] = useState<boolean>(false);
 	const [logoutAnchor, setLogoutAnchor] = React.useState<null | HTMLElement>(null);
 	const logoutOpen = Boolean(logoutAnchor);
@@ -45,7 +43,7 @@ const Top = () => {
 
 	useEffect(() => {
 		switch (router.pathname) {
-			case '/property/detail':
+			case '/programs/detail':
 				setBgColor(true);
 				break;
 			default:
@@ -82,18 +80,6 @@ const Top = () => {
 			setColorChange(true);
 		} else {
 			setColorChange(false);
-		}
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	const handleHover = (event: any) => {
-		if (anchorEl !== event.currentTarget) {
-			setAnchorEl(event.currentTarget);
-		} else {
-			setAnchorEl(null);
 		}
 	};
 
@@ -145,17 +131,17 @@ const Top = () => {
 				<Link href={'/'}>
 					<div>{t('Home')}</div>
 				</Link>
-				<Link href={'/property'}>
-					<div>{t('Properties')}</div>
+				<Link href={'/programs'}>
+					<div>{t('Programs')}</div>
 				</Link>
-				<Link href={'/agent'}>
-					<div> {t('Agents')} </div>
+				<Link href={'/trainer'}>
+					<div>{t('Trainers')}</div>
 				</Link>
 				<Link href={'/community?articleCategory=FREE'}>
-					<div> {t('Community')} </div>
+					<div>{t('Community')}</div>
 				</Link>
 				<Link href={'/cs'}>
-					<div> {t('CS')} </div>
+					<div>{t('CS')}</div>
 				</Link>
 			</Stack>
 		);
@@ -166,29 +152,30 @@ const Top = () => {
 					<Stack className={'container'}>
 						<Box component={'div'} className={'logo-box'}>
 							<Link href={'/'}>
-								<img src="/img/logo/logoWhite.svg" alt="" />
+								<img src="/img/logo/logoWhite.svg" alt="Athlex" />
+								<span className={'logo-name'}>ATHLEX</span>
 							</Link>
 						</Box>
 						<Box component={'div'} className={'router-box'}>
 							<Link href={'/'}>
 								<div>{t('Home')}</div>
 							</Link>
-							<Link href={'/property'}>
-								<div>{t('Properties')}</div>
+							<Link href={'/programs'}>
+								<div>{t('Programs')}</div>
 							</Link>
-							<Link href={'/agent'}>
-								<div> {t('Agents')} </div>
+							<Link href={'/trainer'}>
+								<div>{t('Trainers')}</div>
 							</Link>
 							<Link href={'/community?articleCategory=FREE'}>
-								<div> {t('Community')} </div>
+								<div>{t('Community')}</div>
 							</Link>
 							{user?._id && (
 								<Link href={'/mypage'}>
-									<div> {t('My Page')} </div>
+									<div>{t('My Page')}</div>
 								</Link>
 							)}
 							<Link href={'/cs'}>
-								<div> {t('CS')} </div>
+								<div>{t('CS')}</div>
 							</Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>

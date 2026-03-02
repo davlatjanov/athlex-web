@@ -15,19 +15,20 @@ const Footer = () => {
 				<Stack className={'main'}>
 					<Stack className={'left'}>
 						<Box component={'div'} className={'footer-box'}>
-							<img src="/img/logo/logoWhite.svg" alt="" className={'logo'} />
+							<img src="/img/logo/logoWhite.svg" alt="Athlex" className={'logo'} />
+							<span className={'logo-name'}>ATHLEX</span>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>total free customer care</span>
-							<p>+82 10 4867 2909</p>
+							<span>24/7 Customer Support</span>
+							<p>support@athlex.com</p>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>nee live</span>
-							<p>+82 10 4867 2909</p>
-							<span>Support?</span>
+							<span>Live Chat</span>
+							<p>Available Mon–Sun</p>
+							<span>Need help?</span>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<p>follow us on social media</p>
+							<p>Follow us on social media</p>
 							<div className={'media-box'}>
 								<FacebookOutlinedIcon />
 								<TelegramIcon />
@@ -39,31 +40,31 @@ const Footer = () => {
 					<Stack className={'right'}>
 						<Box component={'div'} className={'bottom'}>
 							<div>
-								<strong>Popular Search</strong>
-								<span>Property for Rent</span>
-								<span>Property Low to hide</span>
+								<strong>Popular</strong>
+								<span>Strength Programs</span>
+								<span>Weight Loss Plans</span>
 							</div>
 							<div>
 								<strong>Quick Links</strong>
 								<span>Terms of Use</span>
 								<span>Privacy Policy</span>
-								<span>Pricing Plans</span>
+								<span>Membership Plans</span>
 								<span>Our Services</span>
 								<span>Contact Support</span>
 								<span>FAQs</span>
 							</div>
 							<div>
-								<strong>Discover</strong>
-								<span>Seoul</span>
-								<span>Gyeongido</span>
-								<span>Busan</span>
-								<span>Jejudo</span>
+								<strong>Explore</strong>
+								<span>Programs</span>
+								<span>Trainers</span>
+								<span>Community</span>
+								<span>Blog</span>
 							</div>
 						</Box>
 					</Stack>
 				</Stack>
 				<Stack className={'second'}>
-					<span>© Nestar - All rights reserved. Nestar {moment().year()}</span>
+					<span>© Athlex - All rights reserved. Athlex {moment().year()}</span>
 				</Stack>
 			</Stack>
 		);
@@ -73,19 +74,20 @@ const Footer = () => {
 				<Stack className={'main'}>
 					<Stack className={'left'}>
 						<Box component={'div'} className={'footer-box'}>
-							<img src="/img/logo/logoWhite.svg" alt="" className={'logo'} />
+							<img src="/img/logo/logoWhite.svg" alt="Athlex" className={'logo'} />
+							<span className={'logo-name'}>ATHLEX</span>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>total free customer care</span>
-							<p>+82 10 4867 2909</p>
+							<span>24/7 Customer Support</span>
+							<p>support@athlex.com</p>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<span>nee live</span>
-							<p>+82 10 4867 2909</p>
-							<span>Support?</span>
+							<span>Live Chat</span>
+							<p>Available Mon–Sun</p>
+							<span>Need help?</span>
 						</Box>
 						<Box component={'div'} className={'footer-box'}>
-							<p>follow us on social media</p>
+							<p>Follow us on social media</p>
 							<div className={'media-box'}>
 								<FacebookOutlinedIcon />
 								<TelegramIcon />
@@ -96,7 +98,7 @@ const Footer = () => {
 					</Stack>
 					<Stack className={'right'}>
 						<Box component={'div'} className={'top'}>
-							<strong>keep yourself up to date</strong>
+							<strong>Stay up to date with Athlex</strong>
 							<div>
 								<input type="text" placeholder={'Your Email'} />
 								<span>Subscribe</span>
@@ -104,31 +106,33 @@ const Footer = () => {
 						</Box>
 						<Box component={'div'} className={'bottom'}>
 							<div>
-								<strong>Popular Search</strong>
-								<span>Property for Rent</span>
-								<span>Property Low to hide</span>
+								<strong>Popular</strong>
+								<span>Strength Programs</span>
+								<span>Weight Loss Plans</span>
+								<span>HIIT Cardio</span>
+								<span>Yoga & Flexibility</span>
 							</div>
 							<div>
 								<strong>Quick Links</strong>
 								<span>Terms of Use</span>
 								<span>Privacy Policy</span>
-								<span>Pricing Plans</span>
+								<span>Membership Plans</span>
 								<span>Our Services</span>
 								<span>Contact Support</span>
 								<span>FAQs</span>
 							</div>
 							<div>
-								<strong>Discover</strong>
-								<span>Seoul</span>
-								<span>Gyeongido</span>
-								<span>Busan</span>
-								<span>Jejudo</span>
+								<strong>Explore</strong>
+								<span>Programs</span>
+								<span>Trainers</span>
+								<span>Community</span>
+								<span>Blog</span>
 							</div>
 						</Box>
 					</Stack>
 				</Stack>
 				<Stack className={'second'}>
-					<span>© Nestar - All rights reserved. Nestar {moment().year()}</span>
+					<span>© Athlex - All rights reserved. Athlex {moment().year()}</span>
 					<span>Privacy · Terms · Sitemap</span>
 				</Stack>
 			</Stack>
