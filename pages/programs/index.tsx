@@ -1,21 +1,11 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { NextPage } from 'next';
-import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography } from '@mui/material';
-import PropertyCard from '../../libs/components/property/PropertyCard';
+import { Stack } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import Filter from '../../libs/components/property/Filter';
-import { useRouter } from 'next/router';
-import { PropertiesInquiry } from '../../libs/types/property/property.input';
-import { Property } from '../../libs/types/property/property';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import { Direction, Message } from '../../libs/enums/common.enum';
-import { GET_PROPERTIES } from '../../apollo/user/query';
-import { useMutation, useQuery } from '@apollo/client';
-import { T } from '../../libs/types/common';
-import { LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
-import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import ProgramCard from '../../libs/components/homepage/ProgramCard';
+import { allPrograms } from '../../libs/data/programs';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -23,216 +13,191 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
+const TYPES = ['ALL', 'MASS GAIN', 'WEIGHT LOSS', 'STRENGTH', 'CARDIO', 'YOGA', 'FUNCTIONAL', 'REHABILITATION', 'MOBILITY'];
+const LEVELS = ['ALL', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+const PRICE_FILTERS = [
+	{ label: 'All Prices', value: 'all' },
+	{ label: 'Free', value: 'free' },
+	{ label: 'Under $30', value: 'under30' },
+	{ label: '$30 – $60', value: '30to60' },
+	{ label: '$60+', value: '60plus' },
+];
+const SORT_OPTIONS = [
+	{ label: 'Most Popular', value: 'popular' },
+	{ label: 'Top Rated', value: 'rating' },
+	{ label: 'Price: Low → High', value: 'price-asc' },
+	{ label: 'Price: High → Low', value: 'price-desc' },
+	{ label: 'Duration: Short → Long', value: 'duration-asc' },
+];
+
+const ProgramsPage: NextPage = () => {
 	const device = useDeviceDetect();
-	const router = useRouter();
-	const [searchFilter, setSearchFilter] = useState<PropertiesInquiry>(
-		router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
-	);
-	const [properties, setProperties] = useState<Property[]>([]);
-	const [total, setTotal] = useState<number>(0);
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-	const [sortingOpen, setSortingOpen] = useState(false);
-	const [filterSortName, setFilterSortName] = useState('New');
+	const [selectedType, setSelectedType] = useState('ALL');
+	const [selectedLevel, setSelectedLevel] = useState('ALL');
+	const [selectedPrice, setSelectedPrice] = useState('all');
+	const [sortBy, setSortBy] = useState('popular');
+	const [page, setPage] = useState(1);
+	const PER_PAGE = 9;
 
-	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const filtered = useMemo(() => {
+		let list = [...allPrograms];
 
-	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
-	} = useQuery(GET_PROPERTIES, {
-		fetchPolicy: 'network-only',
-		variables: { input: searchFilter },
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setProperties(data?.getProperties?.list);
-			setTotal(data?.getProperties?.metaCounter[0]?.total);
-		},
-	});
+		if (selectedType !== 'ALL') list = list.filter((p) => p.type === selectedType);
+		if (selectedLevel !== 'ALL') list = list.filter((p) => p.level === selectedLevel);
 
-	/** LIFECYCLES **/
-	useEffect(() => {
-		if (router.query.input) {
-			const inputObj = JSON.parse(router?.query?.input as string);
-			setSearchFilter(inputObj);
-		}
+		if (selectedPrice === 'free') list = list.filter((p) => p.price === 0);
+		else if (selectedPrice === 'under30') list = list.filter((p) => p.price > 0 && p.price < 30);
+		else if (selectedPrice === '30to60') list = list.filter((p) => p.price >= 30 && p.price <= 60);
+		else if (selectedPrice === '60plus') list = list.filter((p) => p.price > 60);
 
-		setCurrentPage(searchFilter.page === undefined ? 1 : searchFilter.page);
-	}, [router]);
+		if (sortBy === 'popular') list.sort((a, b) => b.views - a.views);
+		else if (sortBy === 'rating') list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+		else if (sortBy === 'price-asc') list.sort((a, b) => a.price - b.price);
+		else if (sortBy === 'price-desc') list.sort((a, b) => b.price - a.price);
+		else if (sortBy === 'duration-asc') list.sort((a, b) => a.duration - b.duration);
 
-	useEffect(() => {
-		//backend refetch
-		console.log('+++', searchFilter);
-	}, [searchFilter]);
+		return list;
+	}, [selectedType, selectedLevel, selectedPrice, sortBy]);
 
-	/** HANDLERS **/
-	const handlePaginationChange = async (event: ChangeEvent<unknown>, value: number) => {
-		searchFilter.page = value;
-		await router.push(
-			`/property?input=${JSON.stringify(searchFilter)}`,
-			`/property?input=${JSON.stringify(searchFilter)}`,
-			{
-				scroll: false,
-			},
-		);
-		setCurrentPage(value);
-	};
+	const totalPages = Math.ceil(filtered.length / PER_PAGE);
+	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-	const likePropertyHandler = async (user: T, id: string) => {
-		try {
-			if (!id) return;
-			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-
-			//execute likeTargetMutation
-			await likeTargetProperty({ variables: { input: id } });
-			//execute getPropertiesRefetch
-			await getPropertiesRefetch({ input: initialInput });
-
-			await sweetTopSmallSuccessAlert('success', 800);
-		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err.message);
-			sweetMixinErrorAlert(err.message).then();
-		}
-	};
-
-	const sortingClickHandler = (e: MouseEvent<HTMLElement>) => {
-		setAnchorEl(e.currentTarget);
-		setSortingOpen(true);
-	};
-
-	const sortingCloseHandler = () => {
-		setSortingOpen(false);
-		setAnchorEl(null);
-	};
-
-	const sortingHandler = (e: React.MouseEvent<HTMLLIElement>) => {
-		switch (e.currentTarget.id) {
-			case 'new':
-				setSearchFilter({ ...searchFilter, sort: 'createdAt', direction: Direction.ASC });
-				setFilterSortName('New');
-				break;
-			case 'lowest':
-				setSearchFilter({ ...searchFilter, sort: 'propertyPrice', direction: Direction.ASC });
-				setFilterSortName('Lowest Price');
-				break;
-			case 'highest':
-				setSearchFilter({ ...searchFilter, sort: 'propertyPrice', direction: Direction.DESC });
-				setFilterSortName('Highest Price');
-		}
-		setSortingOpen(false);
-		setAnchorEl(null);
+	const handleFilterChange = (setter: (v: string) => void, value: string) => {
+		setter(value);
+		setPage(1);
 	};
 
 	if (device === 'mobile') {
-		return <h1>PROPERTIES MOBILE</h1>;
-	} else {
 		return (
-			<div id="property-list-page" style={{ position: 'relative' }}>
-				<div className="container">
-					<Box component={'div'} className={'right'}>
-						<span>Sort by</span>
-						<div>
-							<Button onClick={sortingClickHandler} endIcon={<KeyboardArrowDownRoundedIcon />}>
-								{filterSortName}
-							</Button>
-							<Menu anchorEl={anchorEl} open={sortingOpen} onClose={sortingCloseHandler} sx={{ paddingTop: '5px' }}>
-								<MenuItem
-									onClick={sortingHandler}
-									id={'new'}
-									disableRipple
-									sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}
-								>
-									New
-								</MenuItem>
-								<MenuItem
-									onClick={sortingHandler}
-									id={'lowest'}
-									disableRipple
-									sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}
-								>
-									Lowest Price
-								</MenuItem>
-								<MenuItem
-									onClick={sortingHandler}
-									id={'highest'}
-									disableRipple
-									sx={{ boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}
-								>
-									Highest Price
-								</MenuItem>
-							</Menu>
-						</div>
-					</Box>
-					<Stack className={'property-page'}>
-						<Stack className={'filter-config'}>
-							{/* @ts-ignore */}
-							<Filter searchFilter={searchFilter} setSearchFilter={setSearchFilter} initialInput={initialInput} />
-						</Stack>
-						<Stack className="main-config" mb={'76px'}>
-							<Stack className={'list-config'}>
-								{properties?.length === 0 ? (
-									<div className={'no-data'}>
-										<img src="/img/icons/icoAlert.svg" alt="" />
-										<p>No Properties found!</p>
-									</div>
-								) : (
-									properties.map((property: Property) => {
-										return (
-											<PropertyCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />
-										);
-									})
-								)}
-							</Stack>
-							<Stack className="pagination-config">
-								{properties.length !== 0 && (
-									<Stack className="pagination-box">
-										<Pagination
-											page={currentPage}
-											count={Math.ceil(total / searchFilter.limit)}
-											onChange={handlePaginationChange}
-											shape="circular"
-											color="primary"
-										/>
-									</Stack>
-								)}
-
-								{properties.length !== 0 && (
-									<Stack className="total-result">
-										<Typography>
-											Total {total} propert{total > 1 ? 'ies' : 'y'} available
-										</Typography>
-									</Stack>
-								)}
-							</Stack>
-						</Stack>
-					</Stack>
-				</div>
-			</div>
+			<Stack className={'programs-page-mobile'}>
+				<h2>Programs</h2>
+				<Stack className={'mobile-grid'}>
+					{paginated.map((prog) => (
+						<ProgramCard key={prog.id} {...prog} />
+					))}
+				</Stack>
+			</Stack>
 		);
 	}
+
+	return (
+		<div id="programs-page">
+			<div className={'programs-container'}>
+				{/* SIDEBAR */}
+				<aside className={'filter-sidebar'}>
+					<div className={'filter-block'}>
+						<h4>Program Type</h4>
+						<div className={'chip-group'}>
+							{TYPES.map((type) => (
+								<button
+									key={type}
+									className={`chip ${selectedType === type ? 'active' : ''}`}
+									onClick={() => handleFilterChange(setSelectedType, type)}
+								>
+									{type === 'ALL' ? 'All Types' : type}
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div className={'filter-block'}>
+						<h4>Level</h4>
+						<div className={'chip-group'}>
+							{LEVELS.map((level) => (
+								<button
+									key={level}
+									className={`chip ${selectedLevel === level ? 'active' : ''}`}
+									onClick={() => handleFilterChange(setSelectedLevel, level)}
+								>
+									{level === 'ALL' ? 'All Levels' : level}
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div className={'filter-block'}>
+						<h4>Price</h4>
+						<div className={'radio-group'}>
+							{PRICE_FILTERS.map((pf) => (
+								<label key={pf.value} className={`radio-item ${selectedPrice === pf.value ? 'active' : ''}`}>
+									<input
+										type="radio"
+										name="price"
+										value={pf.value}
+										checked={selectedPrice === pf.value}
+										onChange={() => handleFilterChange(setSelectedPrice, pf.value)}
+									/>
+									{pf.label}
+								</label>
+							))}
+						</div>
+					</div>
+				</aside>
+
+				{/* MAIN */}
+				<main className={'programs-main'}>
+					{/* TOP BAR */}
+					<div className={'top-bar'}>
+						<span className={'results-count'}>
+							<strong>{filtered.length}</strong> programs found
+						</span>
+						<div className={'sort-row'}>
+							<span>Sort by:</span>
+							<div className={'sort-buttons'}>
+								{SORT_OPTIONS.map((opt) => (
+									<button
+										key={opt.value}
+										className={`sort-btn ${sortBy === opt.value ? 'active' : ''}`}
+										onClick={() => { setSortBy(opt.value); setPage(1); }}
+									>
+										{opt.label}
+									</button>
+								))}
+							</div>
+						</div>
+					</div>
+
+					{/* GRID */}
+					{paginated.length === 0 ? (
+						<div className={'empty-state'}>
+							<span>🏋️</span>
+							<p>No programs match your filters.</p>
+							<button onClick={() => { setSelectedType('ALL'); setSelectedLevel('ALL'); setSelectedPrice('all'); }}>
+								Clear Filters
+							</button>
+						</div>
+					) : (
+						<div className={'programs-grid'}>
+							{paginated.map((prog) => (
+								<ProgramCard key={prog.id} {...prog} />
+							))}
+						</div>
+					)}
+
+					{/* PAGINATION */}
+					{totalPages > 1 && (
+						<div className={'pagination'}>
+							<button className={'page-btn'} disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+								← Prev
+							</button>
+							{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+								<button
+									key={p}
+									className={`page-btn ${page === p ? 'active' : ''}`}
+									onClick={() => setPage(p)}
+								>
+									{p}
+								</button>
+							))}
+							<button className={'page-btn'} disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
+								Next →
+							</button>
+						</div>
+					)}
+				</main>
+			</div>
+		</div>
+	);
 };
 
-PropertyList.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 9,
-		sort: 'createdAt',
-		direction: 'DESC',
-		search: {
-			squaresRange: {
-				start: 0,
-				end: 500,
-			},
-			pricesRange: {
-				start: 0,
-				end: 2000000,
-			},
-		},
-	},
-};
-
-export default withLayoutBasic(PropertyList);
+export default withLayoutBasic(ProgramsPage);
