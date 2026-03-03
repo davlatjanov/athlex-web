@@ -22,6 +22,7 @@ const topPrograms = [
 		likes: 920,
 		members: 3100,
 		gradient: 'linear-gradient(160deg, #1a0505 0%, #3d0f0f 100%)',
+			image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '2',
@@ -36,6 +37,7 @@ const topPrograms = [
 		likes: 740,
 		members: 2600,
 		gradient: 'linear-gradient(160deg, #050a1a 0%, #0f1a3d 100%)',
+			image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '3',
@@ -50,6 +52,7 @@ const topPrograms = [
 		likes: 680,
 		members: 2200,
 		gradient: 'linear-gradient(160deg, #0a0a0a 0%, #1f1f1f 100%)',
+			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '4',
@@ -64,6 +67,7 @@ const topPrograms = [
 		likes: 590,
 		members: 1950,
 		gradient: 'linear-gradient(160deg, #0a1a05 0%, #1a3d0f 100%)',
+			image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '5',
@@ -78,6 +82,7 @@ const topPrograms = [
 		likes: 480,
 		members: 1400,
 		gradient: 'linear-gradient(160deg, #05101a 0%, #0f203d 100%)',
+			image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '6',
@@ -92,6 +97,7 @@ const topPrograms = [
 		likes: 430,
 		members: 1100,
 		gradient: 'linear-gradient(160deg, #1a1005 0%, #3d250f 100%)',
+			image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '7',
@@ -106,6 +112,7 @@ const topPrograms = [
 		likes: 360,
 		members: 890,
 		gradient: 'linear-gradient(160deg, #100a1a 0%, #1a123d 100%)',
+			image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '8',
@@ -120,6 +127,7 @@ const topPrograms = [
 		likes: 820,
 		members: 4200,
 		gradient: 'linear-gradient(160deg, #0a0a1a 0%, #151530 100%)',
+			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
 	},
 ];
 

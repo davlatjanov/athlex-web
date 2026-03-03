@@ -6,6 +6,7 @@ const products = [
 	{
 		id: '1',
 		name: 'Whey Protein Gold Standard',
+		image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=600&fit=crop&auto=format&q=80',
 		brand: 'OPTIMUM',
 		type: 'SUPPLEMENT',
 		price: 59,
@@ -16,6 +17,7 @@ const products = [
 	{
 		id: '2',
 		name: 'Pro Resistance Band Set',
+		image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&fit=crop&auto=format&q=80',
 		brand: 'NIKE',
 		type: 'EQUIPMENT',
 		price: 35,
@@ -26,6 +28,7 @@ const products = [
 	{
 		id: '3',
 		name: 'Pre-Workout Ignite X',
+		image: 'https://images.unsplash.com/photo-1585442143296-26f7d9ddf5e9?w=600&fit=crop&auto=format&q=80',
 		brand: 'MUSCLETECH',
 		type: 'SUPPLEMENT',
 		price: 44,
@@ -36,6 +39,7 @@ const products = [
 	{
 		id: '4',
 		name: 'Performance Running Shoes',
+		image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&fit=crop&auto=format&q=80',
 		brand: 'ADIDAS',
 		type: 'WEARABLE',
 		price: 129,
@@ -60,6 +64,8 @@ const FeaturedProducts = () => {
 					{products.map((product) => (
 						<Box key={product.id} className={'product-card'}>
 							<div className={'product-img'} style={{ background: product.gradient }}>
+								<img src={product.image} alt={product.name} className={'fp-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+								<div className={'fp-overlay'} />
 								<span className={'product-badge'}>{product.badge}</span>
 								<span className={'product-type-tag'}>{product.type}</span>
 							</div>

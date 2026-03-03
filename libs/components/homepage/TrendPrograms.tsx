@@ -20,6 +20,7 @@ const trendPrograms = [
 		likes: 342,
 		members: 1240,
 		gradient: 'linear-gradient(160deg, #1a0a0a 0%, #3d1212 100%)',
+			image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '2',
@@ -32,6 +33,7 @@ const trendPrograms = [
 		likes: 289,
 		members: 980,
 		gradient: 'linear-gradient(160deg, #0a1a0a 0%, #123d12 100%)',
+			image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '3',
@@ -44,6 +46,7 @@ const trendPrograms = [
 		likes: 256,
 		members: 870,
 		gradient: 'linear-gradient(160deg, #0a0a1a 0%, #12123d 100%)',
+			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '4',
@@ -56,6 +59,7 @@ const trendPrograms = [
 		likes: 234,
 		members: 1560,
 		gradient: 'linear-gradient(160deg, #1a0a1a 0%, #3d123d 100%)',
+			image: 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '5',
@@ -68,6 +72,7 @@ const trendPrograms = [
 		likes: 198,
 		members: 720,
 		gradient: 'linear-gradient(160deg, #0a1a1a 0%, #123d3d 100%)',
+			image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '6',
@@ -80,6 +85,7 @@ const trendPrograms = [
 		likes: 187,
 		members: 640,
 		gradient: 'linear-gradient(160deg, #1a1a0a 0%, #3d3d12 100%)',
+			image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '7',
@@ -92,6 +98,7 @@ const trendPrograms = [
 		likes: 156,
 		members: 430,
 		gradient: 'linear-gradient(160deg, #1a0f0a 0%, #3d2512 100%)',
+			image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '8',
@@ -104,6 +111,7 @@ const trendPrograms = [
 		likes: 145,
 		members: 510,
 		gradient: 'linear-gradient(160deg, #0f0a1a 0%, #25123d 100%)',
+			image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=800&fit=crop&auto=format&q=80',
 	},
 ];
 

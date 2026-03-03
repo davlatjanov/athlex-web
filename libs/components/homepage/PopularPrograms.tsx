@@ -20,6 +20,7 @@ const popularPrograms = [
 		likes: 520,
 		members: 2100,
 		gradient: 'linear-gradient(160deg, #0a1a0a 0%, #1a3d1a 100%)',
+			image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '2',
@@ -32,6 +33,7 @@ const popularPrograms = [
 		likes: 680,
 		members: 3200,
 		gradient: 'linear-gradient(160deg, #0a0a1a 0%, #1a1a3d 100%)',
+			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '3',
@@ -44,6 +46,7 @@ const popularPrograms = [
 		likes: 410,
 		members: 1540,
 		gradient: 'linear-gradient(160deg, #1a0a0a 0%, #2d1a1a 100%)',
+			image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '4',
@@ -56,6 +59,7 @@ const popularPrograms = [
 		likes: 760,
 		members: 4100,
 		gradient: 'linear-gradient(160deg, #0a1a1a 0%, #1a2d2d 100%)',
+			image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '5',
@@ -68,6 +72,7 @@ const popularPrograms = [
 		likes: 290,
 		members: 890,
 		gradient: 'linear-gradient(160deg, #1a1a0a 0%, #2d2d1a 100%)',
+			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '6',
@@ -80,6 +85,7 @@ const popularPrograms = [
 		likes: 540,
 		members: 2780,
 		gradient: 'linear-gradient(160deg, #1a0a1a 0%, #2d1a2d 100%)',
+			image: 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&fit=crop&auto=format&q=80',
 	},
 	{
 		id: '7',
@@ -92,6 +98,7 @@ const popularPrograms = [
 		likes: 330,
 		members: 1230,
 		gradient: 'linear-gradient(160deg, #0f1a0a 0%, #1a2d12 100%)',
+			image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&fit=crop&auto=format&q=80',
 	},
 ];
 

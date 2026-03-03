@@ -10,6 +10,7 @@ const topTrainers = [
 	{
 		id: '1',
 		fullName: 'Marcus Johnson',
+		image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&fit=crop&auto=format&q=80',
 		nick: 'marcus_j',
 		specialty: 'Strength & Powerlifting',
 		plan: 'PRO',
@@ -21,6 +22,7 @@ const topTrainers = [
 	{
 		id: '2',
 		fullName: 'Sarah Chen',
+		image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=600&fit=crop&auto=format&q=80',
 		nick: 'sarah_fit',
 		specialty: 'Yoga & Flexibility',
 		plan: 'ADVANCED',
@@ -32,6 +34,7 @@ const topTrainers = [
 	{
 		id: '3',
 		fullName: 'David Park',
+		image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&fit=crop&auto=format&q=80',
 		nick: 'dpark_hiit',
 		specialty: 'HIIT & Cardio',
 		plan: 'ADVANCED',
@@ -43,6 +46,7 @@ const topTrainers = [
 	{
 		id: '4',
 		fullName: 'Emma Rodriguez',
+		image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&fit=crop&auto=format&q=80',
 		nick: 'emma_rehab',
 		specialty: 'Rehabilitation',
 		plan: 'ADVANCED',
@@ -54,6 +58,7 @@ const topTrainers = [
 	{
 		id: '5',
 		fullName: 'Chris Thompson',
+		image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&fit=crop&auto=format&q=80',
 		nick: 'chris_move',
 		specialty: 'Functional Training',
 		plan: 'ADVANCED',
@@ -65,6 +70,7 @@ const topTrainers = [
 	{
 		id: '6',
 		fullName: 'Aisha Williams',
+		image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&fit=crop&auto=format&q=80',
 		nick: 'aisha_pro',
 		specialty: 'Weight Loss & Nutrition',
 		plan: 'PRO',
@@ -99,12 +105,7 @@ const TopTrainers = () => {
 									<Link href={`/trainer/${trainer.id}`}>
 										<Box className={'trainer-card'}>
 											<div className={'trainer-avatar'} style={{ background: trainer.gradient }}>
-												<span>
-													{trainer.fullName
-														.split(' ')
-														.map((n) => n[0])
-														.join('')}
-												</span>
+												<img src={trainer.image} alt={trainer.fullName} className={'trainer-avatar-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
 											</div>
 											<strong className={'trainer-name'}>{trainer.fullName}</strong>
 											<span className={'trainer-specialty'}>{trainer.specialty}</span>
@@ -162,12 +163,7 @@ const TopTrainers = () => {
 									<Link href={`/trainer/${trainer.id}`}>
 										<Box className={'trainer-card'}>
 											<div className={'trainer-avatar'} style={{ background: trainer.gradient }}>
-												<span>
-													{trainer.fullName
-														.split(' ')
-														.map((n) => n[0])
-														.join('')}
-												</span>
+												<img src={trainer.image} alt={trainer.fullName} className={'trainer-avatar-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
 											</div>
 											<span className={'plan-badge'}>{trainer.plan}</span>
 											<strong className={'trainer-name'}>{trainer.fullName}</strong>
