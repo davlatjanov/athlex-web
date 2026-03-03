@@ -631,8 +631,14 @@
 				&:hover { background: #ff3d39; }
 			}
 
+			.tdp-ac-btn-row {
+				display: flex;
+				gap: 8px;
+				align-items: stretch;
+			}
+
 			.tdp-ac-follow {
-				width: 100%;
+				flex: 1;
 				padding: 11px;
 				background: transparent;
 				border: 1px solid rgba(255, 255, 255, 0.1);
@@ -653,6 +659,34 @@
 					background: rgba(78, 205, 100, 0.08);
 					border-color: rgba(78, 205, 100, 0.3);
 					color: #4ecd64;
+				}
+			}
+
+			.tdp-ac-like {
+				width: 44px;
+				height: 44px;
+				padding: 0;
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 8px;
+				color: rgba(255, 255, 255, 0.35);
+				font-size: 18px;
+				cursor: pointer;
+				transition: all 0.2s;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+
+				&:hover {
+					border-color: rgba(233, 44, 40, 0.35);
+					color: #E92C28;
+				}
+
+				&.liked {
+					color: #E92C28;
+					border-color: rgba(233, 44, 40, 0.4);
+					background: rgba(233, 44, 40, 0.07);
 				}
 			}
 

@@ -40,11 +40,16 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 				<div className={'card-visual'} style={{ background: gradient }}>
 					<div className={'card-top-row'}>
 						<span className={'type-badge'}>{type}</span>
-						{rank ? (
-							<span className={'rank-badge'}>#{rank}</span>
-						) : (
-							<span className={'level-top'}>{level}</span>
-						)}
+						<div className={'card-top-right'}>
+							{rank ? (
+								<span className={'rank-badge'}>#{rank}</span>
+							) : (
+								<span className={'level-top'}>{level}</span>
+							)}
+							<button className={`card-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
+								{liked ? '♥' : '♡'}
+							</button>
+						</div>
 					</div>
 					<div className={'card-center-icon'}>{icon}</div>
 					<div className={'card-name-overlay'}>

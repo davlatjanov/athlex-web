@@ -5,6 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { allTrainers, TRAINER_SPECIALTIES, TRAINER_LEVELS, Trainer } from '../../libs/data/trainers';
+import { useLike } from '../../libs/hooks/useInteractions';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -23,12 +24,16 @@ const PER_PAGE = 9;
 
 const TrainerCard = ({ trainer }: { trainer: Trainer }) => {
 	const displayClients = trainer.clients >= 1000 ? `${(trainer.clients / 1000).toFixed(1)}K` : String(trainer.clients);
+	const { liked, toggle: toggleLike } = useLike('trainers', trainer.id);
 
 	return (
 		<div className="trainer-card">
 			<div className="tc-header" style={{ background: trainer.gradient }}>
 				<div className="tc-header-overlay" />
 				<div className="tc-level-badge">{trainer.level}</div>
+				<button className={`tc-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
+					{liked ? '♥' : '♡'}
+				</button>
 				<div className="tc-avatar">{trainer.icon}</div>
 			</div>
 			<div className="tc-body">

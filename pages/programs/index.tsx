@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { Stack } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -32,11 +33,21 @@ const SORT_OPTIONS = [
 
 const ProgramsPage: NextPage = () => {
 	const device = useDeviceDetect();
+	const router = useRouter();
+
 	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
 	const [selectedPrice, setSelectedPrice] = useState('all');
 	const [sortBy, setSortBy] = useState('popular');
 	const [page, setPage] = useState(1);
+
+	useEffect(() => {
+		const { type } = router.query;
+		if (type && typeof type === 'string') {
+			setSelectedTypes([type]);
+			setPage(1);
+		}
+	}, [router.query.type]);
 	const PER_PAGE = 9;
 
 	const toggleType = (type: string) => {

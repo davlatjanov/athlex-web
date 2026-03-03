@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { allTrainers } from '../../libs/data/trainers';
+import { useLike, useFollow } from '../../libs/hooks/useInteractions';
 import { allPrograms } from '../../libs/data/programs';
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -62,7 +63,9 @@ const TrainerDetail: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const { id } = router.query;
-	const [followed, setFollowed] = useState(false);
+	const trainerId = typeof id === 'string' ? id : '';
+	const { followed, toggle: toggleFollow } = useFollow(trainerId);
+	const { liked: trainerLiked, toggle: toggleLike } = useLike('trainers', trainerId);
 
 	const trainer = allTrainers.find((t) => t.id === id);
 
@@ -202,7 +205,7 @@ const TrainerDetail: NextPage = () => {
 						<section className="tdp-section">
 							<div className="tdp-section-header">
 								<h2 className="tdp-section-title">Programs</h2>
-								<Link href="/programs" className="tdp-see-all">See all →</Link>
+								<Link href={`/programs?type=${encodeURIComponent(trainer.specialty)}`} className="tdp-see-all">See all →</Link>
 							</div>
 							<div className="tdp-programs-grid">
 								{trainerPrograms.map((prog) => (
@@ -291,12 +294,20 @@ const TrainerDetail: NextPage = () => {
 							<span className="tdp-ac-amount">$49<span className="tdp-ac-per">/session</span></span>
 						</div>
 						<button className="tdp-ac-book">Book a Session →</button>
-						<button
-							className={`tdp-ac-follow ${followed ? 'following' : ''}`}
-							onClick={() => setFollowed((f) => !f)}
-						>
-							{followed ? '✓ Following' : '+ Follow'}
-						</button>
+						<div className="tdp-ac-btn-row">
+							<button
+								className={`tdp-ac-follow ${followed ? 'following' : ''}`}
+								onClick={toggleFollow}
+							>
+								{followed ? '✓ Following' : '+ Follow'}
+							</button>
+							<button
+								className={`tdp-ac-like ${trainerLiked ? 'liked' : ''}`}
+								onClick={(e) => toggleLike(e)}
+							>
+								{trainerLiked ? '♥' : '♡'}
+							</button>
+						</div>
 
 						<div className="tdp-ac-divider" />
 
