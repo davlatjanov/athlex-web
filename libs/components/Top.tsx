@@ -137,9 +137,6 @@ const Top = () => {
 				<Link href={'/trainer'}>
 					<div>{t('Trainers')}</div>
 				</Link>
-				<Link href={'/community?articleCategory=FREE'}>
-					<div>{t('Community')}</div>
-				</Link>
 				<Link href={'/cs'}>
 					<div>{t('CS')}</div>
 				</Link>
@@ -165,9 +162,6 @@ const Top = () => {
 							</Link>
 							<Link href={'/trainer'}>
 								<div>{t('Trainers')}</div>
-							</Link>
-							<Link href={'/community?articleCategory=FREE'}>
-								<div>{t('Community')}</div>
 							</Link>
 							<Link href={'/products'}>
 								<div>{t('Shop')}</div>
