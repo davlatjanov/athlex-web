@@ -10,8 +10,20 @@ export interface Program {
 	members: number;
 	rating: number;
 	gradient: string;
+	image?: string;
 	rank?: number;
 }
+
+const typeImages: Record<string, string> = {
+	'MASS GAIN':      'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800&fit=crop&auto=format&q=80',
+	'WEIGHT LOSS':    'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&fit=crop&auto=format&q=80',
+	'STRENGTH':       'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
+	'CARDIO':         'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&fit=crop&auto=format&q=80',
+	'YOGA':           'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&fit=crop&auto=format&q=80',
+	'FUNCTIONAL':     'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
+	'REHABILITATION': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&fit=crop&auto=format&q=80',
+	'MOBILITY':       'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=800&fit=crop&auto=format&q=80',
+};
 
 export const allPrograms: Program[] = [
 	{ id: '1',  name: 'Alpha Muscle Builder',        type: 'MASS GAIN',      level: 'ADVANCED',     duration: 12, price: 49, views: 8400,  likes: 342, members: 1240, rating: 4.7, gradient: 'linear-gradient(160deg, #1a0a0a 0%, #3d1212 100%)', image: typeImages['MASS GAIN'] },
