@@ -429,6 +429,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 
 				.category-card {
 					@extend %card-base;
+					position: relative;
 					display: flex;
 					flex-direction: column;
 					align-items: center;
@@ -436,6 +437,29 @@ $border-accent: rgba(233, 44, 40, 0.4);
 					padding: 32px 16px;
 					gap: 10px;
 					text-align: center;
+					min-height: 160px;
+					overflow: hidden;
+
+					.cat-bg-img {
+						position: absolute;
+						inset: 0;
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+						object-position: center;
+						transition: transform 0.4s ease;
+						z-index: 0;
+					}
+
+					.cat-overlay {
+						position: absolute;
+						inset: 0;
+						background: rgba(10, 10, 10, 0.72);
+						transition: background 0.3s ease;
+						z-index: 1;
+					}
+
+					.cat-icon, .cat-name, .cat-count { position: relative; z-index: 2; }
 
 					.cat-icon { font-size: 32px; line-height: 1; }
 
@@ -453,8 +477,9 @@ $border-accent: rgba(233, 44, 40, 0.4);
 						font-size: 12px;
 					}
 					&:hover {
-						background: rgba(233, 44, 40, 0.08);
 						border-color: $accent;
+						.cat-bg-img { transform: scale(1.08); }
+						.cat-overlay { background: rgba(10, 10, 10, 0.55); }
 						.cat-name { color: $accent; }
 					}
 				}

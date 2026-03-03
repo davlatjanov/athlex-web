@@ -3,14 +3,14 @@ import { Stack, Box } from '@mui/material';
 import Link from 'next/link';
 
 const categories = [
-	{ icon: '💪', label: 'Mass Gain', type: 'MASS_GAIN', count: '48 Programs' },
-	{ icon: '🔥', label: 'Weight Loss', type: 'WEIGHT_LOSS', count: '62 Programs' },
-	{ icon: '🏋️', label: 'Strength', type: 'STRENGTH', count: '35 Programs' },
-	{ icon: '🏃', label: 'Cardio', type: 'CARDIO', count: '54 Programs' },
-	{ icon: '🧘', label: 'Yoga', type: 'YOGA', count: '29 Programs' },
-	{ icon: '⚡', label: 'Functional', type: 'FUNCTIONAL', count: '41 Programs' },
-	{ icon: '🩺', label: 'Rehabilitation', type: 'REHABILITATION', count: '18 Programs' },
-	{ icon: '🤸', label: 'Mobility', type: 'MOBILITY', count: '23 Programs' },
+	{ icon: '💪', label: 'Mass Gain',      type: 'MASS GAIN',      count: '48 Programs', image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '🔥', label: 'Weight Loss',    type: 'WEIGHT LOSS',    count: '62 Programs', image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '🏋️', label: 'Strength',       type: 'STRENGTH',       count: '35 Programs', image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '🏃', label: 'Cardio',         type: 'CARDIO',         count: '54 Programs', image: 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '🧘', label: 'Yoga',           type: 'YOGA',           count: '29 Programs', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '⚡', label: 'Functional',     type: 'FUNCTIONAL',     count: '41 Programs', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '🩺', label: 'Rehabilitation', type: 'REHABILITATION', count: '18 Programs', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&fit=crop&auto=format&q=80' },
+	{ icon: '🤸', label: 'Mobility',       type: 'MOBILITY',       count: '23 Programs', image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=600&fit=crop&auto=format&q=80' },
 ];
 
 const ProgramCategories = () => {
@@ -25,6 +25,8 @@ const ProgramCategories = () => {
 					{categories.map((cat) => (
 						<Link href={`/programs?type=${cat.type}`} key={cat.type}>
 							<Box component={'div'} className={'category-card'}>
+								<img src={cat.image} alt={cat.label} className={'cat-bg-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+								<div className={'cat-overlay'} />
 								<span className={'cat-icon'}>{cat.icon}</span>
 								<strong className={'cat-name'}>{cat.label}</strong>
 								<span className={'cat-count'}>{cat.count}</span>

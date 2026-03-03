@@ -212,14 +212,20 @@ body::-webkit-scrollbar {
 		.hero-content-wrapper {
 			position: relative;
 			z-index: 2;
-			flex-direction: column;
-			justify-content: center;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
 			padding-top: 87px;
+			gap: 40px;
+			padding-left: 32px;
+			padding-right: 32px;
+			box-sizing: border-box;
 
 			.hero-inner {
 				display: flex;
 				flex-direction: column;
-				max-width: 700px;
+				max-width: 560px;
+				flex-shrink: 0;
 
 				.hero-eyebrow {
 					display: block;
@@ -307,6 +313,70 @@ body::-webkit-scrollbar {
 					}
 				}
 			}
+		}
+
+		.hero-visual {
+			position: relative;
+			flex: 1;
+			height: 640px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.hero-img-frame {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				border-radius: 24px;
+				overflow: hidden;
+				border: 1px solid rgba(233, 44, 40, 0.15);
+
+				.hero-athlete-img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					object-position: center top;
+				}
+
+				.hero-img-overlay {
+					position: absolute;
+					inset: 0;
+					background: linear-gradient(to left, transparent 55%, rgba(10,10,10,0.55) 100%);
+				}
+			}
+
+			.hero-floating-stat {
+				position: absolute;
+				background: rgba(17, 17, 17, 0.92);
+				border: 1px solid rgba(233, 44, 40, 0.25);
+				border-radius: 12px;
+				padding: 12px 18px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 2px;
+				z-index: 3;
+
+				.hfs-val {
+					color: #ffffff;
+					font-family: $font;
+					font-size: 18px;
+					font-weight: 800;
+				}
+
+				.hfs-lbl {
+					color: #888888;
+					font-family: $font;
+					font-size: 10px;
+					font-weight: 600;
+					letter-spacing: 0.5px;
+					text-transform: uppercase;
+				}
+			}
+
+			.hero-stat-1 { top: 60px; left: -20px; }
+			.hero-stat-2 { bottom: 90px; left: -20px; }
+			.hero-stat-3 { top: 60px; right: -10px; }
 		}
 
 		.container {

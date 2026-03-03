@@ -30,6 +30,28 @@ const HeroSection = () => {
 					<span>✓ 7-day free trial</span>
 				</div>
 			</Box>
+			<Box component={'div'} className={'hero-visual'}>
+				<div className={'hero-img-frame'}>
+					<img
+						src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&fit=crop&auto=format&q=85"
+						alt="Athlete training"
+						className={'hero-athlete-img'}
+					/>
+					<div className={'hero-img-overlay'} />
+				</div>
+				<div className={'hero-floating-stat hero-stat-1'}>
+					<span className={'hfs-val'}>4.9★</span>
+					<span className={'hfs-lbl'}>Avg Rating</span>
+				</div>
+				<div className={'hero-floating-stat hero-stat-2'}>
+					<span className={'hfs-val'}>10K+</span>
+					<span className={'hfs-lbl'}>Active Members</span>
+				</div>
+				<div className={'hero-floating-stat hero-stat-3'}>
+					<span className={'hfs-val'}>500+</span>
+					<span className={'hfs-lbl'}>Programs</span>
+				</div>
+			</Box>
 		</Stack>
 	);
 };
