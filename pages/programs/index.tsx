@@ -93,6 +93,12 @@ const ProgramsPage: NextPage = () => {
 					<div className={'filter-block'}>
 						<h4>Program Type</h4>
 						<div className={'chip-group'}>
+							<button
+								className={`chip ${selectedTypes.length === 0 ? 'active' : ''}`}
+								onClick={() => { setSelectedTypes([]); setPage(1); }}
+							>
+								All Types
+							</button>
 							{TYPES.filter((t) => t !== 'ALL').map((type) => (
 								<button
 									key={type}
@@ -108,6 +114,12 @@ const ProgramsPage: NextPage = () => {
 					<div className={'filter-block'}>
 						<h4>Level</h4>
 						<div className={'chip-group'}>
+							<button
+								className={`chip ${selectedLevels.length === 0 ? 'active' : ''}`}
+								onClick={() => { setSelectedLevels([]); setPage(1); }}
+							>
+								All Levels
+							</button>
 							{LEVELS.filter((l) => l !== 'ALL').map((level) => (
 								<button
 									key={level}
