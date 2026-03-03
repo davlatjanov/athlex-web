@@ -32,7 +32,7 @@
 		}
 
 		.tl-filter-title {
-			color: #333333;
+			color: #777777;
 			font-family: $font;
 			font-size: 10px;
 			font-weight: 700;
@@ -50,9 +50,9 @@
 		.tl-chip {
 			padding: 8px 12px;
 			background: transparent;
-			border: 1px solid rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 6px;
-			color: #555555;
+			color: #999999;
 			font-family: $font;
 			font-size: 12px;
 			font-weight: 600;
@@ -89,7 +89,7 @@
 			gap: 16px;
 
 			.tl-count {
-				color: #444444;
+				color: #888888;
 				font-family: $font;
 				font-size: 13px;
 
@@ -105,7 +105,7 @@
 				gap: 10px;
 
 				> span {
-					color: #333333;
+					color: #777777;
 					font-family: $font;
 					font-size: 12px;
 				}
@@ -119,9 +119,9 @@
 			.tl-sort-btn {
 				padding: 6px 12px;
 				background: transparent;
-				border: 1px solid rgba(255, 255, 255, 0.06);
+				border: 1px solid rgba(255, 255, 255, 0.08);
 				border-radius: 6px;
-				color: #444444;
+				color: #999999;
 				font-family: $font;
 				font-size: 11px;
 				font-weight: 600;
@@ -231,7 +231,7 @@
 				}
 
 				.tc-nick {
-					color: #333333;
+					color: #666666;
 					font-family: $font;
 					font-size: 11px;
 					text-align: center;
@@ -239,7 +239,7 @@
 				}
 
 				.tc-bio {
-					color: #555555;
+					color: #aaaaaa;
 					font-family: $font;
 					font-size: 11px;
 					line-height: 1.6;
@@ -277,7 +277,7 @@
 						}
 
 						.ts-lbl {
-							color: #333333;
+							color: #777777;
 							font-family: $font;
 							font-size: 9px;
 							font-weight: 600;
@@ -304,7 +304,7 @@
 						padding: 3px 8px;
 						background: #1a1a1a;
 						border: 1px solid rgba(255, 255, 255, 0.06);
-						color: #555555;
+						color: #888888;
 						font-family: $font;
 						font-size: 9px;
 						border-radius: 4px;
@@ -319,7 +319,7 @@
 					background: transparent;
 					border: 1px solid rgba(255, 255, 255, 0.08);
 					border-radius: 7px;
-					color: #666666;
+					color: #bbbbbb;
 					font-family: $font;
 					font-size: 12px;
 					font-weight: 700;
@@ -380,7 +380,7 @@
 				background: #111111;
 				border: 1px solid rgba(255, 255, 255, 0.07);
 				border-radius: 7px;
-				color: #555555;
+				color: #888888;
 				font-family: $font;
 				font-size: 13px;
 				font-weight: 600;
