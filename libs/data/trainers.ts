@@ -26,6 +26,7 @@ export interface Trainer {
 	views: number;
 	icon: string;
 	gradient: string;
+	image: string;
 	certifications: string[];
 	bio: string;
 }
@@ -47,6 +48,7 @@ export const allTrainers: Trainer[] = [
 		views: 18400,
 		icon: '🏋️',
 		gradient: 'linear-gradient(135deg, #1a0a0a 0%, #3a0808 100%)',
+		image: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=600&fit=crop&auto=format&q=80',
 		certifications: ['NSCA-CSCS', 'NASM-CPT', 'USA Weightlifting'],
 		bio: 'Elite strength coach with a decade of competitive powerlifting experience.',
 	},
@@ -66,6 +68,7 @@ export const allTrainers: Trainer[] = [
 		views: 14200,
 		icon: '🧘',
 		gradient: 'linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 100%)',
+		image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=600&fit=crop&auto=format&q=80',
 		certifications: ['RYT-500', 'FRC Mobility Specialist'],
 		bio: 'Certified yoga instructor specializing in mobility and mind-body connection.',
 	},
@@ -85,6 +88,7 @@ export const allTrainers: Trainer[] = [
 		views: 22600,
 		icon: '🏃',
 		gradient: 'linear-gradient(135deg, #0a1a0a 0%, #0a2a10 100%)',
+		image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&fit=crop&auto=format&q=80',
 		certifications: ['ACSM-CPT', 'RRCA Running Coach', 'TRX'],
 		bio: 'Former marathon runner turned elite cardio coach. Specializes in fat loss transformation.',
 	},
@@ -104,6 +108,7 @@ export const allTrainers: Trainer[] = [
 		views: 11800,
 		icon: '⚡',
 		gradient: 'linear-gradient(135deg, #1a1000 0%, #2a1f00 100%)',
+		image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&fit=crop&auto=format&q=80',
 		certifications: ['NASM-CPT', 'CrossFit L2', 'Kettlebell Specialist'],
 		bio: 'Functional fitness expert blending strength, agility, and athletic performance.',
 	},
@@ -123,6 +128,7 @@ export const allTrainers: Trainer[] = [
 		views: 31000,
 		icon: '💪',
 		gradient: 'linear-gradient(135deg, #1a0505 0%, #2d0a0a 100%)',
+		image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=600&fit=crop&auto=format&q=80',
 		certifications: ['ISSA-CPT', 'NPC Competitor', 'Precision Nutrition L2'],
 		bio: 'Bodybuilding coach and NPC competitor helping clients build serious mass.',
 	},
@@ -142,6 +148,7 @@ export const allTrainers: Trainer[] = [
 		views: 9400,
 		icon: '🩺',
 		gradient: 'linear-gradient(135deg, #001a1a 0%, #002a2a 100%)',
+		image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&fit=crop&auto=format&q=80',
 		certifications: ['DPT', 'CSCS', 'FMS Level 2'],
 		bio: 'Doctor of physical therapy specializing in injury recovery and corrective exercise.',
 	},
@@ -161,6 +168,7 @@ export const allTrainers: Trainer[] = [
 		views: 8200,
 		icon: '🔥',
 		gradient: 'linear-gradient(135deg, #1a0800 0%, #2a1200 100%)',
+		image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=600&fit=crop&auto=format&q=80',
 		certifications: ['ACE-CPT', 'Precision Nutrition L1'],
 		bio: 'High-energy fat-loss specialist. Known for intense HIIT programming.',
 	},
@@ -180,6 +188,7 @@ export const allTrainers: Trainer[] = [
 		views: 9800,
 		icon: '🌊',
 		gradient: 'linear-gradient(135deg, #00101a 0%, #001a2a 100%)',
+		image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&fit=crop&auto=format&q=80',
 		certifications: ['FRC Mobility Specialist', 'RYT-200', 'NASM-CES'],
 		bio: 'Mobility and movement coach focused on flexibility, posture, and pain-free living.',
 	},
@@ -199,6 +208,7 @@ export const allTrainers: Trainer[] = [
 		views: 45000,
 		icon: '🏆',
 		gradient: 'linear-gradient(135deg, #1a0a00 0%, #2a1500 100%)',
+		image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&fit=crop&auto=format&q=80',
 		certifications: ['NSCA-CSCS', 'EXOS Performance Specialist', 'USA Weightlifting L2'],
 		bio: 'Veteran strength coach with 14 years training elite athletes and general population.',
 	},
@@ -218,6 +228,7 @@ export const allTrainers: Trainer[] = [
 		views: 6800,
 		icon: '🎯',
 		gradient: 'linear-gradient(135deg, #0a001a 0%, #12002a 100%)',
+		image: 'https://images.unsplash.com/photo-1519311965067-36d3e5f33d39?w=600&fit=crop&auto=format&q=80',
 		certifications: ['NASM-CPT', 'CrossFit L1'],
 		bio: 'Dynamic coach making fitness accessible and fun for all fitness levels.',
 	},
@@ -237,6 +248,7 @@ export const allTrainers: Trainer[] = [
 		views: 15200,
 		icon: '🧬',
 		gradient: 'linear-gradient(135deg, #001000 0%, #002000 100%)',
+		image: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&fit=crop&auto=format&q=80',
 		certifications: ['CSCS', 'ATC', 'SFMA Level 2'],
 		bio: 'Athletic trainer bridging sports medicine and performance coaching.',
 	},
@@ -256,6 +268,7 @@ export const allTrainers: Trainer[] = [
 		views: 12400,
 		icon: '⚔️',
 		gradient: 'linear-gradient(135deg, #10001a 0%, #1a002a 100%)',
+		image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&fit=crop&auto=format&q=80',
 		certifications: ['ISSA-CPT', 'Precision Nutrition L2', 'IFBB Competitor'],
 		bio: 'IFBB competitor and physique coach specializing in body recomposition.',
 	},

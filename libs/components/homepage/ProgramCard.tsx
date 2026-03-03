@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import Link from 'next/link';
+import { useLike } from '../../hooks/useInteractions';
 
 const typeIcons: Record<string, string> = {
 	'MASS GAIN': '💪',
@@ -24,11 +25,13 @@ interface ProgramCardProps {
 	likes: number;
 	members: number;
 	gradient: string;
+	image?: string;
 	rank?: number;
 	rating?: number;
 }
 
-const ProgramCard = ({ id, name, type, level, duration, price, views, likes, members, gradient, rank, rating }: ProgramCardProps) => {
+const ProgramCard = ({ id, name, type, level, duration, price, views, likes, members, gradient, image, rank, rating }: ProgramCardProps) => {
+	const { liked, toggle: toggleLike } = useLike('programs', id);
 	const icon = typeIcons[type] ?? '🏅';
 	const displayPrice = price === 0 ? 'FREE' : `$${price}`;
 	const displayViews = views >= 1000 ? `${(views / 1000).toFixed(1)}K` : String(views);
@@ -38,6 +41,15 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 		<Link href={`/programs/${id}`}>
 			<Box className={'program-card'}>
 				<div className={'card-visual'} style={{ background: gradient }}>
+					{image && (
+						<img
+							src={image}
+							alt={name}
+							className={'card-bg-img'}
+							onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+						/>
+					)}
+					<div className={'card-visual-overlay'} />
 					<div className={'card-top-row'}>
 						<span className={'type-badge'}>{type}</span>
 						<div className={'card-top-right'}>

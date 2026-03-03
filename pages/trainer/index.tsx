@@ -29,12 +29,18 @@ const TrainerCard = ({ trainer }: { trainer: Trainer }) => {
 	return (
 		<div className="trainer-card">
 			<div className="tc-header" style={{ background: trainer.gradient }}>
+				<img
+					src={trainer.image}
+					alt={trainer.name}
+					className="tc-header-img"
+					onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+				/>
 				<div className="tc-header-overlay" />
 				<div className="tc-level-badge">{trainer.level}</div>
 				<button className={`tc-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
 					{liked ? '♥' : '♡'}
 				</button>
-				<div className="tc-avatar">{trainer.icon}</div>
+				<div className="tc-avatar-icon">{trainer.icon}</div>
 			</div>
 			<div className="tc-body">
 				<div className="tc-specialty">{trainer.specialty}</div>

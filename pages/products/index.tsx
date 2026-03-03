@@ -49,7 +49,13 @@ const ProductCard = ({ product }: { product: Product }) => {
 	return (
 		<div className={`product-card ${isOutOfStock ? 'out-of-stock' : ''}`}>
 			<Link href={`/products/${product.id}`} className="pc-link">
-				<div className="pc-visual" style={{ background: product.gradient }}>
+				<div className="pc-visual">
+					<img
+						src={product.image}
+						alt={product.productName}
+						className="pc-img"
+						onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+					/>
 					<div className="pc-visual-overlay" />
 					<div className="pc-type-badge">{product.productType}</div>
 					<button
@@ -58,7 +64,6 @@ const ProductCard = ({ product }: { product: Product }) => {
 					>
 						{liked ? '♥' : '♡'}
 					</button>
-					<div className="pc-icon">{product.icon}</div>
 					{isOutOfStock && <div className="pc-oos-overlay">OUT OF STOCK</div>}
 				</div>
 				<div className="pc-body">

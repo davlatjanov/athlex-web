@@ -116,11 +116,22 @@ const TrainerDetail: NextPage = () => {
 
 			{/* ─── HERO ─────────────────────────────────────────────── */}
 			<div className="tdp-hero" style={{ background: trainer.gradient }}>
+				<img
+					src={trainer.image}
+					alt={trainer.name}
+					className="tdp-hero-bg-img"
+					onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+				/>
 				<div className="tdp-hero-overlay" />
 				<div className="tdp-hero-inner">
 					<Link href="/trainer" className="tdp-back">← Trainers</Link>
 					<div className="tdp-hero-profile">
-						<div className="tdp-avatar">{trainer.icon}</div>
+						<img
+							src={trainer.image}
+							alt={trainer.name}
+							className="tdp-avatar"
+							onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+						/>
 						<div className="tdp-hero-info">
 							<div className="tdp-level-badge">{trainer.level}</div>
 							<h1 className="tdp-name">{trainer.name}</h1>

@@ -79,8 +79,15 @@ const ProgramDetail: NextPage = () => {
 		<div id="program-detail-page">
 
 			{/* ─── HERO ─────────────────────────────────────────────── */}
-			<div className="pdp-hero">
-				<div className="pdp-hero-bg" style={{ background: program.gradient }} />
+			<div className="pdp-hero" style={{ background: program.gradient }}>
+				{program.image && (
+					<img
+						src={program.image}
+						alt={program.name}
+						className="pdp-hero-bg-img"
+						onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+					/>
+				)}
 				<div className="pdp-hero-overlay" />
 				<div className="pdp-hero-inner">
 					<Link href="/programs" className="pdp-back">← Programs</Link>

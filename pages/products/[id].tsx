@@ -73,6 +73,7 @@ const ProductDetail: NextPage = () => {
 
 			{/* ─── HERO ────────────────────────────────────────────────── */}
 			<div className="pdp-hero" style={{ background: product.gradient }}>
+				<img src={product.image} alt={product.productName} className="pdp-hero-bg" />
 				<div className="pdp-hero-overlay" />
 				<div className="pdp-hero-inner">
 					<Link href="/products" className="pdp-back">← Shop</Link>
@@ -93,7 +94,7 @@ const ProductDetail: NextPage = () => {
 								<span className="pdp-status" style={{ color: status.color }}>{status.label}</span>
 							</div>
 						</div>
-						<div className="pdp-hero-icon">{product.icon}</div>
+						<img src={product.image} alt={product.productName} className="pdp-hero-img" />
 					</div>
 				</div>
 			</div>
