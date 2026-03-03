@@ -32,18 +32,28 @@ const SORT_OPTIONS = [
 
 const ProgramsPage: NextPage = () => {
 	const device = useDeviceDetect();
-	const [selectedType, setSelectedType] = useState('ALL');
-	const [selectedLevel, setSelectedLevel] = useState('ALL');
+	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+	const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
 	const [selectedPrice, setSelectedPrice] = useState('all');
 	const [sortBy, setSortBy] = useState('popular');
 	const [page, setPage] = useState(1);
 	const PER_PAGE = 9;
 
+	const toggleType = (type: string) => {
+		setSelectedTypes((prev) => prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]);
+		setPage(1);
+	};
+
+	const toggleLevel = (level: string) => {
+		setSelectedLevels((prev) => prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]);
+		setPage(1);
+	};
+
 	const filtered = useMemo(() => {
 		let list = [...allPrograms];
 
-		if (selectedType !== 'ALL') list = list.filter((p) => p.type === selectedType);
-		if (selectedLevel !== 'ALL') list = list.filter((p) => p.level === selectedLevel);
+		if (selectedTypes.length > 0) list = list.filter((p) => selectedTypes.includes(p.type));
+		if (selectedLevels.length > 0) list = list.filter((p) => selectedLevels.includes(p.level));
 
 		if (selectedPrice === 'free') list = list.filter((p) => p.price === 0);
 		else if (selectedPrice === 'under30') list = list.filter((p) => p.price > 0 && p.price < 30);
@@ -57,15 +67,10 @@ const ProgramsPage: NextPage = () => {
 		else if (sortBy === 'duration-asc') list.sort((a, b) => a.duration - b.duration);
 
 		return list;
-	}, [selectedType, selectedLevel, selectedPrice, sortBy]);
+	}, [selectedTypes, selectedLevels, selectedPrice, sortBy]);
 
 	const totalPages = Math.ceil(filtered.length / PER_PAGE);
 	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
-
-	const handleFilterChange = (setter: (v: string) => void, value: string) => {
-		setter(value);
-		setPage(1);
-	};
 
 	if (device === 'mobile') {
 		return (
@@ -88,13 +93,13 @@ const ProgramsPage: NextPage = () => {
 					<div className={'filter-block'}>
 						<h4>Program Type</h4>
 						<div className={'chip-group'}>
-							{TYPES.map((type) => (
+							{TYPES.filter((t) => t !== 'ALL').map((type) => (
 								<button
 									key={type}
-									className={`chip ${selectedType === type ? 'active' : ''}`}
-									onClick={() => handleFilterChange(setSelectedType, type)}
+									className={`chip ${selectedTypes.includes(type) ? 'active' : ''}`}
+									onClick={() => toggleType(type)}
 								>
-									{type === 'ALL' ? 'All Types' : type}
+									{type}
 								</button>
 							))}
 						</div>
@@ -103,13 +108,13 @@ const ProgramsPage: NextPage = () => {
 					<div className={'filter-block'}>
 						<h4>Level</h4>
 						<div className={'chip-group'}>
-							{LEVELS.map((level) => (
+							{LEVELS.filter((l) => l !== 'ALL').map((level) => (
 								<button
 									key={level}
-									className={`chip ${selectedLevel === level ? 'active' : ''}`}
-									onClick={() => handleFilterChange(setSelectedLevel, level)}
+									className={`chip ${selectedLevels.includes(level) ? 'active' : ''}`}
+									onClick={() => toggleLevel(level)}
 								>
-									{level === 'ALL' ? 'All Levels' : level}
+									{level}
 								</button>
 							))}
 						</div>
@@ -125,7 +130,7 @@ const ProgramsPage: NextPage = () => {
 										name="price"
 										value={pf.value}
 										checked={selectedPrice === pf.value}
-										onChange={() => handleFilterChange(setSelectedPrice, pf.value)}
+										onChange={() => { setSelectedPrice(pf.value); setPage(1); }}
 									/>
 									{pf.label}
 								</label>
@@ -162,7 +167,7 @@ const ProgramsPage: NextPage = () => {
 						<div className={'empty-state'}>
 							<span>🏋️</span>
 							<p>No programs match your filters.</p>
-							<button onClick={() => { setSelectedType('ALL'); setSelectedLevel('ALL'); setSelectedPrice('all'); }}>
+							<button onClick={() => { setSelectedTypes([]); setSelectedLevels([]); setSelectedPrice('all'); }}>
 								Clear Filters
 							</button>
 						</div>
