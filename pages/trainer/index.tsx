@@ -1,20 +1,10 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { NextPage } from 'next';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { Stack, Box, Button, Pagination } from '@mui/material';
-import { Menu, MenuItem } from '@mui/material';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import AgentCard from '../../libs/components/common/AgentCard';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Member } from '../../libs/types/member/member';
-import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
-import { GET_AGENTS } from '../../apollo/user/query';
-import { T } from '../../libs/types/common';
-import { Messages } from '../../libs/config';
-import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
+import { allTrainers, TRAINER_SPECIALTIES, TRAINER_LEVELS, Trainer } from '../../libs/data/trainers';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -22,200 +12,215 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const AgentList: NextPage = ({ initialInput, ...props }: any) => {
-	const device = useDeviceDetect();
-	const router = useRouter();
-	const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-	const [filterSortName, setFilterSortName] = useState('Recent');
-	const [sortingOpen, setSortingOpen] = useState(false);
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-	const [searchFilter, setSearchFilter] = useState<any>(
-		router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
+const SORT_OPTIONS = [
+	{ label: 'Most Popular', value: 'popular' },
+	{ label: 'Top Rated', value: 'rating' },
+	{ label: 'Most Clients', value: 'clients' },
+	{ label: 'Experience', value: 'experience' },
+];
+
+const PER_PAGE = 9;
+
+const TrainerCard = ({ trainer }: { trainer: Trainer }) => {
+	const displayClients = trainer.clients >= 1000 ? `${(trainer.clients / 1000).toFixed(1)}K` : String(trainer.clients);
+
+	return (
+		<div className="trainer-card">
+			<div className="tc-header" style={{ background: trainer.gradient }}>
+				<div className="tc-header-overlay" />
+				<div className="tc-level-badge">{trainer.level}</div>
+				<div className="tc-avatar">{trainer.icon}</div>
+			</div>
+			<div className="tc-body">
+				<div className="tc-specialty">{trainer.specialty}</div>
+				<h3 className="tc-name">{trainer.name}</h3>
+				<p className="tc-nick">@{trainer.nickname}</p>
+				<p className="tc-bio">{trainer.bio}</p>
+				<div className="tc-stats">
+					<div className="tc-stat">
+						<span className="ts-val">★ {trainer.rating}</span>
+						<span className="ts-lbl">Rating</span>
+					</div>
+					<div className="tc-stat-sep" />
+					<div className="tc-stat">
+						<span className="ts-val">{displayClients}</span>
+						<span className="ts-lbl">Clients</span>
+					</div>
+					<div className="tc-stat-sep" />
+					<div className="tc-stat">
+						<span className="ts-val">{trainer.programs}</span>
+						<span className="ts-lbl">Programs</span>
+					</div>
+					<div className="tc-stat-sep" />
+					<div className="tc-stat">
+						<span className="ts-val">{trainer.experience}</span>
+						<span className="ts-lbl">Exp.</span>
+					</div>
+				</div>
+				<div className="tc-certs">
+					{trainer.certifications.slice(0, 2).map((c) => (
+						<span key={c} className="tc-cert">{c}</span>
+					))}
+				</div>
+				<Link href={`/trainer/detail?id=${trainer.id}`}>
+					<button className="tc-btn">View Profile →</button>
+				</Link>
+			</div>
+		</div>
 	);
-	const [agents, setAgents] = useState<Member[]>([]);
-	const [total, setTotal] = useState<number>(0);
-	const [currentPage, setCurrentPage] = useState<number>(1);
-	const [searchText, setSearchText] = useState<string>('');
+};
 
-	/** APOLLO REQUESTS **/
-	const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
+const TrainerList: NextPage = () => {
+	const device = useDeviceDetect();
+	const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
+	const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+	const [sortBy, setSortBy] = useState('popular');
+	const [page, setPage] = useState(1);
 
-	const {
-		loading: getAgentsLoading,
-		data: getAgentsData,
-		error: getAgentsError,
-		refetch: getAgentsRefetch,
-	} = useQuery(GET_AGENTS, {
-		fetchPolicy: 'network-only',
-		variables: { input: searchFilter },
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setAgents(data?.getAgents?.list);
-			setTotal(data?.getAgents?.metaCounter[0]?.total);
-		},
-	});
-
-	/** LIFECYCLES **/
-	useEffect(() => {
-		if (router.query.input) {
-			const input_obj = JSON.parse(router?.query?.input as string);
-			setSearchFilter(input_obj);
-		} else
-			router.replace(`/agent?input=${JSON.stringify(searchFilter)}`, `/agent?input=${JSON.stringify(searchFilter)}`);
-
-		setCurrentPage(searchFilter.page === undefined ? 1 : searchFilter.page);
-	}, [router]);
-
-	/** HANDLERS **/
-	const likeMemberHandler = async (user: any, id: string) => {
-		try {
-			if (!id) return;
-			if (!user._id) throw new Error(Messages.error2);
-
-			await likeTargetMember({ variables: { input: id } });
-
-			await getAgentsRefetch({ input: searchFilter });
-			await sweetTopSmallSuccessAlert('success', 800);
-		} catch (err: any) {
-			console.log('Error:likeMemberHandler', err.message);
-			sweetMixinErrorAlert(err.message).then();
-		}
+	const toggleSpecialty = (s: string) => {
+		setSelectedSpecialties((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+		setPage(1);
 	};
 
-	const sortingClickHandler = (e: MouseEvent<HTMLElement>) => {
-		setAnchorEl(e.currentTarget);
-		setSortingOpen(true);
+	const toggleLevel = (l: string) => {
+		setSelectedLevels((prev) => prev.includes(l) ? prev.filter((x) => x !== l) : [...prev, l]);
+		setPage(1);
 	};
 
-	const sortingCloseHandler = () => {
-		setSortingOpen(false);
-		setAnchorEl(null);
-	};
+	const filtered = useMemo(() => {
+		let list = [...allTrainers];
 
-	const sortingHandler = (e: React.MouseEvent<HTMLLIElement>) => {
-		switch (e.currentTarget.id) {
-			case 'recent':
-				setSearchFilter({ ...searchFilter, sort: 'createdAt', direction: 'DESC' });
-				setFilterSortName('Recent');
-				break;
-			case 'old':
-				setSearchFilter({ ...searchFilter, sort: 'createdAt', direction: 'ASC' });
-				setFilterSortName('Oldest order');
-				break;
-			case 'likes':
-				setSearchFilter({ ...searchFilter, sort: 'memberLikes', direction: 'DESC' });
-				setFilterSortName('Likes');
-				break;
-			case 'views':
-				setSearchFilter({ ...searchFilter, sort: 'memberViews', direction: 'DESC' });
-				setFilterSortName('Views');
-				break;
-		}
-		setSortingOpen(false);
-		setAnchorEl2(null);
-	};
+		if (selectedSpecialties.length > 0)
+			list = list.filter((t) => selectedSpecialties.includes(t.specialty) || (t.secondarySpecialty && selectedSpecialties.includes(t.secondarySpecialty)));
+		if (selectedLevels.length > 0)
+			list = list.filter((t) => selectedLevels.includes(t.level));
 
-	const paginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-		searchFilter.page = value;
-		await router.push(`/agent?input=${JSON.stringify(searchFilter)}`, `/agent?input=${JSON.stringify(searchFilter)}`, {
-			scroll: false,
-		});
-		setCurrentPage(value);
-	};
+		if (sortBy === 'popular') list.sort((a, b) => b.views - a.views);
+		else if (sortBy === 'rating') list.sort((a, b) => b.rating - a.rating);
+		else if (sortBy === 'clients') list.sort((a, b) => b.clients - a.clients);
+		else if (sortBy === 'experience') list.sort((a, b) => b.experienceYears - a.experienceYears);
+
+		return list;
+	}, [selectedSpecialties, selectedLevels, sortBy]);
+
+	const totalPages = Math.ceil(filtered.length / PER_PAGE);
+	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
 	if (device === 'mobile') {
-		return <h1>AGENTS PAGE MOBILE</h1>;
-	} else {
-		return (
-			<Stack className={'agent-list-page'}>
-				<Stack className={'container'}>
-					<Stack className={'filter'}>
-						<Box component={'div'} className={'left'}>
-							<input
-								type="text"
-								placeholder={'Search for an agent'}
-								value={searchText}
-								onChange={(e: any) => setSearchText(e.target.value)}
-								onKeyDown={(event: any) => {
-									if (event.key == 'Enter') {
-										setSearchFilter({
-											...searchFilter,
-											search: { ...searchFilter.search, text: searchText },
-										});
-									}
-								}}
-							/>
-						</Box>
-						<Box component={'div'} className={'right'}>
-							<span>Sort by</span>
-							<div>
-								<Button onClick={sortingClickHandler} endIcon={<KeyboardArrowDownRoundedIcon />}>
-									{filterSortName}
-								</Button>
-								<Menu anchorEl={anchorEl} open={sortingOpen} onClose={sortingCloseHandler} sx={{ paddingTop: '5px' }}>
-									<MenuItem onClick={sortingHandler} id={'recent'} disableRipple>
-										Recent
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'old'} disableRipple>
-										Oldest
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'likes'} disableRipple>
-										Likes
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'views'} disableRipple>
-										Views
-									</MenuItem>
-								</Menu>
-							</div>
-						</Box>
-					</Stack>
-					<Stack className={'card-wrap'}>
-						{agents?.length === 0 ? (
-							<div className={'no-data'}>
-								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Agents found!</p>
-							</div>
-						) : (
-							agents.map((agent: Member) => {
-								return <AgentCard agent={agent} key={agent._id} likeMemberHandler={likeMemberHandler} />;
-							})
-						)}
-					</Stack>
-					<Stack className={'pagination'}>
-						<Stack className="pagination-box">
-							{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
-								<Stack className="pagination-box">
-									<Pagination
-										page={currentPage}
-										count={Math.ceil(total / searchFilter.limit)}
-										onChange={paginationChangeHandler}
-										shape="circular"
-										color="primary"
-									/>
-								</Stack>
-							)}
-						</Stack>
-
-						{agents.length !== 0 && (
-							<span>
-								Total {total} agent{total > 1 ? 's' : ''} available
-							</span>
-						)}
-					</Stack>
-				</Stack>
-			</Stack>
-		);
+		return <div id="trainer-list-page"><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
 	}
+
+	return (
+		<div id="trainer-list-page">
+			<div className="tl-container">
+
+				{/* ── SIDEBAR ───────────────────────────────────────── */}
+				<aside className="tl-sidebar">
+					<div className="tl-filter-block">
+						<h4 className="tl-filter-title">Specialty</h4>
+						<div className="tl-chip-group">
+							<button
+								className={`tl-chip ${selectedSpecialties.length === 0 ? 'active' : ''}`}
+								onClick={() => { setSelectedSpecialties([]); setPage(1); }}
+							>
+								All
+							</button>
+							{TRAINER_SPECIALTIES.map((s) => (
+								<button
+									key={s}
+									className={`tl-chip ${selectedSpecialties.includes(s) ? 'active' : ''}`}
+									onClick={() => toggleSpecialty(s)}
+								>
+									{s}
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div className="tl-filter-block">
+						<h4 className="tl-filter-title">Level</h4>
+						<div className="tl-chip-group">
+							<button
+								className={`tl-chip ${selectedLevels.length === 0 ? 'active' : ''}`}
+								onClick={() => { setSelectedLevels([]); setPage(1); }}
+							>
+								All Levels
+							</button>
+							{TRAINER_LEVELS.map((l) => (
+								<button
+									key={l}
+									className={`tl-chip ${selectedLevels.includes(l) ? 'active' : ''}`}
+									onClick={() => toggleLevel(l)}
+								>
+									{l}
+								</button>
+							))}
+						</div>
+					</div>
+				</aside>
+
+				{/* ── MAIN ──────────────────────────────────────────── */}
+				<main className="tl-main">
+					{/* Top bar */}
+					<div className="tl-top-bar">
+						<span className="tl-count"><strong>{filtered.length}</strong> trainers found</span>
+						<div className="tl-sort-row">
+							<span>Sort by:</span>
+							<div className="tl-sort-buttons">
+								{SORT_OPTIONS.map((opt) => (
+									<button
+										key={opt.value}
+										className={`tl-sort-btn ${sortBy === opt.value ? 'active' : ''}`}
+										onClick={() => { setSortBy(opt.value); setPage(1); }}
+									>
+										{opt.label}
+									</button>
+								))}
+							</div>
+						</div>
+					</div>
+
+					{/* Grid */}
+					{paginated.length === 0 ? (
+						<div className="tl-empty">
+							<span>🏋️</span>
+							<p>No trainers match your filters.</p>
+							<button onClick={() => { setSelectedSpecialties([]); setSelectedLevels([]); }}>
+								Clear Filters
+							</button>
+						</div>
+					) : (
+						<div className="tl-grid">
+							{paginated.map((trainer) => (
+								<TrainerCard key={trainer.id} trainer={trainer} />
+							))}
+						</div>
+					)}
+
+					{/* Pagination */}
+					{totalPages > 1 && (
+						<div className="tl-pagination">
+							<button className="tl-page-btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+								← Prev
+							</button>
+							{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+								<button
+									key={p}
+									className={`tl-page-btn ${page === p ? 'active' : ''}`}
+									onClick={() => setPage(p)}
+								>
+									{p}
+								</button>
+							))}
+							<button className="tl-page-btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
+								Next →
+							</button>
+						</div>
+					)}
+				</main>
+			</div>
+		</div>
+	);
 };
 
-AgentList.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 10,
-		sort: 'createdAt',
-		direction: 'DESC',
-		search: {},
-	},
-};
-
-export default withLayoutBasic(AgentList);
+export default withLayoutBasic(TrainerList);
