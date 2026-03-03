@@ -1,26 +1,12 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import PropertyBigCard from '../../libs/components/common/PropertyBigCard';
-import ReviewCard from '../../libs/components/agent/ReviewCard';
-import { Box, Button, Pagination, Stack, Typography } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
-import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Property } from '../../libs/types/property/property';
-import { Member } from '../../libs/types/member/member';
-import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { userVar } from '../../apollo/store';
-import { PropertiesInquiry } from '../../libs/types/property/property.input';
-import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
-import { Comment } from '../../libs/types/comment/comment';
-import { CommentGroup } from '../../libs/enums/comment.enum';
-import { Messages, REACT_APP_API_URL } from '../../libs/config';
+import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { CREATE_COMMENT, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
-import { GET_COMMENTS, GET_MEMBER, GET_PROPERTIES } from '../../apollo/user/query';
-import { T } from '../../libs/types/common';
+import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
+import { allTrainers } from '../../libs/data/trainers';
+import { allPrograms } from '../../libs/data/programs';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -28,302 +14,336 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) => {
+// ── Hardcoded feedback data (mirrors Feedback entity: feedbackScale, feedbackContent) ──
+const feedbacksByTrainer: Record<string, { name: string; initials: string; scale: number; content: string; date: string; plan: string }[]> = {
+	STRENGTH: [
+		{ name: 'Jordan M.', initials: 'JM', scale: 5, content: 'Completely transformed my squat form. Added 40kg to my max in 3 months.', date: 'Jan 2026', plan: 'PRO' },
+		{ name: 'Chris R.', initials: 'CR', scale: 5, content: 'Best programming I\'ve ever followed. Periodization is on point.', date: 'Dec 2025', plan: 'ADVANCED' },
+		{ name: 'Sam T.', initials: 'ST', scale: 4, content: 'Very technical and detail-oriented. Communication could be faster.', date: 'Nov 2025', plan: 'REGULAR' },
+		{ name: 'Ava K.', initials: 'AK', scale: 5, content: 'First time hitting a 200kg deadlift thanks to this trainer\'s guidance.', date: 'Jan 2026', plan: 'PRO' },
+	],
+	MASS_GAIN: [
+		{ name: 'Mike L.', initials: 'ML', scale: 5, content: 'Gained 8kg of lean mass in 16 weeks. Incredible results.', date: 'Jan 2026', plan: 'PRO' },
+		{ name: 'Tom S.', initials: 'TS', scale: 5, content: 'Diet and training perfectly balanced. I finally understand progressive overload.', date: 'Dec 2025', plan: 'ADVANCED' },
+		{ name: 'Lily J.', initials: 'LJ', scale: 4, content: 'Really knows the science. A bit intense but gets results.', date: 'Nov 2025', plan: 'REGULAR' },
+		{ name: 'Dan W.', initials: 'DW', scale: 5, content: 'My physique goals finally became reality. Highly recommend.', date: 'Feb 2026', plan: 'PRO' },
+	],
+	CARDIO: [
+		{ name: 'Rachel P.', initials: 'RP', scale: 5, content: 'Lost 15kg and can now run a 5K without stopping. Life-changing.', date: 'Jan 2026', plan: 'ADVANCED' },
+		{ name: 'Kevin H.', initials: 'KH', scale: 4, content: 'Great energy. Programs are tough but rewarding.', date: 'Dec 2025', plan: 'REGULAR' },
+		{ name: 'Nina B.', initials: 'NB', scale: 5, content: 'Fat loss was consistent every week. Science-backed approach.', date: 'Nov 2025', plan: 'PRO' },
+		{ name: 'Leo C.', initials: 'LC', scale: 5, content: 'My cardiovascular endurance went from zero to marathon-ready.', date: 'Feb 2026', plan: 'PRO' },
+	],
+};
+
+const defaultFeedback = [
+	{ name: 'Alex W.', initials: 'AW', scale: 5, content: 'Outstanding coaching. Saw real results within the first month.', date: 'Jan 2026', plan: 'PRO' },
+	{ name: 'Jamie L.', initials: 'JL', scale: 4, content: 'Very knowledgeable and approachable. Would highly recommend.', date: 'Dec 2025', plan: 'ADVANCED' },
+	{ name: 'Morgan K.', initials: 'MK', scale: 5, content: 'The programming is excellent and the support is always there.', date: 'Nov 2025', plan: 'REGULAR' },
+	{ name: 'Taylor R.', initials: 'TR', scale: 5, content: 'Best investment I\'ve made in my health. Period.', date: 'Feb 2026', plan: 'PRO' },
+];
+
+const planBadgeColor: Record<string, string> = {
+	PRO: '#FFB800',
+	ADVANCED: '#E92C28',
+	REGULAR: '#4CAF50',
+	BEGINNER: '#888888',
+};
+
+const StarRating = ({ scale }: { scale: number }) => (
+	<span className="td-stars">
+		{[1, 2, 3, 4, 5].map((s) => (
+			<span key={s} className={s <= scale ? 'star filled' : 'star'}>★</span>
+		))}
+	</span>
+);
+
+const TrainerDetail: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const user = useReactiveVar(userVar);
-	const [agentId, setAgentId] = useState<string | null>(null);
-	const [agent, setAgent] = useState<Member | null>(null);
-	const [searchFilter, setSearchFilter] = useState<PropertiesInquiry>(initialInput);
-	const [agentProperties, setAgentProperties] = useState<Property[]>([]);
-	const [propertyTotal, setPropertyTotal] = useState<number>(0);
-	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-	const [agentComments, setAgentComments] = useState<Comment[]>([]);
-	const [commentTotal, setCommentTotal] = useState<number>(0);
-	const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-		commentGroup: CommentGroup.MEMBER,
-		commentContent: '',
-		commentRefId: '',
-	});
+	const { id } = router.query;
+	const [followed, setFollowed] = useState(false);
 
-	/** APOLLO REQUESTS **/
+	const trainer = allTrainers.find((t) => t.id === id);
 
-	const [createComment] = useMutation(CREATE_COMMENT);
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
-
-	const {
-		loading: getMemberLoading,
-		data: getMemberData,
-		error: getMemberError,
-		refetch: getMemberRefetch,
-	} = useQuery(GET_MEMBER, {
-		fetchPolicy: 'network-only',
-		variables: { input: agentId },
-		skip: !agentId,
-		onCompleted: (data: T) => {
-			setAgent(data?.getMember);
-
-			setSearchFilter({
-				...searchFilter,
-				search: {
-					memberId: data?.getMember?._id,
-				},
-			});
-
-			setCommentInquiry({
-				...commentInquiry,
-				search: {
-					commentRefId: data?.getMember?._id,
-				},
-			});
-
-			setInsertCommentData({
-				...insertCommentData,
-				commentRefId: data?.getMember?._id,
-			});
-		},
-	});
-
-	console.log('searchFilter:', searchFilter);
-
-	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch,
-	} = useQuery(GET_PROPERTIES, {
-		fetchPolicy: 'network-only',
-		variables: { input: searchFilter },
-		skip: !searchFilter.search.memberId,
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setAgentProperties(data?.getProperties?.list);
-			setPropertyTotal(data?.getProperties?.metaCounter[0]?.total ?? 0);
-		},
-	});
-
-	const {
-		loading: getCommentsLoading,
-		data: getCommentsData,
-		error: getCommentsError,
-		refetch: getCommentsRefetch,
-	} = useQuery(GET_COMMENTS, {
-		fetchPolicy: 'network-only',
-		variables: { input: commentInquiry },
-		skip: !commentInquiry.search.commentRefId,
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setAgentComments(data?.getComments?.list);
-			setCommentTotal(data?.getComments?.metaCounter[0]?.total);
-		},
-	});
-
-	/** LIFECYCLES **/
-	useEffect(() => {
-		if (router.query.agentId) setAgentId(router.query.agentId as string);
-	}, [router]);
-
-	useEffect(() => {
-		if (searchFilter.search.memberId) {
-			getPropertiesRefetch({ variables: { input: searchFilter } }).then();
-		}
-	}, [searchFilter]);
-
-	useEffect(() => {
-		if (commentInquiry.search.commentRefId) {
-			getCommentsRefetch({ variables: { input: commentInquiry } }).then();
-		}
-	}, [commentInquiry]);
-
-	/** HANDLERS **/
-	const redirectToMemberPageHandler = async (memberId: string) => {
-		try {
-			if (memberId === user?._id) await router.push(`/mypage?memberId=${memberId}`);
-			else await router.push(`/member?memberId=${memberId}`);
-		} catch (error) {
-			await sweetErrorHandling(error);
-		}
-	};
-
-	const propertyPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-		searchFilter.page = value;
-		setSearchFilter({ ...searchFilter });
-	};
-
-	const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-		commentInquiry.page = value;
-		setCommentInquiry({ ...commentInquiry });
-	};
-
-	const createCommentHandler = async () => {
-		try {
-			if (!user._id) throw new Error(Messages.error2);
-			if (user._id === agentId) throw new Error('Cannot write a review for yourself!');
-
-			await createComment({ variables: { input: insertCommentData } });
-			setInsertCommentData({ ...insertCommentData, commentContent: '' });
-			await getCommentsRefetch({ variables: { input: commentInquiry } });
-		} catch (err: any) {
-			sweetErrorHandling(err).then();
-		}
-	};
-
-	const likePropertyHandler = async (user: any, id: string) => {
-		try {
-			if (!id) return;
-			if (!user._id) throw new Error(Messages.error2);
-
-			await likeTargetProperty({ variables: { input: id } });
-			await getPropertiesRefetch({ variables: { input: searchFilter } });
-			await sweetTopSmallSuccessAlert('success', 800);
-		} catch (err: any) {
-			console.log('ERROR:likePropertyHandler', err.mssage);
-			sweetMixinErrorAlert(err.message).then();
-		}
-	};
-
-	if (device === 'mobile') {
-		return <div>AGENT DETAIL PAGE MOBILE</div>;
-	} else {
+	if (!trainer) {
 		return (
-			<Stack className={'agent-detail-page'}>
-				<Stack className={'container'}>
-					<Stack className={'agent-info'}>
-						<img
-							src={agent?.memberImage ? `${REACT_APP_API_URL}/${agent?.memberImage}` : '/img/profile/defaultUser.svg'}
-							alt=""
-						/>
-						<Box component={'div'} className={'info'} onClick={() => redirectToMemberPageHandler(agent?._id as string)}>
-							<strong>{agent?.memberFullName ?? agent?.memberNick}</strong>
-							<div>
-								<img src="/img/icons/call.svg" alt="" />
-								<span>{agent?.memberPhone}</span>
-							</div>
-						</Box>
-					</Stack>
-					<Stack className={'agent-home-list'}>
-						<Stack className={'card-wrap'}>
-							{agentProperties.map((property: Property) => {
-								return (
-									<div className={'wrap-main'} key={property?._id}>
-										<PropertyBigCard
-											property={property}
-											key={property?._id}
-											likePropertyHandler={likePropertyHandler}
-										/>
-									</div>
-								);
-							})}
-						</Stack>
-						<Stack className={'pagination'}>
-							{propertyTotal ? (
-								<>
-									<Stack className="pagination-box">
-										<Pagination
-											page={searchFilter.page}
-											count={Math.ceil(propertyTotal / searchFilter.limit) || 1}
-											onChange={propertyPaginationChangeHandler}
-											shape="circular"
-											color="primary"
-										/>
-									</Stack>
-									<span>
-										Total {propertyTotal} propert{propertyTotal > 1 ? 'ies' : 'y'} available
-									</span>
-								</>
-							) : (
-								<div className={'no-data'}>
-									<img src="/img/icons/icoAlert.svg" alt="" />
-									<p>No properties found!</p>
-								</div>
-							)}
-						</Stack>
-					</Stack>
-					<Stack className={'review-box'}>
-						<Stack className={'main-intro'}>
-							<span>Reviews</span>
-							<p>we are glad to see you again</p>
-						</Stack>
-						{commentTotal !== 0 && (
-							<Stack className={'review-wrap'}>
-								<Box component={'div'} className={'title-box'}>
-									<StarIcon />
-									<span>
-										{commentTotal} review{commentTotal > 1 ? 's' : ''}
-									</span>
-								</Box>
-								{agentComments?.map((comment: Comment) => {
-									return <ReviewCard comment={comment} key={comment?._id} />;
-								})}
-								<Box component={'div'} className={'pagination-box'}>
-									<Pagination
-										page={commentInquiry.page}
-										count={Math.ceil(commentTotal / commentInquiry.limit) || 1}
-										onChange={commentPaginationChangeHandler}
-										shape="circular"
-										color="primary"
-									/>
-								</Box>
-							</Stack>
-						)}
-
-						<Stack className={'leave-review-config'}>
-							<Typography className={'main-title'}>Leave A Review</Typography>
-							<Typography className={'review-title'}>Review</Typography>
-							<textarea
-								onChange={({ target: { value } }: any) => {
-									setInsertCommentData({ ...insertCommentData, commentContent: value });
-								}}
-								value={insertCommentData.commentContent}
-							></textarea>
-							<Box className={'submit-btn'} component={'div'}>
-								<Button
-									className={'submit-review'}
-									disabled={insertCommentData.commentContent === '' || user?._id === ''}
-									onClick={createCommentHandler}
-								>
-									<Typography className={'title'}>Submit Review</Typography>
-									<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-										<g clipPath="url(#clip0_6975_3642)">
-											<path
-												d="M16.1571 0.5H6.37936C6.1337 0.5 5.93491 0.698792 5.93491 0.944458C5.93491 1.19012 6.1337 1.38892 6.37936 1.38892H15.0842L0.731781 15.7413C0.558156 15.915 0.558156 16.1962 0.731781 16.3698C0.818573 16.4566 0.932323 16.5 1.04603 16.5C1.15974 16.5 1.27345 16.4566 1.36028 16.3698L15.7127 2.01737V10.7222C15.7127 10.9679 15.9115 11.1667 16.1572 11.1667C16.4028 11.1667 16.6016 10.9679 16.6016 10.7222V0.944458C16.6016 0.698792 16.4028 0.5 16.1571 0.5Z"
-												fill="#181A20"
-											/>
-										</g>
-										<defs>
-											<clipPath id="clip0_6975_3642">
-												<rect width="16" height="16" fill="white" transform="translate(0.601562 0.5)" />
-											</clipPath>
-										</defs>
-									</svg>
-								</Button>
-							</Box>
-						</Stack>
-					</Stack>
-				</Stack>
-			</Stack>
+			<div id="trainer-detail-page">
+				<div className="tdp-not-found">
+					<span>🏋️</span>
+					<h2>Trainer not found</h2>
+					<Link href="/trainer"><button>Browse Trainers</button></Link>
+				</div>
+			</div>
 		);
 	}
-};
-AgentDetail.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 9,
-		sort: 'createdAt',
-		direction: 'DESC',
-		search: {
-			memberId: '',
-		},
-	},
-	initialComment: {
-		page: 1,
-		limit: 5,
-		sort: 'createdAt',
-		direction: 'ASC',
-		search: {
-			commentRefId: '',
-		},
-	},
+
+	if (device === 'mobile') {
+		return (
+			<div id="trainer-detail-page">
+				<div className="tdp-not-found"><span>📱</span><p>Mobile view coming soon.</p></div>
+			</div>
+		);
+	}
+
+	// ── Derived data ─────────────────────────────────────────────────────────
+	const feedbackKey = trainer.specialty.replace(' ', '_').toUpperCase();
+	const feedbacks = feedbacksByTrainer[feedbackKey] ?? feedbacksByTrainer[trainer.specialty as keyof typeof feedbacksByTrainer] ?? defaultFeedback;
+	const avgRating = feedbacks.reduce((sum, f) => sum + f.scale, 0) / feedbacks.length;
+
+	// Programs matching this trainer's specialty (memberId will link in backend)
+	const trainerPrograms = allPrograms
+		.filter((p) => p.type === trainer.specialty || p.type === trainer.secondarySpecialty)
+		.slice(0, 3);
+
+	const displayClients  = trainer.clients >= 1000 ? `${(trainer.clients / 1000).toFixed(1)}K` : String(trainer.clients);
+	const displayFollowers = Math.floor(trainer.clients * 1.4);
+	const displayFollowersStr = displayFollowers >= 1000 ? `${(displayFollowers / 1000).toFixed(1)}K` : String(displayFollowers);
+
+	const ratingDist = [
+		{ stars: 5, count: feedbacks.filter((f) => f.scale === 5).length },
+		{ stars: 4, count: feedbacks.filter((f) => f.scale === 4).length },
+		{ stars: 3, count: feedbacks.filter((f) => f.scale === 3).length },
+		{ stars: 2, count: feedbacks.filter((f) => f.scale === 2).length },
+		{ stars: 1, count: feedbacks.filter((f) => f.scale === 1).length },
+	];
+
+	return (
+		<div id="trainer-detail-page">
+
+			{/* ─── HERO ─────────────────────────────────────────────── */}
+			<div className="tdp-hero" style={{ background: trainer.gradient }}>
+				<div className="tdp-hero-overlay" />
+				<div className="tdp-hero-inner">
+					<Link href="/trainer" className="tdp-back">← Trainers</Link>
+					<div className="tdp-hero-profile">
+						<div className="tdp-avatar">{trainer.icon}</div>
+						<div className="tdp-hero-info">
+							<div className="tdp-level-badge">{trainer.level}</div>
+							<h1 className="tdp-name">{trainer.name}</h1>
+							<p className="tdp-nick">@{trainer.nickname}</p>
+							<div className="tdp-specialty-row">
+								<span className="tdp-specialty-tag">{trainer.specialty}</span>
+								{trainer.secondarySpecialty && (
+									<span className="tdp-specialty-tag secondary">{trainer.secondarySpecialty}</span>
+								)}
+							</div>
+						</div>
+					</div>
+					<div className="tdp-hero-stats">
+						<div className="tdp-hs-item">
+							<span className="ths-val">★ {trainer.rating}</span>
+							<span className="ths-lbl">Rating</span>
+						</div>
+						<div className="tdp-hs-sep" />
+						<div className="tdp-hs-item">
+							<span className="ths-val">{displayClients}</span>
+							<span className="ths-lbl">Clients</span>
+						</div>
+						<div className="tdp-hs-sep" />
+						<div className="tdp-hs-item">
+							<span className="ths-val">{displayFollowersStr}</span>
+							<span className="ths-lbl">Followers</span>
+						</div>
+						<div className="tdp-hs-sep" />
+						<div className="tdp-hs-item">
+							<span className="ths-val">{trainer.programs}</span>
+							<span className="ths-lbl">Programs</span>
+						</div>
+						<div className="tdp-hs-sep" />
+						<div className="tdp-hs-item">
+							<span className="ths-val">{trainer.experience}</span>
+							<span className="ths-lbl">Experience</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* ─── BODY ─────────────────────────────────────────────── */}
+			<div className="tdp-body">
+
+				{/* ── LEFT main ─────────────────────────────────────── */}
+				<div className="tdp-main">
+
+					{/* About */}
+					<section className="tdp-section">
+						<h2 className="tdp-section-title">About</h2>
+						<p className="tdp-bio">{trainer.bio} With {trainer.experience} in the industry, {trainer.name.split(' ')[0]} has helped {displayClients}+ clients reach their goals through evidence-based programming and personalized coaching. Specializing in {trainer.specialty.toLowerCase()}{trainer.secondarySpecialty ? ` and ${trainer.secondarySpecialty.toLowerCase()}` : ''}, every program is designed for sustainable, long-term results.</p>
+					</section>
+
+					{/* Specialties */}
+					<section className="tdp-section">
+						<h2 className="tdp-section-title">Specialties</h2>
+						<div className="tdp-spec-chips">
+							<span className="tdp-spec-chip primary">{trainer.specialty}</span>
+							{trainer.secondarySpecialty && (
+								<span className="tdp-spec-chip">{trainer.secondarySpecialty}</span>
+							)}
+							<span className="tdp-spec-chip muted">{trainer.level} LEVEL</span>
+							<span className="tdp-spec-chip muted">{trainer.experience} EXPERIENCE</span>
+						</div>
+					</section>
+
+					{/* Certifications */}
+					<section className="tdp-section">
+						<h2 className="tdp-section-title">Certifications</h2>
+						<div className="tdp-cert-list">
+							{trainer.certifications.map((cert, i) => (
+								<div key={i} className="tdp-cert-row">
+									<span className="tdp-cert-icon">✓</span>
+									<span className="tdp-cert-text">{cert}</span>
+								</div>
+							))}
+						</div>
+					</section>
+
+					{/* Programs */}
+					{trainerPrograms.length > 0 && (
+						<section className="tdp-section">
+							<div className="tdp-section-header">
+								<h2 className="tdp-section-title">Programs</h2>
+								<Link href="/programs" className="tdp-see-all">See all →</Link>
+							</div>
+							<div className="tdp-programs-grid">
+								{trainerPrograms.map((prog) => (
+									<Link href={`/programs/${prog.id}`} key={prog.id} className="tdp-prog-card">
+										<div className="tpc-banner" style={{ background: prog.gradient }}>
+											<div className="tpc-overlay" />
+											<span className="tpc-icon">{prog.type.charAt(0)}</span>
+										</div>
+										<div className="tpc-body">
+											<span className="tpc-type">{prog.type}</span>
+											<p className="tpc-name">{prog.name}</p>
+											<div className="tpc-meta">
+												<span>⏱ {prog.duration}wk</span>
+												<span>★ {prog.rating}</span>
+												<span className="tpc-price">{prog.price === 0 ? 'FREE' : `$${prog.price}`}</span>
+											</div>
+										</div>
+									</Link>
+								))}
+							</div>
+						</section>
+					)}
+
+					{/* Feedback (Feedback entity: feedbackScale + feedbackContent) */}
+					<section className="tdp-section">
+						<div className="tdp-section-header">
+							<h2 className="tdp-section-title">Client Feedback</h2>
+							<span className="tdp-avg-rating">★ {avgRating.toFixed(1)} · {feedbacks.length * 60}+ reviews</span>
+						</div>
+
+						{/* Rating distribution */}
+						<div className="tdp-rbar-block">
+							<div className="tdp-rbar-score">
+								<span className="tdp-rbar-big">{avgRating.toFixed(1)}</span>
+								<StarRating scale={Math.round(avgRating)} />
+								<span className="tdp-rbar-total">{feedbacks.length * 60}+ clients rated</span>
+							</div>
+							<div className="tdp-rbar-bars">
+								{ratingDist.map(({ stars, count }) => {
+									const pct = feedbacks.length > 0 ? Math.round((count / feedbacks.length) * 100) : 0;
+									return (
+										<div key={stars} className="tdp-rbar-row">
+											<span className="tdp-rbar-lbl">{stars} ★</span>
+											<div className="tdp-rbar-track">
+												<div className="tdp-rbar-fill" style={{ width: `${pct}%` }} />
+											</div>
+											<span className="tdp-rbar-pct">{pct}%</span>
+										</div>
+									);
+								})}
+							</div>
+						</div>
+
+						{/* Feedback cards (mirrors Feedback entity) */}
+						<div className="tdp-feedback-grid">
+							{feedbacks.map((fb, i) => (
+								<div key={i} className="tdp-fb-card">
+									<div className="tdp-fb-head">
+										<div className="tdp-fb-avatar">{fb.initials}</div>
+										<div className="tdp-fb-meta">
+											<span className="tdp-fb-name">{fb.name}</span>
+											<span className="tdp-fb-date">{fb.date}</span>
+										</div>
+										<div className="tdp-fb-right">
+											<StarRating scale={fb.scale} />
+											<span
+												className="tdp-fb-plan"
+												style={{ color: planBadgeColor[fb.plan] ?? '#888' }}
+											>
+												{fb.plan}
+											</span>
+										</div>
+									</div>
+									<p className="tdp-fb-text">{fb.content}</p>
+								</div>
+							))}
+						</div>
+					</section>
+				</div>
+
+				{/* ── RIGHT sticky sidebar ───────────────────────────── */}
+				<aside className="tdp-sidebar">
+					<div className="tdp-action-card">
+						<div className="tdp-ac-price">
+							<span className="tdp-ac-from">From</span>
+							<span className="tdp-ac-amount">$49<span className="tdp-ac-per">/session</span></span>
+						</div>
+						<button className="tdp-ac-book">Book a Session →</button>
+						<button
+							className={`tdp-ac-follow ${followed ? 'following' : ''}`}
+							onClick={() => setFollowed((f) => !f)}
+						>
+							{followed ? '✓ Following' : '+ Follow'}
+						</button>
+
+						<div className="tdp-ac-divider" />
+
+						{/* memberPlan equivalent */}
+						<div className="tdp-ac-rows">
+							<div className="tdp-ac-row">
+								<span>Specialty</span>
+								<span>{trainer.specialty}</span>
+							</div>
+							<div className="tdp-ac-row">
+								<span>Level</span>
+								<span>{trainer.level}</span>
+							</div>
+							<div className="tdp-ac-row">
+								<span>Experience</span>
+								<span>{trainer.experience}</span>
+							</div>
+							<div className="tdp-ac-row">
+								<span>Clients</span>
+								<span>{displayClients}</span>
+							</div>
+							<div className="tdp-ac-row">
+								<span>Programs</span>
+								<span>{trainer.programs} active</span>
+							</div>
+							<div className="tdp-ac-row">
+								<span>Rating</span>
+								<span>★ {trainer.rating}</span>
+							</div>
+						</div>
+
+						<div className="tdp-ac-divider" />
+
+						<p className="tdp-ac-label">CERTIFICATIONS</p>
+						<div className="tdp-ac-certs">
+							{trainer.certifications.map((c, i) => (
+								<div key={i} className="tdp-ac-cert">
+									<span className="tdp-cert-dot" />
+									{c}
+								</div>
+							))}
+						</div>
+					</div>
+				</aside>
+			</div>
+		</div>
+	);
 };
 
-export default withLayoutBasic(AgentDetail);
+export default withLayoutBasic(TrainerDetail);
