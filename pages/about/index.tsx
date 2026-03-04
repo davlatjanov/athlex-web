@@ -37,17 +37,17 @@ const About: NextPage = () => {
 						<div className={'ab-intro-right'}>
 							<div className={'ab-img-main'}>
 								<img
-									src="https://i.pinimg.com/1200x/6d/10/d1/6d10d1e5cc21d22bf513221855b572a1.jpg"
+									src="https://images.pexels.com/photos/6456128/pexels-photo-6456128.jpeg?auto=compress&cs=tinysrgb&w=900&h=700&dpr=1"
 									alt="Athlete training"
 								/>
 							</div>
 							<div className={'ab-img-thumbs'}>
 								<img
-									src="https://i.pinimg.com/736x/e7/7e/30/e77e3098a5bf5d630418d7c7cc133092.jpg"
+									src="https://images.pexels.com/photos/6388382/pexels-photo-6388382.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
 									alt="Programs"
 								/>
 								<img
-									src="https://i.pinimg.com/736x/13/c8/34/13c83449624a1a9ea2672a5ebdaf97ec.jpg"
+									src="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
 									alt="Gear"
 								/>
 							</div>
@@ -85,7 +85,7 @@ const About: NextPage = () => {
 					<div className={'container ab-offers-inner'}>
 						<div className={'ab-offers-img'}>
 							<img
-								src="https://i.pinimg.com/736x/b4/af/45/b4af45aa415fad2f0399bc69477a06a2.jpg"
+								src="https://images.pexels.com/photos/6296002/pexels-photo-6296002.jpeg?auto=compress&cs=tinysrgb&w=900&h=700&dpr=1"
 								alt="Training"
 							/>
 						</div>
@@ -123,7 +123,7 @@ const About: NextPage = () => {
 				{/* ── CTA ── */}
 				<section className={'ab-cta'}>
 					<img
-						src="https://images.pexels.com/photos/5961414/pexels-photo-5961414.jpeg?auto=compress&cs=tinysrgb&w=1920"
+						src="https://images.pexels.com/photos/5327555/pexels-photo-5327555.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1"
 						alt=""
 						className={'ab-cta-bg'}
 					/>
