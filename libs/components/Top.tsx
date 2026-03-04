@@ -166,11 +166,9 @@ const Top = () => {
 							<Link href={'/products'}>
 								<div>{t('Shop')}</div>
 							</Link>
-							{user?._id && (
-								<Link href={'/mypage'}>
-									<div>{t('My Page')}</div>
-								</Link>
-							)}
+							<Link href={'/mypage'}>
+								<div>{t('My Page')}</div>
+							</Link>
 							<Link href={'/cs'}>
 								<div>{t('CS')}</div>
 							</Link>

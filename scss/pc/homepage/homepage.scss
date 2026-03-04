@@ -1,14 +1,14 @@
 // ─── DESIGN TOKENS ───────────────────────────────────────────────
-$bg-main:       #0a0a0a;
-$bg-section:    #111111;
-$bg-card:       #1a1a1a;
-$accent:        #E92C28;
-$accent-hover:  #ff3d39;
+$bg-main:       #0F172A;
+$bg-section:    #111827;
+$bg-card:       #1F2937;
+$accent:        #22C55E;
+$accent-hover:  #16a34a;
 $text-primary:  #ffffff;
-$text-secondary:#aaaaaa;
-$text-muted:    #666666;
+$text-secondary:#9CA3AF;
+$text-muted:    #6B7280;
 $border:        rgba(255, 255, 255, 0.08);
-$border-accent: rgba(233, 44, 40, 0.4);
+$border-accent: rgba(34, 197, 94, 0.4);
 
 // ─── SHARED HELPERS ───────────────────────────────────────────────
 %section-padding {
@@ -367,7 +367,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 		// ─── STATS BANNER ────────────────────────────────────────────
 		.stats-banner {
 			width: 100%;
-			background: $accent;
+			background: transparent;
 			padding: 28px 0;
 			display: flex;
 			flex-direction: row;
@@ -376,6 +376,9 @@ $border-accent: rgba(233, 44, 40, 0.4);
 				flex-direction: row;
 				justify-content: space-between;
 				align-items: center;
+				background: $accent;
+				border-radius: 14px;
+				padding: 24px 48px;
 			}
 
 			.stat-item {
@@ -502,7 +505,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 		.video-frame {
 			width: 100%;
 			height: 560px;
-			background: #000;
+			background: $bg-main;
 			overflow: hidden;
 		}
 
@@ -539,7 +542,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 					flex-shrink: 0;
 					transition: border-color 0.2s, background 0.2s;
 					svg { color: $text-secondary; width: 14px; height: 14px; }
-					&:hover { border-color: $accent; background: rgba(233,44,40,0.1); svg { color: $accent; } }
+					&:hover { border-color: $accent; background: rgba(34,197,94,0.1); svg { color: $accent; } }
 					&.swiper-trainers-next { transform: rotate(180deg); }
 				}
 
@@ -637,7 +640,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 
 					.chat-header {
 						padding: 16px 20px;
-						background: rgba(233, 44, 40, 0.08);
+						background: rgba(34, 197, 94, 0.08);
 						border-bottom: 1px solid $border;
 						display: flex;
 						align-items: center;
@@ -770,7 +773,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 					gap: 20px;
 					position: relative;
 
-					&.plan-highlight { border-color: $accent; background: rgba(233,44,40,0.05); }
+					&.plan-highlight { border-color: $accent; background: rgba(34,197,94,0.05); }
 
 					.plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 4px 16px; background: $accent; color: #fff; font-family: $font; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; border-radius: 20px; white-space: nowrap; }
 
@@ -812,7 +815,7 @@ $border-accent: rgba(233, 44, 40, 0.4);
 		// ─── GYM EVENTS ──────────────────────────────────────────────
 		.gym-events {
 			@extend %section-padding;
-			background: #080808;
+			background: $bg-section;
 			.container { flex-direction: column; }
 			.white { color: $text-primary; }
 

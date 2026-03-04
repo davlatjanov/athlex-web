@@ -2,7 +2,7 @@
 #pc-wrap {
 	#product-detail-page {
 		min-height: 100vh;
-		background: #0a0a0a;
+		background: #0F172A;
 		padding-top: 80px;
 
 		// ─── NOT FOUND ──────────────────────────────────────────
@@ -17,7 +17,7 @@
 			h2 { color: #888888; font-family: $font; font-size: 20px; }
 			button {
 				padding: 12px 28px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 8px;
 				color: #fff;
@@ -97,7 +97,7 @@
 
 			.pdp-type-badge {
 				padding: 3px 10px;
-				background: #E92C28;
+				background: #22C55E;
 				color: #fff;
 				font-family: $font;
 				font-size: 9px;
@@ -194,7 +194,7 @@
 		}
 
 		.pdp-see-all {
-			color: #E92C28;
+			color: #22C55E;
 			font-family: $font;
 			font-size: 12px;
 			font-weight: 600;
@@ -221,9 +221,9 @@
 
 			.pdp-tag {
 				padding: 7px 14px;
-				background: rgba(233, 44, 40, 0.07);
-				border: 1px solid rgba(233, 44, 40, 0.2);
-				color: #E92C28;
+				background: rgba(34, 197, 94, 0.07);
+				border: 1px solid rgba(34, 197, 94, 0.2);
+				color: #22C55E;
 				font-family: $font;
 				font-size: 11px;
 				font-weight: 600;
@@ -279,7 +279,7 @@
 				display: block;
 				transition: border-color 0.2s, transform 0.2s;
 
-				&:hover { border-color: rgba(233, 44, 40, 0.2); transform: translateY(-2px); }
+				&:hover { border-color: rgba(34, 197, 94, 0.2); transform: translateY(-2px); }
 
 				.pdp-rel-visual {
 					height: 80px;
@@ -297,7 +297,7 @@
 					gap: 4px;
 
 					.pdp-rel-type {
-						color: #E92C28;
+						color: #22C55E;
 						font-family: $font;
 						font-size: 8px;
 						font-weight: 700;
@@ -396,7 +396,7 @@
 					display: flex;
 					align-items: center;
 					gap: 0;
-					background: #1a1a1a;
+					background: #1F2937;
 					border: 1px solid rgba(255, 255, 255, 0.08);
 					border-radius: 6px;
 					overflow: hidden;
@@ -413,7 +413,7 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						&:hover { background: rgba(233, 44, 40, 0.1); color: #E92C28; }
+						&:hover { background: rgba(34, 197, 94, 0.1); color: #22C55E; }
 					}
 
 					.pdp-qty-val {
@@ -432,7 +432,7 @@
 			.pdp-add-btn {
 				width: 100%;
 				padding: 14px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 8px;
 				color: #ffffff;
@@ -470,12 +470,12 @@
 				cursor: pointer;
 				transition: all 0.2s;
 
-				&:hover { border-color: rgba(233, 44, 40, 0.3); color: #E92C28; }
+				&:hover { border-color: rgba(34, 197, 94, 0.3); color: #22C55E; }
 
 				&.liked {
-					color: #E92C28;
-					border-color: rgba(233, 44, 40, 0.35);
-					background: rgba(233, 44, 40, 0.06);
+					color: #22C55E;
+					border-color: rgba(34, 197, 94, 0.35);
+					background: rgba(34, 197, 94, 0.06);
 				}
 			}
 

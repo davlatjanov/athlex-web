@@ -2,7 +2,7 @@
 #pc-wrap {
 	#program-detail-page {
 		min-height: 100vh;
-		background: #0a0a0a;
+		background: #0F172A;
 		padding-top: 80px;
 
 		// ─── NOT FOUND ──────────────────────────────────────────
@@ -17,7 +17,7 @@
 			h2, p { color: #aaaaaa; font-family: $font; font-size: 18px; }
 			button {
 				padding: 12px 28px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 8px;
 				color: #fff;
@@ -91,7 +91,7 @@
 
 				.badge-type {
 					padding: 3px 10px;
-					background: #E92C28;
+					background: #22C55E;
 					color: #fff;
 					font-family: $font;
 					font-size: 9px;
@@ -186,7 +186,7 @@
 				align-items: center;
 				gap: 5px;
 				transition: border-color 0.2s;
-				&:hover { border-color: rgba(233, 44, 40, 0.2); }
+				&:hover { border-color: rgba(34, 197, 94, 0.2); }
 
 				.sp-icon { font-size: 20px; }
 
@@ -236,9 +236,9 @@
 
 			.muscle-chip {
 				padding: 5px 12px;
-				background: rgba(233, 44, 40, 0.07);
-				border: 1px solid rgba(233, 44, 40, 0.2);
-				color: #E92C28;
+				background: rgba(34, 197, 94, 0.07);
+				border: 1px solid rgba(34, 197, 94, 0.2);
+				color: #22C55E;
 				font-family: $font;
 				font-size: 10px;
 				font-weight: 700;
@@ -266,7 +266,7 @@
 					width: 5px;
 					height: 5px;
 					border-radius: 50%;
-					background: #E92C28;
+					background: #22C55E;
 					flex-shrink: 0;
 				}
 			}
@@ -288,8 +288,8 @@
 				text-align: center;
 
 				&.is-workout {
-					background: rgba(233, 44, 40, 0.05);
-					border: 1px solid rgba(233, 44, 40, 0.14);
+					background: rgba(34, 197, 94, 0.05);
+					border: 1px solid rgba(34, 197, 94, 0.14);
 				}
 
 				&.is-rest {
@@ -319,7 +319,7 @@
 				&.is-rest .wd-label { color: #2a2a2a; }
 
 				.wd-muscles {
-					color: #E92C28;
+					color: #22C55E;
 					font-family: $font;
 					font-size: 8px;
 					font-weight: 600;
@@ -352,12 +352,12 @@
 				border-radius: 7px;
 
 				&:nth-child(even) {
-					border-color: rgba(233, 44, 40, 0.1);
-					background: rgba(233, 44, 40, 0.03);
+					border-color: rgba(34, 197, 94, 0.1);
+					background: rgba(34, 197, 94, 0.03);
 				}
 
 				.pr-week {
-					color: #E92C28;
+					color: #22C55E;
 					font-family: $font;
 					font-size: 10px;
 					font-weight: 700;
@@ -373,7 +373,7 @@
 
 					.pr-bar-fill {
 						height: 100%;
-						background: linear-gradient(to right, rgba(233, 44, 40, 0.4), #E92C28);
+						background: linear-gradient(to right, rgba(34, 197, 94, 0.4), #22C55E);
 						border-radius: 2px;
 						transition: width 0.3s ease;
 					}
@@ -484,9 +484,9 @@
 						width: 36px;
 						height: 36px;
 						border-radius: 50%;
-						background: rgba(233, 44, 40, 0.08);
-						border: 1px solid rgba(233, 44, 40, 0.16);
-						color: #E92C28;
+						background: rgba(34, 197, 94, 0.08);
+						border: 1px solid rgba(34, 197, 94, 0.16);
+						color: #22C55E;
 						font-family: $font;
 						font-size: 12px;
 						font-weight: 800;
@@ -558,7 +558,7 @@
 			.ec-enroll-btn {
 				width: 100%;
 				padding: 14px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 8px;
 				color: #ffffff;
@@ -617,7 +617,7 @@
 
 				.equip-tag {
 					padding: 4px 9px;
-					background: #1a1a1a;
+					background: #1F2937;
 					border: 1px solid rgba(255, 255, 255, 0.07);
 					color: #777777;
 					font-family: $font;
@@ -635,8 +635,8 @@
 					width: 44px;
 					height: 44px;
 					border-radius: 50%;
-					background: rgba(233, 44, 40, 0.08);
-					border: 2px solid rgba(233, 44, 40, 0.18);
+					background: rgba(34, 197, 94, 0.08);
+					border: 2px solid rgba(34, 197, 94, 0.18);
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -699,7 +699,7 @@
 				font-weight: 600;
 				cursor: pointer;
 				transition: all 0.2s;
-				&:hover { border-color: rgba(233, 44, 40, 0.3); color: #cccccc; }
+				&:hover { border-color: rgba(34, 197, 94, 0.3); color: #cccccc; }
 			}
 		}
 

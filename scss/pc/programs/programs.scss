@@ -1,7 +1,7 @@
 // ─── PROGRAM CARD — shared styles (used on homepage + programs page) ──────────
 #pc-wrap {
 	.program-card {
-		background: #1a1a1a;
+		background: #1F2937;
 		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 12px;
 		overflow: hidden;
@@ -13,7 +13,7 @@
 
 		&:hover {
 			transform: translateY(-4px);
-			border-color: rgba(233, 44, 40, 0.4);
+			border-color: rgba(34, 197, 94, 0.4);
 		}
 
 		.card-visual {
@@ -84,20 +84,20 @@
 					flex-shrink: 0;
 
 					&:hover {
-						color: #E92C28;
-						border-color: rgba(233, 44, 40, 0.4);
+						color: #22C55E;
+						border-color: rgba(34, 197, 94, 0.4);
 					}
 
 					&.liked {
-						color: #E92C28;
-						border-color: rgba(233, 44, 40, 0.5);
-						background: rgba(233, 44, 40, 0.1);
+						color: #22C55E;
+						border-color: rgba(34, 197, 94, 0.5);
+						background: rgba(34, 197, 94, 0.1);
 					}
 				}
 
 				.type-badge {
 					padding: 4px 10px;
-					background: #E92C28;
+					background: #22C55E;
 					color: #fff;
 					font-family: $font;
 					font-size: 9px;
@@ -267,7 +267,7 @@
 
 				.btn-enroll {
 					padding: 6px 16px;
-					background: #E92C28;
+					background: #22C55E;
 					color: #fff;
 					font-family: $font;
 					font-size: 12px;
@@ -289,7 +289,7 @@
 #pc-wrap {
 	#programs-page {
 		min-height: 100vh;
-		background: #0a0a0a;
+		background: #0F172A;
 		padding: 120px 0 80px;
 
 		.programs-container {
@@ -332,7 +332,7 @@
 					.chip {
 						width: 100%;
 						padding: 9px 14px;
-						background: #1a1a1a;
+						background: #1F2937;
 						border: 1px solid rgba(255, 255, 255, 0.08);
 						border-radius: 8px;
 						color: #aaaaaa;
@@ -344,14 +344,14 @@
 						transition: all 0.2s ease;
 
 						&:hover {
-							border-color: rgba(233, 44, 40, 0.4);
+							border-color: rgba(34, 197, 94, 0.4);
 							color: #ffffff;
 						}
 
 						&.active {
-							background: rgba(233, 44, 40, 0.12);
-							border-color: #E92C28;
-							color: #E92C28;
+							background: rgba(34, 197, 94, 0.12);
+							border-color: #22C55E;
+							color: #22C55E;
 							font-weight: 700;
 						}
 					}
@@ -367,7 +367,7 @@
 						align-items: center;
 						gap: 10px;
 						padding: 9px 14px;
-						background: #1a1a1a;
+						background: #1F2937;
 						border: 1px solid rgba(255, 255, 255, 0.08);
 						border-radius: 8px;
 						color: #aaaaaa;
@@ -377,19 +377,19 @@
 						transition: all 0.2s ease;
 
 						input[type='radio'] {
-							accent-color: #E92C28;
+							accent-color: #22C55E;
 							cursor: pointer;
 						}
 
 						&:hover {
-							border-color: rgba(233, 44, 40, 0.4);
+							border-color: rgba(34, 197, 94, 0.4);
 							color: #ffffff;
 						}
 
 						&.active {
-							background: rgba(233, 44, 40, 0.12);
-							border-color: #E92C28;
-							color: #E92C28;
+							background: rgba(34, 197, 94, 0.12);
+							border-color: #22C55E;
+							color: #22C55E;
 							font-weight: 600;
 						}
 					}
@@ -446,7 +446,7 @@
 
 						.sort-btn {
 							padding: 7px 14px;
-							background: #1a1a1a;
+							background: #1F2937;
 							border: 1px solid rgba(255, 255, 255, 0.08);
 							border-radius: 6px;
 							color: #aaaaaa;
@@ -458,13 +458,13 @@
 							white-space: nowrap;
 
 							&:hover {
-								border-color: rgba(233, 44, 40, 0.4);
+								border-color: rgba(34, 197, 94, 0.4);
 								color: #ffffff;
 							}
 
 							&.active {
-								background: #E92C28;
-								border-color: #E92C28;
+								background: #22C55E;
+								border-color: #22C55E;
 								color: #ffffff;
 								font-weight: 700;
 							}
@@ -501,7 +501,7 @@
 
 				button {
 					padding: 10px 24px;
-					background: #E92C28;
+					background: #22C55E;
 					border: none;
 					border-radius: 8px;
 					color: #ffffff;
@@ -528,7 +528,7 @@
 					min-width: 40px;
 					height: 40px;
 					padding: 0 14px;
-					background: #1a1a1a;
+					background: #1F2937;
 					border: 1px solid rgba(255, 255, 255, 0.08);
 					border-radius: 8px;
 					color: #aaaaaa;
@@ -539,13 +539,13 @@
 					transition: all 0.2s ease;
 
 					&:hover:not(:disabled) {
-						border-color: #E92C28;
+						border-color: #22C55E;
 						color: #ffffff;
 					}
 
 					&.active {
-						background: #E92C28;
-						border-color: #E92C28;
+						background: #22C55E;
+						border-color: #22C55E;
 						color: #ffffff;
 						font-weight: 700;
 					}

@@ -7,7 +7,7 @@
 		overflow: hidden;
 		transition: transform 0.22s ease, border-color 0.22s ease;
 
-		&:hover { transform: translateY(-3px); border-color: rgba(233, 44, 40, 0.2); }
+		&:hover { transform: translateY(-3px); border-color: rgba(34, 197, 94, 0.2); }
 		&.out-of-stock { opacity: 0.7; }
 
 		.pc-link {
@@ -19,7 +19,7 @@
 			position: relative;
 			height: 180px;
 			overflow: hidden;
-			background: #111;
+			background: #111827;
 
 			.pc-img {
 				position: absolute;
@@ -72,11 +72,11 @@
 				transition: all 0.2s;
 				z-index: 3;
 
-				&:hover { color: #E92C28; border-color: rgba(233, 44, 40, 0.4); }
+				&:hover { color: #22C55E; border-color: rgba(34, 197, 94, 0.4); }
 				&.liked {
-					color: #E92C28;
-					border-color: rgba(233, 44, 40, 0.5);
-					background: rgba(233, 44, 40, 0.1);
+					color: #22C55E;
+					border-color: rgba(34, 197, 94, 0.5);
+					background: rgba(34, 197, 94, 0.1);
 				}
 			}
 
@@ -87,7 +87,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				color: #E92C28;
+				color: #22C55E;
 				font-family: $font;
 				font-size: 11px;
 				font-weight: 800;
@@ -105,7 +105,7 @@
 			gap: 6px;
 
 			.pc-brand {
-				color: #E92C28;
+				color: #22C55E;
 				font-family: $font;
 				font-size: 9px;
 				font-weight: 700;
@@ -160,7 +160,7 @@
 
 				.pc-btn {
 					padding: 7px 14px;
-					background: #E92C28;
+					background: #22C55E;
 					border: none;
 					border-radius: 6px;
 					color: #fff;
@@ -185,7 +185,7 @@
 	// ─── PRODUCTS LISTING PAGE ─────────────────────────────────────────────────
 	#products-page {
 		min-height: 100vh;
-		background: #0a0a0a;
+		background: #0F172A;
 		padding-top: 80px;
 
 		.shop-container {
@@ -243,11 +243,11 @@
 			transition: all 0.18s;
 			text-transform: uppercase;
 
-			&:hover { border-color: rgba(233, 44, 40, 0.18); color: #aaaaaa; }
+			&:hover { border-color: rgba(34, 197, 94, 0.18); color: #aaaaaa; }
 			&.active {
-				background: rgba(233, 44, 40, 0.08);
-				border-color: rgba(233, 44, 40, 0.28);
-				color: #E92C28;
+				background: rgba(34, 197, 94, 0.08);
+				border-color: rgba(34, 197, 94, 0.28);
+				color: #22C55E;
 			}
 		}
 
@@ -284,9 +284,9 @@
 			&.active {
 				color: #ffffff;
 				&::before {
-					border-color: #E92C28;
-					background: #E92C28;
-					box-shadow: 0 0 0 2px rgba(233, 44, 40, 0.2);
+					border-color: #22C55E;
+					background: #22C55E;
+					box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
 				}
 			}
 		}
@@ -329,11 +329,11 @@
 			&.on {
 				color: #ffffff;
 				.shop-toggle-track {
-					background: rgba(233, 44, 40, 0.2);
-					border-color: rgba(233, 44, 40, 0.4);
+					background: rgba(34, 197, 94, 0.2);
+					border-color: rgba(34, 197, 94, 0.4);
 					.shop-toggle-thumb {
 						left: calc(100% - 16px);
-						background: #E92C28;
+						background: #22C55E;
 					}
 				}
 			}
@@ -387,9 +387,9 @@
 
 				&:hover { color: #aaaaaa; border-color: rgba(255, 255, 255, 0.1); }
 				&.active {
-					background: rgba(233, 44, 40, 0.08);
-					border-color: rgba(233, 44, 40, 0.25);
-					color: #E92C28;
+					background: rgba(34, 197, 94, 0.08);
+					border-color: rgba(34, 197, 94, 0.25);
+					color: #22C55E;
 				}
 			}
 		}
@@ -413,7 +413,7 @@
 			p { color: #555555; font-family: $font; font-size: 15px; }
 			button {
 				padding: 10px 24px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 7px;
 				color: #fff;
@@ -446,8 +446,8 @@
 				transition: all 0.18s;
 				min-width: 40px;
 
-				&:hover:not(:disabled) { border-color: rgba(233, 44, 40, 0.25); color: #ffffff; }
-				&.active { background: #E92C28; border-color: #E92C28; color: #ffffff; }
+				&:hover:not(:disabled) { border-color: rgba(34, 197, 94, 0.25); color: #ffffff; }
+				&.active { background: #22C55E; border-color: #22C55E; color: #ffffff; }
 				&:disabled { opacity: 0.25; cursor: not-allowed; }
 			}
 		}
