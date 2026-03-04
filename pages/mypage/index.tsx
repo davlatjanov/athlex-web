@@ -30,6 +30,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -37,16 +38,33 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const TABS = [
+// ── Tab definitions per role ──────────────────────────────
+const USER_TABS = [
+	{ key: 'myProfile', label: 'Profile' },
+	{ key: 'myFavorites', label: 'Saved Programs' },
+	{ key: 'recentlyVisited', label: 'Recent' },
+	{ key: 'followers', label: 'Followers' },
+	{ key: 'followings', label: 'Following' },
+];
+
+const AGENT_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myProperties', label: 'My Programs' },
+	{ key: 'addProperty', label: 'Add Program' },
 	{ key: 'myFavorites', label: 'Saved' },
 	{ key: 'recentlyVisited', label: 'Recent' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
 ];
 
-const TRAINER_TABS = [{ key: 'addProperty', label: 'Add Program' }, ...TABS];
+const ADMIN_TABS = [
+	{ key: 'myProfile', label: 'Profile' },
+	{ key: 'myFavorites', label: 'Saved' },
+	{ key: 'recentlyVisited', label: 'Recent' },
+	{ key: 'followers', label: 'Followers' },
+	{ key: 'followings', label: 'Following' },
+	{ key: 'adminPanel', label: 'Admin Panel' },
+];
 
 const PLAN_LABEL: Record<string, string> = {
 	BEGINNER: 'Beginner',
@@ -62,7 +80,12 @@ const MyPage: NextPage = () => {
 	const category: any = router.query?.category ?? 'dashboard';
 	const u = user as any;
 
-	const tabs = u?.memberType === 'AGENT' ? TRAINER_TABS : TABS;
+	const getTabs = () => {
+		if (u?.memberType === 'AGENT') return AGENT_TABS;
+		if (u?.memberType === 'ADMIN') return ADMIN_TABS;
+		return USER_TABS;
+	};
+	const tabs = getTabs();
 
 	/** APOLLO REQUESTS **/
 	const [subscribe] = useMutation(SUBSCRIBE);
@@ -123,6 +146,183 @@ const MyPage: NextPage = () => {
 		}
 	};
 
+	// ── Role-based bento grids ────────────────────────────
+
+	const UserBento = () => (
+		<div className={'mp-bento'}>
+			{/* Saved Programs — 2×2 hero tile (teal accent) */}
+			<Link href={{ pathname: '/mypage', query: { category: 'myFavorites' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--saved-big'}>
+					<BookmarkBorderIcon className={'tile-icon'} />
+					<div className={'tile-body'}>
+						<span className={'tile-label'}>SAVED PROGRAMS</span>
+						<strong className={'tile-count'}>0</strong>
+						<p className={'tile-desc'}>Your bookmarked training programs</p>
+					</div>
+					<ArrowForwardIosIcon className={'tile-arrow'} />
+				</div>
+			</Link>
+
+			{/* Followers */}
+			<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--followers'}>
+					<PeopleOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>FOLLOWERS</span>
+					<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
+					<p className={'tile-desc'}>People following you</p>
+				</div>
+			</Link>
+
+			{/* Following */}
+			<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--following'}>
+					<PersonOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>FOLLOWING</span>
+					<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
+					<p className={'tile-desc'}>Trainers you follow</p>
+				</div>
+			</Link>
+
+			{/* Recent */}
+			<Link href={{ pathname: '/mypage', query: { category: 'recentlyVisited' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--recent'}>
+					<HistoryIcon className={'tile-icon'} />
+					<span className={'tile-label'}>RECENT</span>
+					<strong className={'tile-count'}>0</strong>
+					<p className={'tile-desc'}>Recently viewed</p>
+				</div>
+			</Link>
+
+			{/* Points */}
+			<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--points'}>
+					<EmojiEventsOutlinedIcon className={'tile-icon'} />
+					<span className={'tile-label'}>POINTS</span>
+					<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
+					<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
+				</div>
+			</Link>
+		</div>
+	);
+
+	const AgentBento = () => (
+		<div className={'mp-bento'}>
+			{/* My Programs — 2×2 hero tile (green accent) */}
+			<Link href={{ pathname: '/mypage', query: { category: 'myProperties' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--programs'}>
+					<FitnessCenterIcon className={'tile-icon'} />
+					<div className={'tile-body'}>
+						<span className={'tile-label'}>MY PROGRAMS</span>
+						<strong className={'tile-count'}>{u?.memberProperties ?? 0}</strong>
+						<p className={'tile-desc'}>Training programs you manage</p>
+					</div>
+					<ArrowForwardIosIcon className={'tile-arrow'} />
+				</div>
+			</Link>
+
+			{/* Add Program — 1×1 green CTA */}
+			<Link href={{ pathname: '/mypage', query: { category: 'addProperty' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--add-program'}>
+					<AddCircleOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>ADD PROGRAM</span>
+					<p className={'tile-desc'}>Create a new training program</p>
+				</div>
+			</Link>
+
+			{/* Followers / Students */}
+			<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--followers'}>
+					<PeopleOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>STUDENTS</span>
+					<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
+					<p className={'tile-desc'}>People following you</p>
+				</div>
+			</Link>
+
+			{/* Following */}
+			<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--following'}>
+					<PersonOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>FOLLOWING</span>
+					<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
+					<p className={'tile-desc'}>Trainers you follow</p>
+				</div>
+			</Link>
+
+			{/* Points */}
+			<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--points'}>
+					<EmojiEventsOutlinedIcon className={'tile-icon'} />
+					<span className={'tile-label'}>POINTS</span>
+					<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
+					<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
+				</div>
+			</Link>
+		</div>
+	);
+
+	const AdminBento = () => (
+		<div className={'mp-bento'}>
+			{/* Admin Panel — 2×2 hero tile (blue accent) */}
+			<Link href={'/_admin'}>
+				<div className={'mp-tile mp-tile--admin-panel'}>
+					<AdminPanelSettingsOutlinedIcon className={'tile-icon'} />
+					<div className={'tile-body'}>
+						<span className={'tile-label'}>ADMIN PANEL</span>
+						<p className={'tile-desc'}>Manage users, programs, and platform settings</p>
+					</div>
+					<ArrowForwardIosIcon className={'tile-arrow'} />
+				</div>
+			</Link>
+
+			{/* Followers */}
+			<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--followers'}>
+					<PeopleOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>FOLLOWERS</span>
+					<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
+					<p className={'tile-desc'}>People following you</p>
+				</div>
+			</Link>
+
+			{/* Following */}
+			<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--following'}>
+					<PersonOutlineIcon className={'tile-icon'} />
+					<span className={'tile-label'}>FOLLOWING</span>
+					<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
+					<p className={'tile-desc'}>Trainers you follow</p>
+				</div>
+			</Link>
+
+			{/* Saved */}
+			<Link href={{ pathname: '/mypage', query: { category: 'myFavorites' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--saved'}>
+					<BookmarkBorderIcon className={'tile-icon'} />
+					<span className={'tile-label'}>SAVED</span>
+					<strong className={'tile-count'}>0</strong>
+					<p className={'tile-desc'}>Bookmarked programs</p>
+				</div>
+			</Link>
+
+			{/* Points */}
+			<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
+				<div className={'mp-tile mp-tile--points'}>
+					<EmojiEventsOutlinedIcon className={'tile-icon'} />
+					<span className={'tile-label'}>POINTS</span>
+					<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
+					<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
+				</div>
+			</Link>
+		</div>
+	);
+
+	const renderBento = () => {
+		if (u?.memberType === 'AGENT') return <AgentBento />;
+		if (u?.memberType === 'ADMIN') return <AdminBento />;
+		return <UserBento />;
+	};
+
 	if (device === 'mobile') {
 		return <div>MY PAGE</div>;
 	} else {
@@ -159,11 +359,15 @@ const MyPage: NextPage = () => {
 							)}
 
 							<div className={'mp-stats-row'}>
-								<div className={'mp-stat'}>
-									<strong>{u?.memberProperties ?? 0}</strong>
-									<span>Programs</span>
-								</div>
-								<div className={'mp-stat-divider'} />
+								{u?.memberType === 'AGENT' && (
+									<>
+										<div className={'mp-stat'}>
+											<strong>{u?.memberProperties ?? 0}</strong>
+											<span>Programs</span>
+										</div>
+										<div className={'mp-stat-divider'} />
+									</>
+								)}
 								<div className={'mp-stat'}>
 									<strong>{u?.memberFollowers ?? 0}</strong>
 									<span>Followers</span>
@@ -196,12 +400,16 @@ const MyPage: NextPage = () => {
 					</div>
 				</div>
 
-				{/* ── Tabs ── */}
+				{/* ── Tabs (role-specific) ── */}
 				<div className={'mp-tabs-bar'}>
 					<div className={'container mp-tabs-inner'}>
 						{tabs.map((tab) => (
-							<Link key={tab.key} href={{ pathname: '/mypage', query: { category: tab.key } }} scroll={false}>
-								<div className={`mp-tab ${category === tab.key ? 'active' : ''}`}>
+							<Link
+								key={tab.key}
+								href={tab.key === 'adminPanel' ? '/_admin' : { pathname: '/mypage', query: { category: tab.key } }}
+								scroll={false}
+							>
+								<div className={`mp-tab ${category === tab.key ? 'active' : ''} ${tab.key === 'adminPanel' ? 'mp-tab--admin' : ''}`}>
 									{tab.label}
 								</div>
 							</Link>
@@ -211,88 +419,7 @@ const MyPage: NextPage = () => {
 
 				{/* ── Content ── */}
 				<div className={'container mp-content'}>
-
-					{/* ── Bento Dashboard ── */}
-					{category === 'dashboard' && (
-						<div className={'mp-bento'}>
-							{/* Programs — large 2×2 */}
-							<Link href={{ pathname: '/mypage', query: { category: 'myProperties' } }} scroll={false}>
-								<div className={'mp-tile mp-tile--programs'}>
-									<FitnessCenterIcon className={'tile-icon'} />
-									<div className={'tile-body'}>
-										<span className={'tile-label'}>MY PROGRAMS</span>
-										<strong className={'tile-count'}>{u?.memberProperties ?? 0}</strong>
-										<p className={'tile-desc'}>Training programs you manage</p>
-									</div>
-									<ArrowForwardIosIcon className={'tile-arrow'} />
-								</div>
-							</Link>
-
-							{/* Saved */}
-							<Link href={{ pathname: '/mypage', query: { category: 'myFavorites' } }} scroll={false}>
-								<div className={'mp-tile mp-tile--saved'}>
-									<BookmarkBorderIcon className={'tile-icon'} />
-									<span className={'tile-label'}>SAVED</span>
-									<strong className={'tile-count'}>0</strong>
-									<p className={'tile-desc'}>Bookmarked programs</p>
-								</div>
-							</Link>
-
-							{/* Recent */}
-							<Link href={{ pathname: '/mypage', query: { category: 'recentlyVisited' } }} scroll={false}>
-								<div className={'mp-tile mp-tile--recent'}>
-									<HistoryIcon className={'tile-icon'} />
-									<span className={'tile-label'}>RECENT</span>
-									<strong className={'tile-count'}>0</strong>
-									<p className={'tile-desc'}>Recently viewed</p>
-								</div>
-							</Link>
-
-							{/* Followers */}
-							<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
-								<div className={'mp-tile mp-tile--followers'}>
-									<PeopleOutlineIcon className={'tile-icon'} />
-									<span className={'tile-label'}>FOLLOWERS</span>
-									<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
-									<p className={'tile-desc'}>People following you</p>
-								</div>
-							</Link>
-
-							{/* Following */}
-							<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
-								<div className={'mp-tile mp-tile--following'}>
-									<PersonOutlineIcon className={'tile-icon'} />
-									<span className={'tile-label'}>FOLLOWING</span>
-									<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
-									<p className={'tile-desc'}>Trainers you follow</p>
-								</div>
-							</Link>
-
-							{/* Points — rank/gamification */}
-							<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
-								<div className={'mp-tile mp-tile--points'}>
-									<EmojiEventsOutlinedIcon className={'tile-icon'} />
-									<span className={'tile-label'}>POINTS</span>
-									<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
-									<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
-								</div>
-							</Link>
-
-							{/* Add Program — trainer only, full width */}
-							{u?.memberType === 'AGENT' && (
-								<Link href={{ pathname: '/mypage', query: { category: 'addProperty' } }} scroll={false}>
-									<div className={'mp-tile mp-tile--add-program'}>
-										<AddCircleOutlineIcon className={'tile-icon'} />
-										<div className={'tile-body'}>
-											<span className={'tile-label'}>ADD NEW PROGRAM</span>
-											<p className={'tile-desc'}>Create and publish a new training program for your athletes</p>
-										</div>
-									</div>
-								</Link>
-							)}
-						</div>
-					)}
-
+					{category === 'dashboard' && renderBento()}
 					{category === 'addProperty' && <AddProperty />}
 					{category === 'myProperties' && <MyProperties />}
 					{category === 'myFavorites' && <MyFavorites />}

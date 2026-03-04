@@ -278,6 +278,12 @@
 					color: #fff;
 					border-bottom-color: #22C55E;
 				}
+
+				&.mp-tab--admin {
+					color: rgba(91,141,238,0.6);
+					&:hover { color: #5b8dee; }
+					&.active { border-bottom-color: #5b8dee; color: #5b8dee; }
+				}
 			}
 		}
 
@@ -293,7 +299,9 @@
 			grid-template-columns: repeat(4, 1fr);
 			gap: 20px;
 
-			// Programs — large 2×2
+			// ── Hero tiles (2×2) ──────────────────────────
+
+			// AGENT: My Programs — green
 			.mp-tile--programs {
 				grid-column: span 2;
 				grid-row: span 2;
@@ -305,33 +313,66 @@
 				.tile-icon { font-size: 44px !important; color: #22C55E; opacity: 1; margin-bottom: auto; }
 				.tile-count { font-size: 72px; letter-spacing: -2px; }
 				.tile-label { color: rgba(34,197,94,0.6); }
+
+				&:hover { border-color: rgba(34,197,94,0.4); }
 			}
+
+			// USER: Saved Programs — teal
+			.mp-tile--saved-big {
+				grid-column: span 2;
+				grid-row: span 2;
+				background: linear-gradient(145deg, #0a1a1f 0%, #0d1e24 40%, #1a2e35 100%);
+				border-color: rgba(20,184,166,0.18);
+				min-height: 320px;
+				justify-content: flex-end;
+
+				.tile-icon { font-size: 44px !important; color: #14b8a6; opacity: 1; margin-bottom: auto; }
+				.tile-count { font-size: 72px; letter-spacing: -2px; }
+				.tile-label { color: rgba(20,184,166,0.6); }
+
+				&:hover { border-color: rgba(20,184,166,0.4); }
+			}
+
+			// ADMIN: Admin Panel — blue
+			.mp-tile--admin-panel {
+				grid-column: span 2;
+				grid-row: span 2;
+				background: linear-gradient(145deg, #0d1322 0%, #101a2e 40%, #1a2340 100%);
+				border-color: rgba(91,141,238,0.2);
+				min-height: 320px;
+				justify-content: flex-end;
+
+				.tile-icon { font-size: 44px !important; color: #5b8dee; opacity: 1; margin-bottom: auto; }
+				.tile-label { color: rgba(91,141,238,0.6); }
+				.tile-desc { font-size: 14px; color: rgba(255,255,255,0.35); }
+
+				&:hover { border-color: rgba(91,141,238,0.45); }
+				.tile-arrow { color: rgba(91,141,238,0.4); }
+			}
+
+			// ── Small tiles ───────────────────────────────
 
 			// Points — amber accent
 			.mp-tile--points {
 				background: linear-gradient(145deg, #1a1408 0%, #1F2937 100%);
 				border-color: rgba(245,158,11,0.15);
 				.tile-icon { color: #f59e0b; }
+				&:hover { border-color: rgba(245,158,11,0.35); }
 			}
 
-			// Add Program — full-width trainer CTA
+			// Add Program — 1×1 green dashed CTA (AGENT only)
 			.mp-tile--add-program {
-				grid-column: span 4;
-				flex-direction: row;
-				align-items: center;
-				gap: 24px;
-				padding: 28px 36px;
-				background: linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(20,184,166,0.05) 100%);
+				border-style: dashed;
 				border-color: rgba(34,197,94,0.25);
+				background: rgba(34,197,94,0.04);
 
-				.tile-icon { font-size: 36px !important; color: #22C55E; flex-shrink: 0; }
-				.tile-label { color: rgba(34,197,94,0.7); font-size: 13px; }
-				.tile-body { flex: 1; }
-				.tile-desc { font-size: 14px; color: rgba(255,255,255,0.4); }
+				.tile-icon { color: #22C55E; }
+				.tile-label { color: rgba(34,197,94,0.6); }
 
 				&:hover {
-					background: linear-gradient(135deg, rgba(34,197,94,0.17) 0%, rgba(20,184,166,0.09) 100%);
-					border-color: rgba(34,197,94,0.45);
+					border-style: solid;
+					border-color: rgba(34,197,94,0.5);
+					background: rgba(34,197,94,0.09);
 				}
 			}
 		}
