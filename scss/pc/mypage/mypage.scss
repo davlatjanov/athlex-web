@@ -379,7 +379,8 @@
 			text-decoration: none;
 			position: relative;
 			overflow: hidden;
-			min-height: 160px;
+			height: 100%;
+			min-height: 200px; // Standard 1x1 block height
 
 			&::before {
 				content: '';

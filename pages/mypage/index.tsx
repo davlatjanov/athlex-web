@@ -330,15 +330,7 @@ const MyPage: NextPage = () => {
 			<div id="my-page">
 				{/* Profile Hero */}
 				<div className="mp-hero">
-					<div
-						className="mp-cover"
-						style={{
-							backgroundImage:
-								"url('https://images.pexels.com/photos/4498483/pexels-photo-4498483.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1')",
-							backgroundSize: 'cover',
-							backgroundPosition: 'center 30%',
-						}}
-					/>
+					<div className="mp-cover" />
 					<div className="mp-container mp-hero-inner">
 						<div className="mp-avatar-wrap">
 							<img
@@ -355,7 +347,7 @@ const MyPage: NextPage = () => {
 							<div className="mp-name-row">
 								<h2 className="mp-name">{u?.memberNick || 'Athlete'}</h2>
 								<span className={`mp-role mp-role--${(u?.memberType || 'user').toLowerCase()}`}>
-									{u?.memberType === 'AGENT' ? 'TRAINER' : u?.memberType || 'MEMBER'}
+									{u?.memberType === 'AGENT' ? 'TRAINER' : u?.memberType || 'USER'}
 								</span>
 								{u?.memberPlan && (
 									<span className={`mp-plan mp-plan--${u.memberPlan.toLowerCase()}`}>
