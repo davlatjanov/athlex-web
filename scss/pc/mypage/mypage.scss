@@ -24,19 +24,19 @@
 
 			.mp-cover {
 				width: 100%;
-				height: 190px;
-				background: linear-gradient(135deg, #0a1a12 0%, #111827 45%, #0f172a 100%);
+				height: 220px;
+				background-color: #0F172A;
 				position: relative;
+				background-size: cover;
+				background-position: center center;
 				&::after {
 					content: '';
 					position: absolute;
 					inset: 0;
-					background: repeating-linear-gradient(
-						45deg,
-						transparent,
-						transparent 40px,
-						rgba(34,197,94,0.03) 40px,
-						rgba(34,197,94,0.03) 41px
+					background: linear-gradient(
+						180deg,
+						rgba(15,23,42,0.35) 0%,
+						rgba(15,23,42,0.6) 100%
 					);
 				}
 			}

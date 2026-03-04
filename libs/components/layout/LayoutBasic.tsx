@@ -28,46 +28,46 @@ const withLayoutBasic = (Component: any) => {
 				bgImage = '';
 
 			switch (router.pathname) {
-				case '/property':
-					title = 'Property Search';
-					desc = 'We are glad to see you again!';
-					bgImage = '/img/banner/properties.png';
+				case '/programs':
+					title = 'Training Programs';
+					desc = 'Expert-crafted programs for every level';
+					bgImage = 'https://images.pexels.com/photos/6456128/pexels-photo-6456128.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
 					break;
-				case '/agent':
-					title = 'Agents';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/agents.webp';
+				case '/trainer':
+					title = 'Trainers';
+					desc = 'Find your perfect coach and start training';
+					bgImage = 'https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
 					break;
-				case '/agent/detail':
-					title = 'Agent Page';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header2.svg';
+				case '/products':
+					title = 'Shop';
+					desc = 'Premium gear and supplements for athletes';
+					bgImage = 'https://images.pexels.com/photos/5327555/pexels-photo-5327555.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
 					break;
 				case '/community':
 					title = 'Community';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header2.svg';
+					desc = 'Connect · Compete · Inspire';
+					bgImage = 'https://images.pexels.com/photos/5961414/pexels-photo-5961414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
 					break;
 				case '/community/detail':
-					title = 'Community Detail';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header2.svg';
-					break;
-				case '/cs':
-					title = 'CS';
-					desc = 'We are glad to see you again!';
-					bgImage = '/img/banner/header2.svg';
-					break;
-				case '/account/join':
-					title = 'Login/Signup';
-					desc = 'Authentication Process';
-					bgImage = '/img/banner/header2.svg';
-					setAuthHeader(true);
+					title = 'Community';
+					desc = 'Connect · Compete · Inspire';
+					bgImage = 'https://images.pexels.com/photos/5961414/pexels-photo-5961414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
 					break;
 				case '/member':
-					title = 'Member Page';
-					desc = 'Home / For Rent';
-					bgImage = '/img/banner/header1.svg';
+					title = 'Athlete Profile';
+					desc = 'Track progress · Build connections';
+					bgImage = 'https://images.pexels.com/photos/4498483/pexels-photo-4498483.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
+					break;
+				case '/cs':
+					title = 'Customer Support';
+					desc = 'We are here to help you';
+					bgImage = 'https://images.pexels.com/photos/6389892/pexels-photo-6389892.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
+					break;
+				case '/account/join':
+					title = 'Join Athlex';
+					desc = 'Start your fitness journey today';
+					bgImage = 'https://images.pexels.com/photos/6389892/pexels-photo-6389892.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
+					setAuthHeader(true);
 					break;
 				default:
 					break;
@@ -119,19 +119,16 @@ const withLayoutBasic = (Component: any) => {
 						</Stack>
 
 						{memoizedValues.title && (
-							<Stack
-								className={`header-basic ${authHeader && 'auth'}`}
-								style={{
-									backgroundImage: `url(${memoizedValues.bgImage})`,
-									backgroundSize: 'cover',
-									boxShadow: 'inset 10px 40px 150px 40px rgb(24 22 36)',
-								}}
-							>
-								<Stack className={'container'}>
+							<div className={`header-basic ${authHeader ? 'auth' : ''}`}>
+								<div className={'container hb-container'}>
+									{memoizedValues.bgImage && (
+										<img src={memoizedValues.bgImage} alt="" className={'hb-bg-img'} />
+									)}
+									<div className={'hb-overlay'} />
 									<strong>{t(memoizedValues.title)}</strong>
 									<span>{t(memoizedValues.desc)}</span>
-								</Stack>
-							</Stack>
+								</div>
+							</div>
 						)}
 
 						<Stack id={'main'}>
