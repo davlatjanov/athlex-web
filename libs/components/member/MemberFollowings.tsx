@@ -13,7 +13,7 @@ import { GET_MEMBER_FOLLOWINGS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 
 interface MemberFollowingsProps {
-	initialInput: FollowInquiry;
+	initialInput?: FollowInquiry;
 	subscribeHandler: any;
 	unsubscribeHandler: any;
 	likeMemberHandler: any;
@@ -21,7 +21,17 @@ interface MemberFollowingsProps {
 }
 
 const MemberFollowings = (props: MemberFollowingsProps) => {
-	const { initialInput, subscribeHandler, unsubscribeHandler, redirectToMemberPageHandler, likeMemberHandler } = props;
+	const {
+		initialInput = {
+			page: 1,
+			limit: 5,
+			search: { followerId: '' },
+		},
+		subscribeHandler,
+		unsubscribeHandler,
+		redirectToMemberPageHandler,
+		likeMemberHandler,
+	} = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [total, setTotal] = useState<number>(0);

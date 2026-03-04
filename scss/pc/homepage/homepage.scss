@@ -763,7 +763,7 @@ $border-accent: rgba(34, 197, 94, 0.4);
 				display: grid;
 				grid-template-columns: repeat(4, 1fr);
 				gap: 20px;
-				align-items: start;
+				align-items: stretch;
 
 				.plan-card {
 					@extend %card-base;
@@ -772,10 +772,35 @@ $border-accent: rgba(34, 197, 94, 0.4);
 					padding: 32px 24px;
 					gap: 20px;
 					position: relative;
+					min-height: 100%;
 
-					&.plan-highlight { border-color: $accent; background: rgba(34,197,94,0.05); }
+					// Hover "selected" effect
+					&:hover {
+						border-color: $accent;
+						background: rgba(34,197,94,0.05);
+						box-shadow: 0 18px 45px rgba(0,0,0,0.55);
+						transform: translateY(-6px);
+					}
 
-					.plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 4px 16px; background: $accent; color: #fff; font-family: $font; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; border-radius: 20px; white-space: nowrap; }
+					&.plan-highlight {
+						border-color: $accent;
+						background: rgba(34,197,94,0.05);
+					}
+
+					.plan-badge {
+						position: absolute;
+						top: 16px;
+						right: 24px;
+						padding: 4px 16px;
+						background: $accent;
+						color: #fff;
+						font-family: $font;
+						font-size: 11px;
+						font-weight: 700;
+						letter-spacing: 1.5px;
+						border-radius: 20px;
+						white-space: nowrap;
+					}
 
 					.plan-header {
 						display: flex;
@@ -803,7 +828,18 @@ $border-accent: rgba(34, 197, 94, 0.4);
 						li { display: flex; align-items: center; gap: 10px; color: $text-secondary; font-family: $font; font-size: 13px; .check { color: $accent; font-weight: 700; flex-shrink: 0; } }
 					}
 
-					button { width: 100%; height: 46px; border-radius: 8px; font-family: $font; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; }
+					button {
+						width: 100%;
+						height: 46px;
+						border-radius: 8px;
+						font-family: $font;
+						font-size: 14px;
+						font-weight: 700;
+						cursor: pointer;
+						transition: all 0.2s;
+						letter-spacing: 0.5px;
+						margin-top: auto;
+					}
 				}
 			}
 		}

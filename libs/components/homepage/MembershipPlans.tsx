@@ -38,7 +38,7 @@ const plans = [
 		name: 'ADVANCED',
 		price: 39,
 		period: 'per month',
-		highlight: true,
+		highlight: false,
 		badge: 'MOST POPULAR',
 		features: [
 			'Unlimited programs',
@@ -80,7 +80,7 @@ const MembershipPlans = () => {
 				</Box>
 				<Box component={'div'} className={'plans-grid'}>
 					{plans.map((plan) => (
-						<Box key={plan.name} className={`plan-card ${plan.highlight ? 'plan-highlight' : ''}`}>
+						<Box key={plan.name} className={'plan-card'}>
 							{plan.badge && <span className={'plan-badge'}>{plan.badge}</span>}
 							<div className={'plan-header'}>
 								<strong className={'plan-name'}>{plan.name}</strong>
@@ -99,7 +99,7 @@ const MembershipPlans = () => {
 								))}
 							</ul>
 							<Link href={plan.href}>
-								<button className={plan.highlight ? 'btn-primary' : 'btn-outline'}>{plan.cta}</button>
+								<button className={'btn-outline'}>{plan.cta}</button>
 							</Link>
 						</Box>
 					))}

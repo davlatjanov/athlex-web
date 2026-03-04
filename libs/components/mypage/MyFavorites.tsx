@@ -55,14 +55,14 @@ const MyFavorites: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR MY FAVORITES MOBILE</div>;
+		return <div>MY SAVED PROGRAMS MOBILE</div>;
 	} else {
 		return (
 			<div id="my-favorites-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">My Favorites</Typography>
-						<Typography className="sub-title">We are glad to see you again!</Typography>
+						<Typography className="main-title">Saved Programs</Typography>
+						<Typography className="sub-title">Programs you have bookmarked.</Typography>
 					</Stack>
 				</Stack>
 				<Stack className="favorites-list-box">
@@ -73,7 +73,7 @@ const MyFavorites: NextPage = () => {
 					) : (
 						<div className={'no-data'}>
 							<img src="/img/icons/icoAlert.svg" alt="" />
-							<p>No Favorites found!</p>
+							<p>No saved programs yet.</p>
 						</div>
 					)}
 				</Stack>
@@ -89,9 +89,7 @@ const MyFavorites: NextPage = () => {
 							/>
 						</Stack>
 						<Stack className="total-result">
-							<Typography>
-								Total {total} favorite propert{total > 1 ? 'ies' : 'y'}
-							</Typography>
+							<Typography>Total {total} saved program{total === 1 ? '' : 's'}</Typography>
 						</Stack>
 					</Stack>
 				) : null}

@@ -92,14 +92,14 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	}
 
 	if (device === 'mobile') {
-		return <div>NESTAR PROPERTIES MOBILE</div>;
+		return <div>MY PROGRAMS MOBILE</div>;
 	} else {
 		return (
-			<div id="my-property-page">
+			<div id="my-programs-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">My Properties</Typography>
-						<Typography className="sub-title">We are glad to see you again!</Typography>
+						<Typography className="main-title">My Programs</Typography>
+						<Typography className="sub-title">Manage the training programs you coach.</Typography>
 					</Stack>
 				</Stack>
 				<Stack className="property-list-box">
@@ -119,10 +119,10 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 					</Stack>
 					<Stack className="list-box">
 						<Stack className="listing-title-box">
-							<Typography className="title-text">Listing title</Typography>
-							<Typography className="title-text">Date Published</Typography>
+							<Typography className="title-text">Program</Typography>
+							<Typography className="title-text">Published</Typography>
 							<Typography className="title-text">Status</Typography>
-							<Typography className="title-text">View</Typography>
+							<Typography className="title-text">Views</Typography>
 							{searchFilter.search.propertyStatus === 'ACTIVE' && (
 								<Typography className="title-text">Action</Typography>
 							)}
@@ -131,7 +131,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 						{agentProperties?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Property found!</p>
+								<p>No programs found yet.</p>
 							</div>
 						) : (
 							agentProperties.map((property: Property) => {
@@ -157,7 +157,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 									/>
 								</Stack>
 								<Stack className="total-result">
-									<Typography>{total} property available</Typography>
+									<Typography>{total} program{total === 1 ? '' : 's'} available</Typography>
 								</Stack>
 							</Stack>
 						)}

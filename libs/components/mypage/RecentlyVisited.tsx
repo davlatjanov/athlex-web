@@ -38,14 +38,14 @@ const RecentlyVisited: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR MY FAVORITES MOBILE</div>;
+		return <div>RECENTLY VIEWED PROGRAMS MOBILE</div>;
 	} else {
 		return (
-			<div id="my-favorites-page">
+			<div id="recently-viewed-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">Recently Visited</Typography>
-						<Typography className="sub-title">We are glad to see you again!</Typography>
+						<Typography className="main-title">Recently Viewed</Typography>
+						<Typography className="sub-title">Programs you opened recently.</Typography>
 					</Stack>
 				</Stack>
 				<Stack className="favorites-list-box">
@@ -56,7 +56,7 @@ const RecentlyVisited: NextPage = () => {
 					) : (
 						<div className={'no-data'}>
 							<img src="/img/icons/icoAlert.svg" alt="" />
-							<p>No Recently Visited Properties found!</p>
+							<p>No recently viewed programs yet.</p>
 						</div>
 					)}
 				</Stack>
@@ -72,9 +72,7 @@ const RecentlyVisited: NextPage = () => {
 							/>
 						</Stack>
 						<Stack className="total-result">
-							<Typography>
-								Total {total} recently visited propert{total > 1 ? 'ies' : 'y'}
-							</Typography>
+							<Typography>Total {total} recently viewed program{total === 1 ? '' : 's'}</Typography>
 						</Stack>
 					</Stack>
 				) : null}

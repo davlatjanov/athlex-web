@@ -328,29 +328,32 @@ const MyPage: NextPage = () => {
 	} else {
 		return (
 			<div id="my-page">
-				{/* ── Profile Hero ── */}
-				<div className={'mp-hero'}>
+				{/* Profile Hero */}
+				<div className="mp-hero">
 					<div
-					className={'mp-cover'}
-					style={{
-						backgroundImage: `url('https://images.pexels.com/photos/4498483/pexels-photo-4498483.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1')`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center 30%',
-					}}
-				/>
-					<div className={'container mp-hero-inner'}>
-						<div className={'mp-avatar-wrap'}>
+						className="mp-cover"
+						style={{
+							backgroundImage:
+								"url('https://images.pexels.com/photos/4498483/pexels-photo-4498483.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1')",
+							backgroundSize: 'cover',
+							backgroundPosition: 'center 30%',
+						}}
+					/>
+					<div className="mp-container mp-hero-inner">
+						<div className="mp-avatar-wrap">
 							<img
 								src={u?.memberImage ? `${REACT_APP_API_URL}/${u?.memberImage}` : '/img/profile/defaultUser.svg'}
 								alt={u?.memberNick}
-								className={'mp-avatar'}
-								onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }}
+								className="mp-avatar"
+								onError={(e) => {
+									(e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg';
+								}}
 							/>
 						</div>
 
-						<div className={'mp-hero-info'}>
-							<div className={'mp-name-row'}>
-								<h2 className={'mp-name'}>{u?.memberNick || 'Athlete'}</h2>
+						<div className="mp-hero-info">
+							<div className="mp-name-row">
+								<h2 className="mp-name">{u?.memberNick || 'Athlete'}</h2>
 								<span className={`mp-role mp-role--${(u?.memberType || 'user').toLowerCase()}`}>
 									{u?.memberType === 'AGENT' ? 'TRAINER' : u?.memberType || 'MEMBER'}
 								</span>
@@ -361,45 +364,43 @@ const MyPage: NextPage = () => {
 								)}
 							</div>
 
-							{u?.memberDesc && (
-								<p className={'mp-bio'}>{u.memberDesc}</p>
-							)}
+							{u?.memberDesc && <p className="mp-bio">{u.memberDesc}</p>}
 
-							<div className={'mp-stats-row'}>
+							<div className="mp-stats-row">
 								{u?.memberType === 'AGENT' && (
 									<>
-										<div className={'mp-stat'}>
+										<div className="mp-stat">
 											<strong>{u?.memberProperties ?? 0}</strong>
 											<span>Programs</span>
 										</div>
-										<div className={'mp-stat-divider'} />
+										<div className="mp-stat-divider" />
 									</>
 								)}
-								<div className={'mp-stat'}>
+								<div className="mp-stat">
 									<strong>{u?.memberFollowers ?? 0}</strong>
 									<span>Followers</span>
 								</div>
-								<div className={'mp-stat-divider'} />
-								<div className={'mp-stat'}>
+								<div className="mp-stat-divider" />
+								<div className="mp-stat">
 									<strong>{u?.memberFollowings ?? 0}</strong>
 									<span>Following</span>
 								</div>
-								<div className={'mp-stat-divider'} />
-								<div className={'mp-stat'}>
+								<div className="mp-stat-divider" />
+								<div className="mp-stat">
 									<strong>{u?.memberPoints ?? 0}</strong>
 									<span>Points</span>
 								</div>
 							</div>
 						</div>
 
-						<div className={'mp-hero-actions'}>
+						<div className="mp-hero-actions">
 							<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
-								<button className={'mp-edit-btn'}>
+								<button className="mp-edit-btn">
 									<EditOutlinedIcon fontSize="small" />
 									Edit Profile
 								</button>
 							</Link>
-							<button className={'mp-logout-btn'} onClick={logoutHandler}>
+							<button className="mp-logout-btn" onClick={logoutHandler}>
 								<LogoutIcon fontSize="small" />
 								Logout
 							</button>
@@ -407,16 +408,20 @@ const MyPage: NextPage = () => {
 					</div>
 				</div>
 
-				{/* ── Tabs (role-specific) ── */}
-				<div className={'mp-tabs-bar'}>
-					<div className={'container mp-tabs-inner'}>
+				{/* Tabs */}
+				<div className="mp-tabs-bar">
+					<div className="mp-container mp-tabs-inner">
 						{tabs.map((tab) => (
 							<Link
 								key={tab.key}
 								href={tab.key === 'adminPanel' ? '/_admin' : { pathname: '/mypage', query: { category: tab.key } }}
 								scroll={false}
 							>
-								<div className={`mp-tab ${category === tab.key ? 'active' : ''} ${tab.key === 'adminPanel' ? 'mp-tab--admin' : ''}`}>
+								<div
+									className={`mp-tab ${category === tab.key ? 'active' : ''} ${
+										tab.key === 'adminPanel' ? 'mp-tab--admin' : ''
+									}`}
+								>
 									{tab.label}
 								</div>
 							</Link>
@@ -424,8 +429,8 @@ const MyPage: NextPage = () => {
 					</div>
 				</div>
 
-				{/* ── Content ── */}
-				<div className={'container mp-content'}>
+				{/* Content */}
+				<div className="mp-container mp-content">
 					{category === 'dashboard' && renderBento()}
 					{category === 'addProperty' && <AddProperty />}
 					{category === 'myProperties' && <MyProperties />}
