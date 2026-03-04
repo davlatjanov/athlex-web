@@ -953,170 +953,187 @@ body::-webkit-scrollbar {
 	}
 
 	#footer {
-		position: relative;
-		padding: 60px 0px 18px 0px;
 		width: 100%;
-		height: auto;
-		display: flex;
-		flex-direction: row;
-		background: #181a20;
+		background: #0B1120;
+		border-top: 1px solid rgba(255,255,255,0.06);
+
 		.footer-container {
 			width: 1300px;
-			height: auto;
 			margin: 0 auto;
-			.main {
+			padding: 72px 0 0;
+
+			// ── Top row ─────────────────────────────────
+			.ft-top {
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
-				.left {
-					height: 360px;
+				align-items: flex-start;
+				gap: 60px;
+			}
+
+			.ft-brand {
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+				max-width: 320px;
+			}
+
+			.ft-brand-logo {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.ft-logo { width: 36px; height: 36px; }
+
+			.ft-logo-name {
+				font-family: $font;
+				font-size: 20px;
+				font-weight: 900;
+				letter-spacing: 3px;
+				color: #fff;
+			}
+
+			.ft-tagline {
+				font-family: $font;
+				font-size: 14px;
+				color: rgba(255,255,255,0.45);
+				line-height: 1.7;
+				margin: 0;
+			}
+
+			.ft-socials {
+				display: flex;
+				flex-direction: row;
+				gap: 4px;
+				a {
+					width: 38px;
+					height: 38px;
+					border-radius: 10px;
+					border: 1px solid rgba(255,255,255,0.1);
 					display: flex;
-					flex-direction: column;
-					justify-content: space-between;
-					.footer-box {
-						display: flex;
-						flex-direction: column;
-						.logo {
-							width: 38px;
-							height: 38px;
-							cursor: pointer;
-						}
-						.logo-name {
-							font-size: 18px;
-							font-weight: 800;
-							letter-spacing: 2px;
-							color: #fff;
-							font-family: $font;
-							margin-top: 6px;
-						}
-						span {
-							color: #bebdbd;
-							font-family: $font;
-							font-size: 14px;
-							font-style: normal;
-							font-weight: 400;
-							text-transform: capitalize;
-						}
-						p {
-							color: #fff;
-							font-family: $font;
-							font-size: 15px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-							text-transform: capitalize;
-						}
-						.media-box {
-							margin-top: 12px;
-							color: #929495;
-							svg {
-								font-size: 32px;
-								margin-right: 22px;
-								cursor: pointer;
-							}
-						}
-					}
-				}
-				.right {
-					display: flex;
-					flex-direction: column;
-					.top {
-						display: flex;
-						flex-direction: column;
-						strong {
-							color: #fff;
-							font-family: $font;
-							font-size: 15px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-							text-transform: capitalize;
-						}
-						div {
-							padding: 20px 30px;
-							margin-top: 20px;
-							width: 667px;
-							height: 70px;
-							display: flex;
-							flex-direction: row;
-							align-items: center;
-							box-sizing: border-box;
-							border-radius: 12px;
-							background: #212329;
-							input {
-								margin-right: 10px;
-								width: 85%;
-								border: none;
-								outline: none;
-								color: #fff;
-								font-family: $font;
-								font-size: 14px;
-								font-style: normal;
-								font-weight: 400;
-								line-height: 26px;
-								background: none;
-							}
-							span {
-								color: #fff;
-								font-family: $font;
-								font-size: 15px;
-								font-style: normal;
-								font-weight: 600;
-								line-height: normal;
-								cursor: pointer;
-							}
-						}
-					}
-					.bottom {
-						margin-top: 60px;
-						display: flex;
-						flex-direction: row;
-						justify-content: space-between;
-						div {
-							display: flex;
-							flex-direction: column;
-							strong {
-								margin-bottom: 3px;
-								color: #fff;
-								font-family: $font;
-								font-size: 15px;
-								font-style: normal;
-								font-weight: 600;
-								line-height: normal;
-								text-transform: capitalize;
-							}
-							span {
-								margin-top: 25px;
-								color: #bebdbd;
-								font-family: $font;
-								font-size: 14px;
-								font-style: normal;
-								font-weight: 400;
-								cursor: pointer;
-								&:hover {
-									color: #ffffff;
-									text-decoration-line: underline;
-								}
-							}
-						}
-					}
+					align-items: center;
+					justify-content: center;
+					color: rgba(255,255,255,0.45);
+					transition: border-color 0.15s, color 0.15s, background 0.15s;
+					&:hover { border-color: #22C55E; color: #22C55E; background: rgba(34,197,94,0.07); }
+					svg { font-size: 18px; }
 				}
 			}
-			.second {
-				margin-top: 60px;
-				height: 45px;
-				border-top: 1px solid #212329;
+
+			// ── Newsletter ───────────────────────────────
+			.ft-newsletter {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				max-width: 420px;
+
+				strong {
+					font-family: $font;
+					font-size: 18px;
+					font-weight: 700;
+					color: #fff;
+				}
+
+				p {
+					font-family: $font;
+					font-size: 14px;
+					color: rgba(255,255,255,0.4);
+					line-height: 1.6;
+					margin: 0 0 8px;
+				}
+			}
+
+			.ft-newsletter-input {
+				display: flex;
+				flex-direction: row;
+				gap: 0;
+				border-radius: 10px;
+				overflow: hidden;
+				border: 1px solid rgba(255,255,255,0.1);
+
+				input {
+					flex: 1;
+					padding: 14px 18px;
+					background: rgba(255,255,255,0.04);
+					border: none;
+					outline: none;
+					color: #fff;
+					font-family: $font;
+					font-size: 14px;
+					&::placeholder { color: rgba(255,255,255,0.3); }
+				}
+
+				button {
+					padding: 14px 24px;
+					background: #22C55E;
+					color: #fff;
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 700;
+					border: none;
+					cursor: pointer;
+					transition: background 0.15s;
+					&:hover { background: #16a34a; }
+				}
+			}
+
+			// ── Divider ──────────────────────────────────
+			.ft-divider {
+				margin: 52px 0 48px;
+				height: 1px;
+				background: rgba(255,255,255,0.07);
+			}
+
+			// ── Link columns ─────────────────────────────
+			.ft-links {
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
-				align-items: flex-end;
+				gap: 24px;
+			}
+
+			.ft-col {
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+
+				strong {
+					font-family: $font;
+					font-size: 11px;
+					font-weight: 700;
+					text-transform: uppercase;
+					letter-spacing: 2px;
+					color: #22C55E;
+					margin-bottom: 6px;
+				}
+
+				a { text-decoration: none; }
+
 				span {
-					color: #bebdbd;
 					font-family: $font;
 					font-size: 14px;
-					font-style: normal;
-					font-weight: 400;
-					line-height: normal;
+					color: rgba(255,255,255,0.5);
+					cursor: pointer;
+					transition: color 0.15s;
+					&:hover { color: #fff; }
+				}
+			}
+
+			// ── Bottom bar ───────────────────────────────
+			.ft-bottom {
+				margin-top: 48px;
+				padding: 20px 0;
+				border-top: 1px solid rgba(255,255,255,0.07);
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+
+				span {
+					font-family: $font;
+					font-size: 13px;
+					color: rgba(255,255,255,0.3);
 				}
 			}
 		}
