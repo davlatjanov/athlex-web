@@ -2,8 +2,6 @@
 	#my-page {
 		background: #0F172A;
 		min-height: 100vh;
-
-		// Global dark overrides for sub-page SCSS files
 		color: #fff;
 		p, span, h1, h2, h3, h4, h5, strong, label { color: inherit; }
 		.main-title { color: #fff !important; }
@@ -23,11 +21,10 @@
 			width: 100%;
 			background: linear-gradient(180deg, #1F2937 0%, #0F172A 100%);
 			border-bottom: 1px solid rgba(255,255,255,0.07);
-			padding-bottom: 0;
 
 			.mp-cover {
 				width: 100%;
-				height: 160px;
+				height: 190px;
 				background: linear-gradient(135deg, #0a1a12 0%, #111827 45%, #0f172a 100%);
 				position: relative;
 				&::after {
@@ -48,23 +45,23 @@
 				display: flex;
 				flex-direction: row;
 				align-items: flex-end;
-				gap: 24px;
-				padding-bottom: 24px;
-				margin-top: -40px;
+				gap: 28px;
+				padding-bottom: 32px;
+				margin-top: -60px;
 				position: relative;
 			}
 
 			.mp-avatar-wrap {
 				flex-shrink: 0;
-
 				.mp-avatar {
-					width: 96px;
-					height: 96px;
+					width: 120px;
+					height: 120px;
 					border-radius: 50%;
 					object-fit: cover;
 					border: 3px solid #22C55E;
 					background: #1F2937;
 					display: block;
+					box-shadow: 0 0 0 6px rgba(34,197,94,0.08);
 				}
 			}
 
@@ -72,12 +69,19 @@
 				flex: 1;
 				display: flex;
 				flex-direction: column;
-				gap: 6px;
+				gap: 10px;
 				padding-bottom: 4px;
+
+				.mp-name-row {
+					display: flex;
+					align-items: center;
+					gap: 10px;
+					flex-wrap: wrap;
+				}
 
 				.mp-name {
 					font-family: $font;
-					font-size: 22px;
+					font-size: 26px;
 					font-weight: 800;
 					color: #fff;
 					letter-spacing: 0.3px;
@@ -91,10 +95,8 @@
 					font-weight: 700;
 					letter-spacing: 2px;
 					text-transform: uppercase;
-					padding: 3px 10px;
+					padding: 4px 12px;
 					border-radius: 20px;
-					width: fit-content;
-
 					&--trainer, &--agent {
 						background: rgba(34,197,94,0.15);
 						color: #22C55E;
@@ -112,33 +114,128 @@
 					}
 				}
 
-				.mp-phone {
+				// ── Plan badge ────────────────────────────
+				.mp-plan {
+					display: inline-block;
 					font-family: $font;
-					font-size: 12px;
-					color: rgba(255,255,255,0.35);
+					font-size: 10px;
+					font-weight: 700;
+					letter-spacing: 1.5px;
+					text-transform: uppercase;
+					padding: 4px 12px;
+					border-radius: 20px;
+
+					&--beginner {
+						background: rgba(148,163,184,0.12);
+						color: #94a3b8;
+						border: 1px solid rgba(148,163,184,0.25);
+					}
+					&--regular {
+						background: rgba(255,255,255,0.08);
+						color: rgba(255,255,255,0.6);
+						border: 1px solid rgba(255,255,255,0.15);
+					}
+					&--advanced {
+						background: rgba(34,197,94,0.12);
+						color: #22C55E;
+						border: 1px solid rgba(34,197,94,0.3);
+					}
+					&--pro {
+						background: rgba(245,158,11,0.12);
+						color: #f59e0b;
+						border: 1px solid rgba(245,158,11,0.3);
+					}
+				}
+
+				.mp-bio {
+					font-family: $font;
+					font-size: 13px;
+					color: rgba(255,255,255,0.45);
+					margin: 0;
+					line-height: 1.5;
+					max-width: 480px;
+				}
+
+				.mp-stats-row {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					gap: 20px;
+
+					.mp-stat {
+						display: flex;
+						flex-direction: column;
+						gap: 2px;
+
+						strong {
+							font-family: $font;
+							font-size: 20px;
+							font-weight: 800;
+							color: #fff;
+							line-height: 1;
+						}
+
+						span {
+							font-family: $font;
+							font-size: 10px;
+							color: rgba(255,255,255,0.35);
+							text-transform: uppercase;
+							letter-spacing: 1px;
+						}
+					}
+
+					.mp-stat-divider {
+						width: 1px;
+						height: 30px;
+						background: rgba(255,255,255,0.1);
+					}
 				}
 			}
 
 			.mp-hero-actions {
+				display: flex;
+				flex-direction: row;
+				gap: 10px;
+				align-items: center;
 				padding-bottom: 8px;
+
+				.mp-edit-btn {
+					display: flex;
+					align-items: center;
+					gap: 7px;
+					padding: 10px 22px;
+					border-radius: 10px;
+					border: 1px solid rgba(255,255,255,0.15);
+					background: rgba(255,255,255,0.06);
+					color: rgba(255,255,255,0.75);
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 600;
+					cursor: pointer;
+					transition: border-color 0.2s, background 0.2s, color 0.2s;
+					svg { font-size: 18px; }
+					&:hover {
+						border-color: rgba(34,197,94,0.5);
+						background: rgba(34,197,94,0.07);
+						color: #fff;
+					}
+				}
 
 				.mp-logout-btn {
 					display: flex;
 					align-items: center;
-					gap: 6px;
-					padding: 8px 18px;
-					border-radius: 8px;
+					gap: 7px;
+					padding: 10px 22px;
+					border-radius: 10px;
 					border: 1px solid rgba(34,197,94,0.3);
 					background: rgba(34,197,94,0.08);
-					color: rgba(34,197,94,0.8);
+					color: rgba(34,197,94,0.85);
 					font-family: $font;
-					font-size: 13px;
+					font-size: 14px;
 					font-weight: 600;
 					cursor: pointer;
 					transition: background 0.2s, color 0.2s;
-
-					svg { font-size: 16px; }
-
+					svg { font-size: 18px; }
 					&:hover {
 						background: rgba(34,197,94,0.18);
 						color: #22C55E;
@@ -159,7 +256,6 @@
 			.mp-tabs-inner {
 				display: flex;
 				flex-direction: row;
-				gap: 0;
 				overflow-x: auto;
 				scrollbar-width: none;
 				&::-webkit-scrollbar { display: none; }
@@ -167,9 +263,9 @@
 
 			.mp-tab {
 				flex-shrink: 0;
-				padding: 14px 20px;
+				padding: 16px 24px;
 				font-family: $font;
-				font-size: 13px;
+				font-size: 14px;
 				font-weight: 600;
 				color: rgba(255,255,255,0.45);
 				cursor: pointer;
@@ -177,9 +273,7 @@
 				transition: color 0.15s, border-color 0.15s;
 				white-space: nowrap;
 				text-decoration: none;
-
 				&:hover { color: rgba(255,255,255,0.8); }
-
 				&.active {
 					color: #fff;
 					border-bottom-color: #22C55E;
@@ -189,8 +283,139 @@
 
 		// ── Content Area ─────────────────────────────────
 		.mp-content {
-			padding: 40px 0 80px;
+			padding: 48px 0 100px;
 			min-height: 400px;
+		}
+
+		// ── Bento Dashboard Grid ──────────────────────────
+		.mp-bento {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 20px;
+
+			// Programs — large 2×2
+			.mp-tile--programs {
+				grid-column: span 2;
+				grid-row: span 2;
+				background: linear-gradient(145deg, #0d1f0f 0%, #112214 40%, #172a18 100%);
+				border-color: rgba(34,197,94,0.18);
+				min-height: 320px;
+				justify-content: flex-end;
+
+				.tile-icon { font-size: 44px !important; color: #22C55E; opacity: 1; margin-bottom: auto; }
+				.tile-count { font-size: 72px; letter-spacing: -2px; }
+				.tile-label { color: rgba(34,197,94,0.6); }
+			}
+
+			// Points — amber accent
+			.mp-tile--points {
+				background: linear-gradient(145deg, #1a1408 0%, #1F2937 100%);
+				border-color: rgba(245,158,11,0.15);
+				.tile-icon { color: #f59e0b; }
+			}
+
+			// Add Program — full-width trainer CTA
+			.mp-tile--add-program {
+				grid-column: span 4;
+				flex-direction: row;
+				align-items: center;
+				gap: 24px;
+				padding: 28px 36px;
+				background: linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(20,184,166,0.05) 100%);
+				border-color: rgba(34,197,94,0.25);
+
+				.tile-icon { font-size: 36px !important; color: #22C55E; flex-shrink: 0; }
+				.tile-label { color: rgba(34,197,94,0.7); font-size: 13px; }
+				.tile-body { flex: 1; }
+				.tile-desc { font-size: 14px; color: rgba(255,255,255,0.4); }
+
+				&:hover {
+					background: linear-gradient(135deg, rgba(34,197,94,0.17) 0%, rgba(20,184,166,0.09) 100%);
+					border-color: rgba(34,197,94,0.45);
+				}
+			}
+		}
+
+		// ── Base Tile ─────────────────────────────────────
+		.mp-tile {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			padding: 28px;
+			border-radius: 18px;
+			background: #1F2937;
+			border: 1px solid rgba(255,255,255,0.07);
+			cursor: pointer;
+			transition: border-color 0.2s, transform 0.15s;
+			text-decoration: none;
+			position: relative;
+			overflow: hidden;
+			min-height: 160px;
+
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(135deg, rgba(34,197,94,0.06) 0%, transparent 55%);
+				opacity: 0;
+				transition: opacity 0.2s;
+				pointer-events: none;
+			}
+
+			&:hover {
+				border-color: rgba(34,197,94,0.3);
+				transform: translateY(-3px);
+				&::before { opacity: 1; }
+				.tile-arrow { opacity: 1; transform: translateX(3px); }
+			}
+
+			.tile-icon {
+				font-size: 32px !important;
+				color: #22C55E;
+				opacity: 0.85;
+			}
+
+			.tile-label {
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				color: rgba(255,255,255,0.35);
+			}
+
+			.tile-count {
+				font-family: $font;
+				font-size: 48px;
+				font-weight: 800;
+				color: #fff;
+				line-height: 1;
+				letter-spacing: -1px;
+			}
+
+			.tile-desc {
+				font-family: $font;
+				font-size: 13px;
+				color: rgba(255,255,255,0.3);
+				margin: 0;
+				line-height: 1.5;
+			}
+
+			.tile-body {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			.tile-arrow {
+				position: absolute;
+				bottom: 24px;
+				right: 24px;
+				font-size: 16px !important;
+				color: rgba(255,255,255,0.2);
+				opacity: 0;
+				transition: opacity 0.2s, transform 0.2s;
+			}
 		}
 
 		// ── Card grid (for program/favorites lists) ───────
@@ -207,11 +432,7 @@
 				position: relative;
 				width: 100%;
 				height: 180px;
-				img {
-					width: 100%;
-					height: 100%;
-					object-fit: cover;
-				}
+				img { width: 100%; height: 100%; object-fit: cover; }
 				.top-badge {
 					position: absolute;
 					top: 12px; left: 12px;
