@@ -200,6 +200,7 @@ body::-webkit-scrollbar {
 		display: flex;
 		align-items: stretch;
 		overflow: hidden;
+		margin-top: 87px;
 
 		.hero-root {
 			position: relative;
@@ -257,7 +258,7 @@ body::-webkit-scrollbar {
 				position: relative;
 				z-index: 2;
 				flex-direction: column;
-				padding-top: 87px;
+				padding-top: 20px;
 				padding-bottom: 56px;
 
 				.hero-inner {
@@ -727,6 +728,7 @@ body::-webkit-scrollbar {
 		display: flex;
 		align-items: stretch;
 		overflow: hidden;
+		margin-top: 87px;
 
 		.hero-root {
 			position: relative;
