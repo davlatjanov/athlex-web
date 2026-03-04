@@ -16,8 +16,7 @@ import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } f
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { LIKE_TARGET_MEMBER, SUBSCRIBE, UNSUBSCRIBE } from '../../apollo/user/mutation';
-import { Messages } from '../../libs/config';
-import { REACT_APP_API_URL } from '../../libs/config';
+import { Messages, REACT_APP_API_URL } from '../../libs/config';
 import { logOut } from '../../libs/auth';
 import { sweetConfirmAlert } from '../../libs/sweetAlert';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -28,8 +27,6 @@ import HistoryIcon from '@mui/icons-material/History';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -38,11 +35,10 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-// ── Tab definitions per role ──────────────────────────────
 const USER_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
-	{ key: 'myFavorites', label: 'Saved Programs' },
-	{ key: 'recentlyVisited', label: 'Recent' },
+	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
 ];
@@ -51,16 +47,16 @@ const AGENT_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
-	{ key: 'myFavorites', label: 'Saved' },
-	{ key: 'recentlyVisited', label: 'Recent' },
+	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
 ];
 
 const ADMIN_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
-	{ key: 'myFavorites', label: 'Saved' },
-	{ key: 'recentlyVisited', label: 'Recent' },
+	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
 	{ key: 'adminPanel', label: 'Admin Panel' },
@@ -73,11 +69,25 @@ const PLAN_LABEL: Record<string, string> = {
 	PRO: 'Pro',
 };
 
+const getTabIcon = (key: string) => {
+	switch (key) {
+		case 'myProfile': return <PersonOutlineIcon fontSize="small" />;
+		case 'myFavorites': return <BookmarkBorderIcon fontSize="small" />;
+		case 'recentlyVisited': return <HistoryIcon fontSize="small" />;
+		case 'followers': return <PeopleOutlineIcon fontSize="small" />;
+		case 'followings': return <PersonOutlineIcon fontSize="small" />;
+		case 'myProperties': return <FitnessCenterIcon fontSize="small" />;
+		case 'addProperty': return <AddCircleOutlineIcon fontSize="small" />;
+		case 'adminPanel': return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
+		default: return null;
+	}
+};
+
 const MyPage: NextPage = () => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
-	const category: any = router.query?.category ?? 'dashboard';
+	const category: any = router.query?.category ?? 'myFavorites';
 	const u = user as any;
 
 	const getTabs = () => {
@@ -146,206 +156,35 @@ const MyPage: NextPage = () => {
 		}
 	};
 
-	// ── Role-based bento grids ────────────────────────────
-
-	const UserBento = () => (
-		<div className={'mp-bento'}>
-			{/* Saved Programs — 2×2 hero tile (teal accent) */}
-			<Link href={{ pathname: '/mypage', query: { category: 'myFavorites' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--saved-big'}>
-					<BookmarkBorderIcon className={'tile-icon'} />
-					<div className={'tile-body'}>
-						<span className={'tile-label'}>SAVED PROGRAMS</span>
-						<strong className={'tile-count'}>0</strong>
-						<p className={'tile-desc'}>Your bookmarked training programs</p>
-					</div>
-					<ArrowForwardIosIcon className={'tile-arrow'} />
-				</div>
-			</Link>
-
-			{/* Followers */}
-			<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--followers'}>
-					<PeopleOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>FOLLOWERS</span>
-					<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
-					<p className={'tile-desc'}>People following you</p>
-				</div>
-			</Link>
-
-			{/* Following */}
-			<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--following'}>
-					<PersonOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>FOLLOWING</span>
-					<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
-					<p className={'tile-desc'}>Trainers you follow</p>
-				</div>
-			</Link>
-
-			{/* Recent */}
-			<Link href={{ pathname: '/mypage', query: { category: 'recentlyVisited' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--recent'}>
-					<HistoryIcon className={'tile-icon'} />
-					<span className={'tile-label'}>RECENT</span>
-					<strong className={'tile-count'}>0</strong>
-					<p className={'tile-desc'}>Recently viewed</p>
-				</div>
-			</Link>
-
-			{/* Points */}
-			<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--points'}>
-					<EmojiEventsOutlinedIcon className={'tile-icon'} />
-					<span className={'tile-label'}>POINTS</span>
-					<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
-					<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
-				</div>
-			</Link>
-		</div>
-	);
-
-	const AgentBento = () => (
-		<div className={'mp-bento'}>
-			{/* My Programs — 2×2 hero tile (green accent) */}
-			<Link href={{ pathname: '/mypage', query: { category: 'myProperties' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--programs'}>
-					<FitnessCenterIcon className={'tile-icon'} />
-					<div className={'tile-body'}>
-						<span className={'tile-label'}>MY PROGRAMS</span>
-						<strong className={'tile-count'}>{u?.memberProperties ?? 0}</strong>
-						<p className={'tile-desc'}>Training programs you manage</p>
-					</div>
-					<ArrowForwardIosIcon className={'tile-arrow'} />
-				</div>
-			</Link>
-
-			{/* Add Program — 1×1 green CTA */}
-			<Link href={{ pathname: '/mypage', query: { category: 'addProperty' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--add-program'}>
-					<AddCircleOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>ADD PROGRAM</span>
-					<p className={'tile-desc'}>Create a new training program</p>
-				</div>
-			</Link>
-
-			{/* Followers / Students */}
-			<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--followers'}>
-					<PeopleOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>STUDENTS</span>
-					<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
-					<p className={'tile-desc'}>People following you</p>
-				</div>
-			</Link>
-
-			{/* Following */}
-			<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--following'}>
-					<PersonOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>FOLLOWING</span>
-					<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
-					<p className={'tile-desc'}>Trainers you follow</p>
-				</div>
-			</Link>
-
-			{/* Points */}
-			<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--points'}>
-					<EmojiEventsOutlinedIcon className={'tile-icon'} />
-					<span className={'tile-label'}>POINTS</span>
-					<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
-					<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
-				</div>
-			</Link>
-		</div>
-	);
-
-	const AdminBento = () => (
-		<div className={'mp-bento'}>
-			{/* Admin Panel — 2×2 hero tile (blue accent) */}
-			<Link href={'/_admin'}>
-				<div className={'mp-tile mp-tile--admin-panel'}>
-					<AdminPanelSettingsOutlinedIcon className={'tile-icon'} />
-					<div className={'tile-body'}>
-						<span className={'tile-label'}>ADMIN PANEL</span>
-						<p className={'tile-desc'}>Manage users, programs, and platform settings</p>
-					</div>
-					<ArrowForwardIosIcon className={'tile-arrow'} />
-				</div>
-			</Link>
-
-			{/* Followers */}
-			<Link href={{ pathname: '/mypage', query: { category: 'followers' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--followers'}>
-					<PeopleOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>FOLLOWERS</span>
-					<strong className={'tile-count'}>{u?.memberFollowers ?? 0}</strong>
-					<p className={'tile-desc'}>People following you</p>
-				</div>
-			</Link>
-
-			{/* Following */}
-			<Link href={{ pathname: '/mypage', query: { category: 'followings' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--following'}>
-					<PersonOutlineIcon className={'tile-icon'} />
-					<span className={'tile-label'}>FOLLOWING</span>
-					<strong className={'tile-count'}>{u?.memberFollowings ?? 0}</strong>
-					<p className={'tile-desc'}>Trainers you follow</p>
-				</div>
-			</Link>
-
-			{/* Saved */}
-			<Link href={{ pathname: '/mypage', query: { category: 'myFavorites' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--saved'}>
-					<BookmarkBorderIcon className={'tile-icon'} />
-					<span className={'tile-label'}>SAVED</span>
-					<strong className={'tile-count'}>0</strong>
-					<p className={'tile-desc'}>Bookmarked programs</p>
-				</div>
-			</Link>
-
-			{/* Points */}
-			<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
-				<div className={'mp-tile mp-tile--points'}>
-					<EmojiEventsOutlinedIcon className={'tile-icon'} />
-					<span className={'tile-label'}>POINTS</span>
-					<strong className={'tile-count'}>{u?.memberPoints ?? 0}</strong>
-					<p className={'tile-desc'}>Rank #{u?.memberRank ?? '—'}</p>
-				</div>
-			</Link>
-		</div>
-	);
-
-	const renderBento = () => {
-		if (u?.memberType === 'AGENT') return <AgentBento />;
-		if (u?.memberType === 'ADMIN') return <AdminBento />;
-		return <UserBento />;
-	};
-
 	if (device === 'mobile') {
 		return <div>MY PAGE</div>;
 	} else {
 		return (
 			<div id="my-page">
-				{/* Profile Hero */}
-				<div className="mp-hero">
-					<div className="mp-cover" />
-					<div className="mp-container mp-hero-inner">
-						<div className="mp-avatar-wrap">
-							<img
-								src={u?.memberImage ? `${REACT_APP_API_URL}/${u?.memberImage}` : '/img/profile/defaultUser.svg'}
-								alt={u?.memberNick}
-								className="mp-avatar"
-								onError={(e) => {
-									(e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg';
-								}}
-							/>
+				<div className={'container mp-wrap'}>
+
+					{/* ── Profile Card ── */}
+					<div className={'mp-card'}>
+						<div className={'mp-avatar-wrap'}>
+							{u?.memberImage ? (
+								<img
+									src={`${REACT_APP_API_URL}/${u.memberImage}`}
+									alt={u?.memberNick}
+									className={'mp-avatar'}
+									onError={(e) => {
+										(e.target as HTMLImageElement).style.display = 'none';
+									}}
+								/>
+							) : (
+								<div className={'mp-avatar-initial'}>
+									{(u?.memberNick || 'A')[0].toUpperCase()}
+								</div>
+							)}
 						</div>
 
-						<div className="mp-hero-info">
-							<div className="mp-name-row">
-								<h2 className="mp-name">{u?.memberNick || 'Athlete'}</h2>
+						<div className={'mp-info'}>
+							<div className={'mp-name-row'}>
+								<h2 className={'mp-name'}>{u?.memberNick || 'Athlete'}</h2>
 								<span className={`mp-role mp-role--${(u?.memberType || 'user').toLowerCase()}`}>
 									{u?.memberType === 'AGENT' ? 'TRAINER' : u?.memberType || 'USER'}
 								</span>
@@ -356,57 +195,54 @@ const MyPage: NextPage = () => {
 								)}
 							</div>
 
-							{u?.memberDesc && <p className="mp-bio">{u.memberDesc}</p>}
+							{u?.memberDesc && <p className={'mp-bio'}>{u.memberDesc}</p>}
 
-							<div className="mp-stats-row">
+							<div className={'mp-stats-row'}>
 								{u?.memberType === 'AGENT' && (
-									<>
-										<div className="mp-stat">
-											<strong>{u?.memberProperties ?? 0}</strong>
-											<span>Programs</span>
-										</div>
-										<div className="mp-stat-divider" />
-									</>
+									<div className={'mp-stat'}>
+										<strong>{u?.memberProperties ?? 0}</strong>
+										<span>PROGRAMS</span>
+									</div>
 								)}
-								<div className="mp-stat">
+								<div className={'mp-stat'}>
 									<strong>{u?.memberFollowers ?? 0}</strong>
-									<span>Followers</span>
+									<span>FOLLOWERS</span>
 								</div>
-								<div className="mp-stat-divider" />
-								<div className="mp-stat">
+								<div className={'mp-stat'}>
 									<strong>{u?.memberFollowings ?? 0}</strong>
-									<span>Following</span>
+									<span>FOLLOWING</span>
 								</div>
-								<div className="mp-stat-divider" />
-								<div className="mp-stat">
+								<div className={'mp-stat'}>
 									<strong>{u?.memberPoints ?? 0}</strong>
-									<span>Points</span>
+									<span>POINTS</span>
 								</div>
 							</div>
 						</div>
 
-						<div className="mp-hero-actions">
+						<div className={'mp-card-actions'}>
 							<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
-								<button className="mp-edit-btn">
+								<button className={'mp-edit-btn'}>
 									<EditOutlinedIcon fontSize="small" />
 									Edit Profile
 								</button>
 							</Link>
-							<button className="mp-logout-btn" onClick={logoutHandler}>
+							<button className={'mp-logout-btn'} onClick={logoutHandler}>
 								<LogoutIcon fontSize="small" />
 								Logout
 							</button>
 						</div>
 					</div>
-				</div>
 
-				{/* Tabs */}
-				<div className="mp-tabs-bar">
-					<div className="mp-container mp-tabs-inner">
+					{/* ── Tab Bar ── */}
+					<div className={'mp-tabs-bar'}>
 						{tabs.map((tab) => (
 							<Link
 								key={tab.key}
-								href={tab.key === 'adminPanel' ? '/_admin' : { pathname: '/mypage', query: { category: tab.key } }}
+								href={
+									tab.key === 'adminPanel'
+										? '/_admin'
+										: { pathname: '/mypage', query: { category: tab.key } }
+								}
 								scroll={false}
 							>
 								<div
@@ -414,37 +250,38 @@ const MyPage: NextPage = () => {
 										tab.key === 'adminPanel' ? 'mp-tab--admin' : ''
 									}`}
 								>
-									{tab.label}
+									{getTabIcon(tab.key)}
+									<span>{tab.label}</span>
 								</div>
 							</Link>
 						))}
 					</div>
-				</div>
 
-				{/* Content */}
-				<div className="mp-container mp-content">
-					{category === 'dashboard' && renderBento()}
-					{category === 'addProperty' && <AddProperty />}
-					{category === 'myProperties' && <MyProperties />}
-					{category === 'myFavorites' && <MyFavorites />}
-					{category === 'recentlyVisited' && <RecentlyVisited />}
-					{category === 'myProfile' && <MyProfile />}
-					{category === 'followers' && (
-						<MemberFollowers
-							subscribeHandler={subscribeHandler}
-							unsubscribeHandler={unsubscribeHandler}
-							likeMemberHandler={likeMemberHandler}
-							redirectToMemberPageHandler={redirectToMemberPageHandler}
-						/>
-					)}
-					{category === 'followings' && (
-						<MemberFollowings
-							subscribeHandler={subscribeHandler}
-							unsubscribeHandler={unsubscribeHandler}
-							likeMemberHandler={likeMemberHandler}
-							redirectToMemberPageHandler={redirectToMemberPageHandler}
-						/>
-					)}
+					{/* ── Content ── */}
+					<div className={'mp-content'}>
+						{category === 'addProperty' && <AddProperty />}
+						{category === 'myProperties' && <MyProperties />}
+						{category === 'myFavorites' && <MyFavorites />}
+						{category === 'recentlyVisited' && <RecentlyVisited />}
+						{category === 'myProfile' && <MyProfile />}
+						{category === 'followers' && u?._id && (
+							<MemberFollowers
+								subscribeHandler={subscribeHandler}
+								unsubscribeHandler={unsubscribeHandler}
+								likeMemberHandler={likeMemberHandler}
+								redirectToMemberPageHandler={redirectToMemberPageHandler}
+							/>
+						)}
+						{category === 'followings' && u?._id && (
+							<MemberFollowings
+								subscribeHandler={subscribeHandler}
+								unsubscribeHandler={unsubscribeHandler}
+								likeMemberHandler={likeMemberHandler}
+								redirectToMemberPageHandler={redirectToMemberPageHandler}
+							/>
+						)}
+					</div>
+
 				</div>
 			</div>
 		);

@@ -15,437 +15,265 @@
 			&:focus { border-color: rgba(34,197,94,0.5); outline: none; }
 		}
 
-		// Custom container to prevent clash with global .container
-		.mp-container {
-			max-width: 1200px;
-			margin: 0 auto;
-			padding: 0 24px;
-			box-sizing: border-box;
-			width: 100%;
+		// ── Page wrapper ────────────────────────────────
+		// padding-top clears the fixed 87px navbar + 20px breathing room
+		.mp-wrap {
+			padding-top: 107px;
+			padding-bottom: 80px;
+			display: flex;
+			flex-direction: column;
+			gap: 0;
 		}
 
-		// ── Hero header ───────────────────────────────────
-		.mp-hero {
-			position: relative;
-			width: 100%;
-			padding-top: 110px; // clear fixed navbar
-			padding-bottom: 32px;
-			background: linear-gradient(180deg, #1F2937 0%, #0F172A 100%);
+		// ── Profile Card ─────────────────────────────────
+		.mp-card {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 28px;
+			padding: 32px 36px;
+			background: #1F2937;
+			border: 1px solid rgba(255,255,255,0.08);
+			border-radius: 16px;
+		}
 
-			.mp-cover {
-				width: 100%;
-				max-width: 1200px;
-				height: 260px;
-				margin: 0 auto;
-				border-radius: 18px;
-				overflow: hidden;
-				position: relative;
-				background-size: cover;
-				background-position: center center;
-				&::after {
-					content: '';
-					position: absolute;
-					inset: 0;
-					background: linear-gradient(180deg, rgba(15,23,42,0.35) 0%, rgba(15,23,42,0.8) 100%);
-				}
+		.mp-avatar-wrap {
+			flex-shrink: 0;
+		}
+
+		.mp-avatar {
+			width: 88px;
+			height: 88px;
+			border-radius: 50%;
+			object-fit: cover;
+			border: 2px solid rgba(34,197,94,0.4);
+		}
+
+		.mp-avatar-initial {
+			width: 88px;
+			height: 88px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #22C55E 0%, #16a34a 100%);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: $font;
+			font-size: 34px;
+			font-weight: 800;
+			color: #fff;
+		}
+
+		.mp-info {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.mp-name-row {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.mp-name {
+			font-family: $font;
+			font-size: 22px;
+			font-weight: 800;
+			margin: 0;
+			color: #fff;
+		}
+
+		.mp-role {
+			display: inline-block;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			padding: 3px 10px;
+			border-radius: 20px;
+			&--trainer, &--agent {
+				background: rgba(34,197,94,0.15);
+				color: #22C55E;
+				border: 1px solid rgba(34,197,94,0.3);
+			}
+			&--user, &--member {
+				background: rgba(255,255,255,0.07);
+				color: rgba(255,255,255,0.5);
+				border: 1px solid rgba(255,255,255,0.1);
+			}
+			&--admin {
+				background: rgba(91,141,238,0.15);
+				color: #5b8dee;
+				border: 1px solid rgba(91,141,238,0.3);
+			}
+		}
+
+		.mp-plan {
+			display: inline-block;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			padding: 3px 10px;
+			border-radius: 20px;
+			&--beginner {
+				background: rgba(148,163,184,0.12);
+				color: #94a3b8;
+				border: 1px solid rgba(148,163,184,0.25);
+			}
+			&--regular {
+				background: rgba(255,255,255,0.08);
+				color: rgba(255,255,255,0.6);
+				border: 1px solid rgba(255,255,255,0.15);
+			}
+			&--advanced {
+				background: rgba(34,197,94,0.12);
+				color: #22C55E;
+				border: 1px solid rgba(34,197,94,0.3);
+			}
+			&--pro {
+				background: rgba(245,158,11,0.12);
+				color: #f59e0b;
+				border: 1px solid rgba(245,158,11,0.3);
+			}
+		}
+
+		.mp-bio {
+			font-family: $font;
+			font-size: 13px;
+			color: rgba(255,255,255,0.4);
+			margin: 0;
+			line-height: 1.5;
+		}
+
+		.mp-stats-row {
+			display: flex;
+			flex-direction: row;
+			gap: 28px;
+			margin-top: 4px;
+		}
+
+		.mp-stat {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+
+			strong {
+				font-family: $font;
+				font-size: 18px;
+				font-weight: 800;
+				color: #fff;
 			}
 
-			.mp-hero-inner {
-				margin: -70px auto 0;
-				max-width: 1200px;
+			span {
+				font-family: $font;
+				font-size: 10px;
+				color: rgba(255,255,255,0.35);
+				text-transform: uppercase;
+				letter-spacing: 1.2px;
+			}
+		}
+
+		.mp-card-actions {
+			display: flex;
+			flex-direction: row;
+			gap: 10px;
+			align-items: center;
+			margin-left: auto;
+			flex-shrink: 0;
+
+			.mp-edit-btn,
+			.mp-logout-btn {
 				display: flex;
-				flex-direction: row;
-				align-items: flex-end;
-				gap: 28px;
-				position: relative;
-				z-index: 10;
-			}
-
-			.mp-avatar-wrap {
-				flex-shrink: 0;
-				position: relative;
-			}
-
-			.mp-avatar {
-				width: 120px;
-				height: 120px;
-				border-radius: 999px;
-				object-fit: cover;
-				border: 3px solid #22C55E;
-				background: #0F172A;
-				box-shadow: 0 0 0 6px rgba(34,197,94,0.12);
-			}
-
-			.mp-hero-info {
-				flex: 1;
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
-				padding-bottom: 6px;
-
-				.mp-name-row {
-					display: flex;
-					align-items: center;
-					gap: 10px;
-					flex-wrap: wrap;
-				}
-
-				.mp-name {
-					font-family: $font;
-					font-size: 26px;
-					font-weight: 800;
-					margin: 0;
-				}
-
-				.mp-role {
-					display: inline-block;
-					font-family: $font;
-					font-size: 10px;
-					font-weight: 700;
-					letter-spacing: 2px;
-					text-transform: uppercase;
-					padding: 4px 12px;
-					border-radius: 20px;
-					&--trainer, &--agent {
-						background: rgba(34,197,94,0.15);
-						color: #22C55E;
-						border: 1px solid rgba(34,197,94,0.3);
-					}
-					&--user, &--member {
-						background: rgba(255,255,255,0.07);
-						color: rgba(255,255,255,0.5);
-						border: 1px solid rgba(255,255,255,0.1);
-					}
-					&--admin {
-						background: rgba(91,141,238,0.15);
-						color: #5b8dee;
-						border: 1px solid rgba(91,141,238,0.3);
-					}
-				}
-
-				.mp-plan {
-					display: inline-block;
-					font-family: $font;
-					font-size: 10px;
-					font-weight: 700;
-					letter-spacing: 1.5px;
-					text-transform: uppercase;
-					padding: 4px 12px;
-					border-radius: 20px;
-					&--beginner {
-						background: rgba(148,163,184,0.12);
-						color: #94a3b8;
-						border: 1px solid rgba(148,163,184,0.25);
-					}
-					&--regular {
-						background: rgba(255,255,255,0.08);
-						color: rgba(255,255,255,0.6);
-						border: 1px solid rgba(255,255,255,0.15);
-					}
-					&--advanced {
-						background: rgba(34,197,94,0.12);
-						color: #22C55E;
-						border: 1px solid rgba(34,197,94,0.3);
-					}
-					&--pro {
-						background: rgba(245,158,11,0.12);
-						color: #f59e0b;
-						border: 1px solid rgba(245,158,11,0.3);
-					}
-				}
-
-				.mp-bio {
-					font-family: $font;
-					font-size: 13px;
-					color: rgba(255,255,255,0.45);
-					margin: 0;
-					line-height: 1.5;
-					max-width: 480px;
-				}
-
-				.mp-stats-row {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					gap: 20px;
-
-					.mp-stat {
-						display: flex;
-						flex-direction: column;
-						gap: 2px;
-
-						strong {
-							font-family: $font;
-							font-size: 20px;
-							font-weight: 800;
-						}
-
-						span {
-							font-family: $font;
-							font-size: 10px;
-							color: rgba(255,255,255,0.45);
-							text-transform: uppercase;
-							letter-spacing: 1px;
-						}
-					}
-
-					.mp-stat-divider {
-						width: 1px;
-						height: 30px;
-						background: rgba(255,255,255,0.18);
-					}
-				}
-			}
-
-			.mp-hero-actions {
-				display: flex;
-				flex-direction: row;
-				gap: 10px;
 				align-items: center;
-				margin-left: auto;
+				gap: 6px;
+				padding: 9px 18px;
+				border-radius: 10px;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 600;
+				cursor: pointer;
+				border: 1px solid transparent;
+				transition: background 0.15s, border-color 0.15s;
+			}
 
-				.mp-edit-btn,
-				.mp-logout-btn {
-					display: flex;
-					align-items: center;
-					gap: 7px;
-					padding: 10px 18px;
-					border-radius: 10px;
-					font-family: $font;
-					font-size: 14px;
-					font-weight: 600;
-					cursor: pointer;
-					border: 1px solid transparent;
+			.mp-edit-btn {
+				border-color: rgba(255,255,255,0.12);
+				background: rgba(255,255,255,0.04);
+				color: rgba(255,255,255,0.75);
+				&:hover {
+					border-color: rgba(255,255,255,0.25);
+					background: rgba(255,255,255,0.08);
 				}
+			}
 
-				.mp-edit-btn {
-					border-color: rgba(255,255,255,0.15);
-					background: rgba(15,23,42,0.9);
-					color: rgba(255,255,255,0.8);
-				}
-
-				.mp-logout-btn {
-					border-color: rgba(248,113,113,0.4);
-					background: rgba(153,27,27,0.35);
-					color: #fecaca;
+			.mp-logout-btn {
+				border-color: rgba(248,113,113,0.3);
+				background: rgba(153,27,27,0.25);
+				color: #fca5a5;
+				&:hover {
+					border-color: rgba(248,113,113,0.6);
+					background: rgba(153,27,27,0.45);
 				}
 			}
 		}
 
 		// ── Tab Bar ──────────────────────────────────────
 		.mp-tabs-bar {
-			width: 100%;
-			background: #111827;
-			border-bottom: 1px solid rgba(255,255,255,0.07);
-			position: sticky;
-			top: 87px;
-			z-index: 10;
+			display: flex;
+			flex-direction: row;
+			border-bottom: 1px solid rgba(255,255,255,0.08);
+			overflow-x: auto;
+			scrollbar-width: none;
+			margin-top: 28px;
+			&::-webkit-scrollbar { display: none; }
+		}
 
-			.mp-tabs-inner {
-				display: flex;
-				flex-direction: row;
-				overflow-x: auto;
-				scrollbar-width: none;
-				&::-webkit-scrollbar { display: none; }
+		.mp-tab {
+			display: flex;
+			align-items: center;
+			gap: 7px;
+			flex-shrink: 0;
+			padding: 14px 20px;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 500;
+			color: rgba(255,255,255,0.4);
+			cursor: pointer;
+			border-bottom: 2px solid transparent;
+			transition: color 0.15s, border-color 0.15s;
+			white-space: nowrap;
+			text-decoration: none;
+
+			svg { opacity: 0.5; transition: opacity 0.15s; }
+
+			&:hover {
+				color: rgba(255,255,255,0.75);
+				svg { opacity: 0.75; }
 			}
 
-			.mp-tab {
-				flex-shrink: 0;
-				padding: 16px 24px;
-				font-family: $font;
-				font-size: 14px;
-				font-weight: 600;
-				color: rgba(255,255,255,0.45);
-				cursor: pointer;
-				border-bottom: 2px solid transparent;
-				transition: color 0.15s, border-color 0.15s;
-				white-space: nowrap;
-				text-decoration: none;
-				&:hover { color: rgba(255,255,255,0.8); }
-				&.active {
-					color: #fff;
-					border-bottom-color: #22C55E;
-				}
+			&.active {
+				color: #22C55E;
+				border-bottom-color: #22C55E;
+				svg { opacity: 1; color: #22C55E; }
+			}
 
-				&.mp-tab--admin {
-					color: rgba(91,141,238,0.6);
-					&:hover { color: #5b8dee; }
-					&.active { border-bottom-color: #5b8dee; color: #5b8dee; }
-				}
+			&.mp-tab--admin {
+				color: rgba(91,141,238,0.5);
+				svg { color: #5b8dee; }
+				&:hover { color: #5b8dee; }
+				&.active { border-bottom-color: #5b8dee; color: #5b8dee; }
 			}
 		}
 
 		// ── Content Area ─────────────────────────────────
 		.mp-content {
-			padding: 32px 0 100px;
+			padding: 32px 0 80px;
 			min-height: 400px;
-		}
-
-		// ── Bento Dashboard Grid ──────────────────────────
-		.mp-bento {
-			display: grid;
-			grid-template-columns: repeat(4, 1fr);
-			gap: 20px;
-
-			// ── Hero tiles (2×2) ──────────────────────────
-
-			// AGENT: My Programs — green
-			.mp-tile--programs {
-				grid-column: span 2;
-				grid-row: span 2;
-				background: linear-gradient(145deg, #0d1f0f 0%, #112214 40%, #172a18 100%);
-				border-color: rgba(34,197,94,0.18);
-				min-height: 320px;
-				justify-content: flex-end;
-
-				.tile-icon { font-size: 44px !important; color: #22C55E; opacity: 1; margin-bottom: auto; }
-				.tile-count { font-size: 72px; letter-spacing: -2px; }
-				.tile-label { color: rgba(34,197,94,0.6); }
-
-				&:hover { border-color: rgba(34,197,94,0.4); }
-			}
-
-			// USER: Saved Programs — teal
-			.mp-tile--saved-big {
-				grid-column: span 2;
-				grid-row: span 2;
-				background: linear-gradient(145deg, #0a1a1f 0%, #0d1e24 40%, #1a2e35 100%);
-				border-color: rgba(20,184,166,0.18);
-				min-height: 320px;
-				justify-content: flex-end;
-
-				.tile-icon { font-size: 44px !important; color: #14b8a6; opacity: 1; margin-bottom: auto; }
-				.tile-count { font-size: 72px; letter-spacing: -2px; }
-				.tile-label { color: rgba(20,184,166,0.6); }
-
-				&:hover { border-color: rgba(20,184,166,0.4); }
-			}
-
-			// ADMIN: Admin Panel — blue
-			.mp-tile--admin-panel {
-				grid-column: span 2;
-				grid-row: span 2;
-				background: linear-gradient(145deg, #0d1322 0%, #101a2e 40%, #1a2340 100%);
-				border-color: rgba(91,141,238,0.2);
-				min-height: 320px;
-				justify-content: flex-end;
-
-				.tile-icon { font-size: 44px !important; color: #5b8dee; opacity: 1; margin-bottom: auto; }
-				.tile-label { color: rgba(91,141,238,0.6); }
-				.tile-desc { font-size: 14px; color: rgba(255,255,255,0.35); }
-
-				&:hover { border-color: rgba(91,141,238,0.45); }
-				.tile-arrow { color: rgba(91,141,238,0.4); }
-			}
-
-			// ── Small tiles ───────────────────────────────
-
-			// Points — amber accent
-			.mp-tile--points {
-				background: linear-gradient(145deg, #1a1408 0%, #1F2937 100%);
-				border-color: rgba(245,158,11,0.15);
-				.tile-icon { color: #f59e0b; }
-				&:hover { border-color: rgba(245,158,11,0.35); }
-			}
-
-			// Add Program — 1×1 green dashed CTA (AGENT only)
-			.mp-tile--add-program {
-				border-style: dashed;
-				border-color: rgba(34,197,94,0.25);
-				background: rgba(34,197,94,0.04);
-
-				.tile-icon { color: #22C55E; }
-				.tile-label { color: rgba(34,197,94,0.6); }
-
-				&:hover {
-					border-style: solid;
-					border-color: rgba(34,197,94,0.5);
-					background: rgba(34,197,94,0.09);
-				}
-			}
-		}
-
-		// ── Base Tile ─────────────────────────────────────
-		.mp-tile {
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-			padding: 28px;
-			border-radius: 18px;
-			background: #1F2937;
-			border: 1px solid rgba(255,255,255,0.07);
-			cursor: pointer;
-			transition: border-color 0.2s, transform 0.15s;
-			text-decoration: none;
-			position: relative;
-			overflow: hidden;
-			height: 100%;
-			min-height: 200px; // Standard 1x1 block height
-
-			&::before {
-				content: '';
-				position: absolute;
-				inset: 0;
-				background: linear-gradient(135deg, rgba(34,197,94,0.06) 0%, transparent 55%);
-				opacity: 0;
-				transition: opacity 0.2s;
-				pointer-events: none;
-			}
-
-			&:hover {
-				border-color: rgba(34,197,94,0.3);
-				transform: translateY(-3px);
-				&::before { opacity: 1; }
-				.tile-arrow { opacity: 1; transform: translateX(3px); }
-			}
-
-			.tile-icon {
-				font-size: 32px !important;
-				color: #22C55E;
-				opacity: 0.85;
-			}
-
-			.tile-label {
-				font-family: $font;
-				font-size: 11px;
-				font-weight: 700;
-				letter-spacing: 2px;
-				text-transform: uppercase;
-				color: rgba(255,255,255,0.35);
-			}
-
-			.tile-count {
-				font-family: $font;
-				font-size: 48px;
-				font-weight: 800;
-				color: #fff;
-				line-height: 1;
-				letter-spacing: -1px;
-			}
-
-			.tile-desc {
-				font-family: $font;
-				font-size: 13px;
-				color: rgba(255,255,255,0.3);
-				margin: 0;
-				line-height: 1.5;
-			}
-
-			.tile-body {
-				display: flex;
-				flex-direction: column;
-				gap: 8px;
-			}
-
-			.tile-arrow {
-				position: absolute;
-				bottom: 24px;
-				right: 24px;
-				font-size: 16px !important;
-				color: rgba(255,255,255,0.2);
-				opacity: 0;
-				transition: opacity 0.2s, transform 0.2s;
-			}
 		}
 
 		// ── Card grid (for program/favorites lists) ───────
