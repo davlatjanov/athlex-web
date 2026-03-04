@@ -7,8 +7,6 @@ import Footer from '../Footer';
 import { Stack } from '@mui/material';
 import { getJwtToken, updateUserInfo } from '../../auth';
 import Chat from '../Chat';
-import { useReactiveVar } from '@apollo/client';
-import { userVar } from '../../../apollo/store';
 import { useTranslation } from 'next-i18next';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -17,10 +15,9 @@ import 'swiper/css/navigation';
 const withLayoutBasic = (Component: any) => {
 	return (props: any) => {
 		const router = useRouter();
-		const { t, i18n } = useTranslation('common');
+		const { t } = useTranslation('common');
 		const device = useDeviceDetect();
 		const [authHeader, setAuthHeader] = useState<boolean>(false);
-		const user = useReactiveVar(userVar);
 
 		const memoizedValues = useMemo(() => {
 			let title = '',
@@ -29,19 +26,19 @@ const withLayoutBasic = (Component: any) => {
 
 			switch (router.pathname) {
 				case '/programs':
-					title = 'Training Programs';
-					desc = 'Expert-crafted programs for every level';
-					bgImage = 'https://images.pexels.com/photos/6456128/pexels-photo-6456128.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
+					title = 'Programs Built to Perform';
+					desc = 'From beginner to elite — find the program that transforms you.';
+					bgImage = 'https://i.pinimg.com/736x/e7/7e/30/e77e3098a5bf5d630418d7c7cc133092.jpg';
 					break;
 				case '/trainer':
-					title = 'Trainers';
-					desc = 'Find your perfect coach and start training';
-					bgImage = 'https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
+					title = 'Train Under the Best';
+					desc = 'Connect with certified coaches who push you further than you thought possible.';
+					bgImage = 'https://i.pinimg.com/1200x/6d/10/d1/6d10d1e5cc21d22bf513221855b572a1.jpg';
 					break;
 				case '/products':
-					title = 'Shop';
-					desc = 'Premium gear and supplements for athletes';
-					bgImage = 'https://images.pexels.com/photos/5327555/pexels-photo-5327555.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
+					title = 'Gear Up. Perform More.';
+					desc = 'Premium supplements, equipment and gear built for serious athletes.';
+					bgImage = 'https://i.pinimg.com/736x/13/c8/34/13c83449624a1a9ea2672a5ebdaf97ec.jpg';
 					break;
 				case '/community':
 					title = 'Community';
@@ -125,8 +122,10 @@ const withLayoutBasic = (Component: any) => {
 										<img src={memoizedValues.bgImage} alt="" className={'hb-bg-img'} />
 									)}
 									<div className={'hb-overlay'} />
-									<strong>{t(memoizedValues.title)}</strong>
-									<span>{t(memoizedValues.desc)}</span>
+									<div className={'hb-text'}>
+										<strong className={'hb-title'}>{t(memoizedValues.title)}</strong>
+										<span className={'hb-desc'}>{t(memoizedValues.desc)}</span>
+									</div>
 								</div>
 							</div>
 						)}

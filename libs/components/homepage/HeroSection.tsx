@@ -6,7 +6,7 @@ const HeroSection = () => {
 	return (
 		<Stack className={'hero-root'}>
 			<img
-				src="https://images.pexels.com/photos/6389892/pexels-photo-6389892.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1"
+				src="https://i.pinimg.com/736x/b4/af/45/b4af45aa415fad2f0399bc69477a06a2.jpg"
 				alt=""
 				className={'hero-bg-img'}
 			/>
