@@ -1,325 +1,310 @@
 #pc-wrap {
   .join-page {
-    display: flex;
-    flex-direction: row;
     width: 100%;
     min-height: 100vh;
-    padding-top: 87px; // clear fixed navbar
+    padding-top: 87px;
     box-sizing: border-box;
+    background: #060b14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 60px;
 
-    /* ════════════════════════════════
-       LEFT — Form panel
-    ════════════════════════════════ */
-    .join-left {
-      width: 42%;
-      min-height: calc(100vh - 87px);
-      display: flex;
+    .container {
       align-items: center;
       justify-content: center;
-      background: #080e1a;
-      box-sizing: border-box;
-      padding: 60px 0;
 
-      .jl-inner {
-        width: 380px;
+      .main {
+        width: 1160px;
+        min-height: 700px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7);
 
-        /* Brand */
-        .jl-brand {
-          font-family: $font;
-          font-size: 22px;
-          font-weight: 900;
-          letter-spacing: 5px;
-          color: #e92c28;
-          text-transform: uppercase;
-          margin-bottom: 36px;
-        }
-
-        /* Heading */
-        .jl-heading {
-          margin-bottom: 28px;
-
-          h2 {
-            font-family: $font;
-            font-size: 28px;
-            font-weight: 800;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0 0 8px;
-          }
-
-          p {
-            font-family: $font;
-            font-size: 14px;
-            font-weight: 400;
-            color: #64748b;
-            line-height: 20px;
-            margin: 0;
-          }
-        }
-
-        /* Tab toggle */
-        .jl-tabs {
+        /* ═══════════════════════════════
+           LEFT — Image bg + Form overlay
+        ═══════════════════════════════ */
+        .left {
+          width: 52%;
+          position: relative;
+          background-image: url('https://i.pinimg.com/736x/c2/1c/00/c21c0072e14e319389e6f9c499f575f6.jpg');
+          background-size: cover;
+          background-position: center;
           display: flex;
-          flex-direction: row;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-          margin-bottom: 32px;
+          align-items: center;
+          justify-content: center;
 
-          .jl-tab {
-            flex: 1;
-            height: 42px;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
-            font-family: $font;
-            font-size: 14px;
-            font-weight: 600;
-            color: #475569;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            transition: color 0.2s, border-color 0.2s;
-
-            &.active {
-              color: #ffffff;
-              border-bottom-color: #e92c28;
-            }
-
-            &:hover:not(.active) {
-              color: #94a3b8;
-            }
+          /* Dark overlay so form is readable */
+          &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(6, 11, 20, 0.82);
           }
-        }
 
-        /* Form fields */
-        .jl-form {
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-
-          .jl-field {
+          .jl-inner {
+            position: relative;
+            z-index: 1;
+            width: 360px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            padding: 56px 0;
 
-            label {
+            /* Brand */
+            .jl-brand {
               font-family: $font;
-              font-size: 11px;
-              font-weight: 700;
-              color: #64748b;
+              font-size: 20px;
+              font-weight: 900;
+              letter-spacing: 5px;
+              color: #e92c28;
               text-transform: uppercase;
-              letter-spacing: 1px;
+              margin-bottom: 32px;
             }
 
-            input {
-              width: 100%;
-              height: 50px;
-              padding: 0 16px;
-              box-sizing: border-box;
-              background: rgba(255, 255, 255, 0.04);
-              border: 1px solid rgba(255, 255, 255, 0.08);
-              border-radius: 10px;
-              font-family: $font;
-              font-size: 14px;
-              color: #ffffff;
-              transition: border-color 0.2s, background 0.2s;
+            /* Heading */
+            .jl-heading {
+              margin-bottom: 24px;
 
-              &::placeholder {
-                color: #334155;
+              h2 {
+                font-family: $font;
+                font-size: 26px;
+                font-weight: 800;
+                color: #ffffff;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin: 0 0 6px;
               }
 
-              &:focus {
-                outline: none;
-                border-color: #e92c28;
-                background: rgba(233, 44, 40, 0.04);
+              p {
+                font-family: $font;
+                font-size: 13px;
+                font-weight: 400;
+                color: #64748b;
+                line-height: 20px;
+                margin: 0;
               }
             }
-          }
 
-          /* Role checkboxes */
-          .jl-roles {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-
-            > span {
-              font-family: $font;
-              font-size: 11px;
-              font-weight: 700;
-              color: #64748b;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-            }
-
-            .jl-roles-options {
+            /* Tab toggle */
+            .jl-tabs {
               display: flex;
               flex-direction: row;
-              gap: 20px;
+              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+              margin-bottom: 28px;
 
-              .MuiFormControlLabel-label {
+              .jl-tab {
+                flex: 1;
+                height: 40px;
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid transparent;
+                margin-bottom: -1px;
                 font-family: $font;
-                font-size: 14px;
-                color: #94a3b8;
+                font-size: 13px;
+                font-weight: 600;
+                color: #475569;
+                cursor: pointer;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                transition: color 0.2s, border-color 0.2s;
+
+                &.active {
+                  color: #ffffff;
+                  border-bottom-color: #e92c28;
+                }
+
+                &:hover:not(.active) {
+                  color: #94a3b8;
+                }
+              }
+            }
+
+            /* Form */
+            .jl-form {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+
+              .jl-field {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+
+                label {
+                  font-family: $font;
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: #64748b;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                }
+
+                input {
+                  width: 100%;
+                  height: 48px;
+                  padding: 0 15px;
+                  box-sizing: border-box;
+                  background: rgba(255, 255, 255, 0.05);
+                  border: 1px solid rgba(255, 255, 255, 0.1);
+                  border-radius: 10px;
+                  font-family: $font;
+                  font-size: 14px;
+                  color: #ffffff;
+                  transition: border-color 0.2s, background 0.2s;
+
+                  &::placeholder {
+                    color: #2d3a4e;
+                  }
+
+                  &:focus {
+                    outline: none;
+                    border-color: #e92c28;
+                    background: rgba(233, 44, 40, 0.05);
+                  }
+                }
               }
 
-              .MuiCheckbox-root {
-                color: #334155;
-                padding: 4px 6px;
+              /* Role checkboxes */
+              .jl-roles {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
 
-                &.Mui-checked {
+                > span {
+                  font-family: $font;
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: #64748b;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                }
+
+                .jl-roles-options {
+                  display: flex;
+                  flex-direction: row;
+                  gap: 16px;
+
+                  .MuiFormControlLabel-label {
+                    font-family: $font;
+                    font-size: 13px;
+                    color: #94a3b8;
+                  }
+
+                  .MuiCheckbox-root {
+                    color: #334155;
+                    padding: 3px 6px;
+
+                    &.Mui-checked {
+                      color: #e92c28;
+                    }
+                  }
+                }
+              }
+
+              /* Remember me */
+              .jl-remember {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+
+                .MuiFormControlLabel-label {
+                  font-family: $font;
+                  font-size: 13px;
+                  color: #64748b;
+                }
+
+                .MuiCheckbox-root {
+                  color: #334155;
+                  padding: 3px 6px;
+
+                  &.Mui-checked {
+                    color: #e92c28;
+                  }
+                }
+
+                a {
+                  font-family: $font;
+                  font-size: 12px;
                   color: #e92c28;
+                  cursor: pointer;
+
+                  &:hover {
+                    opacity: 0.8;
+                  }
+                }
+              }
+
+              /* Submit */
+              .jl-submit {
+                width: 100%;
+                height: 50px;
+                border: none;
+                border-radius: 10px;
+                background: #e92c28;
+                font-family: $font;
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                color: #ffffff;
+                text-transform: uppercase;
+                cursor: pointer;
+                margin-top: 4px;
+                transition: background 0.2s, transform 0.1s;
+
+                &:hover:not(:disabled) {
+                  background: #c41f1c;
+                }
+
+                &:active:not(:disabled) {
+                  transform: scale(0.99);
+                }
+
+                &:disabled {
+                  background: rgba(255, 255, 255, 0.04);
+                  border: 1px solid rgba(255, 255, 255, 0.06);
+                  color: #334155;
+                  cursor: not-allowed;
+                }
+              }
+            }
+
+            /* Switch */
+            .jl-switch {
+              margin-top: 24px;
+
+              p {
+                font-family: $font;
+                font-size: 13px;
+                color: #475569;
+                margin: 0;
+
+                b {
+                  margin-left: 5px;
+                  font-weight: 700;
+                  color: #e92c28;
+                  cursor: pointer;
+                  font-style: normal;
+
+                  &:hover {
+                    opacity: 0.8;
+                  }
                 }
               }
             }
           }
-
-          /* Remember me row */
-          .jl-remember {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-
-            .MuiFormControlLabel-label {
-              font-family: $font;
-              font-size: 13px;
-              color: #64748b;
-            }
-
-            .MuiCheckbox-root {
-              color: #334155;
-              padding: 4px 6px;
-
-              &.Mui-checked {
-                color: #e92c28;
-              }
-            }
-
-            a {
-              font-family: $font;
-              font-size: 13px;
-              color: #e92c28;
-              cursor: pointer;
-              transition: opacity 0.2s;
-
-              &:hover {
-                opacity: 0.8;
-              }
-            }
-          }
-
-          /* Submit button */
-          .jl-submit {
-            width: 100%;
-            height: 52px;
-            border: none;
-            border-radius: 10px;
-            background: #e92c28;
-            font-family: $font;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            margin-top: 6px;
-
-            &:hover:not(:disabled) {
-              background: #c41f1c;
-            }
-
-            &:active:not(:disabled) {
-              transform: scale(0.99);
-            }
-
-            &:disabled {
-              background: #0f172a;
-              border: 1px solid rgba(255, 255, 255, 0.06);
-              color: #334155;
-              cursor: not-allowed;
-            }
-          }
         }
 
-        /* Switch link */
-        .jl-switch {
-          margin-top: 28px;
-
-          p {
-            font-family: $font;
-            font-size: 14px;
-            color: #475569;
-            margin: 0;
-
-            b {
-              margin-left: 6px;
-              font-weight: 700;
-              color: #e92c28;
-              cursor: pointer;
-              font-style: normal;
-              transition: opacity 0.2s;
-
-              &:hover {
-                opacity: 0.8;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    /* ════════════════════════════════
-       RIGHT — Image panel
-    ════════════════════════════════ */
-    .join-right {
-      width: 58%;
-      min-height: calc(100vh - 87px);
-      position: relative;
-      background-image: url('https://i.pinimg.com/1200x/ba/af/28/baaf28d530e26cd0da560d0fe2a59bc1.jpg');
-      background-size: cover;
-      background-position: center top;
-
-      .jr-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          to right,
-          rgba(8, 14, 26, 0.55) 0%,
-          rgba(0, 0, 0, 0.2) 60%,
-          rgba(0, 0, 0, 0.1) 100%
-        );
-      }
-
-      .jr-content {
-        position: absolute;
-        bottom: 60px;
-        left: 56px;
-        right: 56px;
-
-        strong {
-          display: block;
-          font-family: $font;
-          font-size: 48px;
-          font-weight: 900;
-          color: #ffffff;
-          text-transform: uppercase;
-          letter-spacing: 3px;
-          line-height: 1.1;
-          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        p {
-          margin-top: 14px;
-          font-family: $font;
-          font-size: 16px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 0.65);
-          line-height: 26px;
-          text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+        /* ═══════════════════════════════
+           RIGHT — Image only
+        ═══════════════════════════════ */
+        .right {
+          width: 48%;
+          background-image: url('https://i.pinimg.com/736x/2b/a0/0d/2ba00d9adcc2ed695d24ce1c2ae37038.jpg');
+          background-size: cover;
+          background-position: center;
         }
       }
     }

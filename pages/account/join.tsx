@@ -53,164 +53,155 @@ const Join: NextPage = () => {
 	} else {
 		return (
 			<Stack className={'join-page'}>
-				{/* ── Left: Form Panel ── */}
-				<div className={'join-left'}>
-					<div className={'jl-inner'}>
-						<div className={'jl-brand'}>ATHLEX</div>
+				<Stack className={'container'}>
+					<Stack className={'main'}>
+						{/* ── Left: Image bg + Form ── */}
+						<div className={'left'}>
+							<div className={'jl-inner'}>
+								<div className={'jl-brand'}>ATHLEX</div>
 
-						<div className={'jl-heading'}>
-							<h2>{loginView ? 'Welcome Back' : 'Create Account'}</h2>
-							<p>
-								{loginView
-									? 'Sign in to continue your fitness journey.'
-									: 'Join Athlex and start training smarter.'}
-							</p>
-						</div>
-
-						{/* Tab toggle */}
-						<div className={'jl-tabs'}>
-							<button
-								className={`jl-tab ${loginView ? 'active' : ''}`}
-								onClick={() => setLoginView(true)}
-							>
-								Login
-							</button>
-							<button
-								className={`jl-tab ${!loginView ? 'active' : ''}`}
-								onClick={() => setLoginView(false)}
-							>
-								Sign Up
-							</button>
-						</div>
-
-						<div className={'jl-form'}>
-							<div className={'jl-field'}>
-								<label>Username</label>
-								<input
-									type="text"
-									placeholder="Enter your username"
-									onChange={(e) => handleInput('nick', e.target.value)}
-									onKeyDown={(e) => {
-										if (e.key === 'Enter' && loginView) doLogin();
-										if (e.key === 'Enter' && !loginView) doSignUp();
-									}}
-								/>
-							</div>
-
-							<div className={'jl-field'}>
-								<label>Password</label>
-								<input
-									type="password"
-									placeholder="Enter your password"
-									onChange={(e) => handleInput('password', e.target.value)}
-									onKeyDown={(e) => {
-										if (e.key === 'Enter' && loginView) doLogin();
-										if (e.key === 'Enter' && !loginView) doSignUp();
-									}}
-								/>
-							</div>
-
-							{!loginView && (
-								<div className={'jl-field'}>
-									<label>Phone</label>
-									<input
-										type="tel"
-										placeholder="Enter your phone number"
-										onChange={(e) => handleInput('phone', e.target.value)}
-										onKeyDown={(e) => {
-											if (e.key === 'Enter') doSignUp();
-										}}
-									/>
+								<div className={'jl-heading'}>
+									<h2>{loginView ? 'Welcome Back' : 'Create Account'}</h2>
+									<p>
+										{loginView
+											? 'Sign in to continue your fitness journey.'
+											: 'Join Athlex and start training smarter.'}
+									</p>
 								</div>
-							)}
 
-							{!loginView && (
-								<div className={'jl-roles'}>
-									<span>I am a:</span>
-									<div className={'jl-roles-options'}>
-										<FormGroup>
-											<FormControlLabel
-												control={
-													<Checkbox
-														size="small"
-														name={'USER'}
-														onChange={checkUserTypeHandler}
-														checked={input.type === 'USER'}
-													/>
-												}
-												label="User"
-											/>
-										</FormGroup>
-										<FormGroup>
-											<FormControlLabel
-												control={
-													<Checkbox
-														size="small"
-														name={'AGENT'}
-														onChange={checkUserTypeHandler}
-														checked={input.type === 'AGENT'}
-													/>
-												}
-												label="Trainer"
-											/>
-										</FormGroup>
-									</div>
+								<div className={'jl-tabs'}>
+									<button className={`jl-tab ${loginView ? 'active' : ''}`} onClick={() => setLoginView(true)}>
+										Login
+									</button>
+									<button className={`jl-tab ${!loginView ? 'active' : ''}`} onClick={() => setLoginView(false)}>
+										Sign Up
+									</button>
 								</div>
-							)}
 
-							{loginView && (
-								<div className={'jl-remember'}>
-									<FormGroup>
-										<FormControlLabel
-											control={<Checkbox defaultChecked size="small" />}
-											label="Remember me"
+								<div className={'jl-form'}>
+									<div className={'jl-field'}>
+										<label>Username</label>
+										<input
+											type="text"
+											placeholder="Enter your username"
+											onChange={(e) => handleInput('nick', e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter' && loginView) doLogin();
+												if (e.key === 'Enter' && !loginView) doSignUp();
+											}}
 										/>
-									</FormGroup>
-									<a>Forgot password?</a>
+									</div>
+
+									<div className={'jl-field'}>
+										<label>Password</label>
+										<input
+											type="password"
+											placeholder="Enter your password"
+											onChange={(e) => handleInput('password', e.target.value)}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter' && loginView) doLogin();
+												if (e.key === 'Enter' && !loginView) doSignUp();
+											}}
+										/>
+									</div>
+
+									{!loginView && (
+										<div className={'jl-field'}>
+											<label>Phone</label>
+											<input
+												type="tel"
+												placeholder="Enter your phone number"
+												onChange={(e) => handleInput('phone', e.target.value)}
+												onKeyDown={(e) => {
+													if (e.key === 'Enter') doSignUp();
+												}}
+											/>
+										</div>
+									)}
+
+									{!loginView && (
+										<div className={'jl-roles'}>
+											<span>I am a:</span>
+											<div className={'jl-roles-options'}>
+												<FormGroup>
+													<FormControlLabel
+														control={
+															<Checkbox
+																size="small"
+																name={'USER'}
+																onChange={checkUserTypeHandler}
+																checked={input.type === 'USER'}
+															/>
+														}
+														label="User"
+													/>
+												</FormGroup>
+												<FormGroup>
+													<FormControlLabel
+														control={
+															<Checkbox
+																size="small"
+																name={'AGENT'}
+																onChange={checkUserTypeHandler}
+																checked={input.type === 'AGENT'}
+															/>
+														}
+														label="Trainer"
+													/>
+												</FormGroup>
+											</div>
+										</div>
+									)}
+
+									{loginView && (
+										<div className={'jl-remember'}>
+											<FormGroup>
+												<FormControlLabel
+													control={<Checkbox defaultChecked size="small" />}
+													label="Remember me"
+												/>
+											</FormGroup>
+											<a>Forgot password?</a>
+										</div>
+									)}
+
+									{loginView ? (
+										<button
+											className={'jl-submit'}
+											disabled={!input.nick || !input.password}
+											onClick={doLogin}
+										>
+											LOGIN
+										</button>
+									) : (
+										<button
+											className={'jl-submit'}
+											disabled={!input.nick || !input.password || !input.phone}
+											onClick={doSignUp}
+										>
+											CREATE ACCOUNT
+										</button>
+									)}
 								</div>
-							)}
 
-							{loginView ? (
-								<button
-									className={'jl-submit'}
-									disabled={!input.nick || !input.password}
-									onClick={doLogin}
-								>
-									LOGIN
-								</button>
-							) : (
-								<button
-									className={'jl-submit'}
-									disabled={!input.nick || !input.password || !input.phone}
-									onClick={doSignUp}
-								>
-									CREATE ACCOUNT
-								</button>
-							)}
+								<div className={'jl-switch'}>
+									{loginView ? (
+										<p>
+											New to Athlex? <b onClick={() => setLoginView(false)}>Sign Up</b>
+										</p>
+									) : (
+										<p>
+											Already have an account? <b onClick={() => setLoginView(true)}>Login</b>
+										</p>
+									)}
+								</div>
+							</div>
 						</div>
 
-						<div className={'jl-switch'}>
-							{loginView ? (
-								<p>
-									New to Athlex? <b onClick={() => setLoginView(false)}>Sign Up</b>
-								</p>
-							) : (
-								<p>
-									Already have an account? <b onClick={() => setLoginView(true)}>Login</b>
-								</p>
-							)}
-						</div>
-					</div>
-				</div>
-
-				{/* ── Right: Image Panel ── */}
-				<div className={'join-right'}>
-					<div className={'jr-overlay'} />
-					<div className={'jr-content'}>
-						<strong>Forge Your Limits</strong>
-						<p>Train smarter. Recover faster.<br />Perform better.</p>
-					</div>
-				</div>
+						{/* ── Right: Image only ── */}
+						<div className={'right'} />
+					</Stack>
+				</Stack>
 			</Stack>
 		);
 	}
