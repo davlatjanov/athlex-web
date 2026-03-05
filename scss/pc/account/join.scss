@@ -41,7 +41,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(6, 11, 20, 0.82);
+            background: rgba(6, 11, 20, 0.62);
           }
 
           .jl-inner {
@@ -81,7 +81,7 @@
                 font-family: $font;
                 font-size: 13px;
                 font-weight: 400;
-                color: #64748b;
+                color: #94a3b8;
                 line-height: 20px;
                 margin: 0;
               }
@@ -104,7 +104,7 @@
                 font-family: $font;
                 font-size: 13px;
                 font-weight: 600;
-                color: #475569;
+                color: #94a3b8;
                 cursor: pointer;
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
@@ -136,7 +136,7 @@
                   font-family: $font;
                   font-size: 11px;
                   font-weight: 700;
-                  color: #64748b;
+                  color: #cbd5e1;
                   text-transform: uppercase;
                   letter-spacing: 1px;
                 }
@@ -146,8 +146,8 @@
                   height: 48px;
                   padding: 0 15px;
                   box-sizing: border-box;
-                  background: rgba(255, 255, 255, 0.05);
-                  border: 1px solid rgba(255, 255, 255, 0.1);
+                  background: rgba(255, 255, 255, 0.08);
+                  border: 1px solid rgba(255, 255, 255, 0.18);
                   border-radius: 10px;
                   font-family: $font;
                   font-size: 14px;
@@ -155,7 +155,7 @@
                   transition: border-color 0.2s, background 0.2s;
 
                   &::placeholder {
-                    color: #2d3a4e;
+                    color: #4b6280;
                   }
 
                   &:focus {
@@ -176,7 +176,7 @@
                   font-family: $font;
                   font-size: 11px;
                   font-weight: 700;
-                  color: #64748b;
+                  color: #cbd5e1;
                   text-transform: uppercase;
                   letter-spacing: 1px;
                 }
@@ -189,11 +189,11 @@
                   .MuiFormControlLabel-label {
                     font-family: $font;
                     font-size: 13px;
-                    color: #94a3b8;
+                    color: #cbd5e1;
                   }
 
                   .MuiCheckbox-root {
-                    color: #334155;
+                    color: #64748b;
                     padding: 3px 6px;
 
                     &.Mui-checked {
@@ -213,11 +213,11 @@
                 .MuiFormControlLabel-label {
                   font-family: $font;
                   font-size: 13px;
-                  color: #64748b;
+                  color: #cbd5e1;
                 }
 
                 .MuiCheckbox-root {
-                  color: #334155;
+                  color: #64748b;
                   padding: 3px 6px;
 
                   &.Mui-checked {
@@ -278,7 +278,7 @@
               p {
                 font-family: $font;
                 font-size: 13px;
-                color: #475569;
+                color: #94a3b8;
                 margin: 0;
 
                 b {
