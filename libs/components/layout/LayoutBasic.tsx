@@ -60,12 +60,7 @@ const withLayoutBasic = (Component: any) => {
 					desc = 'We are here to help you';
 					bgImage = 'https://i.pinimg.com/1200x/01/96/59/019659b0cdc8c3869ee47a138bfd87b1.jpg';
 					break;
-				case '/account/join':
-					title = 'Join Athlex';
-					desc = 'Start your fitness journey today';
-					bgImage = 'https://images.pexels.com/photos/4498482/pexels-photo-4498482.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
-					setAuthHeader(true);
-					break;
+	
 				default:
 					break;
 			}
