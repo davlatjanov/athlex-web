@@ -15,7 +15,7 @@ import MemberFollowers from '../../libs/components/member/MemberFollowers';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { LIKE_TARGET_MEMBER, SUBSCRIBE, UNSUBSCRIBE } from '../../apollo/user/mutation';
+import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
 import { Messages, REACT_APP_API_URL } from '../../libs/config';
 import { logOut } from '../../libs/auth';
 import { sweetConfirmAlert } from '../../libs/sweetAlert';
@@ -98,16 +98,15 @@ const MyPage: NextPage = () => {
 	const tabs = getTabs();
 
 	/** APOLLO REQUESTS **/
-	const [subscribe] = useMutation(SUBSCRIBE);
-	const [unsubscribe] = useMutation(UNSUBSCRIBE);
-	const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
+	const [followMember] = useMutation(FOLLOW_MEMBER);
+	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 
 	/** HANDLERS **/
 	const subscribeHandler = async (id: string, refetch: any, query: any) => {
 		try {
 			if (!id) throw new Error(Messages.error1);
 			if (!u._id) throw new Error(Messages.error2);
-			await subscribe({ variables: { input: id } });
+			await followMember({ variables: { input: { followingId: id } } });
 			await sweetTopSmallSuccessAlert('Subscribed', 800);
 			await refetch({ input: query });
 		} catch (err: any) {
@@ -119,7 +118,7 @@ const MyPage: NextPage = () => {
 		try {
 			if (!id) throw new Error(Messages.error1);
 			if (!u._id) throw new Error(Messages.error2);
-			await unsubscribe({ variables: { input: id } });
+			await followMember({ variables: { input: { followingId: id } } });
 			await sweetTopSmallSuccessAlert('UnSubscribed', 800);
 			await refetch({ input: query });
 		} catch (err: any) {
@@ -131,7 +130,7 @@ const MyPage: NextPage = () => {
 		try {
 			if (!id) return;
 			if (!u._id) throw new Error(Messages.error2);
-			await likeTargetMember({ variables: { input: id } });
+			await likeTargetItem({ variables: { input: { likeGroup: 'MEMBER', likeRefId: id } } });
 			await sweetTopSmallSuccessAlert('Liked', 800);
 			await refetch({ input: query });
 		} catch (err: any) {
@@ -168,7 +167,7 @@ const MyPage: NextPage = () => {
 						<div className={'mp-avatar-wrap'}>
 							{u?.memberImage ? (
 								<img
-									src={`${REACT_APP_API_URL}/${u.memberImage}`}
+									src={u.memberImage}
 									alt={u?.memberNick}
 									className={'mp-avatar'}
 									onError={(e) => {

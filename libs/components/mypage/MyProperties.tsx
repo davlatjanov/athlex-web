@@ -4,40 +4,39 @@ import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { PropertyCard } from './PropertyCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { Property } from '../../types/property/property';
-import { AgentPropertiesInquiry } from '../../types/property/property.input';
+import { Program } from '../../types/program/program';
 import { T } from '../../types/common';
-import { PropertyStatus } from '../../enums/property.enum';
+import { ProgramStatus } from '../../enums/training-program.enum';
 import { userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
-import { UPDATE_PROPERTY } from '../../../apollo/user/mutation';
-import { GET_AGENT_PROPERTIES } from '../../../apollo/user/query';
+import { UPDATE_PROGRAM, DELETE_PROGRAM } from '../../../apollo/user/mutation';
+import { GET_MY_PROGRAMS } from '../../../apollo/user/query';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
-import { stat } from 'fs';
 
 const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
-	const [searchFilter, setSearchFilter] = useState<AgentPropertiesInquiry>(initialInput);
-	const [agentProperties, setAgentProperties] = useState<Property[]>([]);
+	const [searchFilter, setSearchFilter] = useState<any>(initialInput);
+	const [agentProperties, setAgentProperties] = useState<Program[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
 
 	/** APOLLO REQUESTS **/
-	const [updateProperty] = useMutation(UPDATE_PROPERTY);
+	const [updateProgram] = useMutation(UPDATE_PROGRAM);
+	const [deleteProgram] = useMutation(DELETE_PROGRAM);
 
 	const {
-		loading: getAgentPropertiesLoading,
-		data: getAgentPropertiesData,
-		error: getAgentPropertiesError,
-		refetch: getAgentPropertiesRefetch,
-	} = useQuery(GET_AGENT_PROPERTIES, {
+		loading: getMyProgramsLoading,
+		data: getMyProgramsData,
+		error: getMyProgramsError,
+		refetch: getMyProgramsRefetch,
+	} = useQuery(GET_MY_PROGRAMS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setAgentProperties(data?.getAgentProperties?.list);
-			setTotal(data?.getAgentProperties?.metaCounter[0]?.total ?? 0);
+			setAgentProperties(data?.getMyPrograms?.list);
+			setTotal(data?.getMyPrograms?.metaCounter[0]?.total ?? 0);
 		},
 	});
 
@@ -46,23 +45,17 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 		setSearchFilter({ ...searchFilter, page: value });
 	};
 
-	const changeStatusHandler = (value: PropertyStatus) => {
-		setSearchFilter({ ...searchFilter, search: { propertyStatus: value } });
+	const changeStatusHandler = (value: ProgramStatus) => {
+		setSearchFilter({ ...searchFilter, search: { programStatus: value } });
 	};
 
 	const deletePropertyHandler = async (id: string) => {
 		try {
-			if (await sweetConfirmAlert('are you sure to delete this property?')) {
-				await updateProperty({
-					variables: {
-						input: {
-							_id: id,
-							propertyStatus: 'DELETE',
-						},
-					},
+			if (await sweetConfirmAlert('are you sure to delete this program?')) {
+				await deleteProgram({
+					variables: { programId: id },
 				});
-
-				await getAgentPropertiesRefetch({ input: searchFilter });
+				await getMyProgramsRefetch({ input: searchFilter });
 			}
 		} catch (err: any) {
 			await sweetErrorHandling(err);
@@ -72,15 +65,13 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	const updatePropertyHandler = async (status: string, id: string) => {
 		try {
 			if (await sweetConfirmAlert(`are you sure to change to ${status} status?`)) {
-				await updateProperty({
+				await updateProgram({
 					variables: {
-						input: {
-							_id: id,
-							propertyStatus: status,
-						},
+						programId: id,
+						input: { programStatus: status },
 					},
 				});
-				await getAgentPropertiesRefetch({ input: searchFilter });
+				await getMyProgramsRefetch({ input: searchFilter });
 			}
 		} catch (err) {
 			await sweetErrorHandling(err);
@@ -105,16 +96,16 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 				<Stack className="property-list-box">
 					<Stack className="tab-name-box">
 						<Typography
-							onClick={() => changeStatusHandler(PropertyStatus.ACTIVE)}
-							className={searchFilter.search.propertyStatus === 'ACTIVE' ? 'active-tab-name' : 'tab-name'}
+							onClick={() => changeStatusHandler(ProgramStatus.ACTIVE)}
+							className={searchFilter.search.programStatus === 'ACTIVE' ? 'active-tab-name' : 'tab-name'}
 						>
-							On Sale
+							Active
 						</Typography>
 						<Typography
-							onClick={() => changeStatusHandler(PropertyStatus.SOLD)}
-							className={searchFilter.search.propertyStatus === 'SOLD' ? 'active-tab-name' : 'tab-name'}
+							onClick={() => changeStatusHandler(ProgramStatus.ARCHIVED)}
+							className={searchFilter.search.programStatus === 'ARCHIVED' ? 'active-tab-name' : 'tab-name'}
 						>
-							On Sold
+							Archived
 						</Typography>
 					</Stack>
 					<Stack className="list-box">
@@ -123,7 +114,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 							<Typography className="title-text">Published</Typography>
 							<Typography className="title-text">Status</Typography>
 							<Typography className="title-text">Views</Typography>
-							{searchFilter.search.propertyStatus === 'ACTIVE' && (
+							{searchFilter.search.programStatus === 'ACTIVE' && (
 								<Typography className="title-text">Action</Typography>
 							)}
 						</Stack>
@@ -134,12 +125,13 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 								<p>No programs found yet.</p>
 							</div>
 						) : (
-							agentProperties.map((property: Property) => {
+							agentProperties.map((program: Program) => {
 								return (
 									<PropertyCard
-										property={property}
+										property={program}
 										deletePropertyHandler={deletePropertyHandler}
 										updatePropertyHandler={updatePropertyHandler}
+										key={program._id}
 									/>
 								);
 							})
@@ -174,7 +166,7 @@ MyProperties.defaultProps = {
 		limit: 5,
 		sort: 'createdAt',
 		search: {
-			propertyStatus: 'ACTIVE',
+			programStatus: 'ACTIVE',
 		},
 	},
 };
