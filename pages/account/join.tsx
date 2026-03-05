@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Stack } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, FormGroup, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { logIn, signUp } from '../../libs/auth';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
@@ -28,21 +28,17 @@ const Join: NextPage = () => {
 	const checkUserTypeHandler = (e: any) => {
 		const checked = e.target.checked;
 		if (checked) {
-			const value = e.target.name;
-			handleInput('type', value);
+			handleInput('type', e.target.name);
 		} else {
 			handleInput('type', 'USER');
 		}
 	};
 
 	const handleInput = useCallback((name: any, value: any) => {
-		setInput((prev) => {
-			return { ...prev, [name]: value };
-		});
+		setInput((prev) => ({ ...prev, [name]: value }));
 	}, []);
 
 	const doLogin = useCallback(async () => {
-		console.warn(input);
 		try {
 			await logIn(input.nick, input.password);
 			await router.push(`${router.query.referrer ?? '/'}`);
@@ -52,7 +48,6 @@ const Join: NextPage = () => {
 	}, [input]);
 
 	const doSignUp = useCallback(async () => {
-		console.warn(input);
 		try {
 			await signUp(input.nick, input.password, input.phone, input.type);
 			await router.push(`${router.query.referrer ?? '/'}`);
@@ -61,8 +56,6 @@ const Join: NextPage = () => {
 		}
 	}, [input]);
 
-	console.log('+input: ', input);
-
 	if (device === 'mobile') {
 		return <div>LOGIN MOBILE</div>;
 	} else {
@@ -70,40 +63,45 @@ const Join: NextPage = () => {
 			<Stack className={'join-page'}>
 				<Stack className={'container'}>
 					<Stack className={'main'}>
+						{/* ── Left: Form ── */}
 						<Stack className={'left'}>
-							{/* @ts-ignore */}
 							<Box className={'logo'}>
-								<img src="/img/logo/logoText.svg" alt="" />
-								<span>Nestar</span>
+								<span className={'logo-brand'}>ATHLEX</span>
 							</Box>
+
 							<Box className={'info'}>
-								<span>{loginView ? 'login' : 'signup'}</span>
-								<p>{loginView ? 'Login' : 'Sign'} in with this account across the following sites.</p>
+								<span>{loginView ? 'Welcome Back' : 'Create Account'}</span>
+								<p>
+									{loginView
+										? 'Sign in to continue your fitness journey.'
+										: 'Join Athlex and start training smarter.'}
+								</p>
 							</Box>
+
 							<Box className={'input-wrap'}>
 								<div className={'input-box'}>
-									<span>Nickname</span>
+									<span>Username</span>
 									<input
 										type="text"
-										placeholder={'Enter Nickname'}
+										placeholder={'Enter your username'}
 										onChange={(e) => handleInput('nick', e.target.value)}
-										required={true}
-										onKeyDown={(event) => {
-											if (event.key == 'Enter' && loginView) doLogin();
-											if (event.key == 'Enter' && !loginView) doSignUp();
+										required
+										onKeyDown={(e) => {
+											if (e.key === 'Enter' && loginView) doLogin();
+											if (e.key === 'Enter' && !loginView) doSignUp();
 										}}
 									/>
 								</div>
 								<div className={'input-box'}>
 									<span>Password</span>
 									<input
-										type="text"
-										placeholder={'Enter Password'}
+										type="password"
+										placeholder={'Enter your password'}
 										onChange={(e) => handleInput('password', e.target.value)}
-										required={true}
-										onKeyDown={(event) => {
-											if (event.key == 'Enter' && loginView) doLogin();
-											if (event.key == 'Enter' && !loginView) doSignUp();
+										required
+										onKeyDown={(e) => {
+											if (e.key === 'Enter' && loginView) doLogin();
+											if (e.key === 'Enter' && !loginView) doSignUp();
 										}}
 									/>
 								</div>
@@ -111,21 +109,22 @@ const Join: NextPage = () => {
 									<div className={'input-box'}>
 										<span>Phone</span>
 										<input
-											type="text"
-											placeholder={'Enter Phone'}
+											type="tel"
+											placeholder={'Enter your phone number'}
 											onChange={(e) => handleInput('phone', e.target.value)}
-											required={true}
-											onKeyDown={(event) => {
-												if (event.key == 'Enter') doSignUp();
+											required
+											onKeyDown={(e) => {
+												if (e.key === 'Enter') doSignUp();
 											}}
 										/>
 									</div>
 								)}
 							</Box>
+
 							<Box className={'register'}>
 								{!loginView && (
 									<div className={'type-option'}>
-										<span className={'text'}>I want to be registered as:</span>
+										<span className={'text'}>Register as:</span>
 										<div>
 											<FormGroup>
 												<FormControlLabel
@@ -134,7 +133,7 @@ const Join: NextPage = () => {
 															size="small"
 															name={'USER'}
 															onChange={checkUserTypeHandler}
-															checked={input?.type == 'USER'}
+															checked={input?.type === 'USER'}
 														/>
 													}
 													label="User"
@@ -147,10 +146,10 @@ const Join: NextPage = () => {
 															size="small"
 															name={'AGENT'}
 															onChange={checkUserTypeHandler}
-															checked={input?.type == 'AGENT'}
+															checked={input?.type === 'AGENT'}
 														/>
 													}
-													label="Agent"
+													label="Trainer"
 												/>
 											</FormGroup>
 										</div>
@@ -160,53 +159,63 @@ const Join: NextPage = () => {
 								{loginView && (
 									<div className={'remember-info'}>
 										<FormGroup>
-											<FormControlLabel control={<Checkbox defaultChecked size="small" />} label="Remember me" />
+											<FormControlLabel
+												control={<Checkbox defaultChecked size="small" />}
+												label="Remember me"
+											/>
 										</FormGroup>
-										<a>Lost your password?</a>
+										<a>Forgot password?</a>
 									</div>
 								)}
 
 								{loginView ? (
-									<Button
-										variant="contained"
-										endIcon={<img src="/img/icons/rightup.svg" alt="" />}
-										disabled={input.nick == '' || input.password == ''}
+									<button
+										className={'submit-btn'}
+										disabled={input.nick === '' || input.password === ''}
 										onClick={doLogin}
 									>
 										LOGIN
-									</Button>
+									</button>
 								) : (
-									<Button
-										variant="contained"
-										disabled={input.nick == '' || input.password == '' || input.phone == '' || input.type == ''}
+									<button
+										className={'submit-btn'}
+										disabled={
+											input.nick === '' ||
+											input.password === '' ||
+											input.phone === '' ||
+											input.type === ''
+										}
 										onClick={doSignUp}
-										endIcon={<img src="/img/icons/rightup.svg" alt="" />}
 									>
-										SIGNUP
-									</Button>
+										CREATE ACCOUNT
+									</button>
 								)}
 							</Box>
+
 							<Box className={'ask-info'}>
 								{loginView ? (
 									<p>
-										Not registered yet?
-										<b
-											onClick={() => {
-												viewChangeHandler(false);
-											}}
-										>
-											SIGNUP
-										</b>
+										New to Athlex?
+										<b onClick={() => viewChangeHandler(false)}>SIGN UP</b>
 									</p>
 								) : (
 									<p>
-										Have account?
-										<b onClick={() => viewChangeHandler(true)}> LOGIN</b>
+										Already have an account?
+										<b onClick={() => viewChangeHandler(true)}>LOGIN</b>
 									</p>
 								)}
 							</Box>
 						</Stack>
-						<Stack className={'right'}></Stack>
+
+						{/* ── Right: Image ── */}
+						<Stack className={'right'}>
+							<div className={'right-overlay'}>
+								<div className={'right-content'}>
+									<strong>Forge Your Limits</strong>
+									<p>Train smarter. Recover faster. Perform better.</p>
+								</div>
+							</div>
+						</Stack>
 					</Stack>
 				</Stack>
 			</Stack>

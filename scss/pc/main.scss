@@ -130,10 +130,18 @@ body::-webkit-scrollbar {
 						}
 					}
 					.user-box {
-						width: 270px;
 						display: flex;
 						flex-direction: row;
-						justify-content: flex-end;
+						align-items: center;
+						gap: 14px;
+						.notification-icon {
+							color: rgba(255, 255, 255, 0.7);
+							cursor: pointer;
+							transition: color 0.2s;
+							&:hover {
+								color: #ffffff;
+							}
+						}
 						.join-box {
 							width: 184px;
 							height: 47px;
@@ -157,34 +165,18 @@ body::-webkit-scrollbar {
 							}
 						}
 						.login-user {
+							cursor: pointer;
 							img {
 								width: 42px;
 								height: 42px;
 								border-radius: 50%;
 								object-fit: cover;
 							}
-						}
-					}
-					.lan-box {
-						margin-left: 28px;
-						display: flex;
-						align-items: center;
-						.notification-icon {
-							color: white;
-						}
-						.btn-lang {
-							border-radius: 4px;
-							img {
-								width: 24px;
-								height: 17px;
-								border-radius: 2px;
+							.user-avatar-icon {
+								width: 42px;
+								height: 42px;
+								color: rgba(255, 255, 255, 0.8);
 							}
-						}
-						.img-flag {
-							width: 24px;
-							height: 17px;
-							border-radius: 2px;
-							margin-right: 8px;
 						}
 					}
 				}
