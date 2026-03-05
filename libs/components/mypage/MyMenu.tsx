@@ -59,7 +59,7 @@ const MyMenu = () => {
 				<div className={'mm-user-info'}>
 					<span className={'mm-nick'}>{user?.memberNick || 'Athlete'}</span>
 					<span className={`mm-type mm-type--${(user?.memberType || 'USER').toLowerCase()}`}>
-						{user?.memberType === 'AGENT' ? 'TRAINER' : user?.memberType || 'MEMBER'}
+						{user?.memberType === 'TRAINER' ? 'TRAINER' : user?.memberType || 'MEMBER'}
 					</span>
 				</div>
 			</div>
@@ -69,8 +69,8 @@ const MyMenu = () => {
 				{/* Training section */}
 				<div className={'mm-section'}>
 					<span className={'mm-section-label'}>MY TRAINING</span>
-					{user?.memberType === 'AGENT' && menuItem('addProperty', 'Add Program', AddCircleOutlineIcon)}
-					{user?.memberType === 'AGENT' && menuItem('myProperties', 'My Programs', FitnessCenterIcon)}
+					{user?.memberType === 'TRAINER' && menuItem('addProperty', 'Add Program', AddCircleOutlineIcon)}
+					{user?.memberType === 'TRAINER' && menuItem('myProperties', 'My Programs', FitnessCenterIcon)}
 					{menuItem('myFavorites', 'Saved Programs', FavoriteIcon)}
 					{menuItem('recentlyVisited', 'Recent Views', HistoryIcon)}
 				</div>

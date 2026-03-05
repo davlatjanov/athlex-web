@@ -87,7 +87,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 		}
 	};
 
-	if (user?.memberType !== 'AGENT') {
+	if (user?.memberType !== 'TRAINER') {
 		router.back();
 	}
 

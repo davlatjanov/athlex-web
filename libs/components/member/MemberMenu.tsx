@@ -88,7 +88,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 							Details
 						</Typography>
 						<List className={'sub-section'}>
-							{member?.memberType === 'AGENT' && (
+							{member?.memberType === 'TRAINER' && (
 								<ListItem className={category === 'properties' ? 'focus' : ''}>
 									<Link
 										href={{
@@ -105,10 +105,10 @@ const MemberMenu = (props: MemberMenuProps) => {
 												<img className={'com-icon'} src={'/img/icons/home.svg'} alt={'com-icon'} />
 											)}
 											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-												Properties
+												Programs
 											</Typography>
 											<Typography className="count-title" variant="subtitle1">
-												{member?.memberProperties}
+												{member?.memberPrograms}
 											</Typography>
 										</div>
 									</Link>
@@ -244,7 +244,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 												Articles
 											</Typography>
 											<Typography className="count-title" variant="subtitle1">
-												{member?.memberArticles}
+												{0}
 											</Typography>
 										</div>
 									</Link>

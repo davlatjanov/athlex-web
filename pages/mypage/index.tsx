@@ -91,7 +91,7 @@ const MyPage: NextPage = () => {
 	const u = user as any;
 
 	const getTabs = () => {
-		if (u?.memberType === 'AGENT') return AGENT_TABS;
+		if (u?.memberType === 'TRAINER') return AGENT_TABS;
 		if (u?.memberType === 'ADMIN') return ADMIN_TABS;
 		return USER_TABS;
 	};
@@ -186,7 +186,7 @@ const MyPage: NextPage = () => {
 							<div className={'mp-name-row'}>
 								<h2 className={'mp-name'}>{u?.memberNick || 'Athlete'}</h2>
 								<span className={`mp-role mp-role--${(u?.memberType || 'user').toLowerCase()}`}>
-									{u?.memberType === 'AGENT' ? 'TRAINER' : u?.memberType || 'USER'}
+									{u?.memberType === 'TRAINER' ? 'TRAINER' : u?.memberType || 'USER'}
 								</span>
 								{u?.memberPlan && (
 									<span className={`mp-plan mp-plan--${u.memberPlan.toLowerCase()}`}>
@@ -198,9 +198,9 @@ const MyPage: NextPage = () => {
 							{u?.memberDesc && <p className={'mp-bio'}>{u.memberDesc}</p>}
 
 							<div className={'mp-stats-row'}>
-								{u?.memberType === 'AGENT' && (
+								{u?.memberType === 'TRAINER' && (
 									<div className={'mp-stat'}>
-										<strong>{u?.memberProperties ?? 0}</strong>
+										<strong>{u?.memberPrograms ?? 0}</strong>
 										<span>PROGRAMS</span>
 									</div>
 								)}

@@ -5,27 +5,28 @@ import { gql } from '@apollo/client';
  *************************/
 
 export const SIGN_UP = gql`
-	mutation Signup($input: MemberInput!) {
-		signup(input: $input) {
+	mutation SignUp($input: MemberInput!) {
+		signUp(input: $input) {
 			_id
 			memberType
 			memberStatus
 			memberAuthType
 			memberPhone
+			memberEmail
+			memberPlan
+			memberPrograms
 			memberNick
 			memberFullName
 			memberImage
-			memberAddress
 			memberDesc
-			memberWarnings
-			memberBlocks
-			memberProperties
-			memberRank
-			memberArticles
+			memberFollowers
+			memberFollowings
 			memberPoints
 			memberLikes
 			memberViews
-			deletedAt
+			memberComments
+			memberRank
+			memberWarnings
 			createdAt
 			updatedAt
 			accessToken
@@ -41,19 +42,21 @@ export const LOGIN = gql`
 			memberStatus
 			memberAuthType
 			memberPhone
+			memberEmail
+			memberPlan
+			memberPrograms
 			memberNick
 			memberFullName
 			memberImage
-			memberAddress
 			memberDesc
-			memberWarnings
-			memberBlocks
-			memberProperties
-			memberRank
+			memberFollowers
+			memberFollowings
 			memberPoints
 			memberLikes
 			memberViews
-			deletedAt
+			memberComments
+			memberRank
+			memberWarnings
 			createdAt
 			updatedAt
 			accessToken
@@ -69,48 +72,21 @@ export const UPDATE_MEMBER = gql`
 			memberStatus
 			memberAuthType
 			memberPhone
+			memberEmail
+			memberPlan
+			memberPrograms
 			memberNick
 			memberFullName
 			memberImage
-			memberAddress
 			memberDesc
-			memberProperties
-			memberRank
-			memberArticles
+			memberFollowers
+			memberFollowings
 			memberPoints
 			memberLikes
 			memberViews
-			memberWarnings
-			memberBlocks
-			deletedAt
-			createdAt
-			updatedAt
-			accessToken
-		}
-	}
-`;
-
-export const LIKE_TARGET_MEMBER = gql`
-	mutation LikeTargetMember($input: String!) {
-		likeTargetMember(memberId: $input) {
-			_id
-			memberType
-			memberStatus
-			memberAuthType
-			memberPhone
-			memberNick
-			memberFullName
-			memberImage
-			memberAddress
-			memberDesc
-			memberWarnings
-			memberBlocks
-			memberProperties
+			memberComments
 			memberRank
-			memberPoints
-			memberLikes
-			memberViews
-			deletedAt
+			memberWarnings
 			createdAt
 			updatedAt
 			accessToken
@@ -119,111 +95,32 @@ export const LIKE_TARGET_MEMBER = gql`
 `;
 
 /**************************
- *        PROPERTY        *
+ *        PROGRAM         *
  *************************/
 
-export const CREATE_PROPERTY = gql`
-	mutation CreateProperty($input: PropertyInput!) {
-		createProperty(input: $input) {
+export const CREATE_PROGRAM = gql`
+	mutation CreateProgram($input: ProgramInput!) {
+		createProgram(input: $input) {
 			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-		}
-	}
-`;
-
-export const UPDATE_PROPERTY = gql`
-	mutation UpdateProperty($input: PropertyUpdate!) {
-		updateProperty(input: $input) {
-			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-		}
-	}
-`;
-
-export const LIKE_TARGET_PROPERTY = gql`
-	mutation LikeTargetProperty($input: String!) {
-		likeTargetProperty(propertyId: $input) {
-			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-		}
-	}
-`;
-
-/**************************
- *      BOARD-ARTICLE     *
- *************************/
-
-export const CREATE_BOARD_ARTICLE = gql`
-	mutation CreateBoardArticle($input: BoardArticleInput!) {
-		createBoardArticle(input: $input) {
-			_id
-			articleCategory
-			articleStatus
-			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
+			programName
+			programDesc
+			programImages
+			programVideo
+			programType
+			programLevel
+			programStatus
+			programPrice
+			programDuration
+			programStartDate
+			programEndDate
+			programViews
+			programLikes
+			programMembers
+			programComments
+			programRank
+			programTags
+			targetAudience
+			requirements
 			memberId
 			createdAt
 			updatedAt
@@ -231,17 +128,29 @@ export const CREATE_BOARD_ARTICLE = gql`
 	}
 `;
 
-export const UPDATE_BOARD_ARTICLE = gql`
-	mutation UpdateBoardArticle($input: BoardArticleUpdate!) {
-		updateBoardArticle(input: $input) {
+export const UPDATE_PROGRAM = gql`
+	mutation UpdateProgram($programId: String!, $input: ProgramUpdate!) {
+		updateProgram(programId: $programId, input: $input) {
 			_id
-			articleCategory
-			articleStatus
-			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
+			programName
+			programDesc
+			programImages
+			programVideo
+			programType
+			programLevel
+			programStatus
+			programPrice
+			programDuration
+			programStartDate
+			programEndDate
+			programViews
+			programLikes
+			programMembers
+			programComments
+			programRank
+			programTags
+			targetAudience
+			requirements
 			memberId
 			createdAt
 			updatedAt
@@ -249,20 +158,33 @@ export const UPDATE_BOARD_ARTICLE = gql`
 	}
 `;
 
-export const LIKE_TARGET_BOARD_ARTICLE = gql`
-	mutation LikeTargetBoardArticle($input: String!) {
-		likeTargetBoardArticle(articleId: $input) {
+export const DELETE_PROGRAM = gql`
+	mutation DeleteProgram($programId: String!) {
+		deleteProgram(programId: $programId) {
 			_id
-			articleCategory
-			articleStatus
-			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
+			programName
+			programStatus
+		}
+	}
+`;
+
+export const JOIN_PROGRAM = gql`
+	mutation JoinProgram($programId: String!) {
+		joinProgram(programId: $programId) {
+			_id
 			memberId
+			programId
 			createdAt
-			updatedAt
+		}
+	}
+`;
+
+export const LEAVE_PROGRAM = gql`
+	mutation LeaveProgram($programId: String!) {
+		leaveProgram(programId: $programId) {
+			_id
+			memberId
+			programId
 		}
 	}
 `;
@@ -301,30 +223,59 @@ export const UPDATE_COMMENT = gql`
 	}
 `;
 
-/**************************
- *         FOLLOW        *
- *************************/
-
-export const SUBSCRIBE = gql`
-	mutation Subscribe($input: String!) {
-		subscribe(input: $input) {
+export const DELETE_COMMENT = gql`
+	mutation DeleteComment($commentId: String!) {
+		deleteComment(commentId: $commentId) {
 			_id
-			followingId
-			followerId
-			createdAt
-			updatedAt
+			commentContent
+			memberId
 		}
 	}
 `;
 
-export const UNSUBSCRIBE = gql`
-	mutation Unsubscribe($input: String!) {
-		unsubscribe(input: $input) {
+/**************************
+ *          LIKE          *
+ *************************/
+
+export const LIKE_TARGET_ITEM = gql`
+	mutation LikeTargetItem($input: LikeInput!) {
+		likeTargetItem(input: $input) {
+			_id
+			likeGroup
+			likeRefId
+			memberId
+			createdAt
+		}
+	}
+`;
+
+/**************************
+ *        BOOKMARK        *
+ *************************/
+
+export const TOGGLE_BOOKMARK = gql`
+	mutation ToggleBookmark($input: BookmarkInput!) {
+		toggleBookmark(input: $input) {
+			_id
+			bookmarkGroup
+			bookmarkRefId
+			memberId
+			createdAt
+		}
+	}
+`;
+
+/**************************
+ *         FOLLOW         *
+ *************************/
+
+export const FOLLOW_MEMBER = gql`
+	mutation FollowMember($input: FollowInput!) {
+		followMember(input: $input) {
 			_id
 			followingId
 			followerId
 			createdAt
-			updatedAt
 		}
 	}
 `;

@@ -26,7 +26,6 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			...updateData,
 			memberNick: user.memberNick,
 			memberPhone: user.memberPhone,
-			memberAddress: user.memberAddress,
 			memberImage: user.memberImage,
 		});
 	}, [user]);
@@ -71,7 +70,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			updateData.memberImage = responseImage;
 			setUpdateData({ ...updateData });
 
-			return `${REACT_APP_API_URL}/${responseImage}`;
+			return responseImage;
 		} catch (err) {
 			console.log('Error, uploadImage:', err);
 		}
@@ -98,12 +97,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	}, [updateData]);
 
 	const doDisabledCheck = () => {
-		if (
-			updateData.memberNick === '' ||
-			updateData.memberPhone === '' ||
-			updateData.memberAddress === '' ||
-			updateData.memberImage === ''
-		) {
+		if (updateData.memberNick === '' || updateData.memberPhone === '') {
 			return true;
 		}
 	};
@@ -127,11 +121,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 						<Stack className="image-big-box">
 							<Stack className="image-box">
 								<img
-									src={
-										updateData?.memberImage
-											? `${REACT_APP_API_URL}/${updateData?.memberImage}`
-											: `/img/profile/defaultUser.svg`
-									}
+									src={updateData?.memberImage || '/img/profile/avatar-placeholder.png'}
 									alt=""
 								/>
 							</Stack>
@@ -170,15 +160,6 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							/>
 						</Stack>
 					</Stack>
-					<Stack className="address-box">
-						<Typography className="title">Address</Typography>
-						<input
-							type="text"
-							placeholder="Your address"
-							value={updateData.memberAddress}
-							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberAddress: value })}
-						/>
-					</Stack>
 					<Stack className="about-me-box">
 						<Button className="update-button" onClick={updateProfileHandler} disabled={doDisabledCheck()}>
 							<Typography>Update Profile</Typography>
@@ -208,7 +189,6 @@ MyProfile.defaultProps = {
 		memberImage: '',
 		memberNick: '',
 		memberPhone: '',
-		memberAddress: '',
 	},
 };
 

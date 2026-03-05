@@ -89,11 +89,11 @@ const AdminUsers: NextPage = ({ initialInquiry, ...props }: any) => {
 			case 'ACTIVE':
 				setMembersInquiry({ ...membersInquiry, search: { memberStatus: MemberStatus.ACTIVE } });
 				break;
-			case 'BLOCK':
-				setMembersInquiry({ ...membersInquiry, search: { memberStatus: MemberStatus.BLOCK } });
+			case 'BANNED':
+				setMembersInquiry({ ...membersInquiry, search: { memberStatus: MemberStatus.BANNED } });
 				break;
-			case 'DELETE':
-				setMembersInquiry({ ...membersInquiry, search: { memberStatus: MemberStatus.DELETE } });
+			case 'DELETED':
+				setMembersInquiry({ ...membersInquiry, search: { memberStatus: MemberStatus.DELETED } });
 				break;
 			default:
 				delete membersInquiry?.search?.memberStatus;
@@ -241,7 +241,7 @@ const AdminUsers: NextPage = ({ initialInquiry, ...props }: any) => {
 									<MenuItem value={'USER'} onClick={() => searchTypeHandler('USER')}>
 										User
 									</MenuItem>
-									<MenuItem value={'AGENT'} onClick={() => searchTypeHandler('AGENT')}>
+									<MenuItem value={'TRAINER'} onClick={() => searchTypeHandler('TRAINER')}>
 										Agent
 									</MenuItem>
 									<MenuItem value={'ADMIN'} onClick={() => searchTypeHandler('ADMIN')}>

@@ -26,7 +26,6 @@ export const logIn = async (nick: string, password: string): Promise<void> => {
 	} catch (err) {
 		console.warn('login err', err);
 		logOut();
-		// throw new Error('Login Err');
 	}
 };
 
@@ -52,14 +51,8 @@ const requestJwtToken = async ({
 		return { jwtToken: accessToken };
 	} catch (err: any) {
 		console.log('request token err', err.graphQLErrors);
-		switch (err.graphQLErrors[0].message) {
-			case 'Definer: login and password do not match':
-				await sweetMixinErrorAlert('Please check your password again');
-				break;
-			case 'Definer: user has been blocked!':
-				await sweetMixinErrorAlert('User has been blocked!');
-				break;
-		}
+		const msg = err?.graphQLErrors?.[0]?.message ?? '';
+		if (msg) await sweetMixinErrorAlert(msg);
 		throw new Error('token error');
 	}
 };
@@ -73,9 +66,8 @@ export const signUp = async (nick: string, password: string, phone: string, type
 			updateUserInfo(jwtToken);
 		}
 	} catch (err) {
-		console.warn('login err', err);
+		console.warn('signup err', err);
 		logOut();
-		// throw new Error('Login Err');
 	}
 };
 
@@ -101,20 +93,14 @@ const requestSignUpJwtToken = async ({
 			fetchPolicy: 'network-only',
 		});
 
-		console.log('---------- login ----------');
-		const { accessToken } = result?.data?.signup;
+		console.log('---------- signup ----------');
+		const { accessToken } = result?.data?.signUp;
 
 		return { jwtToken: accessToken };
 	} catch (err: any) {
-		console.log('request token err', err.graphQLErrors);
-		switch (err.graphQLErrors[0].message) {
-			case 'Definer: login and password do not match':
-				await sweetMixinErrorAlert('Please check your password again');
-				break;
-			case 'Definer: user has been blocked!':
-				await sweetMixinErrorAlert('User has been blocked!');
-				break;
-		}
+		console.log('request signup token err', err.graphQLErrors);
+		const msg = err?.graphQLErrors?.[0]?.message ?? '';
+		if (msg) await sweetMixinErrorAlert(msg);
 		throw new Error('token error');
 	}
 };
@@ -132,24 +118,23 @@ export const updateUserInfo = (jwtToken: any) => {
 		_id: claims._id ?? '',
 		memberType: claims.memberType ?? '',
 		memberStatus: claims.memberStatus ?? '',
-		memberAuthType: claims.memberAuthType,
+		memberAuthType: claims.memberAuthType ?? '',
 		memberPhone: claims.memberPhone ?? '',
+		memberEmail: claims.memberEmail ?? '',
+		memberPlan: claims.memberPlan ?? '',
+		memberPrograms: claims.memberPrograms ?? 0,
 		memberNick: claims.memberNick ?? '',
 		memberFullName: claims.memberFullName ?? '',
-		memberImage:
-			claims.memberImage === null || claims.memberImage === undefined
-				? '/img/profile/defaultUser.svg'
-				: `${claims.memberImage}`,
-		memberAddress: claims.memberAddress ?? '',
+		memberImage: claims.memberImage ?? '',
 		memberDesc: claims.memberDesc ?? '',
-		memberProperties: claims.memberProperties,
-		memberRank: claims.memberRank,
-		memberArticles: claims.memberArticles,
-		memberPoints: claims.memberPoints,
-		memberLikes: claims.memberLikes,
-		memberViews: claims.memberViews,
-		memberWarnings: claims.memberWarnings,
-		memberBlocks: claims.memberBlocks,
+		memberFollowers: claims.memberFollowers ?? 0,
+		memberFollowings: claims.memberFollowings ?? 0,
+		memberPoints: claims.memberPoints ?? 0,
+		memberLikes: claims.memberLikes ?? 0,
+		memberViews: claims.memberViews ?? 0,
+		memberComments: claims.memberComments ?? 0,
+		memberRank: claims.memberRank ?? 0,
+		memberWarnings: claims.memberWarnings ?? 0,
 	});
 };
 
@@ -171,18 +156,20 @@ const deleteUserInfo = () => {
 		memberStatus: '',
 		memberAuthType: '',
 		memberPhone: '',
+		memberEmail: '',
+		memberPlan: '',
+		memberPrograms: 0,
 		memberNick: '',
 		memberFullName: '',
 		memberImage: '',
-		memberAddress: '',
 		memberDesc: '',
-		memberProperties: 0,
-		memberRank: 0,
-		memberArticles: 0,
+		memberFollowers: 0,
+		memberFollowings: 0,
 		memberPoints: 0,
 		memberLikes: 0,
 		memberViews: 0,
+		memberComments: 0,
+		memberRank: 0,
 		memberWarnings: 0,
-		memberBlocks: 0,
 	});
 };

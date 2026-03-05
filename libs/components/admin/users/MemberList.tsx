@@ -212,7 +212,7 @@ export const MemberPanelList = (props: MemberPanelListType) => {
 										</TableCell>
 
 										<TableCell align="center">{member.memberWarnings}</TableCell>
-										<TableCell align="center">{member.memberBlocks}</TableCell>
+										<TableCell align="center">{member.memberComments}</TableCell>
 										<TableCell align="center">
 											<Button onClick={(e: any) => menuIconClickHandler(e, member._id)} className={'badge success'}>
 												{member.memberStatus}

@@ -170,7 +170,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 		}
 	}, [insertPropertyData]);
 
-	if (user?.memberType !== 'AGENT') {
+	if (user?.memberType !== 'TRAINER') {
 		router.back();
 	}
 

@@ -4,353 +4,54 @@ import { gql } from '@apollo/client';
  *         MEMBER         *
  *************************/
 
-export const GET_AGENTS = gql`
-	query GetAgents($input: AgentsInquiry!) {
-		getAgents(input: $input) {
-			list {
-				_id
-				memberType
-				memberStatus
-				memberAuthType
-				memberPhone
-				memberNick
-				memberFullName
-				memberImage
-				memberAddress
-				memberDesc
-				memberWarnings
-				memberBlocks
-				memberProperties
-				memberRank
-				memberPoints
-				memberLikes
-				memberViews
-				deletedAt
-				createdAt
-				updatedAt
-				accessToken
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-			}
-			metaCounter {
-				total
-			}
+export const GET_MEMBER = gql`
+	query GetMember($memberId: String!) {
+		getMember(memberId: $memberId) {
+			_id
+			memberType
+			memberStatus
+			memberAuthType
+			memberPhone
+			memberEmail
+			memberPlan
+			memberPrograms
+			memberNick
+			memberFullName
+			memberImage
+			memberDesc
+			memberFollowers
+			memberFollowings
+			memberPoints
+			memberLikes
+			memberViews
+			memberComments
+			memberRank
+			memberWarnings
+			lastLoginAt
+			createdAt
+			updatedAt
+			accessToken
 		}
 	}
 `;
 
-export const GET_MEMBER = gql(`
- query GetMember($input: String!) {
-    getMember(memberId: $input) {
-        _id
-        memberType
-        memberStatus
-        memberAuthType
-        memberPhone
-        memberNick
-        memberFullName
-        memberImage
-        memberAddress
-        memberDesc
-        memberProperties
-        memberArticles
-        memberPoints
-        memberLikes
-        memberViews
-        memberFollowings
+export const GET_TRAINERS = gql`
+	query GetTrainers($input: TrainersInquiry!) {
+		getTrainers(input: $input) {
+			list {
+				_id
+				memberType
+				memberStatus
+				memberNick
+				memberFullName
+				memberImage
+				memberDesc
+				memberPrograms
 				memberFollowers
-        memberRank
-        memberWarnings
-        memberBlocks
-        deletedAt
-        createdAt
-        updatedAt
-        accessToken
-        meFollowed {
-					followingId
-					followerId
-					myFollowing
-				}
-    }
-}
-`);
-
-/**************************
- *        PROPERTY        *
- *************************/
-
-export const GET_PROPERTY = gql`
-	query GetProperty($input: String!) {
-		getProperty(propertyId: $input) {
-			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-			memberData {
-				_id
-				memberType
-				memberStatus
-				memberAuthType
-				memberPhone
-				memberNick
-				memberFullName
-				memberImage
-				memberAddress
-				memberDesc
-				memberWarnings
-				memberBlocks
 				memberPoints
 				memberLikes
 				memberViews
-				deletedAt
 				createdAt
-				updatedAt
-				accessToken
-			}
-			meLiked {
-				memberId
-				likeRefId
-				myFavorite
-			}
-		}
-	}
-`;
-
-export const GET_PROPERTIES = gql`
-	query GetProperties($input: PropertiesInquiry!) {
-		getProperties(input: $input) {
-			list {
-				_id
-				propertyType
-				propertyStatus
-				propertyLocation
-				propertyAddress
-				propertyTitle
-				propertyPrice
-				propertySquare
-				propertyBeds
-				propertyRooms
-				propertyViews
-				propertyLikes
-				propertyRank
-				propertyImages
-				propertyDesc
-				propertyBarter
-				propertyRent
-				memberId
-				soldAt
-				deletedAt
-				constructedAt
-				createdAt
-				updatedAt
-				memberData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberWarnings
-					memberBlocks
-					memberProperties
-					memberRank
-					memberPoints
-					memberLikes
-					memberViews
-					deletedAt
-					createdAt
-					updatedAt
-				}
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
-
-export const GET_AGENT_PROPERTIES = gql`
-	query GetAgentProperties($input: AgentPropertiesInquiry!) {
-		getAgentProperties(input: $input) {
-			list {
-				_id
-				propertyType
-				propertyStatus
-				propertyLocation
-				propertyAddress
-				propertyTitle
-				propertyPrice
-				propertySquare
-				propertyBeds
-				propertyRooms
-				propertyViews
-				propertyLikes
-				propertyImages
-				propertyDesc
-				propertyBarter
-				propertyRent
-				memberId
-				soldAt
-				deletedAt
-				constructedAt
-				createdAt
-				updatedAt
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
-
-export const GET_FAVORITES = gql`
-	query GetFavorites($input: OrdinaryInquiry!) {
-		getFavorites(input: $input) {
-			list {
-				_id
-				propertyType
-				propertyStatus
-				propertyLocation
-				propertyAddress
-				propertyTitle
-				propertyPrice
-				propertySquare
-				propertyBeds
-				propertyRooms
-				propertyViews
-				propertyLikes
-				propertyComments
-				propertyRank
-				propertyImages
-				propertyDesc
-				propertyBarter
-				propertyRent
-				memberId
-				soldAt
-				deletedAt
-				constructedAt
-				createdAt
-				updatedAt
-				memberData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberProperties
-					memberArticles
-					memberPoints
-					memberLikes
-					memberViews
-					memberComments
-					memberFollowings
-					memberFollowers
-					memberRank
-					memberWarnings
-					memberBlocks
-					deletedAt
-					createdAt
-					updatedAt
-					accessToken
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
-
-export const GET_VISITED = gql`
-	query GetVisited($input: OrdinaryInquiry!) {
-		getVisited(input: $input) {
-			list {
-				_id
-				propertyType
-				propertyStatus
-				propertyLocation
-				propertyAddress
-				propertyTitle
-				propertyPrice
-				propertySquare
-				propertyBeds
-				propertyRooms
-				propertyViews
-				propertyLikes
-				propertyComments
-				propertyRank
-				propertyImages
-				propertyDesc
-				propertyBarter
-				propertyRent
-				memberId
-				soldAt
-				deletedAt
-				constructedAt
-				createdAt
-				updatedAt
-				memberData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberProperties
-					memberArticles
-					memberPoints
-					memberLikes
-					memberViews
-					memberComments
-					memberFollowings
-					memberFollowers
-					memberRank
-					memberWarnings
-					memberBlocks
-					deletedAt
-					createdAt
-					updatedAt
-					accessToken
-				}
 			}
 			metaCounter {
 				total
@@ -360,102 +61,270 @@ export const GET_VISITED = gql`
 `;
 
 /**************************
- *      BOARD-ARTICLE     *
+ *        PROGRAM         *
  *************************/
 
-export const GET_BOARD_ARTICLE = gql`
-	query GetBoardArticle($input: String!) {
-		getBoardArticle(articleId: $input) {
-			_id
-			articleCategory
-			articleStatus
-			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
-			articleComments
-			memberId
-			createdAt
-			updatedAt
-			memberData {
+export const GET_PROGRAMS = gql`
+	query GetPrograms($input: ProgramInquiry!) {
+		getPrograms(input: $input) {
+			list {
 				_id
-				memberType
-				memberStatus
-				memberAuthType
-				memberPhone
-				memberNick
-				memberFullName
-				memberImage
-				memberAddress
-				memberDesc
-				memberWarnings
-				memberBlocks
-				memberProperties
-				memberRank
-				memberPoints
-				memberLikes
-				memberViews
-				deletedAt
+				programName
+				programDesc
+				programImages
+				programVideo
+				programType
+				programLevel
+				programStatus
+				programPrice
+				programDuration
+				programStartDate
+				programEndDate
+				programViews
+				programLikes
+				programMembers
+				programComments
+				programRank
+				programTags
+				memberId
+				memberData {
+					_id
+					memberNick
+					memberImage
+					memberType
+				}
 				createdAt
 				updatedAt
 			}
-			meLiked {
-				memberId
-				likeRefId
-				myFavorite
+			metaCounter {
+				total
 			}
 		}
 	}
 `;
 
-export const GET_BOARD_ARTICLES = gql`
-	query GetBoardArticles($input: BoardArticlesInquiry!) {
-		getBoardArticles(input: $input) {
+export const GET_ONE_PROGRAM = gql`
+	query GetOneProgram($programId: String!) {
+		getOneProgram(programId: $programId) {
+			_id
+			programName
+			programDesc
+			programImages
+			programVideo
+			programType
+			programLevel
+			programStatus
+			programPrice
+			programDuration
+			programStartDate
+			programEndDate
+			programViews
+			programLikes
+			programMembers
+			programComments
+			programRank
+			programTags
+			targetAudience
+			requirements
+			memberId
+			memberData {
+				_id
+				memberNick
+				memberImage
+				memberType
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const GET_ONE_PROGRAM_WITH_MEMBER = gql`
+	query GetOneProgramWithMember($programId: String!) {
+		getOneProgramWithMember(programId: $programId) {
+			_id
+			programName
+			programDesc
+			programImages
+			programVideo
+			programType
+			programLevel
+			programStatus
+			programPrice
+			programDuration
+			programStartDate
+			programEndDate
+			programViews
+			programLikes
+			programMembers
+			programComments
+			programRank
+			programTags
+			targetAudience
+			requirements
+			memberId
+			memberData {
+				_id
+				memberNick
+				memberImage
+				memberType
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const GET_PROGRAM_WITH_WORKOUTS = gql`
+	query GetProgramWithWorkouts($programId: String!) {
+		getProgramWithWorkouts(programId: $programId) {
+			_id
+			programName
+			programDesc
+			programImages
+			programType
+			programLevel
+			programStatus
+			programDuration
+			workouts {
+				_id
+				workoutName
+				workoutDesc
+				workoutDay
+				workoutDuration
+				bodyParts
+				isRestDay
+				exercises {
+					_id
+					exerciseName
+					exerciseDesc
+					exerciseVideo
+					exerciseGif
+					exerciseImage
+					primaryMuscle
+					secondaryMuscles
+					sets
+					reps
+					restTime
+					instructions
+					tips
+					equipment
+					difficulty
+					orderInWorkout
+				}
+				createdAt
+			}
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const GET_MY_PROGRAMS = gql`
+	query GetMyPrograms($input: ProgramInquiry!) {
+		getMyPrograms(input: $input) {
 			list {
 				_id
-				articleCategory
-				articleStatus
-				articleTitle
-				articleContent
-				articleImage
-				articleViews
-				articleLikes
-				articleComments
-				memberId
+				programName
+				programDesc
+				programImages
+				programType
+				programLevel
+				programStatus
+				programPrice
+				programDuration
+				programStartDate
+				programEndDate
+				programViews
+				programLikes
+				programMembers
+				programComments
+				programRank
 				createdAt
 				updatedAt
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-				memberData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberWarnings
-					memberBlocks
-					memberProperties
-					memberRank
-					memberPoints
-					memberLikes
-					memberViews
-					deletedAt
-					createdAt
-					updatedAt
-				}
 			}
 			metaCounter {
 				total
 			}
+		}
+	}
+`;
+
+export const GET_JOINED_PROGRAMS = gql`
+	query GetJoinedPrograms($input: ProgramInquiry!) {
+		getJoinedPrograms(input: $input) {
+			list {
+				_id
+				programName
+				programDesc
+				programImages
+				programType
+				programLevel
+				programStatus
+				programPrice
+				programDuration
+				programStartDate
+				programEndDate
+				programViews
+				programLikes
+				programMembers
+				programRank
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *         PRODUCT        *
+ *************************/
+
+export const GET_PRODUCTS = gql`
+	query GetProducts($input: ProductsInquiry!) {
+		getProducts(input: $input) {
+			list {
+				_id
+				productName
+				productBrand
+				productStatus
+				productType
+				productPrice
+				productStock
+				productImages
+				productDesc
+				productViews
+				productLikes
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_ONE_PRODUCT = gql`
+	query GetOneProduct($productId: String!) {
+		getOneProduct(productId: $productId) {
+			_id
+			productName
+			productBrand
+			productStatus
+			productType
+			productPrice
+			productStock
+			productImages
+			productDesc
+			productViews
+			productLikes
+			createdAt
+			updatedAt
 		}
 	}
 `;
@@ -465,7 +334,7 @@ export const GET_BOARD_ARTICLES = gql`
  *************************/
 
 export const GET_COMMENTS = gql`
-	query GetComments($input: CommentsInquiry!) {
+	query GetComments($input: CommentInquiry!) {
 		getComments(input: $input) {
 			list {
 				_id
@@ -476,28 +345,57 @@ export const GET_COMMENTS = gql`
 				memberId
 				createdAt
 				updatedAt
-				memberData {
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *         FOLLOW         *
+ *************************/
+
+export const GET_FOLLOWERS = gql`
+	query GetFollowers($memberId: String!, $input: FollowInquiry!) {
+		getFollowers(memberId: $memberId, input: $input) {
+			list {
+				_id
+				followingId
+				followerId
+				createdAt
+				followerData {
 					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
 					memberNick
-					memberFullName
 					memberImage
-					memberAddress
-					memberDesc
-					memberWarnings
-					memberBlocks
-					memberProperties
-					memberRank
-					memberPoints
-					memberLikes
-					memberViews
-					deletedAt
-					createdAt
-					updatedAt
-					accessToken
+					memberType
+					memberFollowers
+					memberFollowings
+				}
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_FOLLOWINGS = gql`
+	query GetFollowings($memberId: String!, $input: FollowInquiry!) {
+		getFollowings(memberId: $memberId, input: $input) {
+			list {
+				_id
+				followingId
+				followerId
+				createdAt
+				followingData {
+					_id
+					memberNick
+					memberImage
+					memberType
+					memberFollowers
+					memberFollowings
 				}
 			}
 			metaCounter {
@@ -508,107 +406,18 @@ export const GET_COMMENTS = gql`
 `;
 
 /**************************
- *         FOLLOW        *
+ *        BOOKMARK        *
  *************************/
-export const GET_MEMBER_FOLLOWERS = gql`
-	query GetMemberFollowers($input: FollowInquiry!) {
-		getMemberFollowers(input: $input) {
-			list {
-				_id
-				followingId
-				followerId
-				createdAt
-				updatedAt
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-				meFollowed {
-					followingId
-					followerId
-					myFollowing
-				}
-				followerData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberProperties
-					memberArticles
-					memberPoints
-					memberLikes
-					memberViews
-					memberComments
-					memberFollowings
-					memberFollowers
-					memberRank
-					memberWarnings
-					memberBlocks
-					deletedAt
-					createdAt
-					updatedAt
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
 
-export const GET_MEMBER_FOLLOWINGS = gql`
-	query GetMemberFollowings($input: FollowInquiry!) {
-		getMemberFollowings(input: $input) {
+export const GET_MY_BOOKMARKS = gql`
+	query GetMyBookmarks($input: BookmarkInquiry!) {
+		getMyBookmarks(input: $input) {
 			list {
 				_id
-				followingId
-				followerId
+				bookmarkGroup
+				bookmarkRefId
+				memberId
 				createdAt
-				updatedAt
-				followingData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberProperties
-					memberArticles
-					memberPoints
-					memberLikes
-					memberViews
-					memberComments
-					memberFollowings
-					memberFollowers
-					memberRank
-					memberWarnings
-					memberBlocks
-					deletedAt
-					createdAt
-					updatedAt
-					accessToken
-				}
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-				meFollowed {
-					followingId
-					followerId
-					myFollowing
-				}
 			}
 			metaCounter {
 				total

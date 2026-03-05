@@ -19,7 +19,7 @@ const Join: NextPage = () => {
 	const device = useDeviceDetect();
 	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER' });
 	const [loginView, setLoginView] = useState<boolean>(true);
-	const [selectedType, setSelectedType] = useState<'USER' | 'AGENT'>('USER');
+	const [selectedType, setSelectedType] = useState<'USER' | 'TRAINER'>('USER');
 
 	/** HANDLERS **/
 	const handleInput = useCallback((name: any, value: any) => {
@@ -44,7 +44,7 @@ const Join: NextPage = () => {
 		}
 	}, [input]);
 
-	const selectType = (type: 'USER' | 'AGENT') => {
+	const selectType = (type: 'USER' | 'TRAINER') => {
 		setSelectedType(type);
 		handleInput('type', type);
 	};
@@ -140,8 +140,8 @@ const Join: NextPage = () => {
 											User
 										</button>
 										<button
-											className={`jf-role-btn ${selectedType === 'AGENT' ? 'active' : ''}`}
-											onClick={() => selectType('AGENT')}
+											className={`jf-role-btn ${selectedType === 'TRAINER' ? 'active' : ''}`}
+											onClick={() => selectType('TRAINER')}
 										>
 											Trainer
 										</button>
