@@ -143,23 +143,30 @@ body::-webkit-scrollbar {
 							}
 						}
 						.join-box {
-							width: 184px;
-							height: 47px;
+							height: 40px;
+							padding: 0 20px;
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							border-radius: 60px;
-							border: 1px solid #ffffff;
+							gap: 8px;
+							border-radius: 8px;
+							background: #e92c28;
+							border: none;
 							cursor: pointer;
+							transition: background 0.2s;
+							&:hover {
+								background: #c41f1c;
+							}
 							svg {
 								color: #ffffff;
-								margin-right: 10px;
+								width: 18px;
+								height: 18px;
 							}
 							span {
 								font-family: $font;
-								font-size: 14px;
+								font-size: 13px;
 								font-style: normal;
-								font-weight: 600;
+								font-weight: 700;
 								line-height: normal;
 								color: #ffffff;
 							}
