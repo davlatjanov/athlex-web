@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
+import withAuth from '../../libs/components/layout/withAuth';
 import MyProperties from '../../libs/components/mypage/MyProperties';
 import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
@@ -16,7 +17,7 @@ import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } f
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
-import { Messages, REACT_APP_API_URL } from '../../libs/config';
+import { Messages } from '../../libs/config';
 import { logOut } from '../../libs/auth';
 import { sweetConfirmAlert } from '../../libs/sweetAlert';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -287,4 +288,4 @@ const MyPage: NextPage = () => {
 	}
 };
 
-export default withLayoutBasic(MyPage);
+export default withAuth(withLayoutBasic(MyPage));

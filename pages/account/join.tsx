@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
-import { logIn, signUp } from '../../libs/auth';
+import { getJwtToken, logIn, signUp } from '../../libs/auth';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -20,6 +20,11 @@ const Join: NextPage = () => {
 	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER' });
 	const [loginView, setLoginView] = useState<boolean>(true);
 	const [selectedType, setSelectedType] = useState<'USER' | 'TRAINER'>('USER');
+
+	/** LIFECYCLES **/
+	useEffect(() => {
+		if (getJwtToken()) router.replace('/');
+	}, []);
 
 	/** HANDLERS **/
 	const handleInput = useCallback((name: any, value: any) => {
