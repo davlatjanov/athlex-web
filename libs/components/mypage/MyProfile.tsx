@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Button, Stack, Typography } from '@mui/material';
 import axios from 'axios';
-import { Messages, REACT_APP_API_URL } from '../../config';
+import { Messages } from '../../config';
 import { getJwtToken, updateStorage, updateUserInfo } from '../../auth';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
@@ -11,7 +11,7 @@ import { MemberUpdate } from '../../types/member/member.update';
 import { UPDATE_MEMBER } from '../../../apollo/user/mutation';
 import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
 
-const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
+const MyProfile: NextPage = ({ initialValues }: any) => {
 	const device = useDeviceDetect();
 	const token = getJwtToken();
 	const user = useReactiveVar(userVar);
@@ -26,6 +26,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			...updateData,
 			memberNick: user.memberNick,
 			memberPhone: user.memberPhone,
+			memberFullName: user.memberFullName,
+			memberDesc: user.memberDesc,
 			memberImage: user.memberImage,
 		});
 	}, [user]);
@@ -34,7 +36,6 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const uploadImage = async (e: any) => {
 		try {
 			const image = e.target.files[0];
-			console.log('+image:', image);
 
 			const formData = new FormData();
 			formData.append(
@@ -42,19 +43,14 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 				JSON.stringify({
 					query: `mutation ImageUploader($file: Upload!, $target: String!) {
 						imageUploader(file: $file, target: $target)
-				  }`,
+					}`,
 					variables: {
 						file: null,
 						target: 'member',
 					},
 				}),
 			);
-			formData.append(
-				'map',
-				JSON.stringify({
-					'0': ['variables.file'],
-				}),
-			);
+			formData.append('map', JSON.stringify({ '0': ['variables.file'] }));
 			formData.append('0', image);
 
 			const response = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
@@ -66,11 +62,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			});
 
 			const responseImage = response.data.data.imageUploader;
-			console.log('+responseImage: ', responseImage);
-			updateData.memberImage = responseImage;
-			setUpdateData({ ...updateData });
-
-			return responseImage;
+			setUpdateData({ ...updateData, memberImage: responseImage });
 		} catch (err) {
 			console.log('Error, uploadImage:', err);
 		}
@@ -80,29 +72,21 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 		try {
 			if (!user._id) throw new Error(Messages.error2);
 			updateData._id = user._id;
-			const result = await updateMember({
-				variables: {
-					input: updateData,
-				},
-			});
+			const result = await updateMember({ variables: { input: updateData } });
 
 			//@ts-ignore
 			const jwtToken = result.data.updateMember?.accessToken;
 			await updateStorage({ jwtToken });
-			updateUserInfo(result.data.updateMember?.accessToken);
-			await sweetMixinSuccessAlert('information updated successfully');
+			updateUserInfo(jwtToken);
+			sweetMixinSuccessAlert('Profile updated successfully');
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
 	}, [updateData]);
 
 	const doDisabledCheck = () => {
-		if (updateData.memberNick === '' || updateData.memberPhone === '') {
-			return true;
-		}
+		return !updateData.memberNick || !updateData.memberPhone;
 	};
-
-	console.log('+updateData', updateData);
 
 	if (device === 'mobile') {
 		return <>MY PROFILE PAGE MOBILE</>;
@@ -120,10 +104,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 						<Typography className="title">Photo</Typography>
 						<Stack className="image-big-box">
 							<Stack className="image-box">
-								<img
-									src={updateData?.memberImage || '/img/profile/avatar-placeholder.png'}
-									alt=""
-								/>
+								<img src={updateData?.memberImage || '/img/profile/avatar-placeholder.png'} alt="" />
 							</Stack>
 							<Stack className="upload-big-box">
 								<input
@@ -146,7 +127,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your username"
-								value={updateData.memberNick}
+								value={updateData.memberNick ?? ''}
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
 							/>
 						</Stack>
@@ -154,11 +135,29 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<Typography className="title">Phone</Typography>
 							<input
 								type="text"
-								placeholder="Your Phone"
-								value={updateData.memberPhone}
+								placeholder="Your phone"
+								value={updateData.memberPhone ?? ''}
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
 							/>
 						</Stack>
+						<Stack className="input-box">
+							<Typography className="title">Full Name</Typography>
+							<input
+								type="text"
+								placeholder="Your full name"
+								value={updateData.memberFullName ?? ''}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberFullName: value })}
+							/>
+						</Stack>
+					</Stack>
+					<Stack className="desc-box">
+						<Typography className="title">Bio</Typography>
+						<textarea
+							rows={4}
+							placeholder="Tell something about yourself..."
+							value={updateData.memberDesc ?? ''}
+							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberDesc: value })}
+						/>
 					</Stack>
 					<Stack className="about-me-box">
 						<Button className="update-button" onClick={updateProfileHandler} disabled={doDisabledCheck()}>
@@ -189,6 +188,8 @@ MyProfile.defaultProps = {
 		memberImage: '',
 		memberNick: '',
 		memberPhone: '',
+		memberFullName: '',
+		memberDesc: '',
 	},
 };
 

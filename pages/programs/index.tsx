@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Stack } from '@mui/material';
@@ -6,7 +6,10 @@ import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import ProgramCard from '../../libs/components/homepage/ProgramCard';
-import { allPrograms } from '../../libs/data/programs';
+import { useQuery } from '@apollo/client';
+import { GET_PROGRAMS } from '../../apollo/user/query';
+import { Program } from '../../libs/types/program/program';
+import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -14,82 +17,134 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const TYPES = ['ALL', 'MASS GAIN', 'WEIGHT LOSS', 'STRENGTH', 'CARDIO', 'YOGA', 'FUNCTIONAL', 'REHABILITATION', 'MOBILITY'];
-const LEVELS = ['ALL', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+const TYPE_OPTIONS = [
+	{ label: 'All Types', value: '' },
+	{ label: 'Mass Gain', value: 'MASS_GAIN' },
+	{ label: 'Weight Loss', value: 'WEIGHT_LOSS' },
+	{ label: 'Strength', value: 'STRENGTH' },
+	{ label: 'Cardio', value: 'CARDIO' },
+	{ label: 'Yoga', value: 'YOGA' },
+	{ label: 'Functional', value: 'FUNCTIONAL' },
+	{ label: 'Rehabilitation', value: 'REHABILITATION' },
+	{ label: 'Mobility', value: 'MOBILITY' },
+	{ label: 'Beginners', value: 'BEGINNERS' },
+	{ label: 'Advanced', value: 'ADVANCED' },
+];
+
+const LEVEL_OPTIONS = [
+	{ label: 'All Levels', value: '' },
+	{ label: 'Beginner', value: 'BEGINNER' },
+	{ label: 'Intermediate', value: 'INTERMEDIATE' },
+	{ label: 'Advanced', value: 'ADVANCED' },
+];
+
+const SORT_OPTIONS = [
+	{ label: 'Most Popular', value: 'programViews', direction: 'DESC' },
+	{ label: 'Top Rated', value: 'programRank', direction: 'DESC' },
+	{ label: 'Price: Low to High', value: 'programPrice', direction: 'ASC' },
+	{ label: 'Price: High to Low', value: 'programPrice', direction: 'DESC' },
+	{ label: 'Newest', value: 'createdAt', direction: 'DESC' },
+];
+
 const PRICE_FILTERS = [
 	{ label: 'All Prices', value: 'all' },
 	{ label: 'Free', value: 'free' },
 	{ label: 'Under $30', value: 'under30' },
-	{ label: '$30 – $60', value: '30to60' },
+	{ label: '$30 to $60', value: '30to60' },
 	{ label: '$60+', value: '60plus' },
 ];
-const SORT_OPTIONS = [
-	{ label: 'Most Popular', value: 'popular' },
-	{ label: 'Top Rated', value: 'rating' },
-	{ label: 'Price: Low → High', value: 'price-asc' },
-	{ label: 'Price: High → Low', value: 'price-desc' },
-	{ label: 'Duration: Short → Long', value: 'duration-asc' },
-];
+
+const typeGradients: Record<string, string> = {
+	MASS_GAIN: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+	WEIGHT_LOSS: 'linear-gradient(135deg, #0f3460 0%, #e94560 100%)',
+	STRENGTH: 'linear-gradient(135deg, #1a1a2e 0%, #e92c28 100%)',
+	CARDIO: 'linear-gradient(135deg, #0f3460 0%, #533483 100%)',
+	YOGA: 'linear-gradient(135deg, #1b4332 0%, #40916c 100%)',
+	FUNCTIONAL: 'linear-gradient(135deg, #212529 0%, #495057 100%)',
+	REHABILITATION: 'linear-gradient(135deg, #003566 0%, #0077b6 100%)',
+	MOBILITY: 'linear-gradient(135deg, #370617 0%, #e85d04 100%)',
+	BEGINNERS: 'linear-gradient(135deg, #1b263b 0%, #415a77 100%)',
+	ADVANCED: 'linear-gradient(135deg, #10002b 0%, #5a189a 100%)',
+};
+
+const LIMIT = 9;
 
 const ProgramsPage: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 
-	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-	const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+	const [programType, setProgramType] = useState('');
+	const [programLevel, setProgramLevel] = useState('');
 	const [selectedPrice, setSelectedPrice] = useState('all');
-	const [sortBy, setSortBy] = useState('popular');
+	const [sortIdx, setSortIdx] = useState(0);
 	const [page, setPage] = useState(1);
+	const [programs, setPrograms] = useState<Program[]>([]);
+	const [total, setTotal] = useState(0);
+
+	const sort = SORT_OPTIONS[sortIdx];
+
+	const { loading } = useQuery(GET_PROGRAMS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: {
+				page,
+				limit: LIMIT,
+				sort: sort.value,
+				direction: sort.direction,
+				...(programType && { programType }),
+				...(programLevel && { programLevel }),
+				programStatus: 'ACTIVE',
+			},
+		},
+		onCompleted: (data: T) => {
+			setPrograms(data?.getPrograms?.list ?? []);
+			setTotal(data?.getPrograms?.metaCounter?.[0]?.total ?? 0);
+		},
+	});
 
 	useEffect(() => {
 		const { type } = router.query;
 		if (type && typeof type === 'string') {
-			setSelectedTypes([type]);
+			setProgramType(type);
 			setPage(1);
 		}
 	}, [router.query.type]);
-	const PER_PAGE = 9;
 
-	const toggleType = (type: string) => {
-		setSelectedTypes((prev) => prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]);
+	useEffect(() => {
 		setPage(1);
-	};
+	}, [programType, programLevel, sortIdx]);
 
-	const toggleLevel = (level: string) => {
-		setSelectedLevels((prev) => prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]);
-		setPage(1);
-	};
+	const filtered = programs.filter((p) => {
+		if (selectedPrice === 'free') return p.programPrice === 0;
+		if (selectedPrice === 'under30') return p.programPrice > 0 && p.programPrice < 30;
+		if (selectedPrice === '30to60') return p.programPrice >= 30 && p.programPrice <= 60;
+		if (selectedPrice === '60plus') return p.programPrice > 60;
+		return true;
+	});
 
-	const filtered = useMemo(() => {
-		let list = [...allPrograms];
-
-		if (selectedTypes.length > 0) list = list.filter((p) => selectedTypes.includes(p.type));
-		if (selectedLevels.length > 0) list = list.filter((p) => selectedLevels.includes(p.level));
-
-		if (selectedPrice === 'free') list = list.filter((p) => p.price === 0);
-		else if (selectedPrice === 'under30') list = list.filter((p) => p.price > 0 && p.price < 30);
-		else if (selectedPrice === '30to60') list = list.filter((p) => p.price >= 30 && p.price <= 60);
-		else if (selectedPrice === '60plus') list = list.filter((p) => p.price > 60);
-
-		if (sortBy === 'popular') list.sort((a, b) => b.views - a.views);
-		else if (sortBy === 'rating') list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-		else if (sortBy === 'price-asc') list.sort((a, b) => a.price - b.price);
-		else if (sortBy === 'price-desc') list.sort((a, b) => b.price - a.price);
-		else if (sortBy === 'duration-asc') list.sort((a, b) => a.duration - b.duration);
-
-		return list;
-	}, [selectedTypes, selectedLevels, selectedPrice, sortBy]);
-
-	const totalPages = Math.ceil(filtered.length / PER_PAGE);
-	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+	const totalPages = Math.ceil(total / LIMIT);
 
 	if (device === 'mobile') {
 		return (
 			<Stack className={'programs-page-mobile'}>
 				<h2>Programs</h2>
 				<Stack className={'mobile-grid'}>
-					{paginated.map((prog) => (
-						<ProgramCard key={prog.id} {...prog} />
+					{filtered.map((prog) => (
+						<ProgramCard
+							key={prog._id}
+							id={prog._id}
+							name={prog.programName}
+							type={prog.programType}
+							level={prog.programLevel}
+							duration={prog.programDuration}
+							price={prog.programPrice}
+							views={prog.programViews}
+							likes={prog.programLikes}
+							members={prog.programMembers}
+							rank={prog.programRank}
+							image={prog.programImages?.[0]}
+							gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+						/>
 					))}
 				</Stack>
 			</Stack>
@@ -99,24 +154,17 @@ const ProgramsPage: NextPage = () => {
 	return (
 		<div id="programs-page">
 			<div className={'programs-container'}>
-				{/* SIDEBAR */}
 				<aside className={'filter-sidebar'}>
 					<div className={'filter-block'}>
 						<h4>Program Type</h4>
 						<div className={'chip-group'}>
-							<button
-								className={`chip ${selectedTypes.length === 0 ? 'active' : ''}`}
-								onClick={() => { setSelectedTypes([]); setPage(1); }}
-							>
-								All Types
-							</button>
-							{TYPES.filter((t) => t !== 'ALL').map((type) => (
+							{TYPE_OPTIONS.map((opt) => (
 								<button
-									key={type}
-									className={`chip ${selectedTypes.includes(type) ? 'active' : ''}`}
-									onClick={() => toggleType(type)}
+									key={opt.value}
+									className={`chip ${programType === opt.value ? 'active' : ''}`}
+									onClick={() => setProgramType(opt.value)}
 								>
-									{type}
+									{opt.label}
 								</button>
 							))}
 						</div>
@@ -125,19 +173,13 @@ const ProgramsPage: NextPage = () => {
 					<div className={'filter-block'}>
 						<h4>Level</h4>
 						<div className={'chip-group'}>
-							<button
-								className={`chip ${selectedLevels.length === 0 ? 'active' : ''}`}
-								onClick={() => { setSelectedLevels([]); setPage(1); }}
-							>
-								All Levels
-							</button>
-							{LEVELS.filter((l) => l !== 'ALL').map((level) => (
+							{LEVEL_OPTIONS.map((opt) => (
 								<button
-									key={level}
-									className={`chip ${selectedLevels.includes(level) ? 'active' : ''}`}
-									onClick={() => toggleLevel(level)}
+									key={opt.value}
+									className={`chip ${programLevel === opt.value ? 'active' : ''}`}
+									onClick={() => setProgramLevel(opt.value)}
 								>
-									{level}
+									{opt.label}
 								</button>
 							))}
 						</div>
@@ -162,21 +204,19 @@ const ProgramsPage: NextPage = () => {
 					</div>
 				</aside>
 
-				{/* MAIN */}
 				<main className={'programs-main'}>
-					{/* TOP BAR */}
 					<div className={'top-bar'}>
 						<span className={'results-count'}>
-							<strong>{filtered.length}</strong> programs found
+							<strong>{total}</strong> programs found
 						</span>
 						<div className={'sort-row'}>
 							<span>Sort by:</span>
 							<div className={'sort-buttons'}>
-								{SORT_OPTIONS.map((opt) => (
+								{SORT_OPTIONS.map((opt, idx) => (
 									<button
-										key={opt.value}
-										className={`sort-btn ${sortBy === opt.value ? 'active' : ''}`}
-										onClick={() => { setSortBy(opt.value); setPage(1); }}
+										key={`${opt.value}-${opt.direction}`}
+										className={`sort-btn ${sortIdx === idx ? 'active' : ''}`}
+										onClick={() => setSortIdx(idx)}
 									>
 										{opt.label}
 									</button>
@@ -185,28 +225,41 @@ const ProgramsPage: NextPage = () => {
 						</div>
 					</div>
 
-					{/* GRID */}
-					{paginated.length === 0 ? (
+					{loading ? (
+						<div className={'loading-state'}>Loading programs...</div>
+					) : filtered.length === 0 ? (
 						<div className={'empty-state'}>
-							<span>🏋️</span>
-							<p>No programs match your filters.</p>
-							<button onClick={() => { setSelectedTypes([]); setSelectedLevels([]); setSelectedPrice('all'); }}>
+							<span>No programs match your filters.</span>
+							<button onClick={() => { setProgramType(''); setProgramLevel(''); setSelectedPrice('all'); }}>
 								Clear Filters
 							</button>
 						</div>
 					) : (
 						<div className={'programs-grid'}>
-							{paginated.map((prog) => (
-								<ProgramCard key={prog.id} {...prog} />
+							{filtered.map((prog) => (
+								<ProgramCard
+									key={prog._id}
+									id={prog._id}
+									name={prog.programName}
+									type={prog.programType}
+									level={prog.programLevel}
+									duration={prog.programDuration}
+									price={prog.programPrice}
+									views={prog.programViews}
+									likes={prog.programLikes}
+									members={prog.programMembers}
+									rank={prog.programRank}
+									image={prog.programImages?.[0]}
+									gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+								/>
 							))}
 						</div>
 					)}
 
-					{/* PAGINATION */}
 					{totalPages > 1 && (
 						<div className={'pagination'}>
 							<button className={'page-btn'} disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-								← Prev
+								Prev
 							</button>
 							{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
 								<button
@@ -218,7 +271,7 @@ const ProgramsPage: NextPage = () => {
 								</button>
 							))}
 							<button className={'page-btn'} disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
-								Next →
+								Next
 							</button>
 						</div>
 					)}

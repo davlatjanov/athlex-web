@@ -89,9 +89,8 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 				limit: 4,
 				sort: 'createdAt',
 				direction: Direction.DESC,
-				search: {
-					programType: program?.programType ? [program?.programType] : [],
-				},
+				...(program?.programType && { programType: program.programType }),
+				programStatus: 'ACTIVE',
 			},
 		},
 		skip: !programId && !program,
