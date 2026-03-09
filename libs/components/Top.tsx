@@ -13,7 +13,7 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
-import { REACT_APP_API_URL } from '../config';
+
 
 const Top = () => {
 	const device = useDeviceDetect();
@@ -97,14 +97,14 @@ const Top = () => {
 							<Link href={'/products'}>
 								<div>{t('Shop')}</div>
 							</Link>
-							<Link href={'/mypage'}>
-								<div>{t('My Page')}</div>
-							</Link>
 							<Link href={'/about'}>
 								<div>{t('About')}</div>
 							</Link>
 							<Link href={'/cs'}>
 								<div>{t('Support')}</div>
+							</Link>
+							<Link href={'/mypage'}>
+								<div>{t('My Page')}</div>
 							</Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>
@@ -116,10 +116,11 @@ const Top = () => {
 										onClick={(event: any) => setLogoutAnchor(event.currentTarget)}
 									>
 										{user?.memberImage ? (
-											<img src={`${REACT_APP_API_URL}/${user.memberImage}`} alt="" />
+											<img src={user.memberImage} alt="" />
 										) : (
 											<AccountCircleOutlinedIcon className={'user-avatar-icon'} />
 										)}
+										{user?.memberNick && <span className={'user-nick'}>{user.memberNick}</span>}
 									</div>
 									<Menu
 										id="basic-menu"
