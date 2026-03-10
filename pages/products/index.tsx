@@ -4,14 +4,21 @@ import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import { allProducts, PRODUCT_TYPES, PRODUCT_BRANDS, Product, ProductBrand, ProductType } from '../../libs/data/products';
+import { useQuery } from '@apollo/client';
+import { GET_PRODUCTS } from '../../apollo/user/query';
+import { Product } from '../../libs/types/product/product';
+import { ProductType, ProductBrand } from '../../libs/enums/product.enum';
 import { useLike } from '../../libs/hooks/useInteractions';
+import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
 		...(await serverSideTranslations(locale, ['common'])),
 	},
 });
+
+const PRODUCT_TYPES = Object.values(ProductType);
+const PRODUCT_BRANDS = Object.values(ProductBrand).filter((b) => b !== ProductBrand.NONE);
 
 const PRICE_FILTERS = [
 	{ label: 'All Prices', value: 'all' },
@@ -22,11 +29,11 @@ const PRICE_FILTERS = [
 ];
 
 const SORT_OPTIONS = [
-	{ label: 'Most Popular', value: 'popular' },
-	{ label: 'Top Rated', value: 'rating' },
-	{ label: 'Price: Low → High', value: 'price-asc' },
-	{ label: 'Price: High → Low', value: 'price-desc' },
-	{ label: 'Most Liked', value: 'liked' },
+	{ label: 'Most Popular', value: 'productViews', direction: 'DESC' },
+	{ label: 'Most Liked', value: 'productLikes', direction: 'DESC' },
+	{ label: 'Price: Low → High', value: 'productPrice', direction: 'ASC' },
+	{ label: 'Price: High → Low', value: 'productPrice', direction: 'DESC' },
+	{ label: 'Newest', value: 'createdAt', direction: 'DESC' },
 ];
 
 const brandLabel: Record<string, string> = {
@@ -35,7 +42,7 @@ const brandLabel: Record<string, string> = {
 };
 
 const statusColor: Record<string, string> = {
-	ACTIVE: '#4ecd64',
+	ACTIVE: '#22C55E',
 	STOPPED: '#FFB800',
 	OUT_OF_STOCK: '#E92C28',
 };
@@ -43,35 +50,35 @@ const statusColor: Record<string, string> = {
 const PER_PAGE = 12;
 
 const ProductCard = ({ product }: { product: Product }) => {
-	const { liked, toggle: toggleLike } = useLike('programs', product.id);
+	const { liked, toggle: toggleLike } = useLike('programs', product._id);
 	const isOutOfStock = product.productStatus === 'OUT_OF_STOCK';
+	const image = product.productImages?.[0];
 
 	return (
 		<div className={`product-card ${isOutOfStock ? 'out-of-stock' : ''}`}>
-			<Link href={`/products/${product.id}`} className="pc-link">
+			<Link href={`/products/${product._id}`} className="pc-link">
 				<div className="pc-visual">
-					<img
-						src={product.image}
-						alt={product.productName}
-						className="pc-img"
-						onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-					/>
+					{image && (
+						<img
+							src={image}
+							alt={product.productName}
+							className="pc-img"
+							onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+						/>
+					)}
 					<div className="pc-visual-overlay" />
 					<div className="pc-type-badge">{product.productType}</div>
-					<button
-						className={`pc-like-btn ${liked ? 'liked' : ''}`}
-						onClick={toggleLike}
-					>
+					<button className={`pc-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
 						{liked ? '♥' : '♡'}
 					</button>
 					{isOutOfStock && <div className="pc-oos-overlay">OUT OF STOCK</div>}
+					<div className="pc-status-dot" style={{ background: statusColor[product.productStatus] }} />
 				</div>
 				<div className="pc-body">
 					<div className="pc-brand">{brandLabel[product.productBrand] ?? product.productBrand}</div>
 					<h3 className="pc-name">{product.productName}</h3>
-					<div className="pc-rating">
-						<span className="pc-stars">★ {product.rating}</span>
-						<span className="pc-views">{product.productViews >= 1000 ? `${(product.productViews / 1000).toFixed(1)}K` : product.productViews} views</span>
+					<div className="pc-views">
+						{product.productViews >= 1000 ? `${(product.productViews / 1000).toFixed(1)}K` : product.productViews} views · ♥ {product.productLikes}
 					</div>
 					<div className="pc-footer">
 						<span className="pc-price">${product.productPrice.toFixed(2)}</span>
@@ -91,8 +98,27 @@ const ProductsPage: NextPage = () => {
 	const [selectedBrands, setSelectedBrands] = useState<ProductBrand[]>([]);
 	const [selectedPrice, setSelectedPrice] = useState('all');
 	const [showInStockOnly, setShowInStockOnly] = useState(false);
-	const [sortBy, setSortBy] = useState('popular');
+	const [sortIdx, setSortIdx] = useState(0);
 	const [page, setPage] = useState(1);
+	const [allProducts, setAllProducts] = useState<Product[]>([]);
+
+	const sort = SORT_OPTIONS[sortIdx];
+
+	const { loading } = useQuery(GET_PRODUCTS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: {
+				page: 1,
+				limit: 100,
+				sort: sort.value,
+				direction: sort.direction,
+				productStatus: 'ACTIVE',
+			},
+		},
+		onCompleted: (data: T) => {
+			setAllProducts(data?.getProducts?.list ?? []);
+		},
+	});
 
 	const toggleType = (t: ProductType) => {
 		setSelectedTypes((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
@@ -106,24 +132,15 @@ const ProductsPage: NextPage = () => {
 
 	const filtered = useMemo(() => {
 		let list = [...allProducts];
-
 		if (selectedTypes.length > 0) list = list.filter((p) => selectedTypes.includes(p.productType));
 		if (selectedBrands.length > 0) list = list.filter((p) => selectedBrands.includes(p.productBrand));
 		if (showInStockOnly) list = list.filter((p) => p.productStatus === 'ACTIVE');
-
 		if (selectedPrice === 'under30') list = list.filter((p) => p.productPrice < 30);
 		else if (selectedPrice === '30to60') list = list.filter((p) => p.productPrice >= 30 && p.productPrice <= 60);
 		else if (selectedPrice === '60to150') list = list.filter((p) => p.productPrice > 60 && p.productPrice <= 150);
 		else if (selectedPrice === '150plus') list = list.filter((p) => p.productPrice > 150);
-
-		if (sortBy === 'popular') list.sort((a, b) => b.productViews - a.productViews);
-		else if (sortBy === 'rating') list.sort((a, b) => b.rating - a.rating);
-		else if (sortBy === 'price-asc') list.sort((a, b) => a.productPrice - b.productPrice);
-		else if (sortBy === 'price-desc') list.sort((a, b) => b.productPrice - a.productPrice);
-		else if (sortBy === 'liked') list.sort((a, b) => b.productLikes - a.productLikes);
-
 		return list;
-	}, [selectedTypes, selectedBrands, selectedPrice, showInStockOnly, sortBy]);
+	}, [allProducts, selectedTypes, selectedBrands, selectedPrice, showInStockOnly]);
 
 	const totalPages = Math.ceil(filtered.length / PER_PAGE);
 	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -136,25 +153,14 @@ const ProductsPage: NextPage = () => {
 		<div id="products-page">
 			<div className="shop-container">
 
-				{/* ── SIDEBAR ───────────────────────────────────────────── */}
+				{/* ── SIDEBAR ─────────────────────────────────────── */}
 				<aside className="shop-sidebar">
 					<div className="shop-filter-block">
 						<h4 className="shop-filter-title">Category</h4>
 						<div className="shop-chip-group">
-							<button
-								className={`shop-chip ${selectedTypes.length === 0 ? 'active' : ''}`}
-								onClick={() => { setSelectedTypes([]); setPage(1); }}
-							>
-								All
-							</button>
+							<button className={`shop-chip ${selectedTypes.length === 0 ? 'active' : ''}`} onClick={() => { setSelectedTypes([]); setPage(1); }}>All</button>
 							{PRODUCT_TYPES.map((t) => (
-								<button
-									key={t}
-									className={`shop-chip ${selectedTypes.includes(t) ? 'active' : ''}`}
-									onClick={() => toggleType(t)}
-								>
-									{t}
-								</button>
+								<button key={t} className={`shop-chip ${selectedTypes.includes(t) ? 'active' : ''}`} onClick={() => toggleType(t)}>{t}</button>
 							))}
 						</div>
 					</div>
@@ -162,20 +168,9 @@ const ProductsPage: NextPage = () => {
 					<div className="shop-filter-block">
 						<h4 className="shop-filter-title">Brand</h4>
 						<div className="shop-chip-group">
-							<button
-								className={`shop-chip ${selectedBrands.length === 0 ? 'active' : ''}`}
-								onClick={() => { setSelectedBrands([]); setPage(1); }}
-							>
-								All Brands
-							</button>
+							<button className={`shop-chip ${selectedBrands.length === 0 ? 'active' : ''}`} onClick={() => { setSelectedBrands([]); setPage(1); }}>All Brands</button>
 							{PRODUCT_BRANDS.map((b) => (
-								<button
-									key={b}
-									className={`shop-chip ${selectedBrands.includes(b) ? 'active' : ''}`}
-									onClick={() => toggleBrand(b)}
-								>
-									{brandLabel[b] ?? b}
-								</button>
+								<button key={b} className={`shop-chip ${selectedBrands.includes(b) ? 'active' : ''}`} onClick={() => toggleBrand(b)}>{brandLabel[b] ?? b}</button>
 							))}
 						</div>
 					</div>
@@ -185,13 +180,7 @@ const ProductsPage: NextPage = () => {
 						<div className="shop-radio-group">
 							{PRICE_FILTERS.map((pf) => (
 								<label key={pf.value} className={`shop-radio-item ${selectedPrice === pf.value ? 'active' : ''}`}>
-									<input
-										type="radio"
-										name="price"
-										value={pf.value}
-										checked={selectedPrice === pf.value}
-										onChange={() => { setSelectedPrice(pf.value); setPage(1); }}
-									/>
+									<input type="radio" name="price" value={pf.value} checked={selectedPrice === pf.value} onChange={() => { setSelectedPrice(pf.value); setPage(1); }} />
 									{pf.label}
 								</label>
 							))}
@@ -201,30 +190,27 @@ const ProductsPage: NextPage = () => {
 					<div className="shop-filter-block">
 						<h4 className="shop-filter-title">Availability</h4>
 						<label className={`shop-toggle ${showInStockOnly ? 'on' : ''}`}>
-							<input
-								type="checkbox"
-								checked={showInStockOnly}
-								onChange={(e) => { setShowInStockOnly(e.target.checked); setPage(1); }}
-							/>
+							<input type="checkbox" checked={showInStockOnly} onChange={(e) => { setShowInStockOnly(e.target.checked); setPage(1); }} />
 							<span className="shop-toggle-track"><span className="shop-toggle-thumb" /></span>
 							In Stock Only
 						</label>
 					</div>
 				</aside>
 
-				{/* ── MAIN ──────────────────────────────────────────────── */}
+				{/* ── MAIN ────────────────────────────────────────── */}
 				<main className="shop-main">
-					{/* Top bar */}
 					<div className="shop-top-bar">
-						<span className="shop-count"><strong>{filtered.length}</strong> products found</span>
+						<span className="shop-count">
+							{loading ? 'Loading…' : <><strong>{filtered.length}</strong> products found</>}
+						</span>
 						<div className="shop-sort-row">
 							<span>Sort:</span>
 							<div className="shop-sort-buttons">
-								{SORT_OPTIONS.map((opt) => (
+								{SORT_OPTIONS.map((opt, i) => (
 									<button
-										key={opt.value}
-										className={`shop-sort-btn ${sortBy === opt.value ? 'active' : ''}`}
-										onClick={() => { setSortBy(opt.value); setPage(1); }}
+										key={`${opt.value}-${opt.direction}`}
+										className={`shop-sort-btn ${sortIdx === i ? 'active' : ''}`}
+										onClick={() => { setSortIdx(i); setPage(1); }}
 									>
 										{opt.label}
 									</button>
@@ -233,8 +219,9 @@ const ProductsPage: NextPage = () => {
 						</div>
 					</div>
 
-					{/* Grid */}
-					{paginated.length === 0 ? (
+					{loading && allProducts.length === 0 ? (
+						<div className="shop-empty"><span>⏳</span><p>Loading products…</p></div>
+					) : paginated.length === 0 ? (
 						<div className="shop-empty">
 							<span>🛒</span>
 							<p>No products match your filters.</p>
@@ -245,29 +232,18 @@ const ProductsPage: NextPage = () => {
 					) : (
 						<div className="shop-grid">
 							{paginated.map((product) => (
-								<ProductCard key={product.id} product={product} />
+								<ProductCard key={product._id} product={product} />
 							))}
 						</div>
 					)}
 
-					{/* Pagination */}
 					{totalPages > 1 && (
 						<div className="shop-pagination">
-							<button className="shop-page-btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-								← Prev
-							</button>
+							<button className="shop-page-btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>← Prev</button>
 							{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-								<button
-									key={p}
-									className={`shop-page-btn ${page === p ? 'active' : ''}`}
-									onClick={() => setPage(p)}
-								>
-									{p}
-								</button>
+								<button key={p} className={`shop-page-btn ${page === p ? 'active' : ''}`} onClick={() => setPage(p)}>{p}</button>
 							))}
-							<button className="shop-page-btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
-								Next →
-							</button>
+							<button className="shop-page-btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>Next →</button>
 						</div>
 					)}
 				</main>
