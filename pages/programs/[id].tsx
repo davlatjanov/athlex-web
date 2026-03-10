@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import ProgramCard from '../../libs/components/homepage/ProgramCard';
-import {
-	allPrograms,
-	typeIcons,
-	typeTrainers,
-	typeMuscles,
-	typeEquipment,
-	typeWeeklySchedule,
-	levelRequirements,
-	getReviews,
-} from '../../libs/data/programs';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
+import { GET_ONE_PROGRAM_WITH_MEMBER, GET_COMMENTS, GET_PROGRAM_WITH_WORKOUTS } from '../../apollo/user/query';
+import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM } from '../../apollo/user/mutation';
+import { userVar } from '../../apollo/store';
+import { Program, Workout } from '../../libs/types/program/program';
+import { Comment } from '../../libs/types/comment/comment';
+import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
+import { CommentGroup } from '../../libs/enums/comment.enum';
+import { LikeGroup } from '../../libs/enums/like.enum';
+import { Message } from '../../libs/enums/common.enum';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { T } from '../../libs/types/common';
+import moment from 'moment';
+import { CircularProgress, Pagination as MuiPagination, Stack } from '@mui/material';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import IosShareIcon from '@mui/icons-material/IosShare';
+
+const SAVED_KEY = 'athlex_saved_programs';
+const DAY_LABELS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 export const getServerSideProps = async ({ locale }: any) => ({
 	props: {
@@ -23,22 +34,152 @@ export const getServerSideProps = async ({ locale }: any) => ({
 	},
 });
 
-const StarRating = ({ rating }: { rating: number }) => (
-	<span className="star-rating">
-		{[1, 2, 3, 4, 5].map((s) => (
-			<span key={s} className={s <= Math.round(rating) ? 'star filled' : 'star'}>★</span>
-		))}
-	</span>
-);
-
-const ProgramDetail: NextPage = () => {
+const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const { id } = router.query;
+	const user = useReactiveVar(userVar);
 
-	const program = allPrograms.find((p) => p.id === id);
+	const [program, setProgram] = useState<Program | null>(null);
+	const [workouts, setWorkouts] = useState<Workout[]>([]);
+	const [slideImage, setSlideImage] = useState<string>('');
+	const [joined, setJoined] = useState(false);
+	const [saved, setSaved] = useState(false);
+	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
+	const [programComments, setProgramComments] = useState<Comment[]>([]);
+	const [commentTotal, setCommentTotal] = useState(0);
+	const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
+		commentGroup: CommentGroup.PROGRAM,
+		commentContent: '',
+		commentRefId: '',
+	});
 
-	if (!program) {
+	/** APOLLO **/
+	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
+	const [createComment] = useMutation(CREATE_COMMENT);
+	const [joinProgram] = useMutation(JOIN_PROGRAM);
+	const [leaveProgram] = useMutation(LEAVE_PROGRAM);
+
+	const { loading, refetch: getProgramRefetch } = useQuery(GET_ONE_PROGRAM_WITH_MEMBER, {
+		fetchPolicy: 'network-only',
+		variables: { programId: id },
+		skip: !id,
+		onCompleted: (data: T) => {
+			const prog = data?.getOneProgramWithMember;
+			if (prog) {
+				setProgram(prog);
+				setSlideImage(prog.programImages?.[0] ?? '');
+				setInsertCommentData((prev) => ({ ...prev, commentRefId: prog._id }));
+				setCommentInquiry((prev) => ({ ...prev, search: { commentRefId: prog._id } }));
+			}
+		},
+	});
+
+	useQuery(GET_PROGRAM_WITH_WORKOUTS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { programId: id },
+		skip: !id,
+		onCompleted: (data: T) => {
+			setWorkouts(data?.getProgramWithWorkouts?.workouts ?? []);
+		},
+	});
+
+	const { refetch: getCommentsRefetch } = useQuery(GET_COMMENTS, {
+		fetchPolicy: 'cache-and-network',
+		variables: { input: commentInquiry },
+		skip: !commentInquiry.search.commentRefId,
+		onCompleted: (data: T) => {
+			setProgramComments(data?.getComments?.list ?? []);
+			setCommentTotal(data?.getComments?.metaCounter?.[0]?.total ?? 0);
+		},
+	});
+
+	useEffect(() => {
+		if (commentInquiry.search.commentRefId) {
+			getCommentsRefetch({ input: commentInquiry });
+		}
+	}, [commentInquiry]);
+
+	useEffect(() => {
+		if (!id) return;
+		try {
+			const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) ?? '[]');
+			setSaved(list.includes(id as string));
+		} catch {}
+	}, [id]);
+
+	/** HANDLERS **/
+	const likeProgramHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.PROGRAM, likeRefId: program?._id } } });
+			await getProgramRefetch({ programId: id });
+			await sweetTopSmallSuccessAlert('Liked!', 800);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
+	const joinProgramHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			if (joined) {
+				await leaveProgram({ variables: { programId: program?._id } });
+				setJoined(false);
+				await sweetTopSmallSuccessAlert('Left program', 800);
+			} else {
+				await joinProgram({ variables: { programId: program?._id } });
+				setJoined(true);
+				await sweetTopSmallSuccessAlert('Enrolled!', 800);
+			}
+			await getProgramRefetch({ programId: id });
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
+	const createCommentHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await createComment({ variables: { input: insertCommentData } });
+			setInsertCommentData((prev) => ({ ...prev, commentContent: '' }));
+			await getCommentsRefetch({ input: commentInquiry });
+		} catch (err: any) {
+			await sweetErrorHandling(err);
+		}
+	};
+
+	const toggleSavedHandler = () => {
+		try {
+			const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) ?? '[]');
+			const newList = list.includes(id as string)
+				? list.filter((x) => x !== id)
+				: [...list, id as string];
+			localStorage.setItem(SAVED_KEY, JSON.stringify(newList));
+			setSaved(newList.includes(id as string));
+		} catch {}
+	};
+
+	const shareHandler = async () => {
+		try {
+			await navigator.clipboard.writeText(window.location.href);
+			await sweetTopSmallSuccessAlert('Link copied!', 800);
+		} catch {}
+	};
+
+	const commentPaginationChangeHandler = async (_: ChangeEvent<unknown>, value: number) => {
+		setCommentInquiry((prev) => ({ ...prev, page: value }));
+	};
+
+	if (loading) {
+		return (
+			<Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '80vh' }}>
+				<CircularProgress size={'4rem'} />
+			</Stack>
+		);
+	}
+
+	if (!program && !loading) {
 		return (
 			<div id="program-detail-page">
 				<div className="pdp-not-found">
@@ -50,190 +191,330 @@ const ProgramDetail: NextPage = () => {
 		);
 	}
 
+	const displayPrice = program?.programPrice === 0 ? 'FREE' : `$${program?.programPrice?.toLocaleString()}`;
+	const isPopular = (program?.programRank ?? 99) <= 10;
+
+	/** Shared UI blocks **/
+	const heroBlock = (
+		<div className="pdp-hero">
+			{slideImage && (
+				<img
+					src={slideImage}
+					alt={program?.programName}
+					className="pdp-hero-bg-img"
+					onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+				/>
+			)}
+			<div className="pdp-hero-overlay" />
+			<div className="pdp-hero-top-actions">
+				<button className={`pdp-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save program">
+					{saved ? <BookmarkIcon fontSize="small" /> : <BookmarkBorderIcon fontSize="small" />}
+				</button>
+				<button className="pdp-action-btn" onClick={shareHandler} title="Share">
+					<IosShareIcon fontSize="small" />
+				</button>
+			</div>
+			<div className="pdp-hero-inner">
+				<Link href="/programs" className="pdp-back">← Programs</Link>
+				<div className="pdp-badges">
+					<span className="badge-type">{program?.programType}</span>
+					<span className="badge-level">{program?.programLevel}</span>
+					{isPopular && <span className="pdp-popularity-badge">🔥 Top Ranked</span>}
+				</div>
+				<h1 className="pdp-hero-title">{program?.programName}</h1>
+				<div className="pdp-hero-meta">
+					<span className="phm-item">{program?.programMembers} enrolled</span>
+					<span className="phm-dot" />
+					<span className="phm-item">{program?.programDuration} weeks</span>
+					<span className="phm-dot" />
+					<span className="phm-item">{moment(program?.createdAt).fromNow()}</span>
+				</div>
+				<div className="pdp-hero-actions">
+					<div className="pdp-stat">
+						<RemoveRedEyeIcon fontSize="small" />
+						<span>{program?.programViews}</span>
+					</div>
+					<div className="pdp-stat" onClick={likeProgramHandler} style={{ cursor: 'pointer' }}>
+						<FavoriteBorderIcon fontSize="small" />
+						<span>{program?.programLikes}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+
+	const statPills = (
+		<div className="stat-pills">
+			{[
+				{ icon: '🗓', val: program?.programDuration, lbl: 'WEEKS' },
+				{ icon: '👥', val: program?.programMembers, lbl: 'ENROLLED' },
+				{ icon: '💬', val: program?.programComments, lbl: 'REVIEWS' },
+				{ icon: '🏆', val: program?.programRank, lbl: 'RANK' },
+			].map(({ icon, val, lbl }) => (
+				<div key={lbl} className="stat-pill">
+					<span className="sp-icon">{icon}</span>
+					<span className="sp-val">{val}</span>
+					<span className="sp-lbl">{lbl}</span>
+				</div>
+			))}
+		</div>
+	);
+
+	const weekSchedule = workouts.length > 0 && (
+		<section className="pdp-section">
+			<h2 className="pdp-section-title">Sample Week</h2>
+			<div className="week-grid">
+				{DAY_LABELS.map((day, i) => {
+					const workout = workouts.find((w) => w.workoutDay === i + 1);
+					const isRest = !workout || workout.isRestDay;
+					return (
+						<div key={day} className={`week-day ${isRest ? 'is-rest' : 'is-workout'}`}>
+							<span className="wd-name">{day}</span>
+							<span className="wd-icon">{isRest ? '😴' : '💪'}</span>
+							<span className="wd-label">{isRest ? 'Rest' : workout?.workoutName}</span>
+							{!isRest && (workout?.bodyParts?.length ?? 0) > 0 && (
+								<span className="wd-muscles">{workout?.bodyParts?.slice(0, 2).join(', ')}</span>
+							)}
+						</div>
+					);
+				})}
+			</div>
+		</section>
+	);
+
+	const trainerSection = program?.memberData && (
+		<section className="pdp-section">
+			<h2 className="pdp-section-title">About The Trainer</h2>
+			<div className="ec-trainer">
+				<img
+					src={program.memberData.memberImage || ''}
+					alt={program.memberData.memberNick}
+					className="et-avatar-img"
+					onError={(e) => { const el = e.target as HTMLImageElement; el.onerror = null; el.style.display = 'none'; }}
+				/>
+				<div className="et-info">
+					<Link href={`/member?memberId=${program.memberData._id}`}>
+						<div className="et-name">{program.memberData.memberNick}</div>
+					</Link>
+					<div className="et-spec">{program.memberData.memberType}</div>
+				</div>
+				<Link href={`/member?memberId=${program.memberData._id}`} className="et-profile-link">
+					View Profile →
+				</Link>
+			</div>
+		</section>
+	);
+
+	const reviewsSection = commentTotal > 0 && (
+		<section className="pdp-section">
+			<h2 className="pdp-section-title">Reviews ({commentTotal})</h2>
+			<div className="review-cards">
+				{programComments.map((comment: Comment) => (
+					<div key={comment._id} className="review-card">
+						<div className="rc-head">
+							<div className="rc-avatar">{comment.memberId?.toString().slice(-2).toUpperCase()}</div>
+							<div className="rc-meta">
+								<span className="rc-date">{moment(comment.createdAt).format('MMM DD, YYYY')}</span>
+							</div>
+						</div>
+						<p className="rc-text">{comment.commentContent}</p>
+					</div>
+				))}
+			</div>
+			{commentTotal > commentInquiry.limit && (
+				<MuiPagination
+					page={commentInquiry.page}
+					count={Math.ceil(commentTotal / commentInquiry.limit)}
+					onChange={commentPaginationChangeHandler}
+					shape="circular"
+					color="primary"
+				/>
+			)}
+		</section>
+	);
+
+	const leaveReviewSection = (
+		<section className="pdp-section">
+			<h2 className="pdp-section-title">Leave A Review</h2>
+			<textarea
+				className="pdp-review-input"
+				rows={4}
+				placeholder="Share your experience with this program..."
+				value={insertCommentData.commentContent}
+				onChange={({ target: { value } }) => setInsertCommentData((prev) => ({ ...prev, commentContent: value }))}
+			/>
+			<button
+				className="pdp-submit-btn"
+				disabled={!insertCommentData.commentContent || !user._id}
+				onClick={createCommentHandler}
+			>
+				Submit Review
+			</button>
+		</section>
+	);
+
+	/** MOBILE **/
 	if (device === 'mobile') {
 		return (
 			<div id="program-detail-page">
-				<div className="pdp-not-found">
-					<span>📱</span><p>Mobile view coming soon.</p>
+				{heroBlock}
+				<div className="pdp-mobile-body">
+					{statPills}
+
+					{program?.programDesc && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">About This Program</h2>
+							<p className="pdp-desc">{program.programDesc}</p>
+						</section>
+					)}
+
+					{(program?.targetAudience?.length ?? 0) > 0 && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">Who Is This For?</h2>
+							<div className="req-list">
+								{program?.targetAudience?.map((t, i) => (
+									<div key={i} className="req-item"><span className="req-dot" />{t}</div>
+								))}
+							</div>
+						</section>
+					)}
+
+					{(program?.requirements?.length ?? 0) > 0 && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">Requirements</h2>
+							<div className="req-list">
+								{program?.requirements?.map((r, i) => (
+									<div key={i} className="req-item"><span className="req-dot" />{r}</div>
+								))}
+							</div>
+						</section>
+					)}
+
+					{weekSchedule}
+					{trainerSection}
+					{reviewsSection}
+					{leaveReviewSection}
+				</div>
+
+				<div className="mobile-sticky-cta">
+					<span className="msc-price">{displayPrice}</span>
+					<button className={`msc-btn ${joined ? 'leave' : ''}`} onClick={joinProgramHandler}>
+						{joined ? 'Leave Program' : 'Enroll Now →'}
+					</button>
 				</div>
 			</div>
 		);
 	}
 
-	const icon           = typeIcons[program.type] ?? '🏅';
-	const trainer        = typeTrainers[program.type];
-	const muscles        = typeMuscles[program.type] ?? [];
-	const equipment      = typeEquipment[program.type] ?? [];
-	const weekSchedule   = typeWeeklySchedule[program.type] ?? typeWeeklySchedule['STRENGTH'];
-	const requirements   = levelRequirements[program.level] ?? [];
-	const reviews        = getReviews(program.type);
-	const displayPrice   = program.price === 0 ? 'FREE' : `$${program.price}`;
-	const displayMembers = program.members >= 1000 ? `${(program.members / 1000).toFixed(1)}K` : String(program.members);
-	const related        = allPrograms.filter((p) => p.type === program.type && p.id !== program.id).slice(0, 3);
-	const weeks          = Array.from({ length: program.duration }, (_, i) => i + 1);
-	const phaseLabels    = ['Foundation', 'Foundation', 'Development', 'Development', 'Amplification', 'Amplification', 'Peak', 'Peak', 'Advanced', 'Advanced', 'Power Peak', 'Power Peak', 'Elite', 'Elite', 'Final Push', 'Final Push', 'Deload', 'Deload', 'Mastery', 'Mastery'];
-	const ratingDist     = [{ stars: 5, pct: 65 }, { stars: 4, pct: 22 }, { stars: 3, pct: 8 }, { stars: 2, pct: 3 }, { stars: 1, pct: 2 }];
-	const workoutDays    = weekSchedule.filter((d) => !d.isRest).length;
-
+	/** DESKTOP **/
 	return (
 		<div id="program-detail-page">
+			{heroBlock}
 
-			{/* ─── HERO ─────────────────────────────────────────────── */}
-			<div className="pdp-hero" style={{ background: program.gradient }}>
-				{program.image && (
-					<img
-						src={program.image}
-						alt={program.name}
-						className="pdp-hero-bg-img"
-						onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-					/>
-				)}
-				<div className="pdp-hero-overlay" />
-				<div className="pdp-hero-inner">
-					<Link href="/programs" className="pdp-back">← Programs</Link>
-					<div className="pdp-badges">
-						<span className="badge-type">{program.type}</span>
-						<span className="badge-level">{program.level}</span>
-					</div>
-					<div className="pdp-hero-icon">{icon}</div>
-					<h1 className="pdp-hero-title">{program.name}</h1>
-					<div className="pdp-hero-meta">
-						<span className="phm-item">★ {program.rating}</span>
-						<span className="phm-dot" />
-						<span className="phm-item">{displayMembers} enrolled</span>
-						<span className="phm-dot" />
-						<span className="phm-item">{program.duration} weeks</span>
-						<span className="phm-dot" />
-						<span className="phm-item">{workoutDays}x / week</span>
-					</div>
-				</div>
-			</div>
-
-			{/* ─── BODY — 2-column ──────────────────────────────────── */}
 			<div className="pdp-body">
-
-				{/* ── LEFT: main scrollable content ─────────────────── */}
 				<div className="pdp-main">
+					{(program?.programImages?.length ?? 0) > 1 && (
+						<div className="pdp-gallery">
+							{program?.programImages?.map((img) => (
+								<img
+									key={img}
+									src={img}
+									alt=""
+									className={`pdp-thumb ${img === slideImage ? 'active' : ''}`}
+									onClick={() => setSlideImage(img)}
+								/>
+							))}
+						</div>
+					)}
 
-					{/* Stat pills */}
-					<div className="stat-pills">
-						{[
-							{ icon: '🗓', val: program.duration, lbl: 'WEEKS' },
-							{ icon: '💪', val: program.duration * 3, lbl: 'SESSIONS' },
-							{ icon: '👥', val: displayMembers, lbl: 'ENROLLED' },
-							{ icon: '⭐', val: program.rating, lbl: 'RATING' },
-						].map(({ icon: i, val, lbl }) => (
-							<div key={lbl} className="stat-pill">
-								<span className="sp-icon">{i}</span>
-								<span className="sp-val">{val}</span>
-								<span className="sp-lbl">{lbl}</span>
+					{statPills}
+
+					{program?.programDesc && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">About This Program</h2>
+							<p className="pdp-desc">{program.programDesc}</p>
+						</section>
+					)}
+
+					{(program?.targetAudience?.length ?? 0) > 0 && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">Who Is This For?</h2>
+							<div className="req-list">
+								{program?.targetAudience?.map((t, i) => (
+									<div key={i} className="req-item"><span className="req-dot" />{t}</div>
+								))}
 							</div>
-						))}
-					</div>
+						</section>
+					)}
 
-					{/* Muscles */}
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">Muscles Targeted</h2>
-						<div className="muscle-chips">
-							{muscles.map((m) => (
-								<span key={m} className="muscle-chip">{m}</span>
-							))}
-						</div>
-					</section>
+					{(program?.requirements?.length ?? 0) > 0 && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">Requirements</h2>
+							<div className="req-list">
+								{program?.requirements?.map((r, i) => (
+									<div key={i} className="req-item"><span className="req-dot" />{r}</div>
+								))}
+							</div>
+						</section>
+					)}
 
-					{/* Requirements */}
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">Requirements</h2>
-						<div className="req-list">
-							{requirements.map((r, i) => (
-								<div key={i} className="req-item">
-									<span className="req-dot" />{r}
-								</div>
-							))}
-						</div>
-					</section>
+					{weekSchedule}
 
-					{/* Weekly schedule */}
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">Weekly Schedule</h2>
-						<div className="week-grid">
-							{weekSchedule.map((day) => (
-								<div key={day.day} className={`week-day ${day.isRest ? 'is-rest' : 'is-workout'}`}>
-									<div className="wd-name">{day.day}</div>
-									<div className="wd-icon">{day.isRest ? '😴' : icon}</div>
-									<div className="wd-label">{day.label}</div>
-									{!day.isRest && <div className="wd-muscles">{day.muscles}</div>}
-								</div>
-							))}
-						</div>
-						<p className="week-note">Pattern repeats {program.duration} weeks · intensity increases each phase</p>
-					</section>
+					{(program?.programTags?.length ?? 0) > 0 && (
+						<section className="pdp-section">
+							<h2 className="pdp-section-title">Tags</h2>
+							<div className="muscle-chips">
+								{program?.programTags?.map((tag) => (
+									<span key={tag} className="muscle-chip">{tag}</span>
+								))}
+							</div>
+						</section>
+					)}
 
-					{/* Program phases */}
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">Program Phases</h2>
-						<div className="phases-list">
-							{weeks.map((w) => (
-								<div key={w} className="phase-row">
-									<span className="pr-week">WK {w}</span>
-									<div className="pr-bar-wrap">
-										<div className="pr-bar-fill" style={{ width: `${Math.min(100, 20 + w * 4)}%` }} />
-									</div>
-									<span className="pr-name">{phaseLabels[w - 1] ?? 'Advanced'}</span>
-									<span className="pr-sess">{workoutDays}x/wk</span>
-								</div>
-							))}
-						</div>
-					</section>
-
-					{/* Reviews */}
-					<section className="pdp-section">
-						<div className="reviews-head">
-							<h2 className="pdp-section-title">Reviews</h2>
-							<span className="reviews-count">★ {program.rating} · {reviews.length * 80}+ reviews</span>
-						</div>
-						<div className="rbar-list">
-							{ratingDist.map(({ stars, pct }) => (
-								<div key={stars} className="rbar-row">
-									<span className="rbar-stars">{stars} ★</span>
-									<div className="rbar-track">
-										<div className="rbar-fill" style={{ width: `${pct}%` }} />
-									</div>
-									<span className="rbar-pct">{pct}%</span>
-								</div>
-							))}
-						</div>
-						<div className="review-cards">
-							{reviews.slice(0, 4).map((review, i) => (
-								<div key={i} className="review-card">
-									<div className="rc-head">
-										<div className="rc-avatar">{review.initials}</div>
-										<div className="rc-meta">
-											<span className="rc-name">{review.name}</span>
-											<span className="rc-date">{review.date}</span>
-										</div>
-										<StarRating rating={review.rating} />
-									</div>
-									<p className="rc-text">{review.text}</p>
-								</div>
-							))}
-						</div>
-					</section>
+					{trainerSection}
+					{reviewsSection}
+					{leaveReviewSection}
 				</div>
 
-				{/* ── RIGHT: sticky enrollment sidebar ──────────────── */}
 				<aside className="pdp-sidebar">
 					<div className="enroll-card">
 						<div className="ec-price">{displayPrice}</div>
-						<button className="ec-enroll-btn">Enroll Now →</button>
+
+						<div className="urgency-bar">
+							<div className="ub-item">
+								<span>{program?.programMembers}</span>
+								<span>enrolled</span>
+							</div>
+							<div className="ub-sep" />
+							<div className="ub-item">
+								<span>{program?.programViews}</span>
+								<span>views</span>
+							</div>
+						</div>
+
+						<button
+							className={joined ? 'ec-leave-btn' : 'ec-enroll-btn'}
+							onClick={joinProgramHandler}
+						>
+							{joined ? 'Leave Program' : 'Enroll Now →'}
+						</button>
+
+						<div className="trust-row">
+							<div className="trust-item">Instant access after enrollment</div>
+							<div className="trust-item">Cancel anytime</div>
+							<div className="trust-item">Trainer support included</div>
+						</div>
+
+						<div className="ec-divider" />
 
 						<div className="ec-details">
 							{[
-								{ label: 'Duration', value: `${program.duration} weeks` },
-								{ label: 'Sessions', value: `${program.duration * 3} total` },
-								{ label: 'Level', value: program.level },
-								{ label: 'Members', value: displayMembers },
-								{ label: 'Rating', value: `★ ${program.rating}` },
+								{ label: 'Level', value: program?.programLevel },
+								{ label: 'Duration', value: `${program?.programDuration} weeks` },
+								{ label: 'Members', value: program?.programMembers },
+								{ label: 'Type', value: program?.programType },
+								{ label: 'Start', value: moment(program?.programStartDate).format('MMM DD, YYYY') },
+								{ label: 'End', value: moment(program?.programEndDate).format('MMM DD, YYYY') },
 							].map(({ label, value }) => (
 								<div key={label} className="ec-row">
 									<span className="ec-row-label">{label}</span>
@@ -241,54 +522,21 @@ const ProgramDetail: NextPage = () => {
 								</div>
 							))}
 						</div>
-
-						<div className="ec-divider" />
-
-						<p className="ec-section-label">EQUIPMENT</p>
-						<div className="ec-equip">
-							{equipment.map((e) => (
-								<span key={e} className="equip-tag">{e}</span>
-							))}
-						</div>
-
-						{trainer && (
-							<>
-								<div className="ec-divider" />
-								<p className="ec-section-label">TRAINER</p>
-								<div className="ec-trainer">
-									<div className="et-avatar">{icon}</div>
-									<div className="et-info">
-										<div className="et-name">{trainer.name}</div>
-										<div className="et-spec">{trainer.specialty}</div>
-										<div className="et-stats">
-											<span>{trainer.experience}</span>
-											<span className="et-sep" />
-											<span>★ {trainer.rating}</span>
-										</div>
-									</div>
-								</div>
-								<Link href="/trainer">
-									<button className="ec-trainer-btn">View Trainer Profile →</button>
-								</Link>
-							</>
-						)}
 					</div>
 				</aside>
 			</div>
-
-			{/* ─── RELATED ──────────────────────────────────────────── */}
-			{related.length > 0 && (
-				<div className="pdp-related">
-					<div className="pdp-related-inner">
-						<h2 className="pdp-related-title">More {program.type} Programs</h2>
-						<div className="pdp-related-grid">
-							{related.map((p) => <ProgramCard key={p.id} {...p} />)}
-						</div>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 };
 
-export default withLayoutFull(ProgramDetail);
+ProgramDetailPage.defaultProps = {
+	initialComment: {
+		page: 1,
+		limit: 5,
+		sort: 'createdAt',
+		direction: 'DESC',
+		search: { commentRefId: '' },
+	},
+};
+
+export default withLayoutFull(ProgramDetailPage);
