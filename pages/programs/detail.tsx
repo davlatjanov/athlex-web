@@ -29,7 +29,7 @@ import { GET_COMMENTS, GET_PROGRAMS, GET_ONE_PROGRAM_WITH_MEMBER } from '../../a
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { CREATE_COMMENT, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
+import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM } from '../../apollo/user/mutation';
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
@@ -46,6 +46,7 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const [programId, setProgramId] = useState<string | null>(null);
 	const [program, setProgram] = useState<Program | null>(null);
 	const [slideImage, setSlideImage] = useState<string>('');
+	const [joined, setJoined] = useState<boolean>(false);
 	const [similarPrograms, setSimilarPrograms] = useState<Program[]>([]);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [programComments, setProgramComments] = useState<Comment[]>([]);
@@ -59,6 +60,8 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 	/** APOLLO REQUESTS **/
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 	const [createComment] = useMutation(CREATE_COMMENT);
+	const [joinProgram] = useMutation(JOIN_PROGRAM);
+	const [leaveProgram] = useMutation(LEAVE_PROGRAM);
 
 	const {
 		loading: getProgramLoading,
@@ -165,6 +168,25 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 		}
 	};
 
+	const joinProgramHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			if (!programId) return;
+			if (joined) {
+				await leaveProgram({ variables: { programId } });
+				setJoined(false);
+				await sweetTopSmallSuccessAlert('Left program', 800);
+			} else {
+				await joinProgram({ variables: { programId } });
+				setJoined(true);
+				await sweetTopSmallSuccessAlert('Joined program!', 800);
+			}
+			await getProgramRefetch({ programId });
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
 	const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
 		commentInquiry.page = value;
 		setCommentInquiry({ ...commentInquiry });
@@ -232,6 +254,12 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 									</Stack>
 									<Typography>${program?.programPrice?.toLocaleString()}</Typography>
+									<Button
+										className={joined ? 'leave-btn' : 'join-btn'}
+										onClick={joinProgramHandler}
+									>
+										{joined ? 'Leave Program' : 'Join Program'}
+									</Button>
 								</Stack>
 							</Stack>
 							<Stack className={'images'}>
