@@ -31,8 +31,6 @@ const PRICE_FILTERS = [
 const SORT_OPTIONS = [
 	{ label: 'Most Popular', value: 'productViews', direction: 'DESC' },
 	{ label: 'Most Liked', value: 'productLikes', direction: 'DESC' },
-	{ label: 'Price: Low → High', value: 'productPrice', direction: 'ASC' },
-	{ label: 'Price: High → Low', value: 'productPrice', direction: 'DESC' },
 	{ label: 'Newest', value: 'createdAt', direction: 'DESC' },
 ];
 
@@ -112,7 +110,6 @@ const ProductsPage: NextPage = () => {
 				limit: 100,
 				sort: sort.value,
 				direction: sort.direction,
-				productStatus: 'ACTIVE',
 			},
 		},
 		onCompleted: (data: T) => {
