@@ -278,7 +278,12 @@
 					cursor: pointer;
 					transition: background 0.2s;
 
-					&:hover { background: #ff3d39; }
+					&:hover { background: #16a34a; }
+
+					&.enrolled {
+						background: #E92C28;
+						&:hover { background: #c0211e; }
+					}
 				}
 			}
 		}

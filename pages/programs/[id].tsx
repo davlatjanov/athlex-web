@@ -26,6 +26,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import IosShareIcon from '@mui/icons-material/IosShare';
 
 const SAVED_KEY = 'athlex_saved_programs';
+const JOINED_KEY = 'athlex_joined_programs';
 const DAY_LABELS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 export const getServerSideProps = async ({ locale }: any) => ({
@@ -68,9 +69,10 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 			const prog = data?.getOneProgramWithMember;
 			if (prog) {
 				setProgram(prog);
-				setSlideImage(prog.programImages?.[0] ?? '');
-				setInsertCommentData((prev) => ({ ...prev, commentRefId: prog._id }));
-				setCommentInquiry((prev) => ({ ...prev, search: { commentRefId: prog._id } }));
+				// Only set initial values once — skip on every subsequent refetch
+				setSlideImage((prev) => prev || prog.programImages?.[0] || '');
+				setInsertCommentData((prev) => prev.commentRefId ? prev : { ...prev, commentRefId: prog._id });
+				setCommentInquiry((prev) => prev.search.commentRefId ? prev : { ...prev, search: { commentRefId: prog._id } });
 			}
 		},
 	});
@@ -100,11 +102,25 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		}
 	}, [commentInquiry]);
 
+	// Refetch after 400ms so the backend-incremented view count is picked up
+	useEffect(() => {
+		if (!id) return;
+		const t = setTimeout(() => {
+			getProgramRefetch({ programId: id }).then((res) => {
+				const updated = res.data?.getOneProgramWithMember;
+				if (updated) setProgram(updated);
+			}).catch(() => {});
+		}, 400);
+		return () => clearTimeout(t);
+	}, [id]);
+
 	useEffect(() => {
 		if (!id) return;
 		try {
-			const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) ?? '[]');
-			setSaved(list.includes(id as string));
+			const saved: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) ?? '[]');
+			setSaved(saved.includes(id as string));
+			const joined: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
+			setJoined(joined.includes(id as string));
 		} catch {}
 	}, [id]);
 
@@ -113,8 +129,11 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.PROGRAM, likeRefId: program?._id } } });
-			await getProgramRefetch({ programId: id });
-			await sweetTopSmallSuccessAlert('Liked!', 800);
+			getProgramRefetch({ programId: id }).then((res) => {
+				const updated = res.data?.getOneProgramWithMember;
+				if (updated) setProgram(updated);
+			}).catch(() => {});
+			sweetTopSmallSuccessAlert('Liked!', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
@@ -123,18 +142,31 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const joinProgramHandler = async () => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			const programId = program?._id ?? id;
 			if (joined) {
-				await leaveProgram({ variables: { programId: program?._id } });
+				await leaveProgram({ variables: { programId } });
 				setJoined(false);
-				await sweetTopSmallSuccessAlert('Left program', 800);
+				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
+				localStorage.setItem(JOINED_KEY, JSON.stringify(list.filter((i) => i !== id)));
+				sweetTopSmallSuccessAlert('Left program', 800);
 			} else {
-				await joinProgram({ variables: { programId: program?._id } });
+				await joinProgram({ variables: { programId } });
 				setJoined(true);
-				await sweetTopSmallSuccessAlert('Enrolled!', 800);
+				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
+				if (!list.includes(id as string)) localStorage.setItem(JOINED_KEY, JSON.stringify([...list, id]));
+				sweetTopSmallSuccessAlert('Enrolled!', 800);
 			}
-			await getProgramRefetch({ programId: id });
+			getProgramRefetch({ programId: id });
 		} catch (err: any) {
-			sweetMixinErrorAlert(err.message).then();
+			const msg: string = err.message ?? '';
+			// Backend says already joined → silently mark as enrolled
+			if (msg.toLowerCase().includes('already')) {
+				setJoined(true);
+				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
+				if (!list.includes(id as string)) localStorage.setItem(JOINED_KEY, JSON.stringify([...list, id]));
+			} else {
+				sweetMixinErrorAlert(msg).then();
+			}
 		}
 	};
 
@@ -196,26 +228,9 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 	/** Shared UI blocks **/
 	const heroBlock = (
-		<div className="pdp-hero">
-			{slideImage && (
-				<img
-					src={slideImage}
-					alt={program?.programName}
-					className="pdp-hero-bg-img"
-					onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-				/>
-			)}
-			<div className="pdp-hero-overlay" />
-			<div className="pdp-hero-top-actions">
-				<button className={`pdp-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save program">
-					{saved ? <BookmarkIcon fontSize="small" /> : <BookmarkBorderIcon fontSize="small" />}
-				</button>
-				<button className="pdp-action-btn" onClick={shareHandler} title="Share">
-					<IosShareIcon fontSize="small" />
-				</button>
-			</div>
-			<div className="pdp-hero-inner">
-				<Link href="/programs" className="pdp-back">← Programs</Link>
+		<div className="pdp-hero-wrap">
+			<div className="pdp-hero-left">
+				<Link href="/programs" className="pdp-back">← Back to Programs</Link>
 				<div className="pdp-badges">
 					<span className="badge-type">{program?.programType}</span>
 					<span className="badge-level">{program?.programLevel}</span>
@@ -229,17 +244,17 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 					<span className="phm-dot" />
 					<span className="phm-item">{moment(program?.createdAt).fromNow()}</span>
 				</div>
-				<div className="pdp-hero-actions">
-					<div className="pdp-stat">
-						<RemoveRedEyeIcon fontSize="small" />
-						<span>{program?.programViews}</span>
-					</div>
-					<div className="pdp-stat" onClick={likeProgramHandler} style={{ cursor: 'pointer' }}>
-						<FavoriteBorderIcon fontSize="small" />
-						<span>{program?.programLikes}</span>
-					</div>
-				</div>
 			</div>
+			{slideImage && (
+				<div className="pdp-hero-right">
+					<img
+						src={slideImage}
+						alt={program?.programName}
+						className="pdp-hero-img"
+						onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+					/>
+				</div>
+			)}
 		</div>
 	);
 
@@ -398,8 +413,8 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 				<div className="mobile-sticky-cta">
 					<span className="msc-price">{displayPrice}</span>
-					<button className={`msc-btn ${joined ? 'leave' : ''}`} onClick={joinProgramHandler}>
-						{joined ? 'Leave Program' : 'Enroll Now →'}
+					<button className={`msc-btn ${joined ? 'enrolled' : ''}`} onClick={joinProgramHandler}>
+						{joined ? '✓ ENROLLED' : 'Enroll Now →'}
 					</button>
 				</div>
 			</div>
@@ -480,23 +495,28 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 					<div className="enroll-card">
 						<div className="ec-price">{displayPrice}</div>
 
-						<div className="urgency-bar">
-							<div className="ub-item">
-								<span>{program?.programMembers}</span>
-								<span>enrolled</span>
-							</div>
-							<div className="ub-sep" />
-							<div className="ub-item">
+						<div className="ec-actions-row">
+							<div className="ec-action-stat">
+								<RemoveRedEyeIcon fontSize="small" />
 								<span>{program?.programViews}</span>
-								<span>views</span>
 							</div>
+							<button className="ec-action-btn" onClick={likeProgramHandler} title="Like">
+								<FavoriteBorderIcon fontSize="small" />
+								<span>{program?.programLikes}</span>
+							</button>
+							<button className={`ec-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save">
+								{saved ? <BookmarkIcon fontSize="small" /> : <BookmarkBorderIcon fontSize="small" />}
+							</button>
+							<button className="ec-action-btn" onClick={shareHandler} title="Share">
+								<IosShareIcon fontSize="small" />
+							</button>
 						</div>
 
 						<button
-							className={joined ? 'ec-leave-btn' : 'ec-enroll-btn'}
+							className={joined ? 'ec-enrolled-btn' : 'ec-enroll-btn'}
 							onClick={joinProgramHandler}
 						>
-							{joined ? 'Leave Program' : 'Enroll Now →'}
+							{joined ? '✓ ENROLLED' : 'Enroll Now →'}
 						</button>
 
 						<div className="trust-row">

@@ -29,127 +29,122 @@
 			}
 		}
 
-		// ─── HERO ────────────────────────────────────────────────
-		.pdp-hero {
-			position: relative;
-			width: 100%;
-			height: 480px;
+		// ─── HERO (split layout) ───────────────────────────────
+		.pdp-hero-wrap {
+			max-width: 1280px;
+			margin: 0 auto;
+			padding: 40px 32px 48px;
+			display: grid;
+			grid-template-columns: 1fr 480px;
+			gap: 48px;
+			align-items: center;
+		}
+
+		.pdp-hero-left {
 			display: flex;
-			align-items: flex-end;
-			overflow: hidden;
+			flex-direction: column;
+			gap: 14px;
+		}
 
-			.pdp-hero-bg-img {
-				position: absolute;
-				inset: 0;
+		.pdp-hero-right {
+			.pdp-hero-img {
 				width: 100%;
-				height: 100%;
+				height: 360px;
 				object-fit: cover;
-				object-position: center top;
-				filter: blur(20px) brightness(0.2) saturate(0.4);
-				transform: scale(1.06);
-				z-index: 0;
+				object-position: center;
+				border-radius: 12px;
+				display: block;
+				box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+			}
+		}
+
+		.pdp-back {
+			color: #6B7280;
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			text-decoration: none;
+			text-transform: uppercase;
+			transition: color 0.2s;
+			align-self: flex-start;
+			&:hover { color: #fff; }
+		}
+
+		.pdp-badges {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+
+			.badge-type {
+				padding: 4px 12px;
+				background: #E92C28;
+				color: #fff;
+				font-family: $font;
+				font-size: 9px;
+				font-weight: 800;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				border-radius: 3px;
 			}
 
-			.pdp-hero-overlay {
-				position: absolute;
-				inset: 0;
-				background: linear-gradient(
-					to bottom,
-					rgba(0, 0, 0, 0.1) 0%,
-					rgba(0, 0, 0, 0.75) 100%
-				);
-				z-index: 1;
+			.badge-level {
+				padding: 4px 12px;
+				background: rgba(255, 255, 255, 0.06);
+				color: rgba(255, 255, 255, 0.65);
+				font-family: $font;
+				font-size: 9px;
+				font-weight: 700;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				border-radius: 3px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
 			}
 
-			.pdp-hero-inner {
-				position: relative;
-				z-index: 2;
-				width: 100%;
-				max-width: 1280px;
-				margin: 0 auto;
-				padding: 0 32px 28px;
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
+			.pdp-popularity-badge {
+				padding: 4px 10px;
+				background: rgba(251, 191, 36, 0.12);
+				border: 1px solid rgba(251, 191, 36, 0.25);
+				color: #fbbf24;
+				font-family: $font;
+				font-size: 9px;
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				border-radius: 3px;
 			}
+		}
 
-			.pdp-back {
+		.pdp-hero-title {
+			color: #ffffff;
+			font-family: $font;
+			font-size: 44px;
+			font-weight: 900;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			margin: 0;
+			line-height: 1.05;
+		}
+
+		.pdp-hero-meta {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex-wrap: wrap;
+
+			.phm-item {
 				color: rgba(255, 255, 255, 0.5);
 				font-family: $font;
-				font-size: 12px;
-				text-decoration: none;
-				letter-spacing: 0.3px;
-				transition: color 0.2s;
-				align-self: flex-start;
-				margin-bottom: 4px;
-				&:hover { color: #fff; }
+				font-size: 13px;
 			}
 
-			.pdp-badges {
-				display: flex;
-				gap: 8px;
-
-				.badge-type {
-					padding: 3px 10px;
-					background: #E92C28;
-					color: #fff;
-					font-family: $font;
-					font-size: 9px;
-					font-weight: 700;
-					letter-spacing: 1.5px;
-					text-transform: uppercase;
-					border-radius: 3px;
-				}
-
-				.badge-level {
-					padding: 3px 10px;
-					background: rgba(0, 0, 0, 0.45);
-					color: rgba(255, 255, 255, 0.7);
-					font-family: $font;
-					font-size: 9px;
-					font-weight: 700;
-					letter-spacing: 1.5px;
-					text-transform: uppercase;
-					border-radius: 3px;
-					border: 1px solid rgba(255, 255, 255, 0.16);
-				}
-			}
-
-			.pdp-hero-icon {
-				font-size: 40px;
-				line-height: 1;
-			}
-
-			.pdp-hero-title {
-				color: #ffffff;
-				font-family: $font;
-				font-size: 42px;
-				font-weight: 900;
-				letter-spacing: 0.5px;
-				text-transform: uppercase;
-				margin: 0;
-				text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
-				line-height: 1.1;
-			}
-
-			.pdp-hero-meta {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-
-				.phm-item {
-					color: rgba(255, 255, 255, 0.65);
-					font-family: $font;
-					font-size: 13px;
-				}
-
-				.phm-dot {
-					width: 3px;
-					height: 3px;
-					border-radius: 50%;
-					background: rgba(255, 255, 255, 0.25);
-					flex-shrink: 0;
-				}
+			.phm-dot {
+				width: 3px;
+				height: 3px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.2);
+				flex-shrink: 0;
 			}
 		}
 
@@ -178,29 +173,29 @@
 			gap: 10px;
 
 			.stat-pill {
-				background: #111111;
-				border: 1px solid rgba(255, 255, 255, 0.07);
-				border-radius: 10px;
-				padding: 16px 12px;
+				background: linear-gradient(135deg, #1F2937 0%, #1a2332 100%);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 12px;
+				padding: 20px 12px;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				gap: 5px;
-				transition: border-color 0.2s;
-				&:hover { border-color: rgba(233, 44, 40, 0.25); }
+				transition: all 0.25s;
+				&:hover { border-color: rgba(34, 197, 94, 0.4); transform: translateY(-2px); }
 
 				.sp-icon { font-size: 20px; }
 
 				.sp-val {
-					color: #ffffff;
+					color: #22C55E;
 					font-family: $font;
-					font-size: 22px;
+					font-size: 24px;
 					font-weight: 900;
 					line-height: 1;
 				}
 
 				.sp-lbl {
-					color: #444444;
+					color: #6B7280;
 					font-family: $font;
 					font-size: 9px;
 					font-weight: 700;
@@ -214,19 +209,25 @@
 		.pdp-section {
 			display: flex;
 			flex-direction: column;
-			gap: 14px;
+			gap: 16px;
+			background: #1F2937;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			border-radius: 12px;
+			padding: 24px;
+			transition: border-color 0.25s;
+			&:hover { border-color: rgba(34, 197, 94, 0.2); }
 		}
 
 		.pdp-section-title {
 			color: #ffffff;
 			font-family: $font;
-			font-size: 12px;
+			font-size: 13px;
 			font-weight: 800;
 			letter-spacing: 1.5px;
 			text-transform: uppercase;
 			margin: 0;
 			padding-left: 12px;
-			border-left: 3px solid #E92C28;
+			border-left: 3px solid #22C55E;
 		}
 
 		// ─── MUSCLE CHIPS ────────────────────────────────────────
@@ -237,9 +238,9 @@
 
 			.muscle-chip {
 				padding: 5px 12px;
-				background: rgba(233, 44, 40, 0.07);
-				border: 1px solid rgba(233, 44, 40, 0.2);
-				color: #E92C28;
+				background: rgba(34, 197, 94, 0.07);
+				border: 1px solid rgba(34, 197, 94, 0.2);
+				color: #22C55E;
 				font-family: $font;
 				font-size: 10px;
 				font-weight: 700;
@@ -259,7 +260,7 @@
 				display: flex;
 				align-items: center;
 				gap: 10px;
-				color: #888888;
+				color: #D1D5DB;
 				font-family: $font;
 				font-size: 13px;
 
@@ -267,7 +268,7 @@
 					width: 5px;
 					height: 5px;
 					border-radius: 50%;
-					background: #E92C28;
+					background: #22C55E;
 					flex-shrink: 0;
 				}
 			}
@@ -294,12 +295,12 @@
 				}
 
 				&.is-rest {
-					background: #0f0f0f;
-					border: 1px solid rgba(255, 255, 255, 0.04);
+					background: #111827;
+					border: 1px solid rgba(255, 255, 255, 0.06);
 				}
 
 				.wd-name {
-					color: #3a3a3a;
+					color: #374151;
 					font-family: $font;
 					font-size: 9px;
 					font-weight: 700;
@@ -317,7 +318,7 @@
 					line-height: 1.3;
 				}
 
-				&.is-rest .wd-label { color: #2a2a2a; }
+				&.is-rest .wd-label { color: #1F2937; }
 
 				.wd-muscles {
 					color: #22C55E;
@@ -330,7 +331,7 @@
 		}
 
 		.week-note {
-			color: #333333;
+			color: #374151;
 			font-family: $font;
 			font-size: 11px;
 			margin: 0;
@@ -348,8 +349,8 @@
 				align-items: center;
 				gap: 12px;
 				padding: 9px 12px;
-				background: #111111;
-				border: 1px solid rgba(255, 255, 255, 0.05);
+				background: #1F2937;
+				border: 1px solid rgba(255, 255, 255, 0.08);
 				border-radius: 7px;
 
 				&:nth-child(even) {
@@ -381,7 +382,7 @@
 				}
 
 				.pr-name {
-					color: #888888;
+					color: #9CA3AF;
 					font-family: $font;
 					font-size: 12px;
 					font-weight: 600;
@@ -389,7 +390,7 @@
 				}
 
 				.pr-sess {
-					color: #333333;
+					color: #374151;
 					font-family: $font;
 					font-size: 11px;
 					text-align: right;
@@ -419,8 +420,8 @@
 			flex-direction: column;
 			gap: 7px;
 			padding: 14px 16px;
-			background: #111111;
-			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: #1F2937;
+			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 8px;
 
 			.rbar-row {
@@ -452,7 +453,7 @@
 				}
 
 				.rbar-pct {
-					color: #444444;
+					color: #4B5563;
 					font-family: $font;
 					font-size: 11px;
 					width: 28px;
@@ -468,8 +469,8 @@
 			gap: 10px;
 
 			.review-card {
-				background: #111111;
-				border: 1px solid rgba(255, 255, 255, 0.06);
+				background: #1F2937;
+				border: 1px solid rgba(255, 255, 255, 0.08);
 				border-radius: 9px;
 				padding: 16px;
 				display: flex;
@@ -511,7 +512,7 @@
 						}
 
 						.rc-date {
-							color: #444444;
+							color: #4B5563;
 							font-family: $font;
 							font-size: 11px;
 						}
@@ -524,7 +525,7 @@
 				}
 
 				.rc-text {
-					color: #666666;
+					color: #9CA3AF;
 					font-family: $font;
 					font-size: 12px;
 					line-height: 1.6;
@@ -533,26 +534,6 @@
 			}
 		}
 
-		// ─── HERO ACTIONS ────────────────────────────────────────
-		.pdp-hero-actions {
-			display: flex;
-			align-items: center;
-			gap: 16px;
-			margin-top: 4px;
-
-			.pdp-stat {
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				color: rgba(255, 255, 255, 0.6);
-				font-family: $font;
-				font-size: 13px;
-
-				svg { opacity: 0.7; }
-
-				&:hover { color: rgba(255, 255, 255, 0.9); }
-			}
-		}
 
 		// ─── IMAGE GALLERY ────────────────────────────────────────
 		.pdp-gallery {
@@ -571,7 +552,7 @@
 				transition: all 0.2s;
 
 				&.active {
-					border-color: #E92C28;
+					border-color: #22C55E;
 					opacity: 1;
 				}
 
@@ -581,10 +562,10 @@
 
 		// ─── DESCRIPTION ─────────────────────────────────────────
 		.pdp-desc {
-			color: #888888;
+			color: #9CA3AF;
 			font-family: $font;
-			font-size: 14px;
-			line-height: 1.75;
+			font-size: 15px;
+			line-height: 1.8;
 			margin: 0;
 		}
 
@@ -594,8 +575,8 @@
 			align-items: center;
 			gap: 14px;
 			padding: 16px;
-			background: #111111;
-			border: 1px solid rgba(255, 255, 255, 0.07);
+			background: #1F2937;
+			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 10px;
 
 			.et-avatar-img {
@@ -603,7 +584,7 @@
 				height: 52px;
 				border-radius: 50%;
 				object-fit: cover;
-				border: 2px solid rgba(233, 44, 40, 0.25);
+				border: 2px solid rgba(34, 197, 94, 0.3);
 				flex-shrink: 0;
 			}
 
@@ -639,7 +620,7 @@
 		.pdp-review-input {
 			width: 100%;
 			padding: 12px 14px;
-			background: #111111;
+			background: #1F2937;
 			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 8px;
 			color: #ffffff;
@@ -651,7 +632,7 @@
 			transition: border-color 0.2s;
 			box-sizing: border-box;
 
-			&::placeholder { color: #444444; }
+			&::placeholder { color: #4B5563; }
 			&:focus { border-color: rgba(233, 44, 40, 0.4); }
 		}
 
@@ -662,7 +643,7 @@
 		}
 
 		.enroll-card {
-			background: #111111;
+			background: #1F2937;
 			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 12px;
 			padding: 24px 20px;
@@ -678,7 +659,59 @@
 				line-height: 1;
 			}
 
+			.ec-actions-row {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+
+				.ec-action-stat {
+					display: flex;
+					align-items: center;
+					gap: 5px;
+					color: #555555;
+					font-family: $font;
+					font-size: 12px;
+					flex: 1;
+					svg { color: #555555; }
+				}
+
+				.ec-action-btn {
+					display: flex;
+					align-items: center;
+					gap: 5px;
+					background: transparent;
+					border: 1px solid #1e1e1e;
+					border-radius: 6px;
+					color: #555555;
+					font-family: $font;
+					font-size: 12px;
+					padding: 7px 10px;
+					cursor: pointer;
+					transition: all 0.15s;
+					svg { font-size: 16px; }
+					&:hover { border-color: #333; color: #888; }
+					&.saved { color: #E92C28; border-color: rgba(233, 44, 40, 0.3); }
+				}
+			}
+
 			.ec-enroll-btn {
+				width: 100%;
+				padding: 14px;
+				background: #22C55E;
+				border: none;
+				border-radius: 8px;
+				color: #ffffff;
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 800;
+				letter-spacing: 0.3px;
+				cursor: pointer;
+				transition: background 0.2s;
+				&:hover { background: #16a34a; }
+				&:disabled { opacity: 0.5; cursor: not-allowed; }
+			}
+
+			.ec-enrolled-btn {
 				width: 100%;
 				padding: 14px;
 				background: #E92C28;
@@ -692,7 +725,6 @@
 				cursor: pointer;
 				transition: background 0.2s;
 				&:hover { background: #c0211e; }
-				&:disabled { opacity: 0.5; cursor: not-allowed; }
 			}
 
 			.ec-leave-btn {
@@ -722,7 +754,7 @@
 					align-items: center;
 
 					.ec-row-label {
-						color: #444444;
+						color: #4B5563;
 						font-family: $font;
 						font-size: 12px;
 					}
@@ -742,7 +774,7 @@
 			}
 
 			.ec-section-label {
-				color: #333333;
+				color: #374151;
 				font-family: $font;
 				font-size: 10px;
 				font-weight: 700;
@@ -758,7 +790,7 @@
 				.equip-tag {
 					padding: 4px 9px;
 					background: #1F2937;
-					border: 1px solid rgba(255, 255, 255, 0.07);
+					border: 1px solid rgba(255, 255, 255, 0.08);
 					color: #777777;
 					font-family: $font;
 					font-size: 11px;
@@ -812,7 +844,7 @@
 						margin-top: 3px;
 
 						span {
-							color: #444444;
+							color: #4B5563;
 							font-family: $font;
 							font-size: 11px;
 						}
@@ -843,41 +875,6 @@
 			}
 		}
 
-		// ─── HERO TOP ACTIONS (save / share) ─────────────────────
-		.pdp-hero-top-actions {
-			position: absolute;
-			top: 28px;
-			right: 32px;
-			z-index: 3;
-			display: flex;
-			gap: 10px;
-		}
-
-		.pdp-action-btn {
-			width: 40px;
-			height: 40px;
-			border-radius: 50%;
-			background: rgba(0, 0, 0, 0.55);
-			backdrop-filter: blur(8px);
-			border: 1px solid rgba(255, 255, 255, 0.14);
-			color: rgba(255, 255, 255, 0.8);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			transition: all 0.2s;
-
-			&:hover {
-				background: rgba(0, 0, 0, 0.8);
-				border-color: rgba(255, 255, 255, 0.3);
-				color: #ffffff;
-			}
-
-			&.saved {
-				color: #E92C28;
-				border-color: rgba(233, 44, 40, 0.4);
-			}
-		}
 
 		// ─── POPULARITY BADGE ─────────────────────────────────────
 		.pdp-popularity-badge {
@@ -901,8 +898,8 @@
 			align-items: center;
 			gap: 0;
 			padding: 10px 14px;
-			background: rgba(233, 44, 40, 0.05);
-			border: 1px solid rgba(233, 44, 40, 0.12);
+			background: rgba(34, 197, 94, 0.04);
+			border: 1px solid rgba(34, 197, 94, 0.1);
 			border-radius: 8px;
 
 			.ub-item {
@@ -944,6 +941,7 @@
 			gap: 7px;
 
 			.trust-item {
+				&::before { content: "✓"; color: #22C55E; margin-right: 8px; font-weight: 700; }
 				display: flex;
 				align-items: center;
 				gap: 8px;
@@ -967,7 +965,7 @@
 			background: transparent;
 			border: 1px solid rgba(255, 255, 255, 0.12);
 			border-radius: 7px;
-			color: #888888;
+			color: #9CA3AF;
 			font-family: $font;
 			font-size: 13px;
 			font-weight: 600;
@@ -991,7 +989,7 @@
 			padding: 8px 16px;
 			border: 1px solid rgba(255, 255, 255, 0.1);
 			border-radius: 6px;
-			color: #666666;
+			color: #6B7280;
 			font-family: $font;
 			font-size: 12px;
 			font-weight: 600;
@@ -1055,21 +1053,21 @@
 	#program-detail-page {
 		padding-top: 72px;
 
-		.pdp-hero {
-			height: 280px;
+		.pdp-hero-wrap {
+			grid-template-columns: 1fr;
+			padding: 24px 16px 28px;
+			gap: 20px;
+		}
 
-			.pdp-hero-inner {
-				padding: 0 16px 20px;
+		.pdp-hero-right {
+			.pdp-hero-img {
+				height: 220px;
+				border-radius: 10px;
 			}
+		}
 
-			.pdp-hero-title {
-				font-size: 26px;
-			}
-
-			.pdp-hero-top-actions {
-				top: 16px;
-				right: 16px;
-			}
+		.pdp-hero-title {
+			font-size: 26px;
 		}
 
 		.pdp-body {
@@ -1108,7 +1106,7 @@
 			.msc-btn {
 				flex: 1;
 				padding: 14px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 8px;
 				color: #ffffff;
@@ -1118,12 +1116,11 @@
 				cursor: pointer;
 				text-align: center;
 
-				&:hover { background: #c0211e; }
+				&:hover { background: #16a34a; }
 
-				&.leave {
-					background: transparent;
-					border: 1px solid rgba(233, 44, 40, 0.4);
-					color: #E92C28;
+				&.enrolled {
+					background: #E92C28;
+					&:hover { background: #c0211e; }
 				}
 			}
 		}
