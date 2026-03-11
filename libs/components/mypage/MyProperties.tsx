@@ -16,7 +16,7 @@ import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
 const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const [searchFilter, setSearchFilter] = useState<any>(initialInput);
-	const [agentProperties, setAgentProperties] = useState<Program[]>([]);
+	const [myPrograms, setAgentProperties] = useState<Program[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
@@ -49,7 +49,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 		setSearchFilter({ ...searchFilter, search: { programStatus: value } });
 	};
 
-	const deletePropertyHandler = async (id: string) => {
+	const deleteProgramHandler = async (id: string) => {
 		try {
 			if (await sweetConfirmAlert('are you sure to delete this program?')) {
 				await deleteProgram({
@@ -62,7 +62,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 		}
 	};
 
-	const updatePropertyHandler = async (status: string, id: string) => {
+	const updateProgramHandler = async (status: string, id: string) => {
 		try {
 			if (await sweetConfirmAlert(`are you sure to change to ${status} status?`)) {
 				await updateProgram({
@@ -119,25 +119,25 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 							)}
 						</Stack>
 
-						{agentProperties?.length === 0 ? (
+						{myPrograms?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
 								<p>No programs found yet.</p>
 							</div>
 						) : (
-							agentProperties.map((program: Program) => {
+							myPrograms.map((program: Program) => {
 								return (
 									<PropertyCard
-										property={program}
-										deletePropertyHandler={deletePropertyHandler}
-										updatePropertyHandler={updatePropertyHandler}
+										program={program}
+										deleteProgramHandler={deleteProgramHandler}
+										updateProgramHandler={updateProgramHandler}
 										key={program._id}
 									/>
 								);
 							})
 						)}
 
-						{agentProperties.length !== 0 && (
+						{myPrograms.length !== 0 && (
 							<Stack className="pagination-config">
 								<Stack className="pagination-box">
 									<Pagination

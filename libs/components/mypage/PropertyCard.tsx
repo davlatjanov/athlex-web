@@ -9,29 +9,29 @@ import Moment from 'react-moment';
 import { useRouter } from 'next/router';
 import { ProgramStatus } from '../../enums/training-program.enum';
 
-interface PropertyCardProps {
-	property: Program;
-	deletePropertyHandler?: any;
+interface ProgramCardProps {
+	program: Program;
+	deleteProgramHandler?: any;
 	memberPage?: boolean;
-	updatePropertyHandler?: any;
+	updateProgramHandler?: any;
 }
 
-export const PropertyCard = (props: PropertyCardProps) => {
-	const { property: program, deletePropertyHandler, memberPage, updatePropertyHandler } = props;
+export const PropertyCard = (props: ProgramCardProps) => {
+	const { program, deleteProgramHandler, memberPage, updateProgramHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 
 	/** HANDLERS **/
-	const pushEditProperty = async (id: string) => {
+	const pushEditProgram = async (id: string) => {
 		await router.push({
 			pathname: '/mypage',
 			query: { category: 'addProperty', propertyId: id },
 		});
 	};
 
-	const pushPropertyDetail = async (id: string) => {
+	const pushProgramDetail = async (id: string) => {
 		if (memberPage)
 			await router.push({
 				pathname: '/programs/detail',
@@ -53,10 +53,10 @@ export const PropertyCard = (props: PropertyCardProps) => {
 	} else
 		return (
 			<Stack className="property-card-box">
-				<Stack className="image-box" onClick={() => pushPropertyDetail(program?._id)}>
+				<Stack className="image-box" onClick={() => pushProgramDetail(program?._id)}>
 					<img src={program?.programImages?.[0] || '/img/banner/header1.svg'} alt="" />
 				</Stack>
-				<Stack className="information-box" onClick={() => pushPropertyDetail(program?._id)}>
+				<Stack className="information-box" onClick={() => pushProgramDetail(program?._id)}>
 					<Typography className="name">{program?.programName}</Typography>
 					<Typography className="address">{program?.programType}</Typography>
 					<Typography className="price">
@@ -102,7 +102,7 @@ export const PropertyCard = (props: PropertyCardProps) => {
 									disableRipple
 									onClick={() => {
 										handleClose();
-										updatePropertyHandler(ProgramStatus.ARCHIVED, program?._id);
+										updateProgramHandler(ProgramStatus.ARCHIVED, program?._id);
 									}}
 								>
 									Archive
@@ -117,10 +117,10 @@ export const PropertyCard = (props: PropertyCardProps) => {
 				</Stack>
 				{!memberPage && program?.programStatus === ProgramStatus.ACTIVE && (
 					<Stack className="action-box">
-						<IconButton className="icon-button" onClick={() => pushEditProperty(program._id)}>
+						<IconButton className="icon-button" onClick={() => pushEditProgram(program._id)}>
 							<ModeIcon className="buttons" />
 						</IconButton>
-						<IconButton className="icon-button" onClick={() => deletePropertyHandler(program._id)}>
+						<IconButton className="icon-button" onClick={() => deleteProgramHandler(program._id)}>
 							<DeleteIcon className="buttons" />
 						</IconButton>
 					</Stack>
