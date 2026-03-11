@@ -10,7 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { userVar } from '../../../apollo/store';
 import { T } from '../../types/common';
-import { GET_MEMBER_FOLLOWERS } from '../../../apollo/user/query';
+import { GET_FOLLOWERS } from '../../../apollo/user/query';
 
 interface MemberFollowsProps {
 	initialInput?: FollowInquiry;
@@ -42,18 +42,18 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 
 	/** APOLLO REQUESTS **/
 	const {
-		loading: getMemberFollowersLoading,
-		data: getMemberFollowersData,
-		error: getMemberFollowersError,
-		refetch: getMemberFollowersRefetch,
-	} = useQuery(GET_MEMBER_FOLLOWERS, {
+		loading: getFollowersLoading,
+		data: getFollowersData,
+		error: getFollowersError,
+		refetch: getFollowersRefetch,
+	} = useQuery(GET_FOLLOWERS, {
 		fetchPolicy: 'network-only',
 		variables: { input: followInquiry },
 		skip: !followInquiry?.search?.followingId,
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setMemberFollowers(data?.getMemberFollowers?.list);
-			setTotal(data?.getMemberFollowers?.metaCounter[0]?.total);
+			setMemberFollowers(data?.getFollowers?.list);
+			setTotal(data?.getFollowers?.metaCounter[0]?.total);
 		},
 	});
 
@@ -65,7 +65,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 	}, [router]);
 
 	useEffect(() => {
-		getMemberFollowersRefetch({ input: followInquiry }).then();
+		getFollowersRefetch({ input: followInquiry }).then();
 	}, [followInquiry]);
 
 	/** HANDLERS **/
@@ -124,13 +124,13 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 											<FavoriteIcon
 												color="primary"
 												onClick={() =>
-													likeMemberHandler(follower?.followerData?._id, getMemberFollowersRefetch, followInquiry)
+													likeMemberHandler(follower?.followerData?._id, getFollowersRefetch, followInquiry)
 												}
 											/>
 										) : (
 											<FavoriteBorderIcon
 												onClick={() =>
-													likeMemberHandler(follower?.followerData?._id, getMemberFollowersRefetch, followInquiry)
+													likeMemberHandler(follower?.followerData?._id, getFollowersRefetch, followInquiry)
 												}
 											/>
 										)}
@@ -146,7 +146,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 													variant="outlined"
 													sx={{ background: '#ed5858', ':hover': { background: '#ee7171' } }}
 													onClick={() =>
-														unsubscribeHandler(follower?.followerData?._id, getMemberFollowersRefetch, followInquiry)
+														unsubscribeHandler(follower?.followerData?._id, getFollowersRefetch, followInquiry)
 													}
 												>
 													Unfollow
@@ -157,7 +157,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 												variant="contained"
 												sx={{ background: '#60eb60d4', ':hover': { background: '#60eb60d4' } }}
 												onClick={() =>
-													subscribeHandler(follower?.followerData?._id, getMemberFollowersRefetch, followInquiry)
+													subscribeHandler(follower?.followerData?._id, getFollowersRefetch, followInquiry)
 												}
 											>
 												Follow

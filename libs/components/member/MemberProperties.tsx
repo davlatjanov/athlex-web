@@ -76,7 +76,7 @@ const MemberProperties: NextPage = ({ initialInput, ...props }: any) => {
 							</div>
 						)}
 						{agentProperties?.map((program: Program) => {
-							return <PropertyCard property={program} memberPage={true} key={program?._id} />;
+							return <PropertyCard program={program} memberPage={true} key={program?._id} />;
 						})}
 
 						{agentProperties.length !== 0 && (

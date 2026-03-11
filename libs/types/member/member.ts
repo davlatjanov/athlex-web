@@ -27,6 +27,8 @@ export interface Member {
 	createdAt: Date;
 	updatedAt: Date;
 	accessToken?: string;
+	/** from aggregation **/
+	meFollowed?: { myFollowing: boolean }[];
 }
 
 export interface Members {
