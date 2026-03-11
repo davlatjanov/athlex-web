@@ -17,12 +17,13 @@ import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { GET_COMMENTS, GET_PROGRAMS, GET_ONE_PROGRAM_WITH_MEMBER } from '../../apollo/user/query';
+import { GET_COMMENTS, GET_PROGRAMS, GET_ONE_PROGRAM_WITH_MEMBER, GET_FEEDBACKS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM } from '../../apollo/user/mutation';
+import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM, CREATE_FEEDBACK } from '../../apollo/user/mutation';
 import ProgramCard from '../../libs/components/homepage/ProgramCard';
+import { Feedback, FeedbackGroup } from '../../libs/types/feedback/feedback';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -60,12 +61,18 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 		commentContent: '',
 		commentRefId: '',
 	});
+	const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+	const [feedbackTotal, setFeedbackTotal] = useState<number>(0);
+	const [newFeedbackScale, setNewFeedbackScale] = useState<number>(0);
+	const [hoverStar, setHoverStar] = useState<number>(0);
+	const [newFeedbackContent, setNewFeedbackContent] = useState<string>('');
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 	const [createComment] = useMutation(CREATE_COMMENT);
 	const [joinProgram] = useMutation(JOIN_PROGRAM);
 	const [leaveProgram] = useMutation(LEAVE_PROGRAM);
+	const [createFeedback] = useMutation(CREATE_FEEDBACK);
 
 	const { loading: getProgramLoading, refetch: getProgramRefetch } = useQuery(GET_ONE_PROGRAM_WITH_MEMBER, {
 		fetchPolicy: 'network-only',
@@ -96,6 +103,23 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
 			if (data?.getPrograms?.list) setSimilarPrograms(data?.getPrograms?.list);
+		},
+	});
+
+	const { refetch: getFeedbacksRefetch } = useQuery(GET_FEEDBACKS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: {
+				page: 1,
+				limit: 100,
+				search: { feedbackRefId: programId ?? '', feedbackGroup: FeedbackGroup.TRAINING_PROGRAM },
+			},
+		},
+		skip: !programId,
+		notifyOnNetworkStatusChange: true,
+		onCompleted: (data: T) => {
+			if (data?.getFeedbacks?.list) setFeedbacks(data.getFeedbacks.list);
+			setFeedbackTotal(data?.getFeedbacks?.metaCounter[0]?.total ?? 0);
 		},
 	});
 
@@ -160,6 +184,29 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 				await sweetTopSmallSuccessAlert('Joined!', 800);
 			}
 			await getProgramRefetch({ programId });
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
+	const createFeedbackHandler = async () => {
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			if (!programId || newFeedbackScale === 0) return;
+			await createFeedback({
+				variables: {
+					input: {
+						feedbackRefId: programId,
+						feedbackGroup: FeedbackGroup.TRAINING_PROGRAM,
+						feedbackScale: newFeedbackScale,
+						feedbackContent: newFeedbackContent,
+					},
+				},
+			});
+			setNewFeedbackScale(0);
+			setNewFeedbackContent('');
+			await getFeedbacksRefetch();
+			await sweetTopSmallSuccessAlert('Rating submitted!', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
@@ -330,6 +377,75 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 							</div>
 						</div>
 					)}
+
+					{/* Ratings */}
+					<div className="pdp-section">
+						<div className="reviews-head">
+							<h3 className="pdp-section-title">Ratings</h3>
+							{feedbackTotal > 0 && (
+								<span className="reviews-count">
+									{'★'.repeat(Math.round(feedbacks.reduce((s, f) => s + f.feedbackScale, 0) / feedbacks.length))}
+									{' '}({feedbackTotal})
+								</span>
+							)}
+						</div>
+
+						{feedbacks.length > 0 && (
+							<div className="review-cards" style={{ marginBottom: 16 }}>
+								{feedbacks.map((fb: Feedback) => (
+									<div className="review-card" key={fb._id}>
+										<div className="rc-head">
+											<div className="rc-avatar">{fb.memberData?.memberNick?.[0]?.toUpperCase() ?? '?'}</div>
+											<div className="rc-meta">
+												<span className="rc-name">{fb.memberData?.memberNick ?? 'Member'}</span>
+												<span className="rc-date">{moment(fb.createdAt).format('MMM DD, YYYY')}</span>
+											</div>
+											<span style={{ color: '#f59e0b', fontSize: 16, marginLeft: 'auto' }}>
+												{'★'.repeat(fb.feedbackScale)}{'☆'.repeat(5 - fb.feedbackScale)}
+											</span>
+										</div>
+										{fb.feedbackContent && <p className="rc-text">{fb.feedbackContent}</p>}
+									</div>
+								))}
+							</div>
+						)}
+
+						<div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+							<div style={{ display: 'flex', gap: 6 }}>
+								{[1, 2, 3, 4, 5].map((star) => (
+									<span
+										key={star}
+										onClick={() => user._id && setNewFeedbackScale(star)}
+										onMouseEnter={() => user._id && setHoverStar(star)}
+										onMouseLeave={() => setHoverStar(0)}
+										style={{
+											fontSize: 28,
+											cursor: user._id ? 'pointer' : 'default',
+											color: star <= (hoverStar || newFeedbackScale) ? '#f59e0b' : '#4b5563',
+											transition: 'color 0.15s',
+										}}
+									>
+										★
+									</span>
+								))}
+							</div>
+							<textarea
+								className="pdp-review-input"
+								rows={3}
+								placeholder={user._id ? 'Optional comment…' : 'Login to leave a rating'}
+								value={newFeedbackContent}
+								onChange={(e) => setNewFeedbackContent(e.target.value)}
+								disabled={!user._id}
+							/>
+							<button
+								className="pdp-submit-btn"
+								disabled={!user._id || newFeedbackScale === 0}
+								onClick={createFeedbackHandler}
+							>
+								Submit Rating
+							</button>
+						</div>
+					</div>
 
 					{/* Reviews */}
 					<div className="pdp-section">

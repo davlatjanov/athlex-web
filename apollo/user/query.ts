@@ -430,3 +430,166 @@ export const GET_MY_BOOKMARKS = gql`
 		}
 	}
 `;
+
+/**************************
+ *        FEEDBACK        *
+ *************************/
+
+export const GET_FEEDBACKS = gql`
+	query GetFeedbacks($input: FeedbackInquiry!) {
+		getFeedbacks(input: $input) {
+			list {
+				_id
+				feedbackContent
+				feedbackScale
+				feedbackGroup
+				feedbackRefId
+				memberId
+				memberData {
+					_id
+					memberNick
+					memberImage
+				}
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *     PROGRESS RESULT    *
+ *************************/
+
+export const GET_PROGRESS_RESULTS = gql`
+	query GetProgressResults($input: ProgressResultInquiry!) {
+		getProgressResults(input: $input) {
+			list {
+				_id
+				memberId
+				programId
+				trainerId
+				images
+				content
+				status
+				memberData {
+					_id
+					memberNick
+					memberImage
+					memberType
+				}
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_MY_PROGRESS_RESULTS = gql`
+	query GetMyProgressResults($input: ProgressResultInquiry!) {
+		getMyProgressResults(input: $input) {
+			list {
+				_id
+				memberId
+				programId
+				trainerId
+				images
+				content
+				status
+				memberData {
+					_id
+					memberNick
+					memberImage
+					memberType
+				}
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
+ *     WORKOUT/EXERCISE   *
+ *************************/
+
+export const GET_WORKOUTS_BY_PROGRAM = gql`
+	query GetWorkoutsByProgram($programId: String!) {
+		getWorkoutsByProgram(programId: $programId) {
+			_id
+			workoutName
+			workoutDesc
+			workoutDay
+			workoutDuration
+			bodyParts
+			isRestDay
+			exercises {
+				_id
+				exerciseName
+				exerciseDesc
+				primaryMuscle
+				secondaryMuscles
+				sets
+				reps
+				restTime
+				equipment
+				difficulty
+				orderInWorkout
+			}
+			createdAt
+		}
+	}
+`;
+
+/**************************
+ *           AI           *
+ *************************/
+
+export const ASK_AI = gql`
+	query AskAI($input: AskAIInput!) {
+		askAI(input: $input) {
+			answer
+			conversationId
+			timestamp
+		}
+	}
+`;
+
+export const GET_MY_CONVERSATIONS = gql`
+	query GetMyConversations {
+		getMyConversations {
+			_id
+			topic
+			messages {
+				role
+				content
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const GET_CONVERSATION = gql`
+	query GetConversation($conversationId: String!) {
+		getConversation(conversationId: $conversationId) {
+			_id
+			topic
+			messages {
+				role
+				content
+			}
+			createdAt
+			updatedAt
+		}
+	}
+`;

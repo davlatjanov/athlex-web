@@ -279,3 +279,100 @@ export const FOLLOW_MEMBER = gql`
 		}
 	}
 `;
+
+/**************************
+ *        FEEDBACK        *
+ *************************/
+
+export const CREATE_FEEDBACK = gql`
+	mutation CreateFeedback($input: FeedbackInput!) {
+		createFeedback(input: $input) {
+			_id
+			feedbackContent
+			feedbackScale
+			feedbackGroup
+			feedbackRefId
+			memberId
+			createdAt
+		}
+	}
+`;
+
+export const UPDATE_FEEDBACK = gql`
+	mutation UpdateFeedback($input: FeedbackUpdate!) {
+		updateFeedback(input: $input) {
+			_id
+			feedbackContent
+			feedbackScale
+			feedbackGroup
+			feedbackRefId
+			memberId
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
+export const DELETE_FEEDBACK = gql`
+	mutation DeleteFeedback($feedbackId: String!) {
+		deleteFeedback(feedbackId: $feedbackId) {
+			_id
+			feedbackContent
+			memberId
+		}
+	}
+`;
+
+/**************************
+ *     PROGRESS RESULT    *
+ *************************/
+
+export const CREATE_PROGRESS_RESULT = gql`
+	mutation CreateProgressResult($input: ProgressResultInput!) {
+		createProgressResult(input: $input) {
+			_id
+			memberId
+			programId
+			trainerId
+			images
+			content
+			status
+			createdAt
+		}
+	}
+`;
+
+export const UPDATE_PROGRESS_RESULT = gql`
+	mutation UpdateProgressResult($input: ProgressResultUpdate!) {
+		updateProgressResult(input: $input) {
+			_id
+			content
+			images
+			status
+			updatedAt
+		}
+	}
+`;
+
+export const DELETE_PROGRESS_RESULT = gql`
+	mutation DeleteProgressResult($progressResultId: String!) {
+		deleteProgressResult(progressResultId: $progressResultId) {
+			_id
+			status
+		}
+	}
+`;
+
+/**************************
+ *           AI           *
+ *************************/
+
+export const CHAT_WITH_AI = gql`
+	mutation ChatWithAI($input: ChatAIInput!) {
+		chatWithAI(input: $input) {
+			answer
+			conversationId
+			timestamp
+		}
+	}
+`;

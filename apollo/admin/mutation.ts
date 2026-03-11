@@ -105,3 +105,45 @@ export const REMOVE_COMMENT_BY_ADMIN = gql`
 		}
 	}
 `;
+
+/**************************
+ *        PROGRAM         *
+ *************************/
+
+export const UPDATE_PROGRAM_BY_ADMIN = gql`
+	mutation UpdateProgram($programId: String!, $input: ProgramUpdate!) {
+		updateProgram(programId: $programId, input: $input) {
+			_id
+			programName
+			programStatus
+			updatedAt
+		}
+	}
+`;
+
+/**************************
+ *        FEEDBACK        *
+ *************************/
+
+export const DELETE_FEEDBACK_BY_ADMIN = gql`
+	mutation DeleteFeedbackByAdmin($feedbackId: String!) {
+		deleteFeedbackByAdmin(feedbackId: $feedbackId) {
+			_id
+			feedbackContent
+			memberId
+		}
+	}
+`;
+
+/**************************
+ *     PROGRESS RESULT    *
+ *************************/
+
+export const DELETE_PROGRESS_RESULT_BY_ADMIN = gql`
+	mutation DeleteProgressResultByAdmin($progressResultId: String!) {
+		deleteProgressResultByAdmin(progressResultId: $progressResultId) {
+			_id
+			status
+		}
+	}
+`;

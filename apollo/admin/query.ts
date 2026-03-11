@@ -70,6 +70,42 @@ export const GET_ALL_PRODUCTS_BY_ADMIN = gql`
 `;
 
 /**************************
+ *        PROGRAM         *
+ *************************/
+
+export const GET_ALL_PROGRAMS_BY_ADMIN = gql`
+	query GetAllProgramsByAdmin($input: ProgramInquiry!) {
+		getAllProgramsByAdmin(input: $input) {
+			list {
+				_id
+				programName
+				programType
+				programLevel
+				programStatus
+				programPrice
+				programDuration
+				programViews
+				programLikes
+				programMembers
+				programComments
+				programRank
+				memberId
+				memberData {
+					_id
+					memberNick
+					memberImage
+				}
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
  *         COMMENT        *
  *************************/
 

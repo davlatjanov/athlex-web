@@ -10,6 +10,7 @@ import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
 import AddProperty from '../../libs/components/mypage/AddNewProperty';
 import MyProfile from '../../libs/components/mypage/MyProfile';
+import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import MemberFollowers from '../../libs/components/member/MemberFollowers';
@@ -39,6 +40,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 const USER_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
@@ -49,6 +51,7 @@ const AGENT_TABS = [
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
 	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
@@ -59,6 +62,7 @@ const ADMIN_TABS = [
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
 	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
@@ -264,6 +268,7 @@ const MyPage: NextPage = () => {
 						{category === 'addProperty' && <AddProperty />}
 						{category === 'myProperties' && <MyProperties />}
 						{category === 'myFavorites' && <MyFavorites />}
+						{category === 'myProgress' && <MyProgressResults />}
 						{category === 'recentlyVisited' && <RecentlyVisited />}
 						{category === 'myProfile' && <MyProfile />}
 						{category === 'followers' && u?._id && (
