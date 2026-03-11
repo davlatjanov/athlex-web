@@ -56,6 +56,8 @@ const AGENT_TABS = [
 
 const ADMIN_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
+	{ key: 'myProperties', label: 'My Programs' },
+	{ key: 'addProperty', label: 'Add Program' },
 	{ key: 'myFavorites', label: 'My Favorites' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
