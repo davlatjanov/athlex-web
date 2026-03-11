@@ -1,88 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
 import Link from 'next/link';
-
-const topTrainers = [
-	{
-		id: '1',
-		fullName: 'Marcus Johnson',
-		image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&fit=crop&auto=format&q=80',
-		nick: 'marcus_j',
-		specialty: 'Strength & Powerlifting',
-		plan: 'PRO',
-		followers: 2400,
-		rating: 4.9,
-		programs: 12,
-		gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 100%)',
-	},
-	{
-		id: '2',
-		fullName: 'Sarah Chen',
-		image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=600&fit=crop&auto=format&q=80',
-		nick: 'sarah_fit',
-		specialty: 'Yoga & Flexibility',
-		plan: 'ADVANCED',
-		followers: 1800,
-		rating: 4.8,
-		programs: 8,
-		gradient: 'linear-gradient(135deg, #0a1a0a 0%, #152d15 100%)',
-	},
-	{
-		id: '3',
-		fullName: 'David Park',
-		image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&fit=crop&auto=format&q=80',
-		nick: 'dpark_hiit',
-		specialty: 'HIIT & Cardio',
-		plan: 'ADVANCED',
-		followers: 1500,
-		rating: 4.9,
-		programs: 15,
-		gradient: 'linear-gradient(135deg, #0a0a1a 0%, #15152d 100%)',
-	},
-	{
-		id: '4',
-		fullName: 'Emma Rodriguez',
-		image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&fit=crop&auto=format&q=80',
-		nick: 'emma_rehab',
-		specialty: 'Rehabilitation',
-		plan: 'ADVANCED',
-		followers: 1200,
-		rating: 4.7,
-		programs: 6,
-		gradient: 'linear-gradient(135deg, #1a1a0a 0%, #2d2d15 100%)',
-	},
-	{
-		id: '5',
-		fullName: 'Chris Thompson',
-		image: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&fit=crop&auto=format&q=80',
-		nick: 'chris_move',
-		specialty: 'Functional Training',
-		plan: 'ADVANCED',
-		followers: 980,
-		rating: 4.8,
-		programs: 9,
-		gradient: 'linear-gradient(135deg, #0a1a1a 0%, #152d2d 100%)',
-	},
-	{
-		id: '6',
-		fullName: 'Aisha Williams',
-		image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&fit=crop&auto=format&q=80',
-		nick: 'aisha_pro',
-		specialty: 'Weight Loss & Nutrition',
-		plan: 'PRO',
-		followers: 2100,
-		rating: 4.9,
-		programs: 11,
-		gradient: 'linear-gradient(135deg, #1a050a 0%, #2d0f15 100%)',
-	},
-];
+import { useQuery } from '@apollo/client';
+import { GET_TRAINERS } from '../../../apollo/user/query';
+import { T } from '../../types/common';
 
 const TopTrainers = () => {
 	const device = useDeviceDetect();
+	const [trainers, setTrainers] = useState<any[]>([]);
+
+	useQuery(GET_TRAINERS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: { page: 1, limit: 6, sort: 'memberViews', direction: 'DESC' },
+		},
+		onCompleted: (data: T) => setTrainers(data?.getTrainers?.list ?? []),
+	});
+
+	const TrainerCard = ({ trainer }: { trainer: any }) => {
+		const initials = (trainer.memberFullName || trainer.memberNick || '?')
+			.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2);
+		const displayFollowers = trainer.memberFollowers >= 1000
+			? `${(trainer.memberFollowers / 1000).toFixed(1)}K`
+			: String(trainer.memberFollowers ?? 0);
+
+		return (
+			<Link href={`/trainer/detail?id=${trainer._id}`}>
+				<Box className={'trainer-card'}>
+					<div className={'trainer-avatar'}>
+						{trainer.memberImage ? (
+							<img
+								src={trainer.memberImage}
+								alt={trainer.memberFullName || trainer.memberNick}
+								className={'trainer-avatar-img'}
+								onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+							/>
+						) : (
+							<span className={'trainer-avatar-initials'}>{initials}</span>
+						)}
+					</div>
+					<strong className={'trainer-name'}>{trainer.memberFullName || trainer.memberNick}</strong>
+					<span className={'trainer-nick'}>@{trainer.memberNick}</span>
+					<div className={'trainer-stats'}>
+						<span>👤 {displayFollowers}</span>
+						<span>🏋️ {trainer.memberPrograms ?? 0} programs</span>
+					</div>
+				</Box>
+			</Link>
+		);
+	};
+
+	const slides = trainers.map((trainer) => (
+		<SwiperSlide key={trainer._id} className={'trainer-slide'}>
+			<TrainerCard trainer={trainer} />
+		</SwiperSlide>
+	));
 
 	if (device === 'mobile') {
 		return (
@@ -100,26 +76,7 @@ const TopTrainers = () => {
 							spaceBetween={20}
 							modules={[Autoplay]}
 						>
-							{topTrainers.map((trainer) => (
-								<SwiperSlide key={trainer.id} className={'trainer-slide'}>
-									<Link href={`/trainer/${trainer.id}`}>
-										<Box className={'trainer-card'}>
-											<div className={'trainer-avatar'} style={{ background: trainer.gradient }}>
-												<img src={trainer.image} alt={trainer.fullName} className={'trainer-avatar-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-											</div>
-											<strong className={'trainer-name'}>{trainer.fullName}</strong>
-											<span className={'trainer-specialty'}>{trainer.specialty}</span>
-											<div className={'trainer-stats'}>
-												<span>
-													👤{' '}
-													{trainer.followers >= 1000 ? `${(trainer.followers / 1000).toFixed(1)}K` : trainer.followers}
-												</span>
-												<span>★ {trainer.rating}</span>
-											</div>
-										</Box>
-									</Link>
-								</SwiperSlide>
-							))}
+							{slides}
 						</Swiper>
 					</Stack>
 				</Stack>
@@ -158,29 +115,7 @@ const TopTrainers = () => {
 							modules={[Autoplay, Navigation]}
 							navigation={{ nextEl: '.swiper-trainers-next', prevEl: '.swiper-trainers-prev' }}
 						>
-							{topTrainers.map((trainer) => (
-								<SwiperSlide key={trainer.id} className={'trainer-slide'}>
-									<Link href={`/trainer/${trainer.id}`}>
-										<Box className={'trainer-card'}>
-											<div className={'trainer-avatar'} style={{ background: trainer.gradient }}>
-												<img src={trainer.image} alt={trainer.fullName} className={'trainer-avatar-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-											</div>
-											<span className={'plan-badge'}>{trainer.plan}</span>
-											<strong className={'trainer-name'}>{trainer.fullName}</strong>
-											<span className={'trainer-specialty'}>{trainer.specialty}</span>
-											<div className={'trainer-stats'}>
-												<span>
-													👤{' '}
-													{trainer.followers >= 1000 ? `${(trainer.followers / 1000).toFixed(1)}K` : trainer.followers}{' '}
-													followers
-												</span>
-												<span>★ {trainer.rating}</span>
-											</div>
-											<span className={'trainer-programs'}>{trainer.programs} Programs</span>
-										</Box>
-									</Link>
-								</SwiperSlide>
-							))}
+							{slides}
 						</Swiper>
 					</Box>
 					<Box component={'div'} className={'switch-btn swiper-trainers-next'}>

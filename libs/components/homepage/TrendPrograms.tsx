@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import WestIcon from '@mui/icons-material/West';
@@ -7,116 +7,51 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import Link from 'next/link';
 import ProgramCard from './ProgramCard';
+import { useQuery } from '@apollo/client';
+import { GET_PROGRAMS } from '../../../apollo/user/query';
+import { T } from '../../types/common';
 
-const trendPrograms = [
-	{
-		id: '1',
-		name: 'Alpha Muscle Builder',
-		type: 'MASS GAIN',
-		level: 'ADVANCED',
-		duration: 12,
-		price: 49,
-		views: 8400,
-		likes: 342,
-		members: 1240,
-		gradient: 'linear-gradient(160deg, #1a0a0a 0%, #3d1212 100%)',
-			image: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '2',
-		name: 'Fat Torch Express',
-		type: 'WEIGHT LOSS',
-		level: 'BEGINNER',
-		duration: 8,
-		price: 29,
-		views: 7200,
-		likes: 289,
-		members: 980,
-		gradient: 'linear-gradient(160deg, #0a1a0a 0%, #123d12 100%)',
-			image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '3',
-		name: 'Power Lift Fundamentals',
-		type: 'STRENGTH',
-		level: 'INTERMEDIATE',
-		duration: 10,
-		price: 39,
-		views: 6100,
-		likes: 256,
-		members: 870,
-		gradient: 'linear-gradient(160deg, #0a0a1a 0%, #12123d 100%)',
-			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '4',
-		name: 'HIIT Cardio Blast',
-		type: 'CARDIO',
-		level: 'BEGINNER',
-		duration: 6,
-		price: 19,
-		views: 9800,
-		likes: 234,
-		members: 1560,
-		gradient: 'linear-gradient(160deg, #1a0a1a 0%, #3d123d 100%)',
-			image: 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '5',
-		name: 'Zen Flow Yoga',
-		type: 'YOGA',
-		level: 'BEGINNER',
-		duration: 8,
-		price: 25,
-		views: 5300,
-		likes: 198,
-		members: 720,
-		gradient: 'linear-gradient(160deg, #0a1a1a 0%, #123d3d 100%)',
-			image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '6',
-		name: 'Athletic Movement Lab',
-		type: 'FUNCTIONAL',
-		level: 'INTERMEDIATE',
-		duration: 10,
-		price: 35,
-		views: 4800,
-		likes: 187,
-		members: 640,
-		gradient: 'linear-gradient(160deg, #1a1a0a 0%, #3d3d12 100%)',
-			image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '7',
-		name: 'Comeback Program',
-		type: 'REHABILITATION',
-		level: 'BEGINNER',
-		duration: 6,
-		price: 45,
-		views: 3200,
-		likes: 156,
-		members: 430,
-		gradient: 'linear-gradient(160deg, #1a0f0a 0%, #3d2512 100%)',
-			image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '8',
-		name: 'Mobility & Flexibility Pro',
-		type: 'MOBILITY',
-		level: 'INTERMEDIATE',
-		duration: 8,
-		price: 30,
-		views: 2900,
-		likes: 145,
-		members: 510,
-		gradient: 'linear-gradient(160deg, #0f0a1a 0%, #25123d 100%)',
-			image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=800&fit=crop&auto=format&q=80',
-	},
-];
+const typeGradients: Record<string, string> = {
+	MASS_GAIN: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+	WEIGHT_LOSS: 'linear-gradient(135deg, #0f3460 0%, #e94560 100%)',
+	STRENGTH: 'linear-gradient(135deg, #1a1a2e 0%, #e92c28 100%)',
+	CARDIO: 'linear-gradient(135deg, #0f3460 0%, #533483 100%)',
+	YOGA: 'linear-gradient(135deg, #1b4332 0%, #40916c 100%)',
+	FUNCTIONAL: 'linear-gradient(135deg, #212529 0%, #495057 100%)',
+	REHABILITATION: 'linear-gradient(135deg, #003566 0%, #0077b6 100%)',
+	MOBILITY: 'linear-gradient(135deg, #370617 0%, #e85d04 100%)',
+	BEGINNERS: 'linear-gradient(135deg, #1b263b 0%, #415a77 100%)',
+};
 
 const TrendPrograms = () => {
 	const device = useDeviceDetect();
+	const [programs, setPrograms] = useState<any[]>([]);
+
+	useQuery(GET_PROGRAMS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: { page: 1, limit: 8, sort: 'programLikes', direction: 'DESC', programStatus: 'ACTIVE' },
+		},
+		onCompleted: (data: T) => setPrograms(data?.getPrograms?.list ?? []),
+	});
+
+	const slides = programs.map((prog) => (
+		<SwiperSlide key={prog._id} className={'program-slide'}>
+			<ProgramCard
+				id={prog._id}
+				name={prog.programName}
+				type={prog.programType}
+				level={prog.programLevel}
+				duration={prog.programDuration}
+				price={prog.programPrice}
+				views={prog.programViews}
+				likes={prog.programLikes}
+				members={prog.programMembers}
+				image={prog.programImages?.[0]}
+				gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+			/>
+		</SwiperSlide>
+	));
 
 	if (device === 'mobile') {
 		return (
@@ -134,11 +69,7 @@ const TrendPrograms = () => {
 							spaceBetween={15}
 							modules={[Autoplay]}
 						>
-							{trendPrograms.map((prog) => (
-								<SwiperSlide key={prog.id} className={'program-slide'}>
-									<ProgramCard {...prog} />
-								</SwiperSlide>
-							))}
+							{slides}
 						</Swiper>
 					</Stack>
 				</Stack>
@@ -179,11 +110,7 @@ const TrendPrograms = () => {
 						navigation={{ nextEl: '.swiper-trend-next', prevEl: '.swiper-trend-prev' }}
 						pagination={{ el: '.swiper-trend-pagination' }}
 					>
-						{trendPrograms.map((prog) => (
-							<SwiperSlide key={prog.id} className={'program-slide'}>
-								<ProgramCard {...prog} />
-							</SwiperSlide>
-						))}
+						{slides}
 					</Swiper>
 				</Stack>
 			</Stack>

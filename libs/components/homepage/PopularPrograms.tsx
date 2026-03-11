@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import WestIcon from '@mui/icons-material/West';
@@ -7,103 +7,51 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import Link from 'next/link';
 import ProgramCard from './ProgramCard';
+import { useQuery } from '@apollo/client';
+import { GET_PROGRAMS } from '../../../apollo/user/query';
+import { T } from '../../types/common';
 
-const popularPrograms = [
-	{
-		id: '1',
-		name: 'The 6-Week Shred',
-		type: 'WEIGHT LOSS',
-		level: 'INTERMEDIATE',
-		duration: 6,
-		price: 34,
-		views: 12400,
-		likes: 520,
-		members: 2100,
-		gradient: 'linear-gradient(160deg, #0a1a0a 0%, #1a3d1a 100%)',
-			image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '2',
-		name: 'Beginner Strength Foundation',
-		type: 'STRENGTH',
-		level: 'BEGINNER',
-		duration: 8,
-		price: 0,
-		views: 10800,
-		likes: 680,
-		members: 3200,
-		gradient: 'linear-gradient(160deg, #0a0a1a 0%, #1a1a3d 100%)',
-			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '3',
-		name: 'Body Recomposition Pro',
-		type: 'FUNCTIONAL',
-		level: 'INTERMEDIATE',
-		duration: 12,
-		price: 59,
-		views: 9600,
-		likes: 410,
-		members: 1540,
-		gradient: 'linear-gradient(160deg, #1a0a0a 0%, #2d1a1a 100%)',
-			image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '4',
-		name: 'Morning Mobility Flow',
-		type: 'MOBILITY',
-		level: 'BEGINNER',
-		duration: 4,
-		price: 0,
-		views: 8900,
-		likes: 760,
-		members: 4100,
-		gradient: 'linear-gradient(160deg, #0a1a1a 0%, #1a2d2d 100%)',
-			image: 'https://images.unsplash.com/photo-1518611184-3f8177f0fc6e?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '5',
-		name: 'Powerlifting Prep',
-		type: 'STRENGTH',
-		level: 'ADVANCED',
-		duration: 16,
-		price: 79,
-		views: 7800,
-		likes: 290,
-		members: 890,
-		gradient: 'linear-gradient(160deg, #1a1a0a 0%, #2d2d1a 100%)',
-			image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '6',
-		name: 'Cardio Kickstarter',
-		type: 'CARDIO',
-		level: 'BEGINNER',
-		duration: 4,
-		price: 15,
-		views: 7200,
-		likes: 540,
-		members: 2780,
-		gradient: 'linear-gradient(160deg, #1a0a1a 0%, #2d1a2d 100%)',
-			image: 'https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=800&fit=crop&auto=format&q=80',
-	},
-	{
-		id: '7',
-		name: 'Yoga for Athletes',
-		type: 'YOGA',
-		level: 'INTERMEDIATE',
-		duration: 6,
-		price: 29,
-		views: 6500,
-		likes: 330,
-		members: 1230,
-		gradient: 'linear-gradient(160deg, #0f1a0a 0%, #1a2d12 100%)',
-			image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&fit=crop&auto=format&q=80',
-	},
-];
+const typeGradients: Record<string, string> = {
+	MASS_GAIN: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+	WEIGHT_LOSS: 'linear-gradient(135deg, #0f3460 0%, #e94560 100%)',
+	STRENGTH: 'linear-gradient(135deg, #1a1a2e 0%, #e92c28 100%)',
+	CARDIO: 'linear-gradient(135deg, #0f3460 0%, #533483 100%)',
+	YOGA: 'linear-gradient(135deg, #1b4332 0%, #40916c 100%)',
+	FUNCTIONAL: 'linear-gradient(135deg, #212529 0%, #495057 100%)',
+	REHABILITATION: 'linear-gradient(135deg, #003566 0%, #0077b6 100%)',
+	MOBILITY: 'linear-gradient(135deg, #370617 0%, #e85d04 100%)',
+	BEGINNERS: 'linear-gradient(135deg, #1b263b 0%, #415a77 100%)',
+};
 
 const PopularPrograms = () => {
 	const device = useDeviceDetect();
+	const [programs, setPrograms] = useState<any[]>([]);
+
+	useQuery(GET_PROGRAMS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: { page: 1, limit: 8, sort: 'programViews', direction: 'DESC', programStatus: 'ACTIVE' },
+		},
+		onCompleted: (data: T) => setPrograms(data?.getPrograms?.list ?? []),
+	});
+
+	const slides = programs.map((prog) => (
+		<SwiperSlide key={prog._id} className={'program-slide'}>
+			<ProgramCard
+				id={prog._id}
+				name={prog.programName}
+				type={prog.programType}
+				level={prog.programLevel}
+				duration={prog.programDuration}
+				price={prog.programPrice}
+				views={prog.programViews}
+				likes={prog.programLikes}
+				members={prog.programMembers}
+				image={prog.programImages?.[0]}
+				gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+			/>
+		</SwiperSlide>
+	));
 
 	if (device === 'mobile') {
 		return (
@@ -121,11 +69,7 @@ const PopularPrograms = () => {
 							spaceBetween={25}
 							modules={[Autoplay]}
 						>
-							{popularPrograms.map((prog) => (
-								<SwiperSlide key={prog.id} className={'program-slide'}>
-									<ProgramCard {...prog} />
-								</SwiperSlide>
-							))}
+							{slides}
 						</Swiper>
 					</Stack>
 				</Stack>
@@ -166,11 +110,7 @@ const PopularPrograms = () => {
 						navigation={{ nextEl: '.swiper-popular-next', prevEl: '.swiper-popular-prev' }}
 						pagination={{ el: '.swiper-popular-pagination' }}
 					>
-						{popularPrograms.map((prog) => (
-							<SwiperSlide key={prog.id} className={'program-slide'}>
-								<ProgramCard {...prog} />
-							</SwiperSlide>
-						))}
+						{slides}
 					</Swiper>
 				</Stack>
 			</Stack>

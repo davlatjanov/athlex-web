@@ -10,14 +10,15 @@ import { Message } from '../../enums/common.enum';
 const JOINED_KEY = 'athlex_joined_programs';
 
 const typeIcons: Record<string, string> = {
-	'MASS GAIN': '💪',
-	'WEIGHT LOSS': '🔥',
-	'STRENGTH': '🏋️',
-	'CARDIO': '🏃',
-	'YOGA': '🧘',
-	'FUNCTIONAL': '⚡',
-	'REHABILITATION': '🩺',
-	'MOBILITY': '🤸',
+	MASS_GAIN: '💪',
+	WEIGHT_LOSS: '🔥',
+	STRENGTH: '🏋️',
+	CARDIO: '🏃',
+	YOGA: '🧘',
+	FUNCTIONAL: '⚡',
+	REHABILITATION: '🩺',
+	MOBILITY: '🤸',
+	BEGINNERS: '🌱',
 };
 
 interface ProgramCardProps {
