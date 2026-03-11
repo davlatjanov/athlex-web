@@ -218,40 +218,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 							</ListItem>
 						</List>
 					</Stack>
-					<Stack className={'section'} sx={{ marginTop: '10px' }}>
-						<div>
-							<Typography className="title" variant={'h5'}>
-								Community
-							</Typography>
-							<List className={'sub-section'}>
-								<ListItem className={category === 'articles' ? 'focus' : ''}>
-									<Link
-										href={{
-											pathname: '/member',
-											query: { ...router.query, category: 'articles' },
-										}}
-										scroll={false}
-										style={{ width: '100%' }}
-									>
-										<div className={'flex-box'}>
-											{category === 'articles' ? (
-												<img className={'com-icon'} src={'/img/icons/discoveryWhite.svg'} alt={'com-icon'} />
-											) : (
-												<img className={'com-icon'} src={'/img/icons/discovery.svg'} alt={'com-icon'} />
-											)}
-
-											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-												Articles
-											</Typography>
-											<Typography className="count-title" variant="subtitle1">
-												{0}
-											</Typography>
-										</div>
-									</Link>
-								</ListItem>
-							</List>
-						</div>
-					</Stack>
+	
 				</Stack>
 			</Stack>
 		);

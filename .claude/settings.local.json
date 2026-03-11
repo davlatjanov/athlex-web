@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add -A)",
+      "Bash(git commit -m \"fix: remove all legacy article/community components \\(no backend\\):*)"
+    ]
+  }
+}

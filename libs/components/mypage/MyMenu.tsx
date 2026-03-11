@@ -12,8 +12,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import HistoryIcon from '@mui/icons-material/History';
 import PeopleIcon from '@mui/icons-material/People';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import ArticleIcon from '@mui/icons-material/Article';
-import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -73,13 +71,6 @@ const MyMenu = () => {
 					{user?.memberType === 'TRAINER' && menuItem('myProperties', 'My Programs', FitnessCenterIcon)}
 					{menuItem('myFavorites', 'Saved Programs', FavoriteIcon)}
 					{menuItem('recentlyVisited', 'Recent Views', HistoryIcon)}
-				</div>
-
-				{/* Community section */}
-				<div className={'mm-section'}>
-					<span className={'mm-section-label'}>CONTENT</span>
-					{menuItem('myArticles', 'My Articles', ArticleIcon)}
-					{menuItem('writeArticle', 'Write Article', EditIcon)}
 				</div>
 
 				{/* Network section */}
