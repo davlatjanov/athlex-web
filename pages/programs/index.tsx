@@ -80,6 +80,8 @@ const ProgramsPage: NextPage = () => {
 	const [page, setPage] = useState(1);
 	const [programs, setPrograms] = useState<Program[]>([]);
 	const [total, setTotal] = useState(0);
+	const [searchInput, setSearchInput] = useState('');
+	const [searchText, setSearchText] = useState('');
 
 	const sort = SORT_OPTIONS[sortIdx];
 
@@ -93,6 +95,7 @@ const ProgramsPage: NextPage = () => {
 				direction: sort.direction,
 				...(programType && { programType }),
 				...(programLevel && { programLevel }),
+				...(searchText && { search: searchText }),
 				programStatus: 'ACTIVE',
 			},
 		},
@@ -112,7 +115,13 @@ const ProgramsPage: NextPage = () => {
 
 	useEffect(() => {
 		setPage(1);
-	}, [programType, programLevel, sortIdx]);
+	}, [programType, programLevel, sortIdx, searchText]);
+
+	const handleSearch = (e: React.FormEvent) => {
+		e.preventDefault();
+		setSearchText(searchInput);
+		setPage(1);
+	};
 
 	const filtered = programs.filter((p) => {
 		if (selectedPrice === 'free') return p.programPrice === 0;
@@ -205,6 +214,20 @@ const ProgramsPage: NextPage = () => {
 				</aside>
 
 				<main className={'programs-main'}>
+					<form className={'search-bar'} onSubmit={handleSearch}>
+						<input
+							className={'search-input'}
+							type="text"
+							placeholder="Search programs…"
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
+						/>
+						{searchText && (
+							<button type="button" className={'search-clear'} onClick={() => { setSearchInput(''); setSearchText(''); setPage(1); }}>✕</button>
+						)}
+						<button type="submit" className={'search-btn'}>Search</button>
+					</form>
+
 					<div className={'top-bar'}>
 						<span className={'results-count'}>
 							<strong>{total}</strong> programs found

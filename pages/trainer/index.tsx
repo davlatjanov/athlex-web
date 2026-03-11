@@ -1,11 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import { allTrainers, TRAINER_SPECIALTIES, TRAINER_LEVELS, Trainer } from '../../libs/data/trainers';
+import { useQuery } from '@apollo/client';
+import { GET_TRAINERS } from '../../apollo/user/query';
 import { useLike } from '../../libs/hooks/useInteractions';
+import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -14,66 +16,68 @@ export const getStaticProps = async ({ locale }: any) => ({
 });
 
 const SORT_OPTIONS = [
-	{ label: 'Most Popular', value: 'popular' },
-	{ label: 'Top Rated', value: 'rating' },
-	{ label: 'Most Clients', value: 'clients' },
-	{ label: 'Experience', value: 'experience' },
+	{ label: 'Most Popular', value: 'memberViews', direction: 'DESC' },
+	{ label: 'Most Liked', value: 'memberLikes', direction: 'DESC' },
+	{ label: 'Top Ranked', value: 'memberRank', direction: 'DESC' },
+	{ label: 'Newest', value: 'createdAt', direction: 'DESC' },
 ];
 
-const PER_PAGE = 9;
+const TrainerCard = ({ trainer }: { trainer: any }) => {
+	const { liked, toggle: toggleLike } = useLike('trainers', trainer._id);
+	const displayFollowers = trainer.memberFollowers >= 1000
+		? `${(trainer.memberFollowers / 1000).toFixed(1)}K`
+		: String(trainer.memberFollowers ?? 0);
+	const displayViews = trainer.memberViews >= 1000
+		? `${(trainer.memberViews / 1000).toFixed(1)}K`
+		: String(trainer.memberViews ?? 0);
 
-const TrainerCard = ({ trainer }: { trainer: Trainer }) => {
-	const displayClients = trainer.clients >= 1000 ? `${(trainer.clients / 1000).toFixed(1)}K` : String(trainer.clients);
-	const { liked, toggle: toggleLike } = useLike('trainers', trainer.id);
+	const initials = (trainer.memberFullName || trainer.memberNick || '?')
+		.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2);
 
 	return (
 		<div className="trainer-card">
-			<div className="tc-header" style={{ background: trainer.gradient }}>
-				<img
-					src={trainer.image}
-					alt={trainer.name}
-					className="tc-header-img"
-					onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-				/>
+			<div className="tc-header">
+				{trainer.memberImage ? (
+					<img
+						src={trainer.memberImage}
+						alt={trainer.memberFullName}
+						className="tc-header-img"
+						onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+					/>
+				) : (
+					<div className="tc-initials">{initials}</div>
+				)}
 				<div className="tc-header-overlay" />
-				<div className="tc-level-badge">{trainer.level}</div>
 				<button className={`tc-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
 					{liked ? '♥' : '♡'}
 				</button>
-				<div className="tc-avatar-icon">{trainer.icon}</div>
 			</div>
 			<div className="tc-body">
-				<div className="tc-specialty">{trainer.specialty}</div>
-				<h3 className="tc-name">{trainer.name}</h3>
-				<p className="tc-nick">@{trainer.nickname}</p>
-				<p className="tc-bio">{trainer.bio}</p>
+				<h3 className="tc-name">{trainer.memberFullName || trainer.memberNick}</h3>
+				<p className="tc-nick">@{trainer.memberNick}</p>
+				{trainer.memberDesc && <p className="tc-bio">{trainer.memberDesc}</p>}
 				<div className="tc-stats">
 					<div className="tc-stat">
-						<span className="ts-val">★ {trainer.rating}</span>
-						<span className="ts-lbl">Rating</span>
-					</div>
-					<div className="tc-stat-sep" />
-					<div className="tc-stat">
-						<span className="ts-val">{displayClients}</span>
-						<span className="ts-lbl">Clients</span>
-					</div>
-					<div className="tc-stat-sep" />
-					<div className="tc-stat">
-						<span className="ts-val">{trainer.programs}</span>
+						<span className="ts-val">{trainer.memberPrograms ?? 0}</span>
 						<span className="ts-lbl">Programs</span>
 					</div>
 					<div className="tc-stat-sep" />
 					<div className="tc-stat">
-						<span className="ts-val">{trainer.experience}</span>
-						<span className="ts-lbl">Exp.</span>
+						<span className="ts-val">{displayFollowers}</span>
+						<span className="ts-lbl">Followers</span>
+					</div>
+					<div className="tc-stat-sep" />
+					<div className="tc-stat">
+						<span className="ts-val">♥ {trainer.memberLikes ?? 0}</span>
+						<span className="ts-lbl">Likes</span>
+					</div>
+					<div className="tc-stat-sep" />
+					<div className="tc-stat">
+						<span className="ts-val">👁 {displayViews}</span>
+						<span className="ts-lbl">Views</span>
 					</div>
 				</div>
-				<div className="tc-certs">
-					{trainer.certifications.slice(0, 2).map((c) => (
-						<span key={c} className="tc-cert">{c}</span>
-					))}
-				</div>
-				<Link href={`/trainer/detail?id=${trainer.id}`}>
+				<Link href={`/trainer/detail?id=${trainer._id}`}>
 					<button className="tc-btn">View Profile →</button>
 				</Link>
 			</div>
@@ -83,39 +87,40 @@ const TrainerCard = ({ trainer }: { trainer: Trainer }) => {
 
 const TrainerList: NextPage = () => {
 	const device = useDeviceDetect();
-	const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
-	const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
-	const [sortBy, setSortBy] = useState('popular');
+	const [sortIdx, setSortIdx] = useState(0);
 	const [page, setPage] = useState(1);
+	const [searchText, setSearchText] = useState('');
+	const [searchInput, setSearchInput] = useState('');
+	const [allTrainers, setAllTrainers] = useState<any[]>([]);
+	const [total, setTotal] = useState(0);
 
-	const toggleSpecialty = (s: string) => {
-		setSelectedSpecialties((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+	const sort = SORT_OPTIONS[sortIdx];
+	const PER_PAGE = 9;
+
+	const { loading } = useQuery(GET_TRAINERS, {
+		fetchPolicy: 'cache-and-network',
+		variables: {
+			input: {
+				page,
+				limit: PER_PAGE,
+				sort: sort.value,
+				direction: sort.direction,
+				...(searchText ? { search: { text: searchText } } : {}),
+			},
+		},
+		onCompleted: (data: T) => {
+			setAllTrainers(data?.getTrainers?.list ?? []);
+			setTotal(data?.getTrainers?.metaCounter?.[0]?.total ?? 0);
+		},
+	});
+
+	const handleSearch = (e: React.FormEvent) => {
+		e.preventDefault();
+		setSearchText(searchInput);
 		setPage(1);
 	};
 
-	const toggleLevel = (l: string) => {
-		setSelectedLevels((prev) => prev.includes(l) ? prev.filter((x) => x !== l) : [...prev, l]);
-		setPage(1);
-	};
-
-	const filtered = useMemo(() => {
-		let list = [...allTrainers];
-
-		if (selectedSpecialties.length > 0)
-			list = list.filter((t) => selectedSpecialties.includes(t.specialty) || (t.secondarySpecialty && selectedSpecialties.includes(t.secondarySpecialty)));
-		if (selectedLevels.length > 0)
-			list = list.filter((t) => selectedLevels.includes(t.level));
-
-		if (sortBy === 'popular') list.sort((a, b) => b.views - a.views);
-		else if (sortBy === 'rating') list.sort((a, b) => b.rating - a.rating);
-		else if (sortBy === 'clients') list.sort((a, b) => b.clients - a.clients);
-		else if (sortBy === 'experience') list.sort((a, b) => b.experienceYears - a.experienceYears);
-
-		return list;
-	}, [selectedSpecialties, selectedLevels, sortBy]);
-
-	const totalPages = Math.ceil(filtered.length / PER_PAGE);
-	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+	const totalPages = Math.ceil(total / PER_PAGE);
 
 	if (device === 'mobile') {
 		return <div id="trainer-list-page"><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
@@ -124,65 +129,33 @@ const TrainerList: NextPage = () => {
 	return (
 		<div id="trainer-list-page">
 			<div className="tl-container">
+				<main className="tl-main" style={{ width: '100%' }}>
+					<form className="tl-search-bar" onSubmit={handleSearch}>
+						<input
+							className="tl-search-input"
+							type="text"
+							placeholder="Search trainers by nickname…"
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
+						/>
+						{searchText && (
+							<button type="button" className="tl-search-clear" onClick={() => { setSearchInput(''); setSearchText(''); setPage(1); }}>✕</button>
+						)}
+						<button type="submit" className="tl-search-btn">Search</button>
+					</form>
 
-				{/* ── SIDEBAR ───────────────────────────────────────── */}
-				<aside className="tl-sidebar">
-					<div className="tl-filter-block">
-						<h4 className="tl-filter-title">Specialty</h4>
-						<div className="tl-chip-group">
-							<button
-								className={`tl-chip ${selectedSpecialties.length === 0 ? 'active' : ''}`}
-								onClick={() => { setSelectedSpecialties([]); setPage(1); }}
-							>
-								All
-							</button>
-							{TRAINER_SPECIALTIES.map((s) => (
-								<button
-									key={s}
-									className={`tl-chip ${selectedSpecialties.includes(s) ? 'active' : ''}`}
-									onClick={() => toggleSpecialty(s)}
-								>
-									{s}
-								</button>
-							))}
-						</div>
-					</div>
-
-					<div className="tl-filter-block">
-						<h4 className="tl-filter-title">Level</h4>
-						<div className="tl-chip-group">
-							<button
-								className={`tl-chip ${selectedLevels.length === 0 ? 'active' : ''}`}
-								onClick={() => { setSelectedLevels([]); setPage(1); }}
-							>
-								All Levels
-							</button>
-							{TRAINER_LEVELS.map((l) => (
-								<button
-									key={l}
-									className={`tl-chip ${selectedLevels.includes(l) ? 'active' : ''}`}
-									onClick={() => toggleLevel(l)}
-								>
-									{l}
-								</button>
-							))}
-						</div>
-					</div>
-				</aside>
-
-				{/* ── MAIN ──────────────────────────────────────────── */}
-				<main className="tl-main">
-					{/* Top bar */}
 					<div className="tl-top-bar">
-						<span className="tl-count"><strong>{filtered.length}</strong> trainers found</span>
+						<span className="tl-count">
+							{loading ? 'Loading…' : <><strong>{total}</strong> trainers found</>}
+						</span>
 						<div className="tl-sort-row">
 							<span>Sort by:</span>
 							<div className="tl-sort-buttons">
-								{SORT_OPTIONS.map((opt) => (
+								{SORT_OPTIONS.map((opt, i) => (
 									<button
-										key={opt.value}
-										className={`tl-sort-btn ${sortBy === opt.value ? 'active' : ''}`}
-										onClick={() => { setSortBy(opt.value); setPage(1); }}
+										key={`${opt.value}-${opt.direction}`}
+										className={`tl-sort-btn ${sortIdx === i ? 'active' : ''}`}
+										onClick={() => { setSortIdx(i); setPage(1); }}
 									>
 										{opt.label}
 									</button>
@@ -191,41 +164,25 @@ const TrainerList: NextPage = () => {
 						</div>
 					</div>
 
-					{/* Grid */}
-					{paginated.length === 0 ? (
-						<div className="tl-empty">
-							<span>🏋️</span>
-							<p>No trainers match your filters.</p>
-							<button onClick={() => { setSelectedSpecialties([]); setSelectedLevels([]); }}>
-								Clear Filters
-							</button>
-						</div>
+					{loading && allTrainers.length === 0 ? (
+						<div className="tl-empty"><span>⏳</span><p>Loading trainers…</p></div>
+					) : allTrainers.length === 0 ? (
+						<div className="tl-empty"><span>🏋️</span><p>No trainers found.</p></div>
 					) : (
 						<div className="tl-grid">
-							{paginated.map((trainer) => (
-								<TrainerCard key={trainer.id} trainer={trainer} />
+							{allTrainers.map((trainer) => (
+								<TrainerCard key={trainer._id} trainer={trainer} />
 							))}
 						</div>
 					)}
 
-					{/* Pagination */}
 					{totalPages > 1 && (
 						<div className="tl-pagination">
-							<button className="tl-page-btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-								← Prev
-							</button>
+							<button className="tl-page-btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>← Prev</button>
 							{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-								<button
-									key={p}
-									className={`tl-page-btn ${page === p ? 'active' : ''}`}
-									onClick={() => setPage(p)}
-								>
-									{p}
-								</button>
+								<button key={p} className={`tl-page-btn ${page === p ? 'active' : ''}`} onClick={() => setPage(p)}>{p}</button>
 							))}
-							<button className="tl-page-btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
-								Next →
-							</button>
+							<button className="tl-page-btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>Next →</button>
 						</div>
 					)}
 				</main>

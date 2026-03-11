@@ -99,6 +99,8 @@ const ProductsPage: NextPage = () => {
 	const [sortIdx, setSortIdx] = useState(0);
 	const [page, setPage] = useState(1);
 	const [allProducts, setAllProducts] = useState<Product[]>([]);
+	const [searchInput, setSearchInput] = useState('');
+	const [searchText, setSearchText] = useState('');
 
 	const sort = SORT_OPTIONS[sortIdx];
 
@@ -110,12 +112,19 @@ const ProductsPage: NextPage = () => {
 				limit: 100,
 				sort: sort.value,
 				direction: sort.direction,
+				...(searchText && { search: { productName: searchText } }),
 			},
 		},
 		onCompleted: (data: T) => {
 			setAllProducts(data?.getProducts?.list ?? []);
 		},
 	});
+
+	const handleSearch = (e: React.FormEvent) => {
+		e.preventDefault();
+		setSearchText(searchInput);
+		setPage(1);
+	};
 
 	const toggleType = (t: ProductType) => {
 		setSelectedTypes((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
@@ -196,6 +205,20 @@ const ProductsPage: NextPage = () => {
 
 				{/* ── MAIN ────────────────────────────────────────── */}
 				<main className="shop-main">
+					<form className="shop-search-bar" onSubmit={handleSearch}>
+						<input
+							className="shop-search-input"
+							type="text"
+							placeholder="Search products…"
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
+						/>
+						{searchText && (
+							<button type="button" className="shop-search-clear" onClick={() => { setSearchInput(''); setSearchText(''); setPage(1); }}>✕</button>
+						)}
+						<button type="submit" className="shop-search-btn">Search</button>
+					</form>
+
 					<div className="shop-top-bar">
 						<span className="shop-count">
 							{loading ? 'Loading…' : <><strong>{filtered.length}</strong> products found</>}

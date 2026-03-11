@@ -3,173 +3,136 @@
 	#trainer-list-page {
 		min-height: 100vh;
 		background: #0F172A;
-		padding-top: 80px;
+		padding: 120px 0 80px;
 
-		// ─── LAYOUT ──────────────────────────────────────────────
 		.tl-container {
-			max-width: 1280px;
+			max-width: 1300px;
 			margin: 0 auto;
-			padding: 32px 32px 64px;
-			display: grid;
-			grid-template-columns: 220px 1fr;
-			gap: 28px;
-			align-items: start;
+			padding: 0 24px;
 		}
 
-		// ─── SIDEBAR ─────────────────────────────────────────────
-		.tl-sidebar {
-			position: sticky;
-			top: 100px;
-			display: flex;
-			flex-direction: column;
-			gap: 28px;
-		}
-
-		.tl-filter-block {
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-		}
-
-		.tl-filter-title {
-			color: #777777;
-			font-family: $font;
-			font-size: 10px;
-			font-weight: 700;
-			letter-spacing: 2px;
-			text-transform: uppercase;
-			margin: 0;
-		}
-
-		.tl-chip-group {
-			display: flex;
-			flex-direction: column;
-			gap: 4px;
-		}
-
-		.tl-chip {
-			padding: 8px 12px;
-			background: transparent;
-			border: 1px solid rgba(255, 255, 255, 0.08);
-			border-radius: 6px;
-			color: #999999;
-			font-family: $font;
-			font-size: 12px;
-			font-weight: 600;
-			letter-spacing: 0.3px;
-			text-align: left;
-			cursor: pointer;
-			transition: all 0.18s;
-			text-transform: uppercase;
-
-			&:hover {
-				border-color: rgba(34, 197, 94, 0.2);
-				color: #aaaaaa;
-			}
-
-			&.active {
-				background: rgba(34, 197, 94, 0.08);
-				border-color: rgba(34, 197, 94, 0.3);
-				color: #22C55E;
-			}
-		}
-
-		// ─── MAIN ────────────────────────────────────────────────
 		.tl-main {
 			display: flex;
 			flex-direction: column;
-			gap: 20px;
+			gap: 28px;
 		}
 
-		// ─── TOP BAR ─────────────────────────────────────────────
+		.tl-search-bar {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+
+			.tl-search-input {
+				flex: 1;
+				padding: 10px 16px;
+				background: #1F2937;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 8px;
+				color: #ffffff;
+				font-family: $font;
+				font-size: 14px;
+				outline: none;
+				transition: border-color 0.2s;
+
+				&::placeholder { color: #666666; }
+				&:focus { border-color: rgba(34, 197, 94, 0.4); }
+			}
+
+			.tl-search-clear {
+				padding: 10px 12px;
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 8px;
+				color: #666666;
+				font-size: 12px;
+				cursor: pointer;
+				transition: all 0.2s;
+				&:hover { border-color: #E92C28; color: #E92C28; }
+			}
+
+			.tl-search-btn {
+				padding: 10px 20px;
+				background: #22C55E;
+				border: none;
+				border-radius: 8px;
+				color: #ffffff;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: background 0.2s;
+				white-space: nowrap;
+				&:hover { background: #16a34a; }
+			}
+		}
+
 		.tl-top-bar {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+			flex-wrap: wrap;
 			gap: 16px;
+			padding-bottom: 20px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
 			.tl-count {
-				color: #888888;
+				color: #aaaaaa;
 				font-family: $font;
-				font-size: 13px;
-
-				strong {
-					color: #ffffff;
-					font-weight: 700;
-				}
+				font-size: 14px;
+				strong { color: #ffffff; font-size: 16px; }
 			}
 
 			.tl-sort-row {
 				display: flex;
 				align-items: center;
-				gap: 10px;
-
-				> span {
-					color: #777777;
-					font-family: $font;
-					font-size: 12px;
-				}
+				gap: 12px;
+				> span { color: #666666; font-family: $font; font-size: 13px; }
 			}
 
-			.tl-sort-buttons {
-				display: flex;
-				gap: 4px;
-			}
+			.tl-sort-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 
 			.tl-sort-btn {
-				padding: 6px 12px;
-				background: transparent;
+				padding: 7px 14px;
+				background: #1F2937;
 				border: 1px solid rgba(255, 255, 255, 0.08);
 				border-radius: 6px;
-				color: #999999;
+				color: #aaaaaa;
 				font-family: $font;
-				font-size: 11px;
-				font-weight: 600;
+				font-size: 12px;
+				font-weight: 500;
 				cursor: pointer;
-				transition: all 0.18s;
+				transition: all 0.2s ease;
 				white-space: nowrap;
 
-				&:hover { color: #aaaaaa; border-color: rgba(255, 255, 255, 0.1); }
-
-				&.active {
-					background: rgba(34, 197, 94, 0.08);
-					border-color: rgba(34, 197, 94, 0.25);
-					color: #22C55E;
-				}
+				&:hover { border-color: rgba(34, 197, 94, 0.4); color: #ffffff; }
+				&.active { background: #22C55E; border-color: #22C55E; color: #ffffff; font-weight: 700; }
 			}
 		}
 
-		// ─── GRID ────────────────────────────────────────────────
 		.tl-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 16px;
+			gap: 24px;
 		}
 
-		// ─── TRAINER CARD ─────────────────────────────────────────
 		.trainer-card {
-			background: #111111;
-			border: 1px solid rgba(255, 255, 255, 0.06);
+			background: #1F2937;
+			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 12px;
 			overflow: hidden;
-			transition: border-color 0.2s, transform 0.2s;
+			transition: transform 0.25s ease, border-color 0.25s ease;
+			cursor: pointer;
+			display: flex;
+			flex-direction: column;
 
-			&:hover {
-				border-color: rgba(34, 197, 94, 0.2);
-				transform: translateY(-2px);
-			}
-
-			&:hover .tc-header-img {
-				transform: scale(1.06);
-			}
+			&:hover { transform: translateY(-4px); border-color: rgba(34, 197, 94, 0.4); }
+			&:hover .tc-header-img { transform: scale(1.06); }
 
 			.tc-header {
 				position: relative;
 				height: 210px;
-				display: flex;
-				align-items: flex-end;
-				justify-content: center;
-				padding-bottom: 0;
+				overflow: hidden;
+				background: #111827;
 
 				.tc-header-img {
 					position: absolute;
@@ -177,19 +140,37 @@
 					width: 100%;
 					height: 100%;
 					object-fit: cover;
-					object-position: center center;
+					object-position: center top;
 					transition: transform 0.35s ease;
 					z-index: 0;
 				}
 
-				.tc-avatar-icon {
-					display: none;
+				.tc-initials {
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-family: $font;
+					font-size: 48px;
+					font-weight: 900;
+					color: rgba(255, 255, 255, 0.12);
+					letter-spacing: 2px;
+					user-select: none;
+				}
+
+				.tc-header-overlay {
+					position: absolute;
+					inset: 0;
+					background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
+					z-index: 1;
+					pointer-events: none;
 				}
 
 				.tc-like-btn {
 					position: absolute;
 					top: 10px;
-					left: 10px;
+					right: 10px;
 					width: 28px;
 					height: 28px;
 					background: rgba(0, 0, 0, 0.5);
@@ -205,37 +186,8 @@
 					z-index: 3;
 
 					&:hover { color: #22C55E; border-color: rgba(34, 197, 94, 0.4); }
-
-					&.liked {
-						color: #22C55E;
-						border-color: rgba(34, 197, 94, 0.5);
-						background: rgba(34, 197, 94, 0.1);
-					}
+					&.liked { color: #22C55E; border-color: rgba(34, 197, 94, 0.5); background: rgba(34, 197, 94, 0.1); }
 				}
-
-				.tc-header-overlay {
-					position: absolute;
-					inset: 0;
-					background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.55));
-				}
-
-				.tc-level-badge {
-					position: absolute;
-					top: 10px;
-					right: 10px;
-					padding: 3px 8px;
-					background: rgba(0, 0, 0, 0.6);
-					border: 1px solid rgba(255, 255, 255, 0.12);
-					color: rgba(255, 255, 255, 0.6);
-					font-family: $font;
-					font-size: 8px;
-					font-weight: 700;
-					letter-spacing: 1.5px;
-					text-transform: uppercase;
-					border-radius: 3px;
-				}
-
-
 			}
 
 			.tc-body {
@@ -243,16 +195,7 @@
 				display: flex;
 				flex-direction: column;
 				gap: 8px;
-
-				.tc-specialty {
-					color: #22C55E;
-					font-family: $font;
-					font-size: 9px;
-					font-weight: 700;
-					letter-spacing: 2px;
-					text-transform: uppercase;
-					text-align: center;
-				}
+				flex: 1;
 
 				.tc-name {
 					color: #ffffff;
@@ -272,7 +215,7 @@
 				}
 
 				.tc-bio {
-					color: #aaaaaa;
+					color: #9CA3AF;
 					font-family: $font;
 					font-size: 11px;
 					line-height: 1.6;
@@ -288,11 +231,10 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					gap: 0;
-					margin: 6px 0;
+					margin: 4px 0;
 					padding: 12px 0;
-					border-top: 1px solid rgba(255, 255, 255, 0.05);
-					border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+					border-top: 1px solid rgba(255, 255, 255, 0.08);
+					border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
 					.tc-stat {
 						flex: 1;
@@ -301,141 +243,80 @@
 						align-items: center;
 						gap: 3px;
 
-						.ts-val {
-							color: #ffffff;
-							font-family: $font;
-							font-size: 13px;
-							font-weight: 800;
-							line-height: 1;
-						}
-
-						.ts-lbl {
-							color: #777777;
-							font-family: $font;
-							font-size: 9px;
-							font-weight: 600;
-							letter-spacing: 1px;
-							text-transform: uppercase;
-						}
+						.ts-val { color: #ffffff; font-family: $font; font-size: 13px; font-weight: 800; line-height: 1; }
+						.ts-lbl { color: #666666; font-family: $font; font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
 					}
 
-					.tc-stat-sep {
-						width: 1px;
-						height: 28px;
-						background: rgba(255, 255, 255, 0.05);
-						flex-shrink: 0;
-					}
-				}
-
-				.tc-certs {
-					display: flex;
-					flex-wrap: wrap;
-					gap: 5px;
-					justify-content: center;
-
-					.tc-cert {
-						padding: 3px 8px;
-						background: #1F2937;
-						border: 1px solid rgba(255, 255, 255, 0.06);
-						color: #888888;
-						font-family: $font;
-						font-size: 9px;
-						border-radius: 4px;
-						white-space: nowrap;
-					}
+					.tc-stat-sep { width: 1px; height: 28px; background: rgba(255, 255, 255, 0.08); flex-shrink: 0; }
 				}
 
 				.tc-btn {
-					margin-top: 6px;
+					margin-top: auto;
 					width: 100%;
-					padding: 10px;
+					padding: 9px;
 					background: transparent;
 					border: 1px solid rgba(255, 255, 255, 0.08);
-					border-radius: 7px;
-					color: #bbbbbb;
+					border-radius: 8px;
+					color: #aaaaaa;
 					font-family: $font;
 					font-size: 12px;
 					font-weight: 700;
 					cursor: pointer;
-					transition: all 0.2s;
-					letter-spacing: 0.3px;
+					transition: all 0.2s ease;
 
-					&:hover {
-						background: rgba(34, 197, 94, 0.06);
-						border-color: rgba(34, 197, 94, 0.25);
-						color: #22C55E;
-					}
+					&:hover { background: rgba(34, 197, 94, 0.08); border-color: rgba(34, 197, 94, 0.4); color: #22C55E; }
 				}
 			}
 		}
 
-		// ─── EMPTY STATE ─────────────────────────────────────────
 		.tl-empty {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			min-height: 300px;
+			padding: 80px 20px;
 			gap: 16px;
-
 			span { font-size: 48px; }
-
-			p {
-				color: #555555;
-				font-family: $font;
-				font-size: 15px;
-			}
-
+			p { color: #aaaaaa; font-family: $font; font-size: 16px; }
 			button {
 				padding: 10px 24px;
 				background: #22C55E;
 				border: none;
-				border-radius: 7px;
-				color: #fff;
+				border-radius: 8px;
+				color: #ffffff;
 				font-family: $font;
-				font-size: 13px;
-				font-weight: 700;
+				font-size: 14px;
+				font-weight: 600;
 				cursor: pointer;
+				transition: background 0.2s;
 				&:hover { background: #ff3d39; }
 			}
 		}
 
-		// ─── PAGINATION ──────────────────────────────────────────
 		.tl-pagination {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 6px;
-			padding-top: 8px;
+			gap: 8px;
+			padding-top: 16px;
 
 			.tl-page-btn {
-				padding: 8px 14px;
-				background: #111111;
-				border: 1px solid rgba(255, 255, 255, 0.07);
-				border-radius: 7px;
-				color: #888888;
-				font-family: $font;
-				font-size: 13px;
-				font-weight: 600;
-				cursor: pointer;
-				transition: all 0.18s;
 				min-width: 40px;
+				height: 40px;
+				padding: 0 14px;
+				background: #1F2937;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 8px;
+				color: #aaaaaa;
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.2s ease;
 
-				&:hover:not(:disabled) {
-					border-color: rgba(34, 197, 94, 0.25);
-					color: #ffffff;
-				}
-
-				&.active {
-					background: #22C55E;
-					border-color: #22C55E;
-					color: #ffffff;
-				}
-
-				&:disabled {
-					opacity: 0.25;
-					cursor: not-allowed;
-				}
+				&:hover:not(:disabled) { border-color: #22C55E; color: #ffffff; }
+				&.active { background: #22C55E; border-color: #22C55E; color: #ffffff; font-weight: 700; }
+				&:disabled { opacity: 0.3; cursor: not-allowed; }
 			}
 		}
 	}

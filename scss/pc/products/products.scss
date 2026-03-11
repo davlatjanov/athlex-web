@@ -355,6 +355,56 @@
 			}
 		}
 
+		// ─── SEARCH BAR ────────────────────────────────────────────
+		.shop-search-bar {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+
+			.shop-search-input {
+				flex: 1;
+				padding: 10px 16px;
+				background: #1F2937;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 8px;
+				color: #ffffff;
+				font-family: $font;
+				font-size: 14px;
+				outline: none;
+				transition: border-color 0.2s;
+
+				&::placeholder { color: #666666; }
+				&:focus { border-color: rgba(34, 197, 94, 0.4); }
+			}
+
+			.shop-search-clear {
+				padding: 10px 12px;
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 8px;
+				color: #666666;
+				font-size: 12px;
+				cursor: pointer;
+				transition: all 0.2s;
+				&:hover { border-color: #E92C28; color: #E92C28; }
+			}
+
+			.shop-search-btn {
+				padding: 10px 20px;
+				background: #22C55E;
+				border: none;
+				border-radius: 8px;
+				color: #ffffff;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: background 0.2s;
+				white-space: nowrap;
+				&:hover { background: #16a34a; }
+			}
+		}
+
 		// ─── MAIN ──────────────────────────────────────────────────
 		.shop-main {
 			flex: 1;
