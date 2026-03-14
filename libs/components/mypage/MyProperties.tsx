@@ -46,7 +46,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	};
 
 	const changeStatusHandler = (value: ProgramStatus) => {
-		setSearchFilter({ ...searchFilter, search: { programStatus: value } });
+		setSearchFilter({ ...searchFilter, programStatus: value });
 	};
 
 	const deleteProgramHandler = async (id: string) => {
@@ -97,13 +97,13 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 					<Stack className="tab-name-box">
 						<Typography
 							onClick={() => changeStatusHandler(ProgramStatus.ACTIVE)}
-							className={searchFilter.search.programStatus === 'ACTIVE' ? 'active-tab-name' : 'tab-name'}
+							className={searchFilter.programStatus === 'ACTIVE' ? 'active-tab-name' : 'tab-name'}
 						>
 							Active
 						</Typography>
 						<Typography
 							onClick={() => changeStatusHandler(ProgramStatus.ARCHIVED)}
-							className={searchFilter.search.programStatus === 'ARCHIVED' ? 'active-tab-name' : 'tab-name'}
+							className={searchFilter.programStatus === 'ARCHIVED' ? 'active-tab-name' : 'tab-name'}
 						>
 							Archived
 						</Typography>
@@ -114,7 +114,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 							<Typography className="title-text">Published</Typography>
 							<Typography className="title-text">Status</Typography>
 							<Typography className="title-text">Views</Typography>
-							{searchFilter.search.programStatus === 'ACTIVE' && (
+							{searchFilter.programStatus === 'ACTIVE' && (
 								<Typography className="title-text">Action</Typography>
 							)}
 						</Stack>
@@ -165,9 +165,7 @@ MyProperties.defaultProps = {
 		page: 1,
 		limit: 5,
 		sort: 'createdAt',
-		search: {
-			programStatus: 'ACTIVE',
-		},
+		programStatus: 'ACTIVE',
 	},
 };
 
