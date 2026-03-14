@@ -17,7 +17,7 @@
 			h2, p { color: #888888; font-family: $font; font-size: 18px; }
 			button {
 				padding: 12px 28px;
-				background: #22C55E;
+				background: #E92C28;
 				border: none;
 				border-radius: 8px;
 				color: #fff;
@@ -25,181 +25,157 @@
 				font-size: 14px;
 				font-weight: 700;
 				cursor: pointer;
-				&:hover { background: #ff3d39; }
+				&:hover { background: #c0211e; }
 			}
 		}
 
-		// ─── HERO ────────────────────────────────────────────────
-		.tdp-hero {
-			position: relative;
-			width: 100%;
-			overflow: hidden;
+		// ─── HERO (split layout, matches programs detail) ────────
+		.tdp-hero-wrap {
+			max-width: 1280px;
+			margin: 0 auto;
+			padding: 40px 32px 48px;
+			display: grid;
+			grid-template-columns: 1fr 420px;
+			gap: 48px;
+			align-items: center;
+		}
 
-			.tdp-hero-bg-img {
-				position: absolute;
-				inset: 0;
+		.tdp-hero-left {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		.tdp-hero-right {
+			.tdp-hero-img {
 				width: 100%;
-				height: 100%;
+				height: 380px;
 				object-fit: cover;
-				object-position: center top;
-				filter: blur(22px) brightness(0.22) saturate(0.35);
-				transform: scale(1.06);
-				z-index: 0;
+				object-position: center 20%;
+				border-radius: 12px;
+				display: block;
+				box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 			}
 
-			.tdp-hero-overlay {
-				position: absolute;
-				inset: 0;
-				background: linear-gradient(
-					160deg,
-					rgba(0, 0, 0, 0.15) 0%,
-					rgba(0, 0, 0, 0.7) 100%
-				);
-				z-index: 1;
-			}
-
-			.tdp-hero-inner {
-				position: relative;
-				z-index: 2;
-				max-width: 1280px;
-				margin: 0 auto;
-				padding: 28px 32px 32px;
-				display: flex;
-				flex-direction: column;
-				gap: 24px;
-			}
-
-			.tdp-back {
-				color: rgba(255, 255, 255, 0.45);
-				font-family: $font;
-				font-size: 12px;
-				text-decoration: none;
-				align-self: flex-start;
-				transition: color 0.2s;
-				&:hover { color: #fff; }
-			}
-
-			.tdp-hero-profile {
-				display: flex;
-				align-items: flex-end;
-				gap: 24px;
-			}
-
-			.tdp-avatar {
-				width: 80px;
-				height: 80px;
-				border-radius: 50%;
-				border: 3px solid rgba(34, 197, 94, 0.5);
-				object-fit: cover;
-				object-position: center top;
-				flex-shrink: 0;
-				box-shadow: 0 4px 24px rgba(0,0,0,0.6);
-			}
-
-			.tdp-hero-info {
-				display: flex;
-				flex-direction: column;
-				gap: 6px;
-				padding-bottom: 4px;
-
-				.tdp-level-badge {
-					display: inline-block;
-					padding: 3px 9px;
-					background: rgba(0, 0, 0, 0.5);
-					border: 1px solid rgba(255, 255, 255, 0.14);
-					color: rgba(255, 255, 255, 0.7);
-					font-family: $font;
-					font-size: 8px;
-					font-weight: 700;
-					letter-spacing: 2px;
-					text-transform: uppercase;
-					border-radius: 3px;
-					align-self: flex-start;
-				}
-
-				.tdp-name {
-					color: #ffffff;
-					font-family: $font;
-					font-size: 28px;
-					font-weight: 900;
-					letter-spacing: 0.3px;
-					text-transform: uppercase;
-					margin: 0;
-					text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-				}
-
-				.tdp-nick {
-					color: rgba(255, 255, 255, 0.4);
-					font-family: $font;
-					font-size: 12px;
-					margin: 0;
-				}
-
-				.tdp-specialty-row {
-					display: flex;
-					gap: 8px;
-					flex-wrap: wrap;
-
-					.tdp-specialty-tag {
-						padding: 3px 10px;
-						background: #22C55E;
-						color: #fff;
-						font-family: $font;
-						font-size: 9px;
-						font-weight: 700;
-						letter-spacing: 1.5px;
-						text-transform: uppercase;
-						border-radius: 3px;
-
-						&.secondary {
-							background: rgba(34, 197, 94, 0.15);
-							border: 1px solid rgba(34, 197, 94, 0.3);
-							color: rgba(34, 197, 94, 0.85);
-						}
-					}
-				}
-			}
-
-			.tdp-hero-stats {
+			.tdp-hero-img-placeholder {
+				width: 100%;
+				height: 380px;
+				border-radius: 12px;
+				background: #1F2937;
+				border: 1px solid rgba(255, 255, 255, 0.06);
 				display: flex;
 				align-items: center;
-				gap: 0;
-				background: rgba(0, 0, 0, 0.35);
+				justify-content: center;
+				font-size: 80px;
+				color: rgba(255, 255, 255, 0.08);
+				font-family: $font;
+				font-weight: 900;
+				letter-spacing: 4px;
+			}
+		}
+
+		.tdp-back {
+			color: #6B7280;
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			text-decoration: none;
+			text-transform: uppercase;
+			transition: color 0.2s;
+			align-self: flex-start;
+			&:hover { color: #fff; }
+		}
+
+		.tdp-badges {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+
+			.badge-type {
+				padding: 4px 12px;
+				background: #E92C28;
+				color: #fff;
+				font-family: $font;
+				font-size: 9px;
+				font-weight: 800;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				border-radius: 3px;
+			}
+
+			.badge-plan {
+				padding: 4px 12px;
+				background: rgba(255, 255, 255, 0.06);
+				color: rgba(255, 255, 255, 0.65);
+				font-family: $font;
+				font-size: 9px;
+				font-weight: 700;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				border-radius: 3px;
+			}
+		}
+
+		.tdp-name {
+			color: #ffffff;
+			font-family: $font;
+			font-size: 36px;
+			font-weight: 900;
+			letter-spacing: 0.3px;
+			text-transform: uppercase;
+			margin: 0;
+			line-height: 1.1;
+		}
+
+		.tdp-nick {
+			color: #6B7280;
+			font-family: $font;
+			font-size: 13px;
+			margin: 0;
+		}
+
+		.tdp-desc {
+			color: #9CA3AF;
+			font-family: $font;
+			font-size: 14px;
+			line-height: 1.7;
+			margin: 0;
+			max-width: 500px;
+		}
+
+		// ─── STAT PILLS ──────────────────────────────────────────
+		.tdp-stat-pills {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 12px;
+			margin-top: 4px;
+
+			.tdp-pill {
+				background: #1F2937;
 				border: 1px solid rgba(255, 255, 255, 0.07);
 				border-radius: 10px;
-				padding: 14px 0;
-				align-self: flex-start;
+				padding: 14px 16px;
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
 
-				.tdp-hs-item {
-					padding: 0 28px;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					gap: 4px;
-
-					.ths-val {
-						color: #ffffff;
-						font-family: $font;
-						font-size: 16px;
-						font-weight: 900;
-						line-height: 1;
-					}
-
-					.ths-lbl {
-						color: rgba(255, 255, 255, 0.4);
-						font-family: $font;
-						font-size: 9px;
-						font-weight: 600;
-						letter-spacing: 1.5px;
-						text-transform: uppercase;
-					}
+				.pill-val {
+					color: #ffffff;
+					font-family: $font;
+					font-size: 18px;
+					font-weight: 900;
+					line-height: 1;
 				}
 
-				.tdp-hs-sep {
-					width: 1px;
-					height: 32px;
-					background: rgba(255, 255, 255, 0.08);
-					flex-shrink: 0;
+				.pill-lbl {
+					color: #6B7280;
+					font-family: $font;
+					font-size: 9px;
+					font-weight: 600;
+					letter-spacing: 1.2px;
+					text-transform: uppercase;
 				}
 			}
 		}
@@ -208,126 +184,73 @@
 		.tdp-body {
 			max-width: 1280px;
 			margin: 0 auto;
-			padding: 32px 32px 64px;
+			padding: 0 32px 64px;
 			display: grid;
-			grid-template-columns: 1fr 300px;
+			grid-template-columns: 1fr 320px;
 			gap: 28px;
 			align-items: start;
 		}
 
-		// ─── MAIN ────────────────────────────────────────────────
 		.tdp-main {
 			display: flex;
 			flex-direction: column;
-			gap: 32px;
+			gap: 20px;
 		}
 
-		.tdp-section {
-			display: flex;
-			flex-direction: column;
-			gap: 14px;
+		// ─── SECTION CARD ─────────────────────────────────────────
+		.tdp-card {
+			background: #1F2937;
+			border: 1px solid rgba(255, 255, 255, 0.07);
+			border-radius: 12px;
+			overflow: hidden;
 		}
 
-		.tdp-section-header {
+		.tdp-card-head {
+			padding: 16px 20px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+
+			h3 {
+				color: #ffffff;
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 800;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				margin: 0;
+			}
+
+			a {
+				color: #E92C28;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 600;
+				text-decoration: none;
+				transition: opacity 0.2s;
+				&:hover { opacity: 0.75; }
+			}
+
+			.tdp-avg-rating {
+				color: #FFB800;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: 700;
+			}
 		}
 
-		.tdp-section-title {
-			color: #ffffff;
-			font-family: $font;
-			font-size: 13px;
-			font-weight: 800;
-			letter-spacing: 1.5px;
-			text-transform: uppercase;
-			margin: 0;
-			padding-bottom: 10px;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-			flex: 1;
+		.tdp-card-body {
+			padding: 20px;
 		}
 
-		.tdp-see-all {
-			color: #22C55E;
-			font-family: $font;
-			font-size: 12px;
-			font-weight: 600;
-			text-decoration: none;
-			white-space: nowrap;
-			margin-left: 12px;
-			padding-bottom: 10px;
-			&:hover { color: #ff3d39; }
-		}
-
-		.tdp-avg-rating {
-			color: #FFB800;
-			font-family: $font;
-			font-size: 13px;
-			font-weight: 700;
-			white-space: nowrap;
-			margin-left: 12px;
-			padding-bottom: 10px;
-		}
-
-		// ─── ABOUT ───────────────────────────────────────────────
+		// ─── BIO ─────────────────────────────────────────────────
 		.tdp-bio {
-			color: #aaaaaa;
+			color: #9CA3AF;
 			font-family: $font;
 			font-size: 14px;
 			line-height: 1.75;
 			margin: 0;
-		}
-
-		// ─── SPECIALTIES ─────────────────────────────────────────
-		.tdp-spec-chips {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 8px;
-
-			.tdp-spec-chip {
-				padding: 6px 14px;
-				background: rgba(34, 197, 94, 0.08);
-				border: 1px solid rgba(34, 197, 94, 0.22);
-				color: #22C55E;
-				font-family: $font;
-				font-size: 10px;
-				font-weight: 700;
-				letter-spacing: 1px;
-				text-transform: uppercase;
-				border-radius: 4px;
-
-				&.muted {
-					background: #1F2937;
-					border-color: rgba(255, 255, 255, 0.07);
-					color: #777777;
-				}
-			}
-		}
-
-		// ─── CERTIFICATIONS ──────────────────────────────────────
-		.tdp-cert-list {
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-
-			.tdp-cert-row {
-				display: flex;
-				align-items: center;
-				gap: 12px;
-
-				.tdp-cert-icon {
-					color: #22C55E;
-					font-size: 13px;
-					font-weight: 700;
-					flex-shrink: 0;
-				}
-
-				.tdp-cert-text {
-					color: #cccccc;
-					font-family: $font;
-					font-size: 13px;
-				}
-			}
 		}
 
 		// ─── PROGRAMS ────────────────────────────────────────────
@@ -337,7 +260,7 @@
 			gap: 12px;
 
 			.tdp-prog-card {
-				background: #111111;
+				background: #111827;
 				border: 1px solid rgba(255, 255, 255, 0.06);
 				border-radius: 10px;
 				overflow: hidden;
@@ -345,33 +268,12 @@
 				display: block;
 				transition: border-color 0.2s, transform 0.2s;
 
-				&:hover {
-					border-color: rgba(34, 197, 94, 0.2);
-					transform: translateY(-2px);
-				}
+				&:hover { border-color: rgba(233, 44, 40, 0.3); transform: translateY(-2px); }
 
 				.tpc-banner {
 					position: relative;
-					height: 60px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-
-					.tpc-overlay {
-						position: absolute;
-						inset: 0;
-						background: rgba(0, 0, 0, 0.4);
-					}
-
-					.tpc-icon {
-						position: relative;
-						z-index: 1;
-						color: rgba(255, 255, 255, 0.6);
-						font-family: $font;
-						font-size: 22px;
-						font-weight: 900;
-						letter-spacing: 1px;
-					}
+					height: 70px;
+					.tpc-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
 				}
 
 				.tpc-body {
@@ -380,52 +282,26 @@
 					flex-direction: column;
 					gap: 5px;
 
-					.tpc-type {
-						color: #22C55E;
-						font-family: $font;
-						font-size: 8px;
-						font-weight: 700;
-						letter-spacing: 1.5px;
-						text-transform: uppercase;
-					}
-
-					.tpc-name {
-						color: #ffffff;
-						font-family: $font;
-						font-size: 12px;
-						font-weight: 700;
-						margin: 0;
-						line-height: 1.3;
-					}
-
+					.tpc-type { color: #E92C28; font-family: $font; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+					.tpc-name { color: #ffffff; font-family: $font; font-size: 12px; font-weight: 700; margin: 0; line-height: 1.3; }
 					.tpc-meta {
-						display: flex;
-						align-items: center;
-						gap: 8px;
-						color: #666666;
-						font-family: $font;
-						font-size: 11px;
-						margin-top: 2px;
-
-						.tpc-price {
-							margin-left: auto;
-							color: #FFB800;
-							font-weight: 700;
-						}
+						display: flex; align-items: center; gap: 8px; color: #6B7280; font-family: $font; font-size: 11px; margin-top: 2px;
+						.tpc-price { margin-left: auto; color: #FFB800; font-weight: 700; }
 					}
 				}
 			}
 		}
 
-		// ─── FEEDBACK ────────────────────────────────────────────
+		// ─── RATING BARS ─────────────────────────────────────────
 		.tdp-rbar-block {
 			display: flex;
 			align-items: center;
 			gap: 32px;
-			background: #111111;
+			background: #111827;
 			border: 1px solid rgba(255, 255, 255, 0.06);
 			border-radius: 10px;
 			padding: 20px 24px;
+			margin-bottom: 16px;
 
 			.tdp-rbar-score {
 				display: flex;
@@ -434,25 +310,9 @@
 				gap: 6px;
 				min-width: 80px;
 
-				.tdp-rbar-big {
-					color: #FFB800;
-					font-family: $font;
-					font-size: 36px;
-					font-weight: 900;
-					line-height: 1;
-				}
-
-				.tdp-stars {
-					.star { color: #2a2a2a; font-size: 14px; }
-					.star.filled { color: #FFB800; }
-				}
-
-				.tdp-rbar-total {
-					color: #555555;
-					font-family: $font;
-					font-size: 10px;
-					text-align: center;
-				}
+				.tdp-rbar-big { color: #FFB800; font-family: $font; font-size: 36px; font-weight: 900; line-height: 1; }
+				.tdp-stars { .star { color: #2a2a2a; font-size: 14px; } .star.filled { color: #FFB800; } }
+				.tdp-rbar-total { color: #6B7280; font-family: $font; font-size: 10px; text-align: center; }
 			}
 
 			.tdp-rbar-bars {
@@ -462,52 +322,26 @@
 				gap: 7px;
 
 				.tdp-rbar-row {
-					display: flex;
-					align-items: center;
-					gap: 10px;
-
-					.tdp-rbar-lbl {
-						color: #666666;
-						font-family: $font;
-						font-size: 11px;
-						width: 28px;
-						text-align: right;
-						flex-shrink: 0;
-					}
-
+					display: flex; align-items: center; gap: 10px;
+					.tdp-rbar-lbl { color: #6B7280; font-family: $font; font-size: 11px; width: 28px; text-align: right; flex-shrink: 0; }
 					.tdp-rbar-track {
-						flex: 1;
-						height: 4px;
-						background: rgba(255, 255, 255, 0.05);
-						border-radius: 2px;
-						overflow: hidden;
-
-						.tdp-rbar-fill {
-							height: 100%;
-							background: #FFB800;
-							border-radius: 2px;
-						}
+						flex: 1; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;
+						.tdp-rbar-fill { height: 100%; background: #FFB800; border-radius: 2px; }
 					}
-
-					.tdp-rbar-pct {
-						color: #555555;
-						font-family: $font;
-						font-size: 11px;
-						width: 28px;
-						text-align: right;
-						flex-shrink: 0;
-					}
+					.tdp-rbar-pct { color: #6B7280; font-family: $font; font-size: 11px; width: 28px; text-align: right; flex-shrink: 0; }
 				}
 			}
 		}
 
+		// ─── FEEDBACK CARDS ──────────────────────────────────────
 		.tdp-feedback-grid {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			gap: 10px;
+			margin-bottom: 20px;
 
 			.tdp-fb-card {
-				background: #111111;
+				background: #111827;
 				border: 1px solid rgba(255, 255, 255, 0.06);
 				border-radius: 10px;
 				padding: 16px 18px;
@@ -516,73 +350,59 @@
 				gap: 10px;
 
 				.tdp-fb-head {
-					display: flex;
-					align-items: center;
-					gap: 10px;
+					display: flex; align-items: center; gap: 10px;
 
 					.tdp-fb-avatar {
-						width: 36px;
-						height: 36px;
-						border-radius: 50%;
-						background: rgba(34, 197, 94, 0.08);
-						border: 1px solid rgba(34, 197, 94, 0.16);
-						color: #22C55E;
-						font-family: $font;
-						font-size: 11px;
-						font-weight: 800;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						flex-shrink: 0;
+						width: 36px; height: 36px; border-radius: 50%;
+						background: rgba(233, 44, 40, 0.08);
+						border: 1px solid rgba(233, 44, 40, 0.2);
+						color: #E92C28; font-family: $font; font-size: 11px; font-weight: 800;
+						display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 					}
 
 					.tdp-fb-meta {
-						flex: 1;
-						display: flex;
-						flex-direction: column;
-						gap: 2px;
-
-						.tdp-fb-name {
-							color: #ffffff;
-							font-family: $font;
-							font-size: 13px;
-							font-weight: 700;
-						}
-
-						.tdp-fb-date {
-							color: #444444;
-							font-family: $font;
-							font-size: 11px;
-						}
+						flex: 1; display: flex; flex-direction: column; gap: 2px;
+						.tdp-fb-name { color: #ffffff; font-family: $font; font-size: 13px; font-weight: 700; }
+						.tdp-fb-date { color: #4B5563; font-family: $font; font-size: 11px; }
 					}
 
-					.tdp-fb-right {
-						display: flex;
-						flex-direction: column;
-						align-items: flex-end;
-						gap: 3px;
-
-						.td-stars {
-							.star { color: #202020; font-size: 12px; }
-							.star.filled { color: #FFB800; }
-						}
-
-						.tdp-fb-plan {
-							font-family: $font;
-							font-size: 9px;
-							font-weight: 800;
-							letter-spacing: 1px;
-						}
-					}
+					.td-stars { .star { color: #1F2937; font-size: 12px; } .star.filled { color: #FFB800; } }
 				}
 
-				.tdp-fb-text {
-					color: #888888;
-					font-family: $font;
-					font-size: 12px;
-					line-height: 1.65;
-					margin: 0;
-				}
+				.tdp-fb-text { color: #9CA3AF; font-family: $font; font-size: 12px; line-height: 1.65; margin: 0; }
+			}
+		}
+
+		// ─── FEEDBACK FORM ────────────────────────────────────────
+		.tdp-feedback-form {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+
+			.tdp-form-label {
+				color: #6B7280; font-family: $font; font-size: 10px; font-weight: 700;
+				letter-spacing: 1.5px; text-transform: uppercase;
+			}
+
+			.tdp-textarea {
+				width: 100%; padding: 12px 14px;
+				background: #111827;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 8px; color: #e2e8f0; font-size: 13px;
+				resize: vertical; outline: none; font-family: $font; box-sizing: border-box;
+				transition: border-color 0.2s;
+				&::placeholder { color: #374151; }
+				&:focus { border-color: rgba(233, 44, 40, 0.35); }
+				&:disabled { opacity: 0.4; }
+			}
+
+			.tdp-submit-btn {
+				align-self: flex-start; padding: 10px 24px;
+				background: #E92C28; border: none; border-radius: 7px; color: #fff;
+				font-family: $font; font-size: 13px; font-weight: 700; cursor: pointer;
+				transition: background 0.2s;
+				&:hover:not(:disabled) { background: #c0211e; }
+				&:disabled { background: #374151; cursor: not-allowed; }
 			}
 		}
 
@@ -593,175 +413,88 @@
 		}
 
 		.tdp-action-card {
-			background: #111111;
+			background: #1F2937;
 			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 12px;
-			padding: 22px 20px;
-			display: flex;
-			flex-direction: column;
-			gap: 14px;
+			overflow: hidden;
 
-			.tdp-ac-price {
+			.tdp-ac-top {
+				padding: 20px;
 				display: flex;
 				flex-direction: column;
-				gap: 2px;
-
-				.tdp-ac-from {
-					color: #555555;
-					font-family: $font;
-					font-size: 11px;
-				}
-
-				.tdp-ac-amount {
-					color: #ffffff;
-					font-family: $font;
-					font-size: 28px;
-					font-weight: 900;
-					line-height: 1;
-
-					.tdp-ac-per {
-						font-size: 13px;
-						font-weight: 400;
-						color: #555555;
-					}
-				}
+				gap: 16px;
 			}
 
-			.tdp-ac-book {
-				width: 100%;
-				padding: 13px;
-				background: #22C55E;
-				border: none;
-				border-radius: 8px;
-				color: #ffffff;
-				font-family: $font;
-				font-size: 14px;
-				font-weight: 800;
-				cursor: pointer;
-				transition: background 0.2s;
-				&:hover { background: #ff3d39; }
+			.tdp-ac-avatar-row {
+				display: flex;
+				align-items: center;
+				gap: 14px;
+
+				.tdp-ac-avatar {
+					width: 56px; height: 56px; border-radius: 50%;
+					object-fit: cover; object-position: center top;
+					border: 2px solid rgba(233, 44, 40, 0.4); flex-shrink: 0;
+				}
+
+				.tdp-ac-avatar-placeholder {
+					width: 56px; height: 56px; border-radius: 50%;
+					background: rgba(233, 44, 40, 0.08);
+					border: 2px solid rgba(233, 44, 40, 0.2);
+					display: flex; align-items: center; justify-content: center;
+					color: #E92C28; font-family: $font; font-size: 18px; font-weight: 900; flex-shrink: 0;
+				}
+
+				.tdp-ac-name-col {
+					display: flex; flex-direction: column; gap: 3px;
+					.tdp-ac-label { color: #6B7280; font-family: $font; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+					.tdp-ac-name { color: #ffffff; font-family: $font; font-size: 17px; font-weight: 900; }
+				}
 			}
 
 			.tdp-ac-btn-row {
-				display: flex;
-				gap: 8px;
-				align-items: stretch;
+				display: flex; gap: 8px; align-items: stretch;
 			}
 
 			.tdp-ac-follow {
-				flex: 1;
-				padding: 11px;
-				background: transparent;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 8px;
-				color: #aaaaaa;
-				font-family: $font;
-				font-size: 13px;
-				font-weight: 700;
-				cursor: pointer;
-				transition: all 0.2s;
-
-				&:hover {
-					border-color: rgba(34, 197, 94, 0.3);
-					color: #22C55E;
-				}
-
+				flex: 1; padding: 11px;
+				background: #E92C28; border: none; border-radius: 8px;
+				color: #fff; font-family: $font; font-size: 13px; font-weight: 700;
+				cursor: pointer; transition: background 0.2s;
+				&:hover { background: #c0211e; }
 				&.following {
-					background: rgba(78, 205, 100, 0.08);
-					border-color: rgba(78, 205, 100, 0.3);
-					color: #4ecd64;
+					background: rgba(233, 44, 40, 0.1);
+					border: 1px solid rgba(233, 44, 40, 0.3);
+					color: #E92C28;
 				}
 			}
 
 			.tdp-ac-like {
-				width: 44px;
-				height: 44px;
-				padding: 0;
-				background: transparent;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 8px;
-				color: rgba(255, 255, 255, 0.35);
-				font-size: 18px;
-				cursor: pointer;
-				transition: all 0.2s;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-shrink: 0;
-
-				&:hover {
-					border-color: rgba(34, 197, 94, 0.35);
-					color: #22C55E;
-				}
-
-				&.liked {
-					color: #22C55E;
-					border-color: rgba(34, 197, 94, 0.4);
-					background: rgba(34, 197, 94, 0.07);
-				}
+				width: 44px; height: 44px; padding: 0;
+				background: transparent; border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 8px; color: rgba(255, 255, 255, 0.35);
+				font-size: 18px; cursor: pointer; transition: all 0.2s;
+				display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+				&:hover { border-color: rgba(233, 44, 40, 0.4); color: #E92C28; }
 			}
 
-			.tdp-ac-divider {
-				height: 1px;
-				background: rgba(255, 255, 255, 0.06);
-			}
+			.tdp-ac-divider { height: 1px; background: rgba(255, 255, 255, 0.06); }
 
 			.tdp-ac-rows {
-				display: flex;
-				flex-direction: column;
-				gap: 9px;
+				padding: 16px 20px;
+				display: flex; flex-direction: column; gap: 10px;
 
 				.tdp-ac-row {
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-
-					> span:first-child {
-						color: #555555;
-						font-family: $font;
-						font-size: 12px;
-					}
-
-					> span:last-child {
-						color: #cccccc;
-						font-family: $font;
-						font-size: 12px;
-						font-weight: 600;
-						text-transform: uppercase;
-					}
+					display: flex; justify-content: space-between; align-items: center;
+					> span:first-child { color: #6B7280; font-family: $font; font-size: 12px; }
+					> span:last-child { color: #D1D5DB; font-family: $font; font-size: 12px; font-weight: 600; text-transform: uppercase; }
 				}
 			}
 
-			.tdp-ac-label {
-				color: #444444;
-				font-family: $font;
-				font-size: 10px;
-				font-weight: 700;
-				letter-spacing: 2px;
-				margin: 0;
-			}
-
-			.tdp-ac-certs {
-				display: flex;
-				flex-direction: column;
-				gap: 7px;
-
-				.tdp-ac-cert {
-					display: flex;
-					align-items: center;
-					gap: 8px;
-					color: #999999;
-					font-family: $font;
-					font-size: 11px;
-
-					.tdp-cert-dot {
-						width: 4px;
-						height: 4px;
-						border-radius: 50%;
-						background: #22C55E;
-						flex-shrink: 0;
-					}
-				}
+			.tdp-ac-since {
+				padding: 14px 20px;
+				border-top: 1px solid rgba(255, 255, 255, 0.06);
+				.tdp-ac-since-label { color: #E92C28; font-family: $font; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 4px; }
+				.tdp-ac-since-val { color: #9CA3AF; font-family: $font; font-size: 12px; margin: 0; }
 			}
 		}
 	}

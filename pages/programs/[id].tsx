@@ -6,8 +6,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { GET_ONE_PROGRAM_WITH_MEMBER, GET_COMMENTS, GET_PROGRAM_WITH_WORKOUTS } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM } from '../../apollo/user/mutation';
+import { GET_ONE_PROGRAM_WITH_MEMBER, GET_COMMENTS, GET_PROGRAM_WITH_WORKOUTS, GET_FEEDBACKS } from '../../apollo/user/query';
+import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM, TOGGLE_BOOKMARK, CREATE_FEEDBACK } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { Program, Workout } from '../../libs/types/program/program';
 import { Comment } from '../../libs/types/comment/comment';
@@ -24,6 +24,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import { trackProgramVisit } from '../../libs/components/mypage/RecentlyVisited';
 
 const SAVED_KEY = 'athlex_saved_programs';
 const JOINED_KEY = 'athlex_joined_programs';
@@ -54,12 +55,19 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		commentContent: '',
 		commentRefId: '',
 	});
+	const [feedbackScale, setFeedbackScale] = useState(0);
+	const [feedbackHover, setFeedbackHover] = useState(0);
+	const [feedbackContent, setFeedbackContent] = useState('');
+	const [averageRating, setAverageRating] = useState(0);
+	const [ratingCount, setRatingCount] = useState(0);
 
 	/** APOLLO **/
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 	const [createComment] = useMutation(CREATE_COMMENT);
 	const [joinProgram] = useMutation(JOIN_PROGRAM);
 	const [leaveProgram] = useMutation(LEAVE_PROGRAM);
+	const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK);
+	const [createFeedback] = useMutation(CREATE_FEEDBACK);
 
 	const { loading, refetch: getProgramRefetch } = useQuery(GET_ONE_PROGRAM_WITH_MEMBER, {
 		fetchPolicy: 'network-only',
@@ -105,6 +113,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	// Refetch after 400ms so the backend-incremented view count is picked up
 	useEffect(() => {
 		if (!id) return;
+		trackProgramVisit(id as string);
 		const t = setTimeout(() => {
 			getProgramRefetch({ programId: id }).then((res) => {
 				const updated = res.data?.getOneProgramWithMember;
@@ -181,15 +190,14 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		}
 	};
 
-	const toggleSavedHandler = () => {
+	const toggleSavedHandler = async () => {
 		try {
-			const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) ?? '[]');
-			const newList = list.includes(id as string)
-				? list.filter((x) => x !== id)
-				: [...list, id as string];
-			localStorage.setItem(SAVED_KEY, JSON.stringify(newList));
-			setSaved(newList.includes(id as string));
-		} catch {}
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			await toggleBookmark({ variables: { input: { bookmarkGroup: 'PROGRAM', bookmarkRefId: id } } });
+			setSaved((prev) => !prev);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
 	};
 
 	const shareHandler = async () => {
@@ -489,6 +497,72 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 					{trainerSection}
 					{reviewsSection}
 					{leaveReviewSection}
+
+					{/* ── Star Rating Section ── */}
+					<section className="pdp-section">
+						<h2 className="pdp-section-title">Rate This Program</h2>
+						{averageRating > 0 && (
+							<div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+								<span style={{ fontSize: 28, fontWeight: 800, color: '#FFB800' }}>★ {averageRating.toFixed(1)}</span>
+								<span style={{ color: '#9ca3af', fontSize: 14 }}>({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</span>
+							</div>
+						)}
+						<div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+							{[1, 2, 3, 4, 5].map((star) => (
+								<span
+									key={star}
+									style={{
+										fontSize: 32,
+										cursor: user._id ? 'pointer' : 'default',
+										color: star <= (feedbackHover || feedbackScale) ? '#FFB800' : '#4b5563',
+										transition: 'color 0.15s',
+									}}
+									onMouseEnter={() => user._id && setFeedbackHover(star)}
+									onMouseLeave={() => setFeedbackHover(0)}
+									onClick={() => user._id && setFeedbackScale(star)}
+								>
+									★
+								</span>
+							))}
+						</div>
+						{feedbackScale > 0 && (
+							<>
+								<textarea
+									className="pdp-review-input"
+									rows={3}
+									placeholder="Tell us more about your rating (optional)..."
+									value={feedbackContent}
+									onChange={(e) => setFeedbackContent(e.target.value)}
+								/>
+								<button
+									className="pdp-submit-btn"
+									disabled={!user._id}
+									onClick={async () => {
+										try {
+											if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+											await createFeedback({
+												variables: {
+													input: {
+														feedbackGroup: 'TRAINING_PROGRAM',
+														feedbackRefId: id,
+														feedbackScale,
+														feedbackContent: feedbackContent || `Rated ${feedbackScale}/5`,
+													},
+												},
+											});
+											setFeedbackScale(0);
+											setFeedbackContent('');
+											await sweetTopSmallSuccessAlert('Rating submitted!', 800);
+										} catch (err: any) {
+											await sweetErrorHandling(err);
+										}
+									}}
+								>
+									Submit Rating
+								</button>
+							</>
+						)}
+					</section>
 				</div>
 
 				<aside className="pdp-sidebar">

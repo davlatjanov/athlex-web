@@ -50,14 +50,14 @@ const Events = () => {
 					</Stack>
 					<Stack className={'event-cards'}>
 						{gymEvents.map((event) => (
-							<Box key={event.title} className={'event-card'} style={{ background: event.gradient }}>
+							<div key={event.title} className={'event-card'} style={{ background: event.gradient }}>
 								<div className={'event-top'}>
 									<span className={'event-category'}>{event.category}</span>
 									<span className={'event-date'}>{event.date}</span>
 								</div>
 								<strong className={'event-title'}>{event.title}</strong>
 								<span className={'event-location'}>📍 {event.location}</span>
-							</Box>
+							</div>
 						))}
 					</Stack>
 				</Stack>
@@ -77,7 +77,7 @@ const Events = () => {
 				</Stack>
 				<Stack className={'event-cards'}>
 					{gymEvents.map((event) => (
-						<Box key={event.title} className={'event-card'} style={{ background: event.gradient }}>
+						<div key={event.title} className={'event-card'} style={{ background: event.gradient }}>
 							<div className={'event-top'}>
 								<span className={'event-category'}>{event.category}</span>
 								<span className={'event-date'}>{event.date}</span>
@@ -86,7 +86,7 @@ const Events = () => {
 							<span className={'event-location'}>📍 {event.location}</span>
 							<p className={'event-desc'}>{event.desc}</p>
 							<button className={'btn-event'}>Learn More</button>
-						</Box>
+						</div>
 					))}
 				</Stack>
 			</Stack>

@@ -78,7 +78,7 @@ function createIsomorphicLink() {
 
 		/* WEBSOCKET SUBSCRIPTION LINK */
 		const wsLink = new WebSocketLink({
-			uri: process.env.REACT_APP_API_WS ?? 'ws://127.0.0.1:3007',
+			uri: process.env.REACT_APP_API_WS ?? 'ws://localhost:4000/graphql',
 			options: {
 				reconnect: false,
 				timeout: 30000,
@@ -93,12 +93,29 @@ function createIsomorphicLink() {
 			if (graphQLErrors) {
 				graphQLErrors.map(({ message, locations, path, extensions }) => {
 					console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+					// Handle expired/invalid tokens
+					if (
+						extensions?.code === 'UNAUTHENTICATED' ||
+						message.includes('UNAUTHENTICATED') ||
+						message.includes('jwt expired') ||
+						message.includes('jwt malformed')
+					) {
+						localStorage.removeItem('accessToken');
+						if (typeof window !== 'undefined' && !window.location.pathname.includes('/account/join')) {
+							window.location.href = '/account/join';
+						}
+						return;
+					}
 					if (!message.includes('input')) sweetErrorAlert(message);
 				});
 			}
 			if (networkError) console.log(`[Network error]: ${networkError}`);
 			// @ts-ignore
 			if (networkError?.statusCode === 401) {
+				localStorage.removeItem('accessToken');
+				if (typeof window !== 'undefined' && !window.location.pathname.includes('/account/join')) {
+					window.location.href = '/account/join';
+				}
 			}
 		});
 

@@ -3,16 +3,18 @@ import { useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
-import { Stack, Box } from '@mui/material';
+import { Stack, Box, Badge } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
+import { useCart } from '../context/CartContext';
 
 
 const Top = () => {
@@ -20,10 +22,13 @@ const Top = () => {
 	const user = useReactiveVar(userVar);
 	const { t } = useTranslation('common');
 	const router = useRouter();
+	const cart = useCart();
 	const [colorChange, setColorChange] = useState(false);
 	const [bgColor, setBgColor] = useState<boolean>(false);
 	const [logoutAnchor, setLogoutAnchor] = React.useState<null | HTMLElement>(null);
 	const logoutOpen = Boolean(logoutAnchor);
+	const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null);
+	const notifOpen = Boolean(notifAnchor);
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -63,15 +68,20 @@ const Top = () => {
 				<Link href={'/programs'}>
 					<div>{t('Programs')}</div>
 				</Link>
-				<Link href={'/trainer'}>
-					<div>{t('Trainers')}</div>
+				<Link href={'/products'}>
+					<div>{t('Shop')}</div>
 				</Link>
-				<Link href={'/about'}>
-					<div>{t('About')}</div>
-				</Link>
-				<Link href={'/cs'}>
-					<div>{t('Support')}</div>
-				</Link>
+				{user?._id ? (
+					<Link href={'/mypage'}>
+						<div>{t('My Page')}</div>
+					</Link>
+				) : (
+					<Link href={'/account/join'}>
+						<div>
+							{t('Login')} / {t('Register')}
+						</div>
+					</Link>
+				)}
 			</Stack>
 		);
 	} else {
@@ -81,7 +91,7 @@ const Top = () => {
 					<Stack className={'container'}>
 						<Box component={'div'} className={'logo-box'}>
 							<Link href={'/'}>
-								<span className={'logo-name'}>ATHLEX</span>
+								<img src="/img/logo/logoWhite.svg" alt="athlex logo" />
 							</Link>
 						</Box>
 						<Box component={'div'} className={'router-box'}>
@@ -97,6 +107,9 @@ const Top = () => {
 							<Link href={'/products'}>
 								<div>{t('Shop')}</div>
 							</Link>
+							<Link href={'/ai-coach'}>
+								<div>{t('AI Coach')}</div>
+							</Link>
 							<Link href={'/about'}>
 								<div>{t('About')}</div>
 							</Link>
@@ -110,7 +123,53 @@ const Top = () => {
 						<Box component={'div'} className={'user-box'}>
 							{user?._id ? (
 								<>
-									<NotificationsOutlinedIcon className={'notification-icon'} />
+									{/* Cart icon with badge */}
+									<Badge
+										badgeContent={cart.totalItems}
+										color="error"
+										sx={{ cursor: 'pointer', mr: 1 }}
+										onClick={() => router.push('/products')}
+									>
+										<ShoppingBagOutlinedIcon className={'notification-icon'} />
+									</Badge>
+
+									{/* Notifications icon with dropdown */}
+									<Badge
+										badgeContent={0}
+										color="error"
+										variant="dot"
+										invisible={true}
+										sx={{ cursor: 'pointer' }}
+									>
+										<NotificationsOutlinedIcon
+											className={'notification-icon'}
+											onClick={(e: any) => setNotifAnchor(e.currentTarget)}
+										/>
+									</Badge>
+									<Menu
+										anchorEl={notifAnchor}
+										open={notifOpen}
+										onClose={() => setNotifAnchor(null)}
+										sx={{ mt: '5px' }}
+										PaperProps={{
+											sx: {
+												minWidth: 280,
+												maxWidth: 340,
+												maxHeight: 360,
+												background: '#1a1f2e',
+												color: '#e2e8f0',
+												border: '1px solid rgba(255,255,255,0.08)',
+											},
+										}}
+									>
+										<div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+											<strong style={{ fontSize: 15 }}>Notifications</strong>
+										</div>
+										<MenuItem disabled sx={{ color: '#6b7280 !important', fontSize: 13, justifyContent: 'center', py: 3 }}>
+											No new notifications
+										</MenuItem>
+									</Menu>
+
 									<div
 										className={'login-user'}
 										onClick={(event: any) => setLogoutAnchor(event.currentTarget)}

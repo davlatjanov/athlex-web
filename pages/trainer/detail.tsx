@@ -61,6 +61,10 @@ const InteractiveStars = ({ value, onChange }: { value: number; onChange: (v: nu
 	</span>
 );
 
+const SCALE_MAP: Record<number, string> = { 1: 'ONE', 2: 'TWO', 3: 'THREE', 4: 'FOUR', 5: 'FIVE' };
+const SCALE_TO_NUM: Record<string, number> = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
+const toNum = (v: any): number => typeof v === 'number' ? v : (SCALE_TO_NUM[v] ?? 0);
+
 const TrainerDetail: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -126,13 +130,16 @@ const TrainerDetail: NextPage = () => {
 	const handleFeedbackSubmit = async () => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-			if (!feedbackContent.trim()) return;
+			if (feedbackContent.trim().length < 10) {
+				sweetMixinErrorAlert("Feedback must be at least 10 characters.").then();
+				return;
+			}
 			await createFeedback({
 				variables: {
 					input: {
 						feedbackRefId: trainerId,
 						feedbackGroup: FeedbackGroup.TRAINER,
-						feedbackScale,
+						feedbackScale: SCALE_MAP[feedbackScale],
 						feedbackContent,
 					},
 				},
@@ -174,11 +181,11 @@ const TrainerDetail: NextPage = () => {
 	}
 
 	const avgRating = feedbacks.length > 0
-		? feedbacks.reduce((sum, f) => sum + f.feedbackScale, 0) / feedbacks.length
+		? feedbacks.reduce((sum, f) => sum + toNum(f.feedbackScale), 0) / feedbacks.length
 		: 0;
 	const ratingDist = [5, 4, 3, 2, 1].map((s) => ({
 		stars: s,
-		count: feedbacks.filter((f) => f.feedbackScale === s).length,
+		count: feedbacks.filter((f) => toNum(f.feedbackScale) === s).length,
 	}));
 	const displayFollowers = trainer.memberFollowers >= 1000
 		? `${(trainer.memberFollowers / 1000).toFixed(1)}K` : String(trainer.memberFollowers);
@@ -186,67 +193,49 @@ const TrainerDetail: NextPage = () => {
 	return (
 		<div id="trainer-detail-page">
 
-			{/* ─── HERO ─────────────────────────────────────────────── */}
-			<div className="tdp-hero" style={{ background: 'linear-gradient(135deg, #111827 0%, #1f2937 100%)' }}>
-				{trainer.memberImage && (
-					<img
-						src={trainer.memberImage}
-						alt={trainer.memberNick}
-						className="tdp-hero-bg-img"
-						onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-					/>
-				)}
-				<div className="tdp-hero-overlay" />
-				<div className="tdp-hero-inner">
+			{/* ─── HERO SPLIT ────────────────────────────────────────── */}
+			<div className="tdp-hero-wrap">
+				<div className="tdp-hero-left">
 					<Link href="/trainer" className="tdp-back">← Trainers</Link>
-					<div className="tdp-hero-profile">
+					<div className="tdp-badges">
+						<span className="badge-type">TRAINER</span>
+						{trainer.memberPlan && <span className="badge-plan">{trainer.memberPlan}</span>}
+					</div>
+					<h1 className="tdp-name">{trainer.memberFullName || trainer.memberNick}</h1>
+					<p className="tdp-nick">@{trainer.memberNick}</p>
+					{trainer.memberDesc && <p className="tdp-desc">{trainer.memberDesc}</p>}
+					<div className="tdp-stat-pills">
+						<div className="tdp-pill">
+							<span className="pill-val">{trainer.memberPrograms ?? 0}</span>
+							<span className="pill-lbl">Programs</span>
+						</div>
+						<div className="tdp-pill">
+							<span className="pill-val">{displayFollowers}</span>
+							<span className="pill-lbl">Followers</span>
+						</div>
+						<div className="tdp-pill">
+							<span className="pill-val">{trainer.memberPoints ?? 0}</span>
+							<span className="pill-lbl">Points</span>
+						</div>
+						<div className="tdp-pill">
+							<span className="pill-val">{avgRating > 0 ? `★ ${avgRating.toFixed(1)}` : '—'}</span>
+							<span className="pill-lbl">Rating</span>
+						</div>
+					</div>
+				</div>
+				<div className="tdp-hero-right">
+					{trainer.memberImage ? (
 						<img
-							src={trainer.memberImage || '/img/profile/defaultUser.svg'}
-							alt={trainer.memberNick}
-							className="tdp-avatar"
+							src={trainer.memberImage}
+							alt={trainer.memberFullName || trainer.memberNick}
+							className="tdp-hero-img"
 							onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
 						/>
-						<div className="tdp-hero-info">
-							<div className="tdp-level-badge">{trainer.memberPlan ?? 'TRAINER'}</div>
-							<h1 className="tdp-name">{trainer.memberFullName || trainer.memberNick}</h1>
-							<p className="tdp-nick">@{trainer.memberNick}</p>
-							{trainer.memberDesc && (
-								<p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, marginTop: 6, maxWidth: 440 }}>
-									{trainer.memberDesc}
-								</p>
-							)}
+					) : (
+						<div className="tdp-hero-img-placeholder">
+							{(trainer.memberFullName || trainer.memberNick || '?')[0].toUpperCase()}
 						</div>
-					</div>
-					<div className="tdp-hero-stats">
-						{avgRating > 0 && (
-							<>
-								<div className="tdp-hs-item">
-									<span className="ths-val">★ {avgRating.toFixed(1)}</span>
-									<span className="ths-lbl">Rating</span>
-								</div>
-								<div className="tdp-hs-sep" />
-							</>
-						)}
-						<div className="tdp-hs-item">
-							<span className="ths-val">{displayFollowers}</span>
-							<span className="ths-lbl">Followers</span>
-						</div>
-						<div className="tdp-hs-sep" />
-						<div className="tdp-hs-item">
-							<span className="ths-val">{trainer.memberFollowings}</span>
-							<span className="ths-lbl">Following</span>
-						</div>
-						<div className="tdp-hs-sep" />
-						<div className="tdp-hs-item">
-							<span className="ths-val">{trainer.memberPrograms}</span>
-							<span className="ths-lbl">Programs</span>
-						</div>
-						<div className="tdp-hs-sep" />
-						<div className="tdp-hs-item">
-							<span className="ths-val">{trainer.memberPoints}</span>
-							<span className="ths-lbl">Points</span>
-						</div>
-					</div>
+					)}
 				</div>
 			</div>
 
@@ -258,154 +247,145 @@ const TrainerDetail: NextPage = () => {
 
 					{/* About */}
 					{trainer.memberDesc && (
-						<section className="tdp-section">
-							<h2 className="tdp-section-title">About</h2>
-							<p className="tdp-bio">{trainer.memberDesc}</p>
-						</section>
+						<div className="tdp-card">
+							<div className="tdp-card-head"><h3>About</h3></div>
+							<div className="tdp-card-body">
+								<p className="tdp-bio">{trainer.memberDesc}</p>
+							</div>
+						</div>
 					)}
 
 					{/* Programs */}
 					{trainerPrograms.length > 0 && (
-						<section className="tdp-section">
-							<div className="tdp-section-header">
-								<h2 className="tdp-section-title">Programs</h2>
-								<Link href={`/programs`} className="tdp-see-all">See all →</Link>
+						<div className="tdp-card">
+							<div className="tdp-card-head">
+								<h3>Programs</h3>
+								<Link href="/programs">See all →</Link>
 							</div>
-							<div className="tdp-programs-grid">
-								{trainerPrograms.map((prog: Program) => (
-									<Link href={{ pathname: '/programs/detail', query: { id: prog._id } }} key={prog._id} className="tdp-prog-card">
-										<div className="tpc-banner" style={{ background: typeGradients[prog.programType] ?? typeGradients['STRENGTH'] }}>
-											<div className="tpc-overlay" />
-											{prog.programImages?.[0] && (
-												<img src={prog.programImages[0]} alt={prog.programName} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
-											)}
-										</div>
-										<div className="tpc-body">
-											<span className="tpc-type">{prog.programType?.replace(/_/g, ' ')}</span>
-											<p className="tpc-name">{prog.programName}</p>
-											<div className="tpc-meta">
-												<span>⏱ {prog.programDuration}wk</span>
-												<span className="tpc-price">{prog.programPrice === 0 ? 'FREE' : `$${prog.programPrice}`}</span>
+							<div className="tdp-card-body">
+								<div className="tdp-programs-grid">
+									{trainerPrograms.map((prog: Program) => (
+										<Link href={`/programs/${prog._id}`} key={prog._id} className="tdp-prog-card">
+											<div className="tpc-banner" style={{ background: typeGradients[prog.programType] ?? typeGradients['STRENGTH'] }}>
+												<div className="tpc-overlay" />
+												{prog.programImages?.[0] && (
+													<img src={prog.programImages[0]} alt={prog.programName} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+												)}
 											</div>
-										</div>
-									</Link>
-								))}
+											<div className="tpc-body">
+												<span className="tpc-type">{prog.programType?.replace(/_/g, ' ')}</span>
+												<p className="tpc-name">{prog.programName}</p>
+												<div className="tpc-meta">
+													<span>⏱ {prog.programDuration}wk</span>
+													<span className="tpc-price">{prog.programPrice === 0 ? 'FREE' : `$${prog.programPrice}`}</span>
+												</div>
+											</div>
+										</Link>
+									))}
+								</div>
 							</div>
-						</section>
+						</div>
 					)}
 
 					{/* Feedbacks */}
-					<section className="tdp-section">
-						<div className="tdp-section-header">
-							<h2 className="tdp-section-title">Client Feedback</h2>
-							{avgRating > 0 && (
-								<span className="tdp-avg-rating">★ {avgRating.toFixed(1)} · {feedbacks.length} reviews</span>
-							)}
+					<div className="tdp-card">
+						<div className="tdp-card-head">
+							<h3>Client Feedback</h3>
+							{avgRating > 0 && <span className="tdp-avg-rating">★ {avgRating.toFixed(1)} · {feedbacks.length} reviews</span>}
 						</div>
-
-						{feedbacks.length > 0 && (
-							<>
-								{avgRating > 0 && (
-									<div className="tdp-rbar-block">
-										<div className="tdp-rbar-score">
-											<span className="tdp-rbar-big">{avgRating.toFixed(1)}</span>
-											<StarRating scale={Math.round(avgRating)} />
-											<span className="tdp-rbar-total">{feedbacks.length} clients rated</span>
-										</div>
-										<div className="tdp-rbar-bars">
-											{ratingDist.map(({ stars, count }) => {
-												const pct = feedbacks.length > 0 ? Math.round((count / feedbacks.length) * 100) : 0;
-												return (
-													<div key={stars} className="tdp-rbar-row">
-														<span className="tdp-rbar-lbl">{stars} ★</span>
-														<div className="tdp-rbar-track">
-															<div className="tdp-rbar-fill" style={{ width: `${pct}%` }} />
-														</div>
-														<span className="tdp-rbar-pct">{pct}%</span>
-													</div>
-												);
-											})}
-										</div>
-									</div>
-								)}
-								<div className="tdp-feedback-grid">
-									{feedbacks.map((fb: Feedback) => (
-										<div key={fb._id} className="tdp-fb-card">
-											<div className="tdp-fb-head">
-												<div className="tdp-fb-avatar">
-													{fb.memberData?.memberNick?.[0]?.toUpperCase() ?? '?'}
-												</div>
-												<div className="tdp-fb-meta">
-													<span className="tdp-fb-name">{fb.memberData?.memberNick ?? 'Member'}</span>
-													<span className="tdp-fb-date">{moment(fb.createdAt).format('MMM DD, YYYY')}</span>
-												</div>
-												<div className="tdp-fb-right">
-													<StarRating scale={fb.feedbackScale} />
-												</div>
+						<div className="tdp-card-body">
+							{feedbacks.length > 0 && (
+								<>
+									{avgRating > 0 && (
+										<div className="tdp-rbar-block">
+											<div className="tdp-rbar-score">
+												<span className="tdp-rbar-big">{avgRating.toFixed(1)}</span>
+												<StarRating scale={Math.round(avgRating)} />
+												<span className="tdp-rbar-total">{feedbacks.length} clients rated</span>
 											</div>
-											<p className="tdp-fb-text">{fb.feedbackContent}</p>
+											<div className="tdp-rbar-bars">
+												{ratingDist.map(({ stars, count }) => {
+													const pct = feedbacks.length > 0 ? Math.round((count / feedbacks.length) * 100) : 0;
+													return (
+														<div key={stars} className="tdp-rbar-row">
+															<span className="tdp-rbar-lbl">{stars} ★</span>
+															<div className="tdp-rbar-track">
+																<div className="tdp-rbar-fill" style={{ width: `${pct}%` }} />
+															</div>
+															<span className="tdp-rbar-pct">{pct}%</span>
+														</div>
+													);
+												})}
+											</div>
 										</div>
-									))}
-								</div>
-							</>
-						)}
-
-						{/* Submit feedback */}
-						<div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
-							<p style={{ color: '#aaa', fontSize: 12, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase' }}>
-								Leave Feedback
-							</p>
-							<InteractiveStars value={feedbackScale} onChange={setFeedbackScale} />
-							<textarea
-								rows={3}
-								placeholder={user._id ? 'Share your experience with this trainer…' : 'Login to leave feedback'}
-								value={feedbackContent}
-								onChange={(e) => setFeedbackContent(e.target.value)}
-								disabled={!user._id}
-								style={{
-									width: '100%', padding: '10px 14px', background: '#1f2937',
-									border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8,
-									color: '#e2e8f0', fontSize: 13, resize: 'vertical', outline: 'none',
-									fontFamily: 'inherit', boxSizing: 'border-box',
-								}}
-							/>
-							<button
-								onClick={handleFeedbackSubmit}
-								disabled={!feedbackContent.trim() || !user._id}
-								style={{
-									alignSelf: 'flex-start', padding: '10px 24px',
-									background: feedbackContent.trim() && user._id ? '#E92C28' : '#333',
-									border: 'none', borderRadius: 7, color: '#fff',
-									fontFamily: 'inherit', fontSize: 13, fontWeight: 700,
-									cursor: feedbackContent.trim() && user._id ? 'pointer' : 'not-allowed',
-								}}
-							>
-								Submit Feedback
-							</button>
+									)}
+									<div className="tdp-feedback-grid">
+										{feedbacks.map((fb: Feedback) => (
+											<div key={fb._id} className="tdp-fb-card">
+												<div className="tdp-fb-head">
+													<div className="tdp-fb-avatar">
+														{fb.memberData?.memberNick?.[0]?.toUpperCase() ?? '?'}
+													</div>
+													<div className="tdp-fb-meta">
+														<span className="tdp-fb-name">{fb.memberData?.memberNick ?? 'Member'}</span>
+														<span className="tdp-fb-date">{moment(fb.createdAt).format('MMM DD, YYYY')}</span>
+													</div>
+													<StarRating scale={toNum(fb.feedbackScale)} />
+												</div>
+												<p className="tdp-fb-text">{fb.feedbackContent}</p>
+											</div>
+										))}
+									</div>
+								</>
+							)}
+							<div className="tdp-feedback-form">
+								<p className="tdp-form-label">Leave Feedback</p>
+								<InteractiveStars value={feedbackScale} onChange={setFeedbackScale} />
+								<textarea
+									className="tdp-textarea"
+									rows={3}
+									placeholder={user._id ? 'Share your experience with this trainer… (min 10 chars)' : 'Login to leave feedback'}
+									value={feedbackContent}
+									onChange={(e) => setFeedbackContent(e.target.value)}
+									disabled={!user._id}
+								/>
+								<button
+									className="tdp-submit-btn"
+									onClick={handleFeedbackSubmit}
+									disabled={feedbackContent.trim().length < 10 || !user._id}
+								>
+									Submit Feedback
+								</button>
+							</div>
 						</div>
-					</section>
+					</div>
 				</div>
 
 				{/* ── RIGHT sticky sidebar ───────────────────────────── */}
 				<aside className="tdp-sidebar">
 					<div className="tdp-action-card">
-						<div className="tdp-ac-price">
-							<span className="tdp-ac-from">Trainer</span>
-							<span className="tdp-ac-amount" style={{ fontSize: 20 }}>{trainer.memberNick}</span>
+						<div className="tdp-ac-top">
+							<div className="tdp-ac-avatar-row">
+								{trainer.memberImage ? (
+									<img src={trainer.memberImage} alt={trainer.memberNick} className="tdp-ac-avatar" />
+								) : (
+									<div className="tdp-ac-avatar-placeholder">
+										{(trainer.memberFullName || trainer.memberNick || '?')[0].toUpperCase()}
+									</div>
+								)}
+								<div className="tdp-ac-name-col">
+									<span className="tdp-ac-label">Trainer</span>
+									<span className="tdp-ac-name">{trainer.memberNick}</span>
+								</div>
+							</div>
+							<div className="tdp-ac-btn-row">
+								<button className={`tdp-ac-follow ${followed ? 'following' : ''}`} onClick={handleFollow}>
+									{followed ? '✓ Following' : '+ Follow'}
+								</button>
+								<button className="tdp-ac-like" onClick={handleLike}>♡</button>
+							</div>
 						</div>
-
-						<div className="tdp-ac-btn-row">
-							<button
-								className={`tdp-ac-follow ${followed ? 'following' : ''}`}
-								onClick={handleFollow}
-							>
-								{followed ? '✓ Following' : '+ Follow'}
-							</button>
-							<button className="tdp-ac-like" onClick={handleLike}>♡</button>
-						</div>
-
 						<div className="tdp-ac-divider" />
-
 						<div className="tdp-ac-rows">
 							<div className="tdp-ac-row"><span>Type</span><span>{trainer.memberType}</span></div>
 							{trainer.memberPlan && (
@@ -414,26 +394,15 @@ const TrainerDetail: NextPage = () => {
 									<span style={{ color: planBadgeColor[trainer.memberPlan] ?? '#fff' }}>{trainer.memberPlan}</span>
 								</div>
 							)}
-							<div className="tdp-ac-row"><span>Programs</span><span>{trainer.memberPrograms} active</span></div>
+							<div className="tdp-ac-row"><span>Programs</span><span>{trainer.memberPrograms} Active</span></div>
 							<div className="tdp-ac-row"><span>Followers</span><span>{displayFollowers}</span></div>
 							<div className="tdp-ac-row"><span>Points</span><span>{trainer.memberPoints}</span></div>
-							{avgRating > 0 && (
-								<div className="tdp-ac-row"><span>Rating</span><span>★ {avgRating.toFixed(1)}</span></div>
-							)}
+							{avgRating > 0 && <div className="tdp-ac-row"><span>Rating</span><span>★ {avgRating.toFixed(1)}</span></div>}
 						</div>
-
-						{trainer.memberEmail && (
-							<>
-								<div className="tdp-ac-divider" />
-								<div className="tdp-ac-rows">
-									<div className="tdp-ac-row"><span>Email</span><span style={{ fontSize: 11 }}>{trainer.memberEmail}</span></div>
-								</div>
-							</>
-						)}
-
-						<div className="tdp-ac-divider" />
-						<p style={{ color: '#E92C28', fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>MEMBER SINCE</p>
-						<p style={{ color: '#9ca3af', fontSize: 12 }}>{moment(trainer.createdAt).format('MMMM YYYY')}</p>
+						<div className="tdp-ac-since">
+							<p className="tdp-ac-since-label">Member Since</p>
+							<p className="tdp-ac-since-val">{moment(trainer.createdAt).format('MMMM YYYY')}</p>
+						</div>
 					</div>
 				</aside>
 			</div>

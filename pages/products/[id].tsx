@@ -14,6 +14,7 @@ import { T } from '../../libs/types/common';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
 import { LikeGroup } from '../../libs/enums/like.enum';
+import { useCart } from '../../libs/context/CartContext';
 import moment from 'moment';
 
 export const getServerSideProps = async ({ locale }: any) => ({
@@ -89,9 +90,18 @@ const ProductDetail: NextPage = () => {
 		}
 	};
 
+	const cart = useCart();
+
 	const handleAddToCart = () => {
 		if (!product || product.productStatus !== 'ACTIVE') return;
-		setAddedToCart((prev) => !prev);
+		cart.addItem({
+			productId: productId,
+			productName: product.productName,
+			productImage: product.productImages?.[0] || '',
+			productPrice: product.productPrice,
+		}, qty);
+		setAddedToCart(true);
+		setTimeout(() => setAddedToCart(false), 2000);
 	};
 
 	if (loading) {

@@ -1,65 +1,61 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
+import { useMutation, useReactiveVar } from '@apollo/client';
+import { LIKE_TARGET_ITEM, FOLLOW_MEMBER } from '../../apollo/user/mutation';
+import { userVar } from '../../apollo/store';
+import { sweetMixinErrorAlert } from '../sweetAlert';
+import { LikeGroup } from '../enums/like.enum';
+import { Message } from '../enums/common.enum';
 
-const LIKES_KEY = 'athlex_likes';
-const FOLLOWS_KEY = 'athlex_follows';
-
-function getLikes(): { programs: string[]; trainers: string[] } {
-	if (typeof window === 'undefined') return { programs: [], trainers: [] };
-	try {
-		return { programs: [], trainers: [], ...JSON.parse(localStorage.getItem(LIKES_KEY) ?? '{}') };
-	} catch {
-		return { programs: [], trainers: [] };
-	}
-}
-
-function getFollows(): string[] {
-	if (typeof window === 'undefined') return [];
-	try {
-		return JSON.parse(localStorage.getItem(FOLLOWS_KEY) ?? '[]');
-	} catch {
-		return [];
-	}
-}
+const LIKE_GROUP_MAP: Record<string, LikeGroup> = {
+	programs: LikeGroup.PROGRAM,
+	trainers: LikeGroup.MEMBER,
+};
 
 export function useLike(group: 'programs' | 'trainers', id: string) {
+	const user = useReactiveVar(userVar);
 	const [liked, setLiked] = useState(false);
+	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 
-	useEffect(() => {
-		if (!id) return;
-		const data = getLikes();
-		setLiked((data[group] ?? []).includes(id));
-	}, [group, id]);
-
-	const toggle = (e: React.MouseEvent) => {
+	const toggle = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
-		const data = getLikes();
-		const list: string[] = data[group] ?? [];
-		const newList = list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
-		localStorage.setItem(LIKES_KEY, JSON.stringify({ ...data, [group]: newList }));
-		setLiked(newList.includes(id));
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			if (!id) return;
+			await likeTargetItem({
+				variables: {
+					input: {
+						likeGroup: LIKE_GROUP_MAP[group],
+						likeRefId: id,
+					},
+				},
+			});
+			setLiked((prev) => !prev);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
 	};
 
 	return { liked, toggle };
 }
 
 export function useFollow(trainerId: string) {
+	const user = useReactiveVar(userVar);
 	const [followed, setFollowed] = useState(false);
+	const [followMember] = useMutation(FOLLOW_MEMBER);
 
-	useEffect(() => {
-		if (!trainerId) return;
-		setFollowed(getFollows().includes(trainerId));
-	}, [trainerId]);
-
-	const toggle = () => {
-		if (!trainerId) return;
-		const list = getFollows();
-		const newList = list.includes(trainerId)
-			? list.filter((x) => x !== trainerId)
-			: [...list, trainerId];
-		localStorage.setItem(FOLLOWS_KEY, JSON.stringify(newList));
-		setFollowed(newList.includes(trainerId));
+	const toggle = async () => {
+		try {
+			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+			if (!trainerId) return;
+			await followMember({
+				variables: { input: { followingId: trainerId } },
+			});
+			setFollowed((prev) => !prev);
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+		}
 	};
 
 	return { followed, toggle };
