@@ -139,7 +139,7 @@ const AICoachPage: NextPage = () => {
 										className={`acp-conv-item ${conv._id === conversationId ? 'active' : ''}`}
 										onClick={() => loadConversation(conv)}
 									>
-										<span className="acp-conv-topic">{conv.topic || 'Conversation'}</span>
+										<span className="acp-conv-topic">{conv.title || 'Conversation'}</span>
 										<span className="acp-conv-date">{moment(conv.updatedAt).fromNow()}</span>
 									</div>
 								))}

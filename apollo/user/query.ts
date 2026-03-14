@@ -568,7 +568,7 @@ export const GET_MY_CONVERSATIONS = gql`
 	query GetMyConversations {
 		getMyConversations {
 			_id
-			topic
+			title
 			updatedAt
 		}
 	}
@@ -578,11 +578,12 @@ export const GET_CONVERSATION = gql`
 	query GetConversation($conversationId: String!) {
 		getConversation(conversationId: $conversationId) {
 			_id
-			topic
+			title
 			messages {
 				role
 				content
 			}
+			createdAt
 			updatedAt
 		}
 	}
