@@ -13,8 +13,8 @@
 			justify-content: center;
 			min-height: 60vh;
 			gap: 20px;
-			span { font-size: 56px; }
-			h2 { color: #888888; font-family: $font; font-size: 20px; }
+			span { font-size: 64px; }
+			h2, p { color: #aaaaaa; font-family: $font; font-size: 18px; }
 			button {
 				padding: 12px 28px;
 				background: #E92C28;
@@ -29,302 +29,273 @@
 			}
 		}
 
-		// ─── HERO ────────────────────────────────────────────────
-		.pdp-hero {
-			position: relative;
-			width: 100%;
-			overflow: hidden;
-			min-height: 280px;
+		// ─── HERO (split layout — matches programs) ───────────────
+		.pdp-hero-wrap {
+			max-width: 1280px;
+			margin: 0 auto;
+			padding: 40px 32px 48px;
+			display: grid;
+			grid-template-columns: 1fr 460px;
+			gap: 48px;
+			align-items: center;
+		}
 
-			.pdp-hero-bg {
-				position: absolute;
-				inset: 0;
+		.pdp-hero-left {
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+		}
+
+		.pdp-hero-right {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+
+			.pdp-hero-img {
 				width: 100%;
-				height: 100%;
+				height: 340px;
 				object-fit: cover;
 				object-position: center;
-				filter: blur(18px) brightness(0.3) saturate(0.5);
-				transform: scale(1.06);
+				border-radius: 12px;
+				display: block;
+				box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 			}
 
-			.pdp-hero-overlay {
-				position: absolute;
-				inset: 0;
-				background: linear-gradient(160deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
-				z-index: 1;
-			}
-
-			.pdp-hero-inner {
-				position: relative;
-				z-index: 2;
-				max-width: 1280px;
-				margin: 0 auto;
-				padding: 28px 32px 36px;
+			.pdp-thumb-row {
 				display: flex;
-				flex-direction: column;
-				gap: 20px;
-			}
+				gap: 8px;
+				flex-wrap: wrap;
 
-			.pdp-back {
-				color: rgba(255, 255, 255, 0.4);
-				font-family: $font;
-				font-size: 12px;
-				text-decoration: none;
-				align-self: flex-start;
-				transition: color 0.2s;
-				&:hover { color: #fff; }
-			}
+				.pdp-thumb {
+					width: 64px;
+					height: 52px;
+					object-fit: cover;
+					border-radius: 6px;
+					cursor: pointer;
+					border: 2px solid transparent;
+					opacity: 0.55;
+					transition: all 0.2s;
 
-			.pdp-hero-content {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				gap: 40px;
-			}
+					&.active {
+						border-color: #E92C28;
+						opacity: 1;
+					}
 
-			.pdp-hero-left {
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
-				flex: 1;
+					&:hover { opacity: 0.85; }
+				}
 			}
+		}
 
-			.pdp-brand-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
+		.pdp-back {
+			color: #6B7280;
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			text-decoration: none;
+			text-transform: uppercase;
+			transition: color 0.2s;
+			align-self: flex-start;
+			&:hover { color: #fff; }
+		}
 
-			.pdp-type-badge {
-				padding: 3px 10px;
+		.pdp-badges {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+
+			.badge-type {
+				padding: 4px 12px;
 				background: #E92C28;
 				color: #fff;
+				font-family: $font;
+				font-size: 9px;
+				font-weight: 800;
+				letter-spacing: 1.5px;
+				text-transform: uppercase;
+				border-radius: 3px;
+			}
+
+			.badge-brand {
+				padding: 4px 12px;
+				background: rgba(255, 255, 255, 0.06);
+				color: rgba(255, 255, 255, 0.65);
 				font-family: $font;
 				font-size: 9px;
 				font-weight: 700;
 				letter-spacing: 1.5px;
 				text-transform: uppercase;
 				border-radius: 3px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
 			}
 
-			.pdp-brand-name {
-				color: rgba(255, 255, 255, 0.5);
+			.badge-status {
 				font-family: $font;
-				font-size: 12px;
-				font-weight: 500;
-			}
-
-			.pdp-name {
-				color: #ffffff;
-				font-family: $font;
-				font-size: 30px;
-				font-weight: 900;
-				letter-spacing: 0.3px;
-				text-transform: uppercase;
-				margin: 0;
-				text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-				max-width: 600px;
-			}
-
-			.pdp-meta-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				flex-wrap: wrap;
-
-				.pdp-rating { color: #FFB800; font-family: $font; font-size: 13px; font-weight: 700; }
-				.pdp-dot { color: rgba(255, 255, 255, 0.2); }
-				.pdp-views { color: rgba(255, 255, 255, 0.4); font-family: $font; font-size: 12px; }
-				.pdp-likes { color: rgba(255, 255, 255, 0.5); font-family: $font; font-size: 13px; font-weight: 600; transition: color 0.2s; &:hover { color: #E92C28; } &.liked { color: #E92C28; } }
-				.pdp-status { font-family: $font; font-size: 12px; font-weight: 700; }
-			}
-
-			.pdp-hero-img {
-				width: 220px;
-				height: 220px;
-				object-fit: cover;
-				border-radius: 16px;
-				flex-shrink: 0;
-				box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
-				border: 1px solid rgba(255, 255, 255, 0.08);
+				font-size: 11px;
+				font-weight: 700;
 			}
 		}
 
-		// ─── BODY ────────────────────────────────────────────────
+		.pdp-hero-title {
+			color: #ffffff;
+			font-family: $font;
+			font-size: 44px;
+			font-weight: 900;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			margin: 0;
+			line-height: 1.05;
+		}
+
+		.pdp-hero-meta {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex-wrap: wrap;
+
+			.phm-item {
+				color: rgba(255, 255, 255, 0.5);
+				font-family: $font;
+				font-size: 13px;
+
+				&.phm-like {
+					cursor: pointer;
+					transition: color 0.2s;
+					&:hover { color: #E92C28; }
+					&.liked { color: #E92C28; }
+				}
+			}
+
+			.phm-dot {
+				width: 3px;
+				height: 3px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.2);
+				flex-shrink: 0;
+			}
+		}
+
+		// ─── BODY — 2-column grid ────────────────────────────────
 		.pdp-body {
 			max-width: 1280px;
 			margin: 0 auto;
-			padding: 32px 32px 80px;
+			padding: 32px 32px 64px;
 			display: grid;
-			grid-template-columns: 1fr 300px;
+			grid-template-columns: 1fr 320px;
 			gap: 28px;
 			align-items: start;
 		}
 
-		// ─── MAIN ────────────────────────────────────────────────
+		// ─── MAIN — left column ──────────────────────────────────
 		.pdp-main {
 			display: flex;
 			flex-direction: column;
-			gap: 32px;
+			gap: 20px;
 		}
 
+		// ─── STAT PILLS ──────────────────────────────────────────
+		.stat-pills {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 10px;
+
+			.stat-pill {
+				background: linear-gradient(135deg, #1F2937 0%, #1a2332 100%);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				border-radius: 12px;
+				padding: 20px 12px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 5px;
+				transition: all 0.25s;
+				&:hover { border-color: rgba(233, 44, 40, 0.4); transform: translateY(-2px); }
+
+				.sp-icon { font-size: 20px; }
+
+				.sp-val {
+					color: #E92C28;
+					font-family: $font;
+					font-size: 22px;
+					font-weight: 900;
+					line-height: 1;
+				}
+
+				.sp-lbl {
+					color: #6B7280;
+					font-family: $font;
+					font-size: 9px;
+					font-weight: 700;
+					letter-spacing: 2px;
+					text-transform: uppercase;
+				}
+			}
+		}
+
+		// ─── SECTIONS ────────────────────────────────────────────
 		.pdp-section {
 			display: flex;
 			flex-direction: column;
-			gap: 14px;
-		}
-
-		.pdp-section-header {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
+			gap: 16px;
+			background: #1F2937;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			border-radius: 12px;
+			padding: 24px;
+			transition: border-color 0.25s;
+			&:hover { border-color: rgba(233, 44, 40, 0.2); }
 		}
 
 		.pdp-section-title {
 			color: #ffffff;
 			font-family: $font;
-			font-size: 12px;
+			font-size: 13px;
 			font-weight: 800;
 			letter-spacing: 1.5px;
 			text-transform: uppercase;
 			margin: 0;
-			padding-bottom: 10px;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-			flex: 1;
-		}
-
-		.pdp-see-all {
-			color: #E92C28;
-			font-family: $font;
-			font-size: 12px;
-			font-weight: 600;
-			text-decoration: none;
-			white-space: nowrap;
-			margin-left: 12px;
-			padding-bottom: 10px;
-			&:hover { color: #c0211e; }
+			padding-left: 12px;
+			border-left: 3px solid #E92C28;
 		}
 
 		.pdp-desc {
-			color: #aaaaaa;
+			color: #9CA3AF;
 			font-family: $font;
-			font-size: 14px;
-			line-height: 1.75;
+			font-size: 15px;
+			line-height: 1.8;
 			margin: 0;
 		}
 
-		// ─── TAGS ────────────────────────────────────────────────
-		.pdp-tags {
+		// ─── SPEC ROWS ────────────────────────────────────────────
+		.spec-rows {
 			display: flex;
-			flex-wrap: wrap;
-			gap: 8px;
+			flex-direction: column;
+			gap: 0;
 
-			.pdp-tag {
-				padding: 7px 14px;
-				background: rgba(233, 44, 40, 0.07);
-				border: 1px solid rgba(233, 44, 40, 0.2);
-				color: #E92C28;
-				font-family: $font;
-				font-size: 11px;
-				font-weight: 600;
-				border-radius: 4px;
-			}
-		}
-
-		// ─── SPECS GRID ───────────────────────────────────────────
-		.pdp-specs-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
-
-			.pdp-spec-item {
-				background: #111111;
-				border: 1px solid rgba(255, 255, 255, 0.06);
-				border-radius: 8px;
-				padding: 14px 16px;
+			.spec-row {
 				display: flex;
-				flex-direction: column;
-				gap: 5px;
+				justify-content: space-between;
+				align-items: center;
+				padding: 12px 0;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-				.pdp-spec-label {
-					color: #555555;
+				&:last-child { border-bottom: none; }
+
+				.sr-label {
+					color: #4B5563;
 					font-family: $font;
-					font-size: 10px;
+					font-size: 12px;
 					font-weight: 600;
-					letter-spacing: 1px;
-					text-transform: uppercase;
+					letter-spacing: 0.5px;
 				}
 
-				.pdp-spec-value {
-					color: #ffffff;
+				.sr-value {
+					color: #e5e7eb;
 					font-family: $font;
-					font-size: 14px;
+					font-size: 13px;
 					font-weight: 700;
-				}
-			}
-		}
-
-		// ─── RELATED ─────────────────────────────────────────────
-		.pdp-related-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 12px;
-
-			.pdp-rel-card {
-				background: #111111;
-				border: 1px solid rgba(255, 255, 255, 0.06);
-				border-radius: 10px;
-				overflow: hidden;
-				text-decoration: none;
-				display: block;
-				transition: border-color 0.2s, transform 0.2s;
-
-				&:hover { border-color: rgba(233, 44, 40, 0.2); transform: translateY(-2px); }
-
-				.pdp-rel-visual {
-					height: 80px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-
-					.pdp-rel-icon { font-size: 36px; line-height: 1; }
-				}
-
-				.pdp-rel-body {
-					padding: 12px 14px;
-					display: flex;
-					flex-direction: column;
-					gap: 4px;
-
-					.pdp-rel-type {
-						color: #E92C28;
-						font-family: $font;
-						font-size: 8px;
-						font-weight: 700;
-						letter-spacing: 1.5px;
-						text-transform: uppercase;
-					}
-
-					.pdp-rel-name {
-						color: #ffffff;
-						font-family: $font;
-						font-size: 12px;
-						font-weight: 700;
-						margin: 0;
-						line-height: 1.3;
-						display: -webkit-box;
-						-webkit-line-clamp: 2;
-						-webkit-box-orient: vertical;
-						overflow: hidden;
-					}
-
-					.pdp-rel-price {
-						color: #FFB800;
-						font-family: $font;
-						font-size: 14px;
-						font-weight: 800;
-						margin-top: 2px;
-					}
+					text-transform: uppercase;
+					letter-spacing: 0.3px;
 				}
 			}
 		}
@@ -335,21 +306,22 @@
 			top: 100px;
 		}
 
-		.pdp-buy-card {
-			background: #111111;
+		.buy-card {
+			background: #1F2937;
 			border: 1px solid rgba(255, 255, 255, 0.08);
 			border-radius: 12px;
-			padding: 22px 20px;
+			padding: 24px 20px;
 			display: flex;
 			flex-direction: column;
-			gap: 14px;
+			gap: 16px;
 
-			.pdp-price-block {
+			.bc-price-row {
 				display: flex;
 				align-items: baseline;
 				gap: 10px;
+				flex-wrap: wrap;
 
-				.pdp-price {
+				.bc-price {
 					color: #ffffff;
 					font-family: $font;
 					font-size: 32px;
@@ -357,7 +329,7 @@
 					line-height: 1;
 				}
 
-				.pdp-low-stock {
+				.bc-low-stock {
 					color: #FFB800;
 					font-family: $font;
 					font-size: 11px;
@@ -365,7 +337,7 @@
 				}
 			}
 
-			.pdp-status-row {
+			.bc-status-row {
 				display: flex;
 				align-items: center;
 				gap: 7px;
@@ -373,7 +345,7 @@
 				font-size: 12px;
 				font-weight: 600;
 
-				.pdp-status-dot {
+				.bc-status-dot {
 					width: 7px;
 					height: 7px;
 					border-radius: 50%;
@@ -381,27 +353,26 @@
 				}
 			}
 
-			.pdp-qty-row {
+			.bc-qty-row {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 
-				.pdp-qty-label {
-					color: #666666;
+				.bc-qty-label {
+					color: #4B5563;
 					font-family: $font;
 					font-size: 12px;
 				}
 
-				.pdp-qty-ctrl {
+				.bc-qty-ctrl {
 					display: flex;
 					align-items: center;
-					gap: 0;
-					background: #1F2937;
+					background: #111827;
 					border: 1px solid rgba(255, 255, 255, 0.08);
 					border-radius: 6px;
 					overflow: hidden;
 
-					.pdp-qty-btn {
+					.bc-qty-btn {
 						width: 34px;
 						height: 34px;
 						background: transparent;
@@ -416,7 +387,7 @@
 						&:hover { background: rgba(233, 44, 40, 0.1); color: #E92C28; }
 					}
 
-					.pdp-qty-val {
+					.bc-qty-val {
 						width: 36px;
 						text-align: center;
 						color: #ffffff;
@@ -429,7 +400,7 @@
 				}
 			}
 
-			.pdp-add-btn {
+			.bc-add-btn {
 				width: 100%;
 				padding: 14px;
 				background: #E92C28;
@@ -440,7 +411,7 @@
 				font-size: 14px;
 				font-weight: 800;
 				cursor: pointer;
-				transition: all 0.2s;
+				transition: background 0.2s;
 				letter-spacing: 0.3px;
 
 				&:hover:not(.disabled):not(.added) { background: #c0211e; }
@@ -457,13 +428,13 @@
 				}
 			}
 
-			.pdp-like-btn {
+			.bc-wish-btn {
 				width: 100%;
 				padding: 14px;
 				background: transparent;
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				border-radius: 8px;
-				color: #888888;
+				color: #777777;
 				font-family: $font;
 				font-size: 14px;
 				font-weight: 700;
@@ -472,36 +443,36 @@
 
 				&:hover { border-color: rgba(233, 44, 40, 0.4); color: #E92C28; }
 
-				&.liked {
+				&.active {
 					color: #E92C28;
 					border-color: rgba(233, 44, 40, 0.5);
 					background: rgba(233, 44, 40, 0.08);
 				}
 			}
 
-			.pdp-divider {
+			.bc-divider {
 				height: 1px;
 				background: rgba(255, 255, 255, 0.06);
 			}
 
-			.pdp-detail-rows {
+			.bc-detail-rows {
 				display: flex;
 				flex-direction: column;
-				gap: 8px;
+				gap: 9px;
 
-				.pdp-detail-row {
+				.bc-detail-row {
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
 
 					> span:first-child {
-						color: #555555;
+						color: #4B5563;
 						font-family: $font;
 						font-size: 12px;
 					}
 
 					> span:last-child {
-						color: #cccccc;
+						color: #bbbbbb;
 						font-family: $font;
 						font-size: 12px;
 						font-weight: 600;
@@ -510,24 +481,106 @@
 				}
 			}
 
-			.pdp-guarantees {
+			.bc-trust {
 				display: flex;
 				flex-direction: column;
-				gap: 8px;
+				gap: 7px;
 
-				.pdp-guarantee-item {
+				.bc-trust-item {
 					display: flex;
 					align-items: center;
-					gap: 9px;
+					color: #555555;
+					font-family: $font;
+					font-size: 11px;
 
-					.pdp-g-icon { font-size: 14px; flex-shrink: 0; }
-
-					> span:last-child {
-						color: #666666;
-						font-family: $font;
+					&::before {
+						content: '✓';
+						color: #E92C28;
+						font-weight: 800;
 						font-size: 12px;
+						margin-right: 8px;
+						flex-shrink: 0;
 					}
 				}
+			}
+		}
+
+		// ─── MOBILE BODY ──────────────────────────────────────────
+		.pdp-mobile-body {
+			display: flex;
+			flex-direction: column;
+			gap: 28px;
+			padding: 20px 16px 110px;
+		}
+
+		.mobile-sticky-cta {
+			display: none;
+		}
+	}
+}
+
+// ─── MOBILE RESPONSIVE ────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+	#product-detail-page {
+		padding-top: 72px;
+
+		.pdp-hero-wrap {
+			grid-template-columns: 1fr;
+			padding: 24px 16px 28px;
+			gap: 20px;
+		}
+
+		.pdp-hero-right .pdp-hero-img {
+			height: 240px;
+		}
+
+		.pdp-hero-title {
+			font-size: 26px;
+		}
+
+		.pdp-body {
+			display: none;
+		}
+
+		.stat-pills {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.mobile-sticky-cta {
+			display: flex;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 100;
+			padding: 12px 20px 20px;
+			background: #0a0a0a;
+			border-top: 1px solid rgba(255, 255, 255, 0.07);
+			align-items: center;
+			gap: 14px;
+
+			.msc-price {
+				color: #ffffff;
+				font-family: $font;
+				font-size: 22px;
+				font-weight: 900;
+				flex-shrink: 0;
+			}
+
+			.msc-btn {
+				flex: 1;
+				padding: 14px;
+				background: #E92C28;
+				border: none;
+				border-radius: 8px;
+				color: #ffffff;
+				font-family: $font;
+				font-size: 14px;
+				font-weight: 800;
+				cursor: pointer;
+
+				&:hover { background: #c0211e; }
+				&.disabled { background: #333; cursor: not-allowed; }
 			}
 		}
 	}

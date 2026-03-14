@@ -23,22 +23,19 @@ export const getServerSideProps = async ({ locale }: any) => ({
 });
 
 const brandLabel: Record<string, string> = {
-	NONE: 'Generic / Unbranded', OPTIMUM: 'Optimum Nutrition', MUSCLETECH: 'MuscleTech',
-	NUTREX: 'Nutrex Research', MYPROTEIN: 'MyProtein', NIKE: 'Nike', ADIDAS: 'Adidas',
+	NONE: 'Generic / Unbranded',
+	OPTIMUM: 'Optimum Nutrition',
+	MUSCLETECH: 'MuscleTech',
+	NUTREX: 'Nutrex Research',
+	MYPROTEIN: 'MyProtein',
+	NIKE: 'Nike',
+	ADIDAS: 'Adidas',
 };
 
 const statusConfig: Record<string, { label: string; color: string }> = {
 	ACTIVE: { label: 'In Stock', color: '#4ecd64' },
 	STOPPED: { label: 'Discontinued', color: '#FFB800' },
 	OUT_OF_STOCK: { label: 'Out of Stock', color: '#E92C28' },
-};
-
-const typeGradients: Record<string, string> = {
-	SUPPLEMENT: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-	EQUIPMENT: 'linear-gradient(135deg, #1a1a2e 0%, #e92c28 100%)',
-	WEARABLE: 'linear-gradient(135deg, #0f3460 0%, #533483 100%)',
-	ACCESSORY: 'linear-gradient(135deg, #1b4332 0%, #40916c 100%)',
-	DRINK: 'linear-gradient(135deg, #003566 0%, #0077b6 100%)',
 };
 
 const ProductDetail: NextPage = () => {
@@ -112,7 +109,8 @@ const ProductDetail: NextPage = () => {
 				<div className="pdp-not-found">
 					<span>🛒</span>
 					<h2>Product not found</h2>
-					<Link href="/products"><button>Browse Shop</button></Link>
+					<p>This product may have been removed or doesn&apos;t exist.</p>
+					<button onClick={() => router.push('/products')}>Browse Shop</button>
 				</div>
 			</div>
 		);
@@ -121,8 +119,24 @@ const ProductDetail: NextPage = () => {
 	if (device === 'mobile') {
 		return (
 			<div id="product-detail-page">
-				<div className="pdp-not-found">
-					<p style={{ color: '#fff' }}>Mobile view coming soon.</p>
+				<div className="pdp-mobile-body">
+					<h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, margin: 0 }}>{product?.productName}</h2>
+					<img
+						src={selectedImage || '/img/banner/header1.svg'}
+						alt={product?.productName}
+						style={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 10 }}
+					/>
+					<p style={{ color: '#9ca3af', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{product?.productDesc}</p>
+					<div className="mobile-sticky-cta">
+						<span className="msc-price">${product?.productPrice?.toFixed(2)}</span>
+						<button
+							className={`msc-btn${product?.productStatus !== 'ACTIVE' ? ' disabled' : ''}`}
+							onClick={handleAddToCart}
+							disabled={product?.productStatus !== 'ACTIVE'}
+						>
+							{product?.productStatus !== 'ACTIVE' ? 'Out of Stock' : 'Add to Cart →'}
+						</button>
+					</div>
 				</div>
 			</div>
 		);
@@ -130,166 +144,192 @@ const ProductDetail: NextPage = () => {
 
 	const status = statusConfig[product.productStatus] ?? statusConfig['STOPPED'];
 	const isOutOfStock = product.productStatus !== 'ACTIVE';
-	const gradient = typeGradients[product.productType] ?? typeGradients['SUPPLEMENT'];
 	const currentImage = selectedImage || product.productImages?.[0] || '';
-	const displayViews = product.productViews >= 1000 ? `${(product.productViews / 1000).toFixed(1)}K` : String(product.productViews);
+	const displayViews = product.productViews >= 1000
+		? `${(product.productViews / 1000).toFixed(1)}K`
+		: String(product.productViews);
 
 	return (
 		<div id="product-detail-page">
 
-			{/* ─── HERO ─────────────────────────────────────────────── */}
-			<div className="pdp-hero" style={{ background: gradient }}>
-				{currentImage && <img src={currentImage} alt={product.productName} className="pdp-hero-bg" />}
-				<div className="pdp-hero-overlay" />
-				<div className="pdp-hero-inner">
-					<Link href="/products" className="pdp-back">← Shop</Link>
-					<div className="pdp-hero-content">
-						<div className="pdp-hero-left">
-							<div className="pdp-brand-row">
-								<span className="pdp-type-badge">{product.productType}</span>
-								<span className="pdp-brand-name">{brandLabel[product.productBrand] ?? product.productBrand}</span>
-							</div>
-							<h1 className="pdp-name">{product.productName}</h1>
-							<div className="pdp-meta-row">
-								<span className="pdp-views">{displayViews} views</span>
-								<span className="pdp-dot">·</span>
-								<span className={`pdp-likes${liked ? ' liked' : ''}`} style={{ cursor: 'pointer' }} onClick={handleLike}>
-									♥ {product.productLikes + (liked ? 1 : 0)}
-								</span>
-								<span className="pdp-dot">·</span>
-								<span className="pdp-status" style={{ color: status.color }}>{status.label}</span>
-								<span className="pdp-dot">·</span>
-								<span style={{ color: '#666', fontSize: 13 }}>{moment(product.createdAt).fromNow()}</span>
-							</div>
-						</div>
-						<div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-							<img
-								src={currentImage || '/img/banner/header1.svg'}
-								alt={product.productName}
-								className="pdp-hero-img"
-								style={{ width: 240, height: 200, objectFit: 'cover', borderRadius: 12, display: 'block' }}
-							/>
-							{product.productImages?.length > 1 && (
-								<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-									{product.productImages.map((img: string, i: number) => (
-										<img
-											key={i}
-											src={img}
-											alt=""
-											onClick={() => setSelectedImage(img)}
-											style={{
-												width: 52, height: 44, objectFit: 'cover', borderRadius: 6,
-												cursor: 'pointer', border: `2px solid ${img === currentImage ? '#E92C28' : 'transparent'}`,
-												opacity: img === currentImage ? 1 : 0.6,
-											}}
-										/>
-									))}
-								</div>
-							)}
-						</div>
+			{/* ── HERO ── */}
+			<div className="pdp-hero-wrap">
+				<div className="pdp-hero-left">
+					<a className="pdp-back" onClick={() => router.back()} style={{ cursor: 'pointer' }}>← Back</a>
+					<div className="pdp-badges">
+						<span className="badge-type">{product.productType}</span>
+						<span className="badge-brand">{brandLabel[product.productBrand] ?? product.productBrand}</span>
+						<span className="badge-status" style={{ color: status.color }}>● {status.label}</span>
 					</div>
+					<h1 className="pdp-hero-title">{product.productName}</h1>
+					<div className="pdp-hero-meta">
+						<span className="phm-item">👁 {displayViews} views</span>
+						<div className="phm-dot" />
+						<span
+							className={`phm-item phm-like${liked ? ' liked' : ''}`}
+							onClick={handleLike}
+							style={{ cursor: 'pointer' }}
+						>
+							♥ {product.productLikes + (liked ? 1 : 0)} likes
+						</span>
+						<div className="phm-dot" />
+						<span className="phm-item">{moment(product.createdAt).fromNow()}</span>
+					</div>
+				</div>
+				<div className="pdp-hero-right">
+					<img
+						className="pdp-hero-img"
+						src={currentImage || '/img/banner/header1.svg'}
+						alt={product.productName}
+					/>
+					{product.productImages?.length > 1 && (
+						<div className="pdp-thumb-row">
+							{product.productImages.map((img: string, i: number) => (
+								<img
+									key={i}
+									className={`pdp-thumb${img === currentImage ? ' active' : ''}`}
+									src={img}
+									alt=""
+									onClick={() => setSelectedImage(img)}
+								/>
+							))}
+						</div>
+					)}
 				</div>
 			</div>
 
-			{/* ─── BODY ─────────────────────────────────────────────── */}
+			{/* ── BODY ── */}
 			<div className="pdp-body">
 
-				{/* ── LEFT MAIN ───────────────────────────────────────── */}
+				{/* LEFT MAIN */}
 				<div className="pdp-main">
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">About This Product</h2>
-						<p className="pdp-desc">{product.productDesc || 'No description available.'}</p>
-					</section>
 
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">Product Specs</h2>
-						<div className="pdp-specs-grid">
-							<div className="pdp-spec-item">
-								<span className="pdp-spec-label">Category</span>
-								<span className="pdp-spec-value">{product.productType}</span>
+					{/* Stat pills */}
+					<div className="stat-pills">
+						<div className="stat-pill">
+							<span className="sp-icon">💰</span>
+							<span className="sp-val">${product.productPrice?.toFixed(2)}</span>
+							<span className="sp-lbl">Price</span>
+						</div>
+						<div className="stat-pill">
+							<span className="sp-icon">📦</span>
+							<span className="sp-val">{product.productStock > 0 ? product.productStock : '—'}</span>
+							<span className="sp-lbl">In Stock</span>
+						</div>
+						<div className="stat-pill">
+							<span className="sp-icon">👁</span>
+							<span className="sp-val">{displayViews}</span>
+							<span className="sp-lbl">Views</span>
+						</div>
+						<div className="stat-pill">
+							<span className="sp-icon">♥</span>
+							<span className="sp-val">{product.productLikes + (liked ? 1 : 0)}</span>
+							<span className="sp-lbl">Likes</span>
+						</div>
+					</div>
+
+					{/* About */}
+					{product.productDesc && (
+						<div className="pdp-section">
+							<h3 className="pdp-section-title">About This Product</h3>
+							<p className="pdp-desc">{product.productDesc}</p>
+						</div>
+					)}
+
+					{/* Specs */}
+					<div className="pdp-section">
+						<h3 className="pdp-section-title">Product Details</h3>
+						<div className="spec-rows">
+							<div className="spec-row">
+								<span className="sr-label">Category</span>
+								<span className="sr-value">{product.productType}</span>
 							</div>
-							<div className="pdp-spec-item">
-								<span className="pdp-spec-label">Brand</span>
-								<span className="pdp-spec-value">{brandLabel[product.productBrand] ?? product.productBrand}</span>
+							<div className="spec-row">
+								<span className="sr-label">Brand</span>
+								<span className="sr-value">{brandLabel[product.productBrand] ?? product.productBrand}</span>
 							</div>
-							<div className="pdp-spec-item">
-								<span className="pdp-spec-label">Status</span>
-								<span className="pdp-spec-value" style={{ color: status.color }}>{status.label}</span>
+							<div className="spec-row">
+								<span className="sr-label">Status</span>
+								<span className="sr-value" style={{ color: status.color }}>{status.label}</span>
 							</div>
 							{product.productStock > 0 && (
-								<div className="pdp-spec-item">
-									<span className="pdp-spec-label">Stock</span>
-									<span className="pdp-spec-value">{product.productStock} units</span>
+								<div className="spec-row">
+									<span className="sr-label">Stock</span>
+									<span className="sr-value">{product.productStock} units</span>
 								</div>
 							)}
-							<div className="pdp-spec-item">
-								<span className="pdp-spec-label">Views</span>
-								<span className="pdp-spec-value">{displayViews}</span>
-							</div>
-							<div className="pdp-spec-item">
-								<span className="pdp-spec-label">Added</span>
-								<span className="pdp-spec-value">{moment(product.createdAt).format('MMM DD, YYYY')}</span>
+							<div className="spec-row">
+								<span className="sr-label">Added</span>
+								<span className="sr-value">{moment(product.createdAt).format('MMM DD, YYYY')}</span>
 							</div>
 						</div>
-					</section>
+					</div>
 				</div>
 
-				{/* ── RIGHT SIDEBAR ────────────────────────────────────── */}
-				<aside className="pdp-sidebar">
-					<div className="pdp-buy-card">
-						<div className="pdp-price-block">
-							<span className="pdp-price">${product.productPrice?.toFixed(2)}</span>
+				{/* RIGHT SIDEBAR */}
+				<div className="pdp-sidebar">
+					<div className="buy-card">
+						<div className="bc-price-row">
+							<span className="bc-price">${product.productPrice?.toFixed(2)}</span>
 							{product.productStock > 0 && product.productStock < 20 && (
-								<span className="pdp-low-stock">Only {product.productStock} left!</span>
+								<span className="bc-low-stock">Only {product.productStock} left!</span>
 							)}
 						</div>
 
-						<div className="pdp-status-row" style={{ color: status.color }}>
-							<span className="pdp-status-dot" style={{ background: status.color }} />
+						<div className="bc-status-row" style={{ color: status.color }}>
+							<span className="bc-status-dot" style={{ background: status.color }} />
 							{status.label}
 						</div>
 
 						{!isOutOfStock && (
-							<div className="pdp-qty-row">
-								<span className="pdp-qty-label">Quantity</span>
-								<div className="pdp-qty-ctrl">
-									<button className="pdp-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
-									<span className="pdp-qty-val">{qty}</span>
-									<button className="pdp-qty-btn" onClick={() => setQty((q) => Math.min(product.productStock, q + 1))}>+</button>
+							<div className="bc-qty-row">
+								<span className="bc-qty-label">Quantity</span>
+								<div className="bc-qty-ctrl">
+									<button className="bc-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+									<span className="bc-qty-val">{qty}</span>
+									<button className="bc-qty-btn" onClick={() => setQty((q) => Math.min(product.productStock, q + 1))}>+</button>
 								</div>
 							</div>
 						)}
 
 						<button
-							className={`pdp-add-btn ${isOutOfStock ? 'disabled' : ''} ${addedToCart ? 'added' : ''}`}
+							className={`bc-add-btn${isOutOfStock ? ' disabled' : ''}${addedToCart ? ' added' : ''}`}
 							onClick={handleAddToCart}
 							disabled={isOutOfStock}
 						>
 							{addedToCart ? '✓ Added to Cart!' : isOutOfStock ? 'Out of Stock' : 'Add to Cart →'}
 						</button>
 
-						<button className={`pdp-like-btn ${bookmarked ? 'liked' : ''}`} onClick={handleBookmark}>
+						<button className={`bc-wish-btn${bookmarked ? ' active' : ''}`} onClick={handleBookmark}>
 							{bookmarked ? '♥ Saved to Wishlist' : '♡ Add to Wishlist'}
 						</button>
 
-						<div className="pdp-divider" />
+						<div className="bc-divider" />
 
-						<div className="pdp-detail-rows">
-							<div className="pdp-detail-row"><span>Category</span><span>{product.productType}</span></div>
-							<div className="pdp-detail-row"><span>Brand</span><span>{brandLabel[product.productBrand] ?? product.productBrand}</span></div>
-							<div className="pdp-detail-row"><span>Status</span><span style={{ color: status.color }}>{status.label}</span></div>
-							<div className="pdp-detail-row"><span>Liked by</span><span>{product.productLikes} people</span></div>
+						<div className="bc-detail-rows">
+							<div className="bc-detail-row">
+								<span>Category</span>
+								<span>{product.productType}</span>
+							</div>
+							<div className="bc-detail-row">
+								<span>Brand</span>
+								<span>{brandLabel[product.productBrand] ?? product.productBrand}</span>
+							</div>
+							<div className="bc-detail-row">
+								<span>Liked by</span>
+								<span>{product.productLikes + (liked ? 1 : 0)} people</span>
+							</div>
 						</div>
 
-						<div className="pdp-divider" />
+						<div className="bc-divider" />
 
-						<div className="pdp-guarantees">
-							<div className="pdp-guarantee-item"><span className="pdp-g-icon">🔒</span><span>Secure Checkout</span></div>
-							<div className="pdp-guarantee-item"><span className="pdp-g-icon">🚚</span><span>Free Shipping over $50</span></div>
-							<div className="pdp-guarantee-item"><span className="pdp-g-icon">↩</span><span>30-Day Returns</span></div>
+						<div className="bc-trust">
+							<div className="bc-trust-item">Secure Checkout</div>
+							<div className="bc-trust-item">Free Shipping over $50</div>
+							<div className="bc-trust-item">30-Day Returns</div>
 						</div>
 					</div>
-				</aside>
+				</div>
 			</div>
 		</div>
 	);
