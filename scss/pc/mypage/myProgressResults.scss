@@ -1,0 +1,191 @@
+// ─── MY PROGRESS RESULTS ─────────────────────────────────────────────────────
+#pc-wrap {
+	.mpr-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 24px;
+
+		h3 {
+			color: #ffffff;
+			font-family: $font;
+			font-size: 18px;
+			font-weight: 800;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			margin: 0;
+			padding-left: 12px;
+			border-left: 3px solid #E92C28;
+		}
+	}
+
+	.mpr-create-card {
+		background: #1F2937;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 12px;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin-bottom: 24px;
+		transition: border-color 0.25s;
+
+		&:hover { border-color: rgba(233, 44, 40, 0.2); }
+
+		label {
+			color: #6B7280;
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+		}
+	}
+
+	.mpr-textarea {
+		width: 100%;
+		min-height: 100px;
+		padding: 12px 16px;
+		background: #111827;
+		border: 1px solid rgba(255, 255, 255, 0.07);
+		border-radius: 8px;
+		color: #e5e7eb;
+		font-family: $font;
+		font-size: 14px;
+		line-height: 1.7;
+		resize: vertical;
+		outline: none;
+		box-sizing: border-box;
+		transition: border-color 0.2s;
+
+		&::placeholder { color: #374151; }
+		&:focus { border-color: rgba(233, 44, 40, 0.5); }
+	}
+
+	.mpr-submit-btn {
+		align-self: flex-end;
+		padding: 10px 24px;
+		background: #E92C28;
+		border: none;
+		border-radius: 8px;
+		color: #ffffff;
+		font-family: $font;
+		font-size: 13px;
+		font-weight: 800;
+		cursor: pointer;
+		transition: background 0.2s;
+
+		&:hover { background: #c0211e; }
+		&:disabled { background: rgba(255, 255, 255, 0.1); color: #555; cursor: not-allowed; }
+	}
+
+	.mpr-list {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.mpr-post {
+		background: #1F2937;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 12px;
+		padding: 18px 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		transition: border-color 0.25s;
+
+		&:hover { border-color: rgba(233, 44, 40, 0.2); }
+
+		.mpr-post-head {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+
+			.mpr-left {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+
+				.mpr-avatar {
+					width: 36px;
+					height: 36px;
+					border-radius: 50%;
+					object-fit: cover;
+					background: #374151;
+					flex-shrink: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					overflow: hidden;
+				}
+
+				.mpr-nick {
+					color: #ffffff;
+					font-family: $font;
+					font-size: 14px;
+					font-weight: 700;
+					display: block;
+				}
+
+				.mpr-date {
+					color: #4B5563;
+					font-family: $font;
+					font-size: 11px;
+					display: block;
+				}
+			}
+
+			.mpr-delete-btn {
+				padding: 6px 14px;
+				background: transparent;
+				border: 1px solid rgba(233, 44, 40, 0.25);
+				border-radius: 6px;
+				color: #E92C28;
+				font-family: $font;
+				font-size: 11px;
+				font-weight: 700;
+				cursor: pointer;
+				transition: all 0.2s;
+				flex-shrink: 0;
+
+				&:hover { background: rgba(233, 44, 40, 0.1); border-color: #E92C28; }
+			}
+		}
+
+		.mpr-content {
+			color: #9CA3AF;
+			font-family: $font;
+			font-size: 14px;
+			line-height: 1.7;
+			margin: 0;
+		}
+
+		.mpr-images {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+
+			.mpr-img {
+				width: 80px;
+				height: 70px;
+				object-fit: cover;
+				border-radius: 6px;
+				display: block;
+			}
+		}
+	}
+
+	.mpr-empty {
+		text-align: center;
+		padding: 40px 20px;
+
+		p {
+			color: #4B5563;
+			font-family: $font;
+			font-size: 14px;
+			margin: 0;
+		}
+	}
+}
