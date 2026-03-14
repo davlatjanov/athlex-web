@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLazyQuery, useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { ASK_AI, GET_MY_CONVERSATIONS } from '../../apollo/user/query';
+import { ASK_AI, GET_MY_CONVERSATIONS, GET_CONVERSATION } from '../../apollo/user/query';
 import { CHAT_WITH_AI } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { T } from '../types/common';

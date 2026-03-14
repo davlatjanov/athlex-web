@@ -569,10 +569,6 @@ export const GET_MY_CONVERSATIONS = gql`
 		getMyConversations {
 			_id
 			topic
-			messages {
-				role
-				content
-			}
 			updatedAt
 		}
 	}
@@ -587,7 +583,6 @@ export const GET_CONVERSATION = gql`
 				role
 				content
 			}
-			createdAt
 			updatedAt
 		}
 	}

@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useLazyQuery, useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { ASK_AI, GET_MY_CONVERSATIONS } from '../../apollo/user/query';
+import { ASK_AI, GET_MY_CONVERSATIONS, GET_CONVERSATION } from '../../apollo/user/query';
 import { CHAT_WITH_AI } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { T } from '../../libs/types/common';
@@ -42,6 +42,7 @@ const AICoachPage: NextPage = () => {
 
 	const [chatWithAI] = useMutation(CHAT_WITH_AI);
 	const [askAI] = useLazyQuery(ASK_AI);
+	const [getConversation] = useLazyQuery(GET_CONVERSATION);
 
 	useEffect(() => {
 		bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -93,11 +94,14 @@ const AICoachPage: NextPage = () => {
 		}
 	};
 
-	const loadConversation = (conv: T) => {
-		const msgs: ChatMessage[] = (conv.messages ?? []).map((m: T) => ({ role: m.role, content: m.content }));
-		if (msgs.length > 0) setMessages(msgs);
+	const loadConversation = async (conv: T) => {
 		setConversationId(conv._id);
 		setShowHistory(false);
+		try {
+			const { data } = await getConversation({ variables: { conversationId: conv._id } });
+			const msgs: ChatMessage[] = (data?.getConversation?.messages ?? []).map((m: T) => ({ role: m.role, content: m.content }));
+			if (msgs.length > 0) setMessages(msgs);
+		} catch { /* keep current messages on error */ }
 	};
 
 	const startNewChat = () => {
