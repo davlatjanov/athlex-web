@@ -40,16 +40,6 @@ const withLayoutBasic = (Component: any) => {
 					desc = 'Premium supplements, equipment and gear built for serious athletes.';
 					bgImage = 'https://i.pinimg.com/736x/13/c8/34/13c83449624a1a9ea2672a5ebdaf97ec.jpg';
 					break;
-				case '/community':
-					title = 'Community';
-					desc = 'Connect · Compete · Inspire';
-					bgImage = 'https://images.pexels.com/photos/5961414/pexels-photo-5961414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
-					break;
-				case '/community/detail':
-					title = 'Community';
-					desc = 'Connect · Compete · Inspire';
-					bgImage = 'https://images.pexels.com/photos/5961414/pexels-photo-5961414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
-					break;
 				case '/member':
 					title = 'Athlete Profile';
 					desc = 'Track progress · Build connections';

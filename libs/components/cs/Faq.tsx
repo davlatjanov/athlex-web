@@ -60,13 +60,6 @@ const Faq = () => {
 			{ id: 'pay4', subject: 'Will I be charged automatically each month?', content: 'Yes, subscriptions auto-renew monthly (or annually if on an annual plan). You can cancel anytime from your account settings.' },
 			{ id: 'pay5', subject: 'Can I get an invoice for my payment?', content: 'Yes, invoices are automatically sent to your registered email after each payment. You can also download them from your account billing section.' },
 		],
-		community: [
-			{ id: 'c1', subject: 'What is the Athlex community?', content: 'The community is a space where athletes share progress, post workouts, follow each other, and compete in challenges. It is built to keep you motivated.' },
-			{ id: 'c2', subject: 'What are the community guidelines?', content: 'Be respectful, supportive, and relevant. No spam, hate speech, or harassment. Violations will result in warnings or account suspension.' },
-			{ id: 'c3', subject: 'Can I report inappropriate content?', content: 'Yes, use the report button on any post or comment. Our moderation team reviews reports within 24 hours.' },
-			{ id: 'c4', subject: 'How do community challenges work?', content: 'Challenges are time-limited events where you complete a set task (e.g. 30-day squat challenge) and track progress on a public leaderboard.' },
-			{ id: 'c5', subject: 'Can I follow other athletes?', content: 'Yes, you can follow any user on Athlex. Their activity, program updates, and posts will appear in your feed.' },
-		],
 		other: [
 			{ id: 'o1', subject: 'How do I delete my account?', content: 'Go to Settings → Account → Delete Account. This action is permanent and removes all your data from our platform.' },
 			{ id: 'o2', subject: 'Is Athlex available on mobile?', content: 'Currently Athlex is web-based and optimized for desktop. A mobile app is on our roadmap for later this year.' },
@@ -87,7 +80,6 @@ const Faq = () => {
 						{ key: 'trainers', label: 'Trainers' },
 						{ key: 'membership', label: 'Membership' },
 						{ key: 'payment', label: 'Payment' },
-						{ key: 'community', label: 'Community' },
 						{ key: 'other', label: 'Other' },
 					].map((cat) => (
 						<div

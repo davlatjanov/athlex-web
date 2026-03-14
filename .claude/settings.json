@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/davlatjanov/Desktop/athlex/apps/athlex/src/components/order/**)",
+      "Read(//Users/davlatjanov/Desktop/athlex/apps/athlex/src/components/comment/**)"
+    ]
+  }
+}

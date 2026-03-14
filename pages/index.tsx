@@ -15,7 +15,6 @@ import AICoachTeaser from '../libs/components/homepage/AICoachTeaser';
 import FeaturedProducts from '../libs/components/homepage/FeaturedProducts';
 import MembershipPlans from '../libs/components/homepage/MembershipPlans';
 import Events from '../libs/components/homepage/Events';
-import CommunityBoards from '../libs/components/homepage/CommunityBoards';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {

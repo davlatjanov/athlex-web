@@ -36,7 +36,6 @@ const Footer = () => {
 						<strong>Company</strong>
 						<span>About Us</span>
 						<span>Trainers</span>
-						<span>Community</span>
 						<span>Support</span>
 					</div>
 				</div>
@@ -97,7 +96,6 @@ const Footer = () => {
 					<div className={'ft-col'}>
 						<strong>Company</strong>
 						<Link href="/about"><span>About Athlex</span></Link>
-						<Link href="/community"><span>Community</span></Link>
 						<Link href="/mypage"><span>My Page</span></Link>
 						<Link href="/cs"><span>Support Center</span></Link>
 						<Link href="/cs"><span>FAQs</span></Link>
