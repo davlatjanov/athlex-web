@@ -69,8 +69,11 @@ export const PropertyCard = (props: ProgramCardProps) => {
 					</Typography>
 				</Stack>
 				<Stack className="status-box">
-					<Stack className="coloured-box" sx={{ background: '#E5F0FD' }} onClick={handleClick}>
-						<Typography className="status" sx={{ color: '#3554d1' }}>
+					<Stack className="coloured-box"
+						sx={{ background: program?.programStatus === 'ACTIVE' ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.06)' }}
+						onClick={handleClick}
+					>
+						<Typography className="status" sx={{ color: program?.programStatus === 'ACTIVE' ? '#22C55E' : '#aaaaaa', fontWeight: 700 }}>
 							{program?.programStatus}
 						</Typography>
 					</Stack>
@@ -118,10 +121,10 @@ export const PropertyCard = (props: ProgramCardProps) => {
 				{!memberPage && program?.programStatus === ProgramStatus.ACTIVE && (
 					<Stack className="action-box">
 						<IconButton className="icon-button" onClick={() => pushEditProgram(program._id)}>
-							<ModeIcon className="buttons" />
+							<ModeIcon className="buttons btn-edit" />
 						</IconButton>
 						<IconButton className="icon-button" onClick={() => deleteProgramHandler(program._id)}>
-							<DeleteIcon className="buttons" />
+							<DeleteIcon className="buttons btn-delete" />
 						</IconButton>
 					</Stack>
 				)}
