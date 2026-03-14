@@ -88,7 +88,7 @@ const AdminPrograms: NextPage = ({ initialInquiry, ...props }: any) => {
 			</Typography>
 
 			{/* Filters */}
-			<Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+			<div style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
 				<OutlinedInput
 					value={searchText}
 					onChange={(e) => setSearchText(e.target.value)}
@@ -125,7 +125,7 @@ const AdminPrograms: NextPage = ({ initialInquiry, ...props }: any) => {
 					<MenuItem value="STOPPED">Stopped</MenuItem>
 					<MenuItem value="DELETE">Deleted</MenuItem>
 				</Select>
-			</Box>
+			</div>
 
 			{/* Table */}
 			<TableContainer sx={{ background: '#111827', borderRadius: 2 }}>

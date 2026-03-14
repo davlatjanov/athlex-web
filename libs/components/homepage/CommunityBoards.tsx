@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { Stack, Box } from '@mui/material';
+import { Stack } from '@mui/material';
 
 const newsArticles = [
 	{ id: '1', title: 'Science Behind Progressive Overload', category: 'NEWS', views: 4200, date: 'Feb 28', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 100%)' },
@@ -30,14 +30,14 @@ const CommunityBoards = () => {
 					<Stack className={'community-mobile'}>
 						{[...newsArticles.slice(0, 3), ...freeArticles.slice(0, 2)].map((article) => (
 							<Link href={`/community/${article.id}`} key={article.id}>
-								<Box className={'community-article'}>
+								<div className={'community-article'}>
 									<div className={'article-img'} style={{ background: article.gradient }} />
 									<div className={'article-info'}>
 										<span className={'article-category'}>{article.category}</span>
 										<strong>{article.title}</strong>
 										<span className={'article-meta'}>👁 {article.views} · {article.date}</span>
 									</div>
-								</Box>
+								</div>
 							</Link>
 						))}
 					</Stack>
@@ -49,10 +49,10 @@ const CommunityBoards = () => {
 	return (
 		<Stack className={'community-board'}>
 			<Stack className={'container'}>
-				<Box component={'div'} className={'section-header'}>
+				<div className={'section-header'}>
 					<span className={'section-label'}>COMMUNITY</span>
 					<h2 className={'section-title'}>COMMUNITY BOARD</h2>
-				</Box>
+				</div>
 				<Stack className={'community-main'}>
 					<Stack className={'community-left'}>
 						<Stack className={'content-top'}>
@@ -64,13 +64,13 @@ const CommunityBoards = () => {
 						<Stack className={'card-wrap'}>
 							{newsArticles.map((article) => (
 								<Link href={`/community/${article.id}`} key={article.id}>
-									<Box className={'vertical-card'}>
+									<div className={'vertical-card'}>
 										<div className={'community-img'} style={{ background: article.gradient }}>
 											<span className={'cat-label'}>{article.category[0]}</span>
 										</div>
 										<strong>{article.title}</strong>
 										<span className={'article-meta'}>👁 {article.views} · {article.date}</span>
-									</Box>
+									</div>
 								</Link>
 							))}
 						</Stack>
@@ -86,14 +86,14 @@ const CommunityBoards = () => {
 						<Stack className={'card-wrap'}>
 							{freeArticles.map((article) => (
 								<Link href={`/community/${article.id}`} key={article.id}>
-									<Box className={'horizontal-card'}>
+									<div className={'horizontal-card'}>
 										<div className={'article-img-sm'} style={{ background: article.gradient }} />
 										<div className={'article-text'}>
 											<span className={'article-category'}>{article.category}</span>
 											<strong>{article.title}</strong>
 											<span className={'article-author'}>{article.author} · {article.date}</span>
 										</div>
-									</Box>
+									</div>
 								</Link>
 							))}
 						</Stack>
