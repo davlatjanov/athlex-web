@@ -17,7 +17,7 @@
 			h2 { color: #888888; font-family: $font; font-size: 20px; }
 			button {
 				padding: 12px 28px;
-				background: #22C55E;
+				background: #E92C28;
 				border: none;
 				border-radius: 8px;
 				color: #fff;
@@ -25,7 +25,7 @@
 				font-size: 14px;
 				font-weight: 700;
 				cursor: pointer;
-				&:hover { background: #ff3d39; }
+				&:hover { background: #c0211e; }
 			}
 		}
 
@@ -97,7 +97,7 @@
 
 			.pdp-type-badge {
 				padding: 3px 10px;
-				background: #22C55E;
+				background: #E92C28;
 				color: #fff;
 				font-family: $font;
 				font-size: 9px;
@@ -135,7 +135,7 @@
 				.pdp-rating { color: #FFB800; font-family: $font; font-size: 13px; font-weight: 700; }
 				.pdp-dot { color: rgba(255, 255, 255, 0.2); }
 				.pdp-views { color: rgba(255, 255, 255, 0.4); font-family: $font; font-size: 12px; }
-				.pdp-likes { color: rgba(255, 255, 255, 0.4); font-family: $font; font-size: 12px; }
+				.pdp-likes { color: rgba(255, 255, 255, 0.5); font-family: $font; font-size: 13px; font-weight: 600; transition: color 0.2s; &:hover { color: #E92C28; } &.liked { color: #E92C28; } }
 				.pdp-status { font-family: $font; font-size: 12px; font-weight: 700; }
 			}
 
@@ -194,7 +194,7 @@
 		}
 
 		.pdp-see-all {
-			color: #22C55E;
+			color: #E92C28;
 			font-family: $font;
 			font-size: 12px;
 			font-weight: 600;
@@ -202,7 +202,7 @@
 			white-space: nowrap;
 			margin-left: 12px;
 			padding-bottom: 10px;
-			&:hover { color: #ff3d39; }
+			&:hover { color: #c0211e; }
 		}
 
 		.pdp-desc {
@@ -221,9 +221,9 @@
 
 			.pdp-tag {
 				padding: 7px 14px;
-				background: rgba(34, 197, 94, 0.07);
-				border: 1px solid rgba(34, 197, 94, 0.2);
-				color: #22C55E;
+				background: rgba(233, 44, 40, 0.07);
+				border: 1px solid rgba(233, 44, 40, 0.2);
+				color: #E92C28;
 				font-family: $font;
 				font-size: 11px;
 				font-weight: 600;
@@ -279,7 +279,7 @@
 				display: block;
 				transition: border-color 0.2s, transform 0.2s;
 
-				&:hover { border-color: rgba(34, 197, 94, 0.2); transform: translateY(-2px); }
+				&:hover { border-color: rgba(233, 44, 40, 0.2); transform: translateY(-2px); }
 
 				.pdp-rel-visual {
 					height: 80px;
@@ -297,7 +297,7 @@
 					gap: 4px;
 
 					.pdp-rel-type {
-						color: #22C55E;
+						color: #E92C28;
 						font-family: $font;
 						font-size: 8px;
 						font-weight: 700;
@@ -413,7 +413,7 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						&:hover { background: rgba(34, 197, 94, 0.1); color: #22C55E; }
+						&:hover { background: rgba(233, 44, 40, 0.1); color: #E92C28; }
 					}
 
 					.pdp-qty-val {
@@ -432,7 +432,7 @@
 			.pdp-add-btn {
 				width: 100%;
 				padding: 14px;
-				background: #22C55E;
+				background: #E92C28;
 				border: none;
 				border-radius: 8px;
 				color: #ffffff;
@@ -443,7 +443,7 @@
 				transition: all 0.2s;
 				letter-spacing: 0.3px;
 
-				&:hover:not(.disabled):not(.added) { background: #ff3d39; }
+				&:hover:not(.disabled):not(.added) { background: #c0211e; }
 
 				&.disabled {
 					background: rgba(255, 255, 255, 0.05);
@@ -459,23 +459,23 @@
 
 			.pdp-like-btn {
 				width: 100%;
-				padding: 11px;
+				padding: 14px;
 				background: transparent;
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				border-radius: 8px;
 				color: #888888;
 				font-family: $font;
-				font-size: 13px;
-				font-weight: 600;
+				font-size: 14px;
+				font-weight: 700;
 				cursor: pointer;
 				transition: all 0.2s;
 
-				&:hover { border-color: rgba(34, 197, 94, 0.3); color: #22C55E; }
+				&:hover { border-color: rgba(233, 44, 40, 0.4); color: #E92C28; }
 
 				&.liked {
-					color: #22C55E;
-					border-color: rgba(34, 197, 94, 0.35);
-					background: rgba(34, 197, 94, 0.06);
+					color: #E92C28;
+					border-color: rgba(233, 44, 40, 0.5);
+					background: rgba(233, 44, 40, 0.08);
 				}
 			}
 

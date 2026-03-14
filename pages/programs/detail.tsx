@@ -52,6 +52,7 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const [program, setProgram] = useState<Program | null>(null);
 	const [slideImage, setSlideImage] = useState<string>('');
 	const [joined, setJoined] = useState<boolean>(false);
+	const [liked, setLiked] = useState<boolean>(false);
 	const [similarPrograms, setSimilarPrograms] = useState<Program[]>([]);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [programComments, setProgramComments] = useState<Comment[]>([]);
@@ -164,7 +165,8 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 				variables: { input: { likeGroup: LikeGroup.PROGRAM, likeRefId: program._id } },
 			});
 			await getProgramRefetch({ programId: program._id });
-			await sweetTopSmallSuccessAlert('success', 800);
+			setLiked((prev) => !prev);
+			await sweetTopSmallSuccessAlert(liked ? 'Unliked' : 'Liked!', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
@@ -516,10 +518,10 @@ const ProgramDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<span>👁 {program?.programViews?.toLocaleString()}</span>
 							</div>
 							<button
-								className="ec-action-btn"
+								className={`ec-action-btn${liked ? " saved" : ""}`}
 								onClick={likeProgramHandler}
 							>
-								♥ {program?.programLikes?.toLocaleString()}
+								♥ {(program?.programLikes ?? 0) + (liked ? 1 : 0)}
 							</button>
 						</div>
 

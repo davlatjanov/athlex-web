@@ -51,6 +51,7 @@ const ProductDetail: NextPage = () => {
 	const [qty, setQty] = useState(1);
 	const [addedToCart, setAddedToCart] = useState(false);
 	const [bookmarked, setBookmarked] = useState(false);
+	const [liked, setLiked] = useState(false);
 	const [selectedImage, setSelectedImage] = useState<string>('');
 
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
@@ -73,7 +74,8 @@ const ProductDetail: NextPage = () => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.PRODUCT, likeRefId: productId } } });
-			await sweetTopSmallSuccessAlert('success', 800);
+			setLiked((prev) => !prev);
+			await sweetTopSmallSuccessAlert(liked ? 'Unliked' : 'Liked!', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
@@ -151,8 +153,8 @@ const ProductDetail: NextPage = () => {
 							<div className="pdp-meta-row">
 								<span className="pdp-views">{displayViews} views</span>
 								<span className="pdp-dot">·</span>
-								<span className="pdp-likes" style={{ cursor: 'pointer' }} onClick={handleLike}>
-									♥ {product.productLikes}
+								<span className={`pdp-likes${liked ? ' liked' : ''}`} style={{ cursor: 'pointer' }} onClick={handleLike}>
+									♥ {product.productLikes + (liked ? 1 : 0)}
 								</span>
 								<span className="pdp-dot">·</span>
 								<span className="pdp-status" style={{ color: status.color }}>{status.label}</span>
