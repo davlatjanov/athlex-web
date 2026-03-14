@@ -41,7 +41,7 @@ const MyFavorites: NextPage = () => {
 						<div
 							key={p._id}
 							className="card-config"
-							onClick={() => router.push({ pathname: '/programs/detail', query: { id: p._id } })}
+							onClick={() => router.push(`/programs/${p._id}`)}
 							style={{ cursor: 'pointer' }}
 						>
 							<div className="top">

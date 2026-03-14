@@ -49,7 +49,7 @@ const RecentlyVisited: NextPage = () => {
 								<img
 									src={p.programImages?.[0] || '/img/banner/header1.svg'}
 									alt={p.programName}
-									onClick={() => router.push({ pathname: '/programs/detail', query: { id: p._id } })}
+									onClick={() => router.push(`/programs/${p._id}`)}
 									style={{ cursor: 'pointer' }}
 								/>
 								<div className="top-badge">{p.programLevel}</div>
@@ -61,7 +61,7 @@ const RecentlyVisited: NextPage = () => {
 								<div className="name-address">
 									<div className="name">
 										<p
-											onClick={() => router.push({ pathname: '/programs/detail', query: { id: p._id } })}
+											onClick={() => router.push(`/programs/${p._id}`)}
 											style={{ cursor: 'pointer' }}
 										>
 											{p.programName}

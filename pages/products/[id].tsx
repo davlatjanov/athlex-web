@@ -91,8 +91,7 @@ const ProductDetail: NextPage = () => {
 
 	const handleAddToCart = () => {
 		if (!product || product.productStatus !== 'ACTIVE') return;
-		setAddedToCart(true);
-		setTimeout(() => setAddedToCart(false), 2000);
+		setAddedToCart((prev) => !prev);
 	};
 
 	if (loading) {

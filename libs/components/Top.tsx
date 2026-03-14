@@ -28,7 +28,7 @@ const Top = () => {
 	/** LIFECYCLES **/
 	useEffect(() => {
 		switch (router.pathname) {
-			case '/programs/detail':
+			case '/programs/[id]':
 				setBgColor(true);
 				break;
 			default:
@@ -96,6 +96,12 @@ const Top = () => {
 							</Link>
 							<Link href={'/products'}>
 								<div>{t('Shop')}</div>
+							</Link>
+							<Link href={'/community'}>
+								<div>{t('Community')}</div>
+							</Link>
+							<Link href={'/ai-coach'}>
+								<div>{t('AI Coach')}</div>
 							</Link>
 							<Link href={'/about'}>
 								<div>{t('About')}</div>
