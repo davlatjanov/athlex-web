@@ -23,6 +23,7 @@
 
 
 @import '/scss/pc/ai-coach/ai-coach.scss';
+@import '/scss/pc/ai-coach/ai-widget.scss';
 @import '/scss/pc/community/community.scss';
 @import '/scss/pc/mypage/myProgressResults.scss';
 
@@ -97,10 +98,11 @@ body::-webkit-scrollbar {
 					}
 					.router-box {
 						position: relative;
-						width: 617px;
+						width: auto;
 						display: flex;
 						flex-direction: row;
-						justify-content: space-between;
+						gap: 32px;
+						justify-content: flex-start;
 						div {
 							position: relative;
 							color: #eeeeeeed;

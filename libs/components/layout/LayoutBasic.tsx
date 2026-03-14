@@ -7,6 +7,7 @@ import Footer from '../Footer';
 import { Stack } from '@mui/material';
 import { getJwtToken, updateUserInfo } from '../../auth';
 import Chat from '../Chat';
+import AICoachWidget from '../AICoachWidget';
 import { useTranslation } from 'next-i18next';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -130,6 +131,7 @@ const withLayoutBasic = (Component: any) => {
 						</Stack>
 
 						<Chat />
+						<AICoachWidget />
 
 						<Stack id={'footer'}>
 							<Footer />
