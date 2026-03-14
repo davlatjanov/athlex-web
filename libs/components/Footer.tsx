@@ -14,7 +14,6 @@ const Footer = () => {
 		return (
 			<Stack className={'footer-container'}>
 				<div className={'ft-brand'}>
-					<img src="/img/logo/logoWhite.svg" alt="Athlex" className={'ft-logo'} />
 					<span className={'ft-logo-name'}>ATHLEX</span>
 					<p className={'ft-tagline'}>Train harder. Recover smarter. Perform better.</p>
 					<div className={'ft-socials'}>
@@ -51,7 +50,6 @@ const Footer = () => {
 				<div className={'ft-top'}>
 					<div className={'ft-brand'}>
 						<div className={'ft-brand-logo'}>
-							<img src="/img/logo/logoWhite.svg" alt="Athlex" className={'ft-logo'} />
 							<span className={'ft-logo-name'}>ATHLEX</span>
 						</div>
 						<p className={'ft-tagline'}>Train harder. Recover smarter.<br />Perform better.</p>
