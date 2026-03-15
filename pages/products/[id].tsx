@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -15,6 +15,7 @@ import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/swee
 import { Message } from '../../libs/enums/common.enum';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { useCart } from '../../libs/context/CartContext';
+import { trackProductVisit } from '../../libs/components/mypage/RecentlyVisited';
 import moment from 'moment';
 
 export const getServerSideProps = async ({ locale }: any) => ({
@@ -45,6 +46,8 @@ const ProductDetail: NextPage = () => {
 	const user = useReactiveVar(userVar);
 	const { id } = router.query;
 	const productId = typeof id === 'string' ? id : '';
+
+	useEffect(() => { if (productId) trackProductVisit(productId); }, [productId]);
 
 	const [qty, setQty] = useState(1);
 	const [addedToCart, setAddedToCart] = useState(false);

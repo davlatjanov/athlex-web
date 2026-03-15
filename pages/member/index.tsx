@@ -14,6 +14,7 @@ import { userVar } from '../../apollo/store';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
 import { Messages } from '../../libs/config';
+import Link from 'next/link';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -30,7 +31,7 @@ const MemberPage: NextPage = () => {
 	/** APOLLO REQUESTS **/
 	const [followMember] = useMutation(FOLLOW_MEMBER);
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
-	
+
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -39,7 +40,7 @@ const MemberPage: NextPage = () => {
 			router.replace(
 				{
 					pathname: router.pathname,
-					query: { ...router.query, category: 'properties' },
+					query: { ...router.query, category: 'programs' },
 				},
 				undefined,
 				{ shallow: true },
@@ -59,7 +60,7 @@ const MemberPage: NextPage = () => {
 				},
 			});
 			await sweetTopSmallSuccessAlert('Followed', 800);
-			await refetch({ input: query });
+			await refetch(query);
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
@@ -76,7 +77,7 @@ const MemberPage: NextPage = () => {
 				},
 			});
 			await sweetTopSmallSuccessAlert('Unfollowed', 800);
-			await refetch({ input: query });
+			await refetch(query);
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
@@ -93,7 +94,7 @@ const MemberPage: NextPage = () => {
 				},
 			});
 			await sweetTopSmallSuccessAlert('Liked', 800);
-			await refetch({ input: query });
+			await refetch(query);
 		} catch (err: any) {
 			console.log('ERROR likeMemberHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
@@ -114,34 +115,80 @@ const MemberPage: NextPage = () => {
 	} else {
 		return (
 			<div id="member-page" style={{ position: 'relative' }}>
+				{/* Hero — same structure as other pages */}
+				<div className="header-basic member-header">
+					<div className="container hb-container">
+						<img
+							src="https://i.pinimg.com/1200x/9b/8a/28/9b8a28b9f215bc6d85b1b8ff4c33cde4.jpg"
+							alt=""
+							className="hb-bg-img"
+						/>
+						<div className="hb-overlay" />
+						<div className="hb-text">
+							<strong className="hb-title">Athlete Profile</strong>
+							<span className="hb-desc">Track progress · Build connections</span>
+						</div>
+					</div>
+				</div>
+
+				{/* Profile Strip */}
+				<div className="member-profile-strip">
+					<div className="container">
+						<MemberMenu subscribeHandler={subscribeHandler} unsubscribeHandler={unsubscribeHandler} />
+					</div>
+				</div>
+
+				{/* Tab Navigation */}
+				<nav className="member-tabs">
+					<div className="container">
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'programs' } }}
+							scroll={false}
+							className={category === 'programs' ? 'active' : ''}
+						>
+							Programs
+						</Link>
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'followers' } }}
+							scroll={false}
+							className={category === 'followers' ? 'active' : ''}
+						>
+							Followers
+						</Link>
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'followings' } }}
+							scroll={false}
+							className={category === 'followings' ? 'active' : ''}
+						>
+							Followings
+						</Link>
+					</div>
+				</nav>
+
+				{/* Content */}
 				<div className="container">
 					<Stack className={'member-page'}>
-						<Stack className={'back-frame'}>
-							<Stack className={'left-config'}>
-								<MemberMenu subscribeHandler={subscribeHandler} unsubscribeHandler={unsubscribeHandler} />
-							</Stack>
-							<Stack className="main-config" mb={'76px'}>
-								<Stack className={'list-config'}>
-									{category === 'properties' && <MemberProperties />}
-									{category === 'followers' && (
-										<MemberFollowers
-											subscribeHandler={subscribeHandler}
-											unsubscribeHandler={unsubscribeHandler}
-											likeMemberHandler={likeMemberHandler}
-											redirectToMemberPageHandler={redirectToMemberPageHandler}
-										/>
-									)}
-									{category === 'followings' && (
-										<MemberFollowings
-											subscribeHandler={subscribeHandler}
-											unsubscribeHandler={unsubscribeHandler}
-											likeMemberHandler={likeMemberHandler}
-											redirectToMemberPageHandler={redirectToMemberPageHandler}
-										/>
-									)}
-									</Stack>
-							</Stack>
-						</Stack>
+						<div className="member-content">
+							<div className="list-config">
+								{category === 'programs' && <MemberProperties />}
+								{category === 'followers' && (
+									<MemberFollowers
+										subscribeHandler={subscribeHandler}
+										unsubscribeHandler={unsubscribeHandler}
+										likeMemberHandler={likeMemberHandler}
+										redirectToMemberPageHandler={redirectToMemberPageHandler}
+									/>
+								)}
+								{category === 'followings' && (
+									<MemberFollowings
+										subscribeHandler={subscribeHandler}
+										unsubscribeHandler={unsubscribeHandler}
+										likeMemberHandler={likeMemberHandler}
+										redirectToMemberPageHandler={redirectToMemberPageHandler}
+									/>
+								)}
+							</div>
+						</div>
 					</Stack>
 				</div>
 			</div>

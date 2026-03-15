@@ -290,12 +290,13 @@
 	}
 }
 
-// ─── PROGRAMS PAGE ────────────────────────────────────────────────────────────
+// ─── PROGRAMS PAGE + MEMBER PROGRAMS ─────────────────────────────────────────
 #pc-wrap {
-	#programs-page {
+	#programs-page,
+	#member-properties-page {
 		min-height: 100vh;
 		background: #0F172A;
-		padding: 120px 0 80px;
+		padding: 40px 0 80px;
 
 		.programs-container {
 			max-width: 1300px;

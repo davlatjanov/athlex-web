@@ -384,6 +384,12 @@ const TrainerDetail: NextPage = () => {
 								</button>
 								<button className="tdp-ac-like" onClick={handleLike}>♡</button>
 							</div>
+							<Link
+								href={`/member?memberId=${trainerId}&category=programs`}
+								className="tdp-ac-profile-btn"
+							>
+								View Full Profile →
+							</Link>
 						</div>
 						<div className="tdp-ac-divider" />
 						<div className="tdp-ac-rows">

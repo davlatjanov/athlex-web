@@ -12,8 +12,9 @@ import AddProperty from '../../libs/components/mypage/AddNewProperty';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import MyBookmarks from '../../libs/components/mypage/MyBookmarks';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
+import { GET_MEMBER } from '../../apollo/user/query';
 import MemberFollowers from '../../libs/components/member/MemberFollowers';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
@@ -26,6 +27,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
@@ -40,7 +42,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 
 const USER_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
-	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'myFavorites', label: 'My Joinings' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
 	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
@@ -52,7 +54,7 @@ const AGENT_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
-	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'myFavorites', label: 'My Joinings' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
 	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
@@ -64,7 +66,7 @@ const ADMIN_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
-	{ key: 'myFavorites', label: 'My Favorites' },
+	{ key: 'myFavorites', label: 'My Joinings' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
 	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
@@ -83,7 +85,8 @@ const PLAN_LABEL: Record<string, string> = {
 const getTabIcon = (key: string) => {
 	switch (key) {
 		case 'myProfile': return <PersonOutlineIcon fontSize="small" />;
-		case 'myFavorites': return <BookmarkBorderIcon fontSize="small" />;
+		case 'myFavorites': return <CheckCircleOutlineIcon fontSize="small" />;
+		case 'myBookmarks': return <BookmarkBorderIcon fontSize="small" />;
 		case 'recentlyVisited': return <HistoryIcon fontSize="small" />;
 		case 'followers': return <PeopleOutlineIcon fontSize="small" />;
 		case 'followings': return <PersonOutlineIcon fontSize="small" />;
@@ -109,6 +112,13 @@ const MyPage: NextPage = () => {
 	const tabs = getTabs();
 
 	/** APOLLO REQUESTS **/
+	const { data: memberData } = useQuery(GET_MEMBER, {
+		variables: { memberId: u?._id },
+		skip: !u?._id,
+		fetchPolicy: 'network-only',
+	});
+	const liveUser = memberData?.getMember;
+
 	const [followMember] = useMutation(FOLLOW_MEMBER);
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 
@@ -119,7 +129,7 @@ const MyPage: NextPage = () => {
 			if (!u._id) throw new Error(Messages.error2);
 			await followMember({ variables: { input: { followingId: id } } });
 			await sweetTopSmallSuccessAlert('Subscribed', 800);
-			await refetch({ input: query });
+			await refetch(query);
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
@@ -131,7 +141,7 @@ const MyPage: NextPage = () => {
 			if (!u._id) throw new Error(Messages.error2);
 			await followMember({ variables: { input: { followingId: id } } });
 			await sweetTopSmallSuccessAlert('UnSubscribed', 800);
-			await refetch({ input: query });
+			await refetch(query);
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
@@ -210,20 +220,20 @@ const MyPage: NextPage = () => {
 							<div className={'mp-stats-row'}>
 								{u?.memberType === 'TRAINER' && (
 									<div className={'mp-stat'}>
-										<strong>{u?.memberPrograms ?? 0}</strong>
+										<strong>{liveUser?.memberPrograms ?? u?.memberPrograms ?? 0}</strong>
 										<span>PROGRAMS</span>
 									</div>
 								)}
 								<div className={'mp-stat'}>
-									<strong>{u?.memberFollowers ?? 0}</strong>
+									<strong>{liveUser?.memberFollowers ?? u?.memberFollowers ?? 0}</strong>
 									<span>FOLLOWERS</span>
 								</div>
 								<div className={'mp-stat'}>
-									<strong>{u?.memberFollowings ?? 0}</strong>
+									<strong>{liveUser?.memberFollowings ?? u?.memberFollowings ?? 0}</strong>
 									<span>FOLLOWING</span>
 								</div>
 								<div className={'mp-stat'}>
-									<strong>{u?.memberPoints ?? 0}</strong>
+									<strong>{liveUser?.memberPoints ?? u?.memberPoints ?? 0}</strong>
 									<span>POINTS</span>
 								</div>
 							</div>

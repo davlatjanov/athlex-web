@@ -41,9 +41,6 @@ const withLayoutBasic = (Component: any) => {
 					bgImage = 'https://i.pinimg.com/736x/13/c8/34/13c83449624a1a9ea2672a5ebdaf97ec.jpg';
 					break;
 				case '/member':
-					title = 'Athlete Profile';
-					desc = 'Track progress · Build connections';
-					bgImage = 'https://images.pexels.com/photos/4498483/pexels-photo-4498483.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800&dpr=1';
 					break;
 				case '/cs':
 					title = 'Customer Support';

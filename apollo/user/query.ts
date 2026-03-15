@@ -367,17 +367,12 @@ export const GET_FOLLOWERS = gql`
 		getFollowers(memberId: $memberId, input: $input) {
 			list {
 				_id
-				followingId
-				followerId
-				createdAt
-				followerData {
-					_id
-					memberNick
-					memberImage
-					memberType
-					memberFollowers
-					memberFollowings
-				}
+				memberNick
+				memberImage
+				memberType
+				memberFollowers
+				memberFollowings
+				memberLikes
 			}
 			metaCounter {
 				total
@@ -391,17 +386,12 @@ export const GET_FOLLOWINGS = gql`
 		getFollowings(memberId: $memberId, input: $input) {
 			list {
 				_id
-				followingId
-				followerId
-				createdAt
-				followingData {
-					_id
-					memberNick
-					memberImage
-					memberType
-					memberFollowers
-					memberFollowings
-				}
+				memberNick
+				memberImage
+				memberType
+				memberFollowers
+				memberFollowings
+				memberLikes
 			}
 			metaCounter {
 				total
@@ -419,10 +409,22 @@ export const GET_MY_BOOKMARKS = gql`
 		getMyBookmarks(input: $input) {
 			list {
 				_id
-				bookmarkGroup
 				bookmarkRefId
-				memberId
+				bookmarkGroup
 				createdAt
+				itemData {
+					_id
+					name
+					images
+					price
+					type
+					level
+					views
+					likes
+					members
+					duration
+					rank
+				}
 			}
 			metaCounter {
 				total
