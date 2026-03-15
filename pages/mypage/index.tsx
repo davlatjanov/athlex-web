@@ -10,6 +10,9 @@ import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
 import AddProperty from '../../libs/components/mypage/AddNewProperty';
 import AddProduct from '../../libs/components/mypage/AddNewProduct';
+import AdminUsers from '../../libs/components/mypage/AdminUsers';
+import AdminPrograms from '../../libs/components/mypage/AdminPrograms';
+import AdminProductsList from '../../libs/components/mypage/AdminProductsList';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import MyBookmarks from '../../libs/components/mypage/MyBookmarks';
@@ -34,6 +37,8 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -71,7 +76,9 @@ const ADMIN_TABS = [
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
-	{ key: 'adminPanel', label: 'Admin Panel' },
+	{ key: 'adminUsers', label: 'Users' },
+	{ key: 'adminPrograms', label: 'Programs' },
+	{ key: 'adminProducts', label: 'Products' },
 ];
 
 const PLAN_LABEL: Record<string, string> = {
@@ -92,6 +99,9 @@ const getTabIcon = (key: string) => {
 		case 'myProperties': return <FitnessCenterIcon fontSize="small" />;
 		case 'addProperty': return <AddCircleOutlineIcon fontSize="small" />;
 		case 'addProduct': return <AddCircleOutlineIcon fontSize="small" />;
+		case 'adminUsers': return <PeopleOutlineIcon fontSize="small" />;
+		case 'adminPrograms': return <PlayCircleOutlineIcon fontSize="small" />;
+		case 'adminProducts': return <StorefrontOutlinedIcon fontSize="small" />;
 		case 'adminPanel': return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
 		default: return null;
 	}
@@ -258,18 +268,10 @@ const MyPage: NextPage = () => {
 						{tabs.map((tab) => (
 							<Link
 								key={tab.key}
-								href={
-									tab.key === 'adminPanel'
-										? '/_admin'
-										: { pathname: '/mypage', query: { category: tab.key } }
-								}
+								href={{ pathname: '/mypage', query: { category: tab.key } }}
 								scroll={false}
 							>
-								<div
-									className={`mp-tab ${category === tab.key ? 'active' : ''} ${
-										tab.key === 'adminPanel' ? 'mp-tab--admin' : ''
-									}`}
-								>
+								<div className={`mp-tab ${category === tab.key ? 'active' : ''}`}>
 									{getTabIcon(tab.key)}
 									<span>{tab.label}</span>
 								</div>
@@ -303,6 +305,9 @@ const MyPage: NextPage = () => {
 								redirectToMemberPageHandler={redirectToMemberPageHandler}
 							/>
 						)}
+						{category === 'adminUsers' && <AdminUsers />}
+						{category === 'adminPrograms' && <AdminPrograms />}
+						{category === 'adminProducts' && <AdminProductsList />}
 					</div>
 
 				</div>
