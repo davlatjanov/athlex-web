@@ -8,14 +8,11 @@ export interface CommentInput {
 	memberId?: string;
 }
 
-interface CISearch {
-	commentRefId: string;
-}
-
 export interface CommentsInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
 	direction?: Direction;
-	search: CISearch;
+	commentRefId: string;
+	commentGroup: CommentGroup;
 }

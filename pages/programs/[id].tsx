@@ -6,15 +6,15 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { GET_ONE_PROGRAM_WITH_MEMBER, GET_COMMENTS, GET_PROGRAM_WITH_WORKOUTS, GET_FEEDBACKS } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_TARGET_ITEM, JOIN_PROGRAM, LEAVE_PROGRAM, TOGGLE_BOOKMARK, CREATE_FEEDBACK } from '../../apollo/user/mutation';
+import { GET_ONE_PROGRAM_WITH_MEMBER, GET_COMMENTS, GET_PROGRAM_WITH_WORKOUTS, GET_FEEDBACKS, CHECK_IF_USER_LIKED } from '../../apollo/user/query';
+import { CREATE_COMMENT, DELETE_COMMENT, JOIN_PROGRAM, LEAVE_PROGRAM, TOGGLE_BOOKMARK, CREATE_FEEDBACK, UPDATE_FEEDBACK } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { Program, Workout } from '../../libs/types/program/program';
 import { Comment } from '../../libs/types/comment/comment';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { CommentGroup } from '../../libs/enums/comment.enum';
-import { LikeGroup } from '../../libs/enums/like.enum';
 import { Message } from '../../libs/enums/common.enum';
+import { useLike } from '../../libs/hooks/useInteractions';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { T } from '../../libs/types/common';
 import moment from 'moment';
@@ -24,6 +24,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import GroupIcon from '@mui/icons-material/Group';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { trackProgramVisit } from '../../libs/components/mypage/RecentlyVisited';
 
 const SAVED_KEY = 'athlex_saved_programs';
@@ -56,18 +60,56 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		commentRefId: '',
 	});
 	const [feedbackScale, setFeedbackScale] = useState(0);
+	const SCALE_MAP: Record<number, string> = { 1: 'ONE', 2: 'TWO', 3: 'THREE', 4: 'FOUR', 5: 'FIVE' };
+	const REV_SCALE: Record<string, number> = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
 	const [feedbackHover, setFeedbackHover] = useState(0);
 	const [feedbackContent, setFeedbackContent] = useState('');
 	const [averageRating, setAverageRating] = useState(0);
 	const [ratingCount, setRatingCount] = useState(0);
+	const [ratingDist, setRatingDist] = useState<Record<number,number>>({ 1:0, 2:0, 3:0, 4:0, 5:0 });
+	const [myFeedbackId, setMyFeedbackId] = useState<string | null>(null);
+
+	/** HOOKS **/
+	const { data: likedData } = useQuery(CHECK_IF_USER_LIKED, {
+		fetchPolicy: 'network-only',
+		skip: !id || !user?._id,
+		variables: { likeRefId: id },
+	});
+	const { liked: programLiked, toggle: toggleLike } = useLike('programs', id as string, likedData?.checkIfUserLiked ?? false);
 
 	/** APOLLO **/
-	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 	const [createComment] = useMutation(CREATE_COMMENT);
+	const [deleteComment] = useMutation(DELETE_COMMENT);
 	const [joinProgram] = useMutation(JOIN_PROGRAM);
 	const [leaveProgram] = useMutation(LEAVE_PROGRAM);
 	const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK);
 	const [createFeedback] = useMutation(CREATE_FEEDBACK);
+	const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
+
+	const { data: feedbacksData, refetch: refetchFeedbacks } = useQuery(GET_FEEDBACKS, {
+		fetchPolicy: 'network-only',
+		skip: !id,
+		variables: { input: { page: 1, limit: 100, feedbackRefId: id, feedbackGroup: 'TRAINING_PROGRAM' } },
+	});
+
+	useEffect(() => {
+		const list: T[] = feedbacksData?.getFeedbacks?.list ?? [];
+		if (!list.length) return;
+		const dist: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+		list.forEach((fb: T) => {
+			const num = REV_SCALE[fb.feedbackScale] ?? 0;
+			if (num >= 1 && num <= 5) dist[num]++;
+		});
+		const total = list.length;
+		const sum = Object.entries(dist).reduce((acc, [k, v]) => acc + Number(k) * v, 0);
+		setRatingDist(dist);
+		setRatingCount(total);
+		setAverageRating(total > 0 ? sum / total : 0);
+		if (user?._id) {
+			const mine = list.find((fb: T) => fb.memberId === (user as any)._id);
+			if (mine) { setFeedbackScale(REV_SCALE[mine.feedbackScale] ?? 0); setMyFeedbackId(mine._id); }
+		}
+	}, [feedbacksData]);
 
 	const { loading, refetch: getProgramRefetch } = useQuery(GET_ONE_PROGRAM_WITH_MEMBER, {
 		fetchPolicy: 'network-only',
@@ -80,7 +122,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 				// Only set initial values once — skip on every subsequent refetch
 				setSlideImage((prev) => prev || prog.programImages?.[0] || '');
 				setInsertCommentData((prev) => prev.commentRefId ? prev : { ...prev, commentRefId: prog._id });
-				setCommentInquiry((prev) => prev.search.commentRefId ? prev : { ...prev, search: { commentRefId: prog._id } });
+				setCommentInquiry((prev) => prev.commentRefId ? prev : { ...prev, commentRefId: prog._id, commentGroup: CommentGroup.PROGRAM });
 			}
 		},
 	});
@@ -97,7 +139,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const { refetch: getCommentsRefetch } = useQuery(GET_COMMENTS, {
 		fetchPolicy: 'cache-and-network',
 		variables: { input: commentInquiry },
-		skip: !commentInquiry.search.commentRefId,
+		skip: !commentInquiry.commentRefId,
 		onCompleted: (data: T) => {
 			setProgramComments(data?.getComments?.list ?? []);
 			setCommentTotal(data?.getComments?.metaCounter?.[0]?.total ?? 0);
@@ -105,7 +147,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	});
 
 	useEffect(() => {
-		if (commentInquiry.search.commentRefId) {
+		if (commentInquiry.commentRefId) {
 			getCommentsRefetch({ input: commentInquiry });
 		}
 	}, [commentInquiry]);
@@ -134,19 +176,6 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	}, [id]);
 
 	/** HANDLERS **/
-	const likeProgramHandler = async () => {
-		try {
-			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.PROGRAM, likeRefId: program?._id } } });
-			getProgramRefetch({ programId: id }).then((res) => {
-				const updated = res.data?.getOneProgramWithMember;
-				if (updated) setProgram(updated);
-			}).catch(() => {});
-			sweetTopSmallSuccessAlert('Liked!', 800);
-		} catch (err: any) {
-			sweetMixinErrorAlert(err.message).then();
-		}
-	};
 
 	const joinProgramHandler = async () => {
 		try {
@@ -165,7 +194,10 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 				if (!list.includes(id as string)) localStorage.setItem(JOINED_KEY, JSON.stringify([...list, id]));
 				sweetTopSmallSuccessAlert('Enrolled!', 800);
 			}
-			getProgramRefetch({ programId: id });
+			getProgramRefetch({ programId: id }).then((res) => {
+				const updated = res.data?.getOneProgramWithMember;
+				if (updated) setProgram(updated);
+			}).catch(() => {});
 		} catch (err: any) {
 			const msg: string = err.message ?? '';
 			// Backend says already joined → silently mark as enrolled
@@ -335,10 +367,28 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 				{programComments.map((comment: Comment) => (
 					<div key={comment._id} className="review-card">
 						<div className="rc-head">
-							<div className="rc-avatar">{comment.memberId?.toString().slice(-2).toUpperCase()}</div>
+							<div className="rc-avatar">
+								{comment.memberData?.memberImage
+									? <img src={comment.memberData.memberImage} alt="" />
+									: (comment.memberData?.memberNick?.[0] ?? 'A').toUpperCase()}
+								</div>
 							<div className="rc-meta">
+								<span className="rc-nick">{comment.memberData?.memberNick ?? 'Member'}</span>
 								<span className="rc-date">{moment(comment.createdAt).format('MMM DD, YYYY')}</span>
 							</div>
+							{(user as any)?._id === comment.memberId?.toString() && (
+								<button
+									className="rc-delete-btn"
+									title="Delete comment"
+									onClick={async () => {
+										try {
+											await deleteComment({ variables: { commentId: comment._id } });
+											await getCommentsRefetch({ input: commentInquiry });
+											await sweetTopSmallSuccessAlert('Comment deleted', 800);
+										} catch (err: any) { sweetMixinErrorAlert(err.message); }
+									}}
+								>✕</button>
+							)}
 						</div>
 						<p className="rc-text">{comment.commentContent}</p>
 					</div>
@@ -450,8 +500,6 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 						</div>
 					)}
 
-					{statPills}
-
 					{program?.programDesc && (
 						<section className="pdp-section">
 							<h2 className="pdp-section-title">About This Program</h2>
@@ -493,76 +541,6 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 							</div>
 						</section>
 					)}
-
-					{trainerSection}
-					{reviewsSection}
-					{leaveReviewSection}
-
-					{/* ── Star Rating Section ── */}
-					<section className="pdp-section">
-						<h2 className="pdp-section-title">Rate This Program</h2>
-						{averageRating > 0 && (
-							<div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-								<span style={{ fontSize: 28, fontWeight: 800, color: '#FFB800' }}>★ {averageRating.toFixed(1)}</span>
-								<span style={{ color: '#9ca3af', fontSize: 14 }}>({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</span>
-							</div>
-						)}
-						<div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-							{[1, 2, 3, 4, 5].map((star) => (
-								<span
-									key={star}
-									style={{
-										fontSize: 32,
-										cursor: user._id ? 'pointer' : 'default',
-										color: star <= (feedbackHover || feedbackScale) ? '#FFB800' : '#4b5563',
-										transition: 'color 0.15s',
-									}}
-									onMouseEnter={() => user._id && setFeedbackHover(star)}
-									onMouseLeave={() => setFeedbackHover(0)}
-									onClick={() => user._id && setFeedbackScale(star)}
-								>
-									★
-								</span>
-							))}
-						</div>
-						{feedbackScale > 0 && (
-							<>
-								<textarea
-									className="pdp-review-input"
-									rows={3}
-									placeholder="Tell us more about your rating (optional)..."
-									value={feedbackContent}
-									onChange={(e) => setFeedbackContent(e.target.value)}
-								/>
-								<button
-									className="pdp-submit-btn"
-									disabled={!user._id}
-									onClick={async () => {
-										try {
-											if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-											await createFeedback({
-												variables: {
-													input: {
-														feedbackGroup: 'TRAINING_PROGRAM',
-														feedbackRefId: id,
-														feedbackScale,
-														feedbackContent: feedbackContent || `Rated ${feedbackScale}/5`,
-													},
-												},
-											});
-											setFeedbackScale(0);
-											setFeedbackContent('');
-											await sweetTopSmallSuccessAlert('Rating submitted!', 800);
-										} catch (err: any) {
-											await sweetErrorHandling(err);
-										}
-									}}
-								>
-									Submit Rating
-								</button>
-							</>
-						)}
-					</section>
 				</div>
 
 				<aside className="pdp-sidebar">
@@ -574,7 +552,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 								<RemoveRedEyeIcon fontSize="small" />
 								<span>{program?.programViews}</span>
 							</div>
-							<button className="ec-action-btn" onClick={likeProgramHandler} title="Like">
+							<button className={`ec-action-btn ${programLiked ? 'liked' : ''}`} onClick={async (e) => { await toggleLike(e); getProgramRefetch({ programId: id }).then((res) => { const u = res.data?.getOneProgramWithMember; if (u) setProgram(u); }).catch(() => {}); }} title="Like">
 								<FavoriteBorderIcon fontSize="small" />
 								<span>{program?.programLikes}</span>
 							</button>
@@ -617,7 +595,136 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 							))}
 						</div>
 					</div>
+
+					{/* Quick stats 2×2 */}
+					<div className="sidebar-stats">
+						{[
+							{ icon: <DateRangeIcon />, val: program?.programDuration, lbl: 'WEEKS' },
+							{ icon: <GroupIcon />, val: program?.programMembers, lbl: 'ENROLLED' },
+							{ icon: <ChatBubbleOutlineIcon />, val: commentTotal, lbl: 'REVIEWS' },
+							{ icon: <EmojiEventsIcon />, val: program?.programRank, lbl: 'RANK' },
+						].map(({ icon, val, lbl }) => (
+							<div key={lbl} className="sidebar-stat-pill">
+								<span className="sp-icon">{icon}</span>
+								<span className="sp-val">{val}</span>
+								<span className="sp-lbl">{lbl}</span>
+							</div>
+						))}
+					</div>
+
+					{/* Trainer mini-card */}
+					{program?.memberData && (
+						<div className="sidebar-trainer">
+							<span className="sidebar-section-label">Trainer</span>
+							<div className="ec-trainer">
+								<img
+									src={program.memberData.memberImage || ''}
+									alt={program.memberData.memberNick}
+									className="et-avatar-img"
+									onError={(e) => { const el = e.target as HTMLImageElement; el.onerror = null; el.style.display = 'none'; }}
+								/>
+								<div className="et-info">
+									<Link href={`/member?memberId=${program.memberData._id}`}>
+										<div className="et-name">{program.memberData.memberNick}</div>
+									</Link>
+									<div className="et-spec">{program.memberData.memberType}</div>
+								</div>
+								<Link href={`/member?memberId=${program.memberData._id}`} className="et-profile-link">
+									View →
+								</Link>
+							</div>
+						</div>
+					)}
+
 				</aside>
+			</div>
+
+			{/* ── Full-width: Reviews + Rating ── */}
+			<div className="pdp-full-width">
+				{reviewsSection}
+				{leaveReviewSection}
+
+				<section className="pdp-section">
+					<h2 className="pdp-section-title">Rate This Program</h2>
+
+					<div className="pdp-rating-overview">
+						<div className="pdp-rating-score">
+							<span className="pdp-rating-big">{ratingCount > 0 ? averageRating.toFixed(1) : '—'}</span>
+							<div className="pdp-rating-stars">
+								{[1,2,3,4,5].map((s) => (
+									<span key={s} style={{ color: s <= Math.round(averageRating) ? '#FFB800' : '#374151' }}>★</span>
+								))}
+							</div>
+							<span className="pdp-rating-count">{ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'}</span>
+						</div>
+						<div className="pdp-rating-bars">
+							{[5,4,3,2,1].map((star) => {
+								const count = ratingDist[star] ?? 0;
+								const pct = ratingCount > 0 ? (count / ratingCount) * 100 : 0;
+								return (
+									<div key={star} className="pdp-bar-row">
+										<span className="pdp-bar-label">{star} ★</span>
+										<div className="pdp-bar-track">
+											<div className="pdp-bar-fill" style={{ width: `${pct}%` }} />
+										</div>
+										<span className="pdp-bar-count">{count}</span>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					<div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+						{[1, 2, 3, 4, 5].map((star) => (
+							<span
+								key={star}
+								style={{
+									fontSize: 32,
+									cursor: user._id ? 'pointer' : 'default',
+									color: star <= (feedbackHover || feedbackScale) ? '#FFB800' : '#4b5563',
+									transition: 'color 0.15s',
+								}}
+								onMouseEnter={() => user._id && setFeedbackHover(star)}
+								onMouseLeave={() => setFeedbackHover(0)}
+								onClick={() => user._id && setFeedbackScale(star)}
+							>
+								★
+							</span>
+						))}
+					</div>
+					{feedbackScale > 0 && (
+						<>
+							<textarea
+								className="pdp-review-input"
+								rows={3}
+								placeholder="Tell us more about your rating (optional)..."
+								value={feedbackContent}
+								onChange={(e) => setFeedbackContent(e.target.value)}
+							/>
+							<button
+								className="pdp-submit-btn"
+								disabled={!user._id}
+								onClick={async () => {
+									try {
+										if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+										if (myFeedbackId) {
+											await updateFeedback({ variables: { input: { _id: myFeedbackId, feedbackScale: SCALE_MAP[feedbackScale], ...(feedbackContent && { feedbackContent }) } } });
+										} else {
+											await createFeedback({ variables: { input: { feedbackGroup: 'TRAINING_PROGRAM', feedbackRefId: id, feedbackScale: SCALE_MAP[feedbackScale], feedbackContent: feedbackContent || `Rated ${feedbackScale} out of 5 stars` } } });
+										}
+										setFeedbackContent('');
+										await refetchFeedbacks();
+										await sweetTopSmallSuccessAlert('Rating submitted!', 800);
+									} catch (err: any) {
+										await sweetErrorHandling(err);
+									}
+								}}
+							>
+								Submit Rating
+							</button>
+						</>
+					)}
+				</section>
 			</div>
 		</div>
 	);
@@ -629,7 +736,8 @@ ProgramDetailPage.defaultProps = {
 		limit: 5,
 		sort: 'createdAt',
 		direction: 'DESC',
-		search: { commentRefId: '' },
+		commentRefId: '',
+		commentGroup: CommentGroup.PROGRAM,
 	},
 };
 

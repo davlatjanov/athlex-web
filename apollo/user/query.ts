@@ -463,6 +463,12 @@ export const GET_FEEDBACKS = gql`
 	}
 `;
 
+export const CHECK_IF_USER_LIKED = gql`
+	query CheckIfUserLiked($likeRefId: String!) {
+		checkIfUserLiked(likeRefId: $likeRefId)
+	}
+`;
+
 /**************************
  *     PROGRESS RESULT    *
  *************************/

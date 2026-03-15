@@ -12,10 +12,12 @@ const LIKE_GROUP_MAP: Record<string, LikeGroup> = {
 	trainers: LikeGroup.MEMBER,
 };
 
-export function useLike(group: 'programs' | 'trainers', id: string) {
+export function useLike(group: 'programs' | 'trainers', id: string, initialLiked = false) {
 	const user = useReactiveVar(userVar);
-	const [liked, setLiked] = useState(false);
+	const [liked, setLiked] = useState(initialLiked);
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
+
+	React.useEffect(() => { setLiked(initialLiked); }, [initialLiked]);
 
 	const toggle = async (e: React.MouseEvent) => {
 		e.preventDefault();
