@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_ALL_MEMBERS_BY_ADMIN } from '../../../apollo/admin/query';
 import { UPDATE_MEMBER_BY_ADMIN } from '../../../apollo/admin/mutation';
-import { MemberStatus, MemberType } from '../../enums/member.enum';
+import { MemberPlan, MemberStatus, MemberType } from '../../enums/member.enum';
 import { sweetErrorHandling, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { T } from '../../types/common';
 import { Avatar, Menu, MenuItem, Select, TablePagination } from '@mui/material';
@@ -23,7 +23,7 @@ const STATUS_COLOR: Record<string, string> = {
 	DELETED: '#9CA3AF',
 };
 
-const TABS = ['ALL', 'ACTIVE', 'INACTIVE', 'BANNED', 'DELETED'];
+const TABS = ['ALL', 'ACTIVE', 'BANNED', 'DELETED'];
 
 const AdminUsers = () => {
 	const [page, setPage] = useState(0);
@@ -65,7 +65,9 @@ const AdminUsers = () => {
 			await updateMember({ variables: { input: update } });
 			await sweetTopSmallSuccessAlert('Updated', 800);
 			setAnchorEl({});
-			await refetch({ input: inquiry });
+			const result = await refetch({ input: inquiry });
+			setMembers(result.data?.getAllMembersByAdmin?.list ?? []);
+			setTotal(result.data?.getAllMembersByAdmin?.metaCounter?.[0]?.total ?? 0);
 		} catch (err) {
 			sweetErrorHandling(err).then();
 		}
@@ -123,7 +125,7 @@ const AdminUsers = () => {
 				<table style={{ width: '100%', borderCollapse: 'collapse' }}>
 					<thead>
 						<tr>
-							{['Member', 'Phone', 'Type', 'Warnings', 'Status', 'Joined', 'Actions'].map((h) => (
+							{['Member', 'Phone', 'Type', 'Plan', 'Warnings', 'Status', 'Joined', 'Actions'].map((h) => (
 								<th key={h} style={thS}>{h}</th>
 							))}
 						</tr>
@@ -131,7 +133,7 @@ const AdminUsers = () => {
 					<tbody>
 						{members.length === 0 ? (
 							<tr>
-								<td colSpan={7} style={{ ...tdS, textAlign: 'center', padding: '32px', color: muted }}>
+								<td colSpan={8} style={{ ...tdS, textAlign: 'center', padding: '32px', color: muted }}>
 									No members found
 								</td>
 							</tr>
@@ -157,14 +159,15 @@ const AdminUsers = () => {
 									<button
 										id={`type-btn-${m._id}`}
 										onClick={(e) => setAnchorEl({ ...anchorEl, [`type-${m._id}`]: e.currentTarget })}
+										title="Click to change type"
 										style={{
 											fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
 											color: m.memberType === 'TRAINER' ? '#60a5fa' : m.memberType === 'ADMIN' ? accent : '#9CA3AF',
 											background: m.memberType === 'TRAINER' ? 'rgba(96,165,250,0.1)' : m.memberType === 'ADMIN' ? 'rgba(233,44,40,0.1)' : 'rgba(156,163,175,0.1)',
-											border: 'none', cursor: 'pointer',
+											border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
 										}}
 									>
-										{m.memberType}
+										{m.memberType} ▾
 									</button>
 									<Menu
 										anchorEl={anchorEl[`type-${m._id}`]}
@@ -176,18 +179,42 @@ const AdminUsers = () => {
 										))}
 									</Menu>
 								</td>
-								<td style={{ ...tdS, color: muted, fontSize: 13, textAlign: 'center' }}>{m.memberWarnings}</td>
+								<td style={tdS}>
+									<button
+										onClick={(e) => setAnchorEl({ ...anchorEl, [`plan-${m._id}`]: e.currentTarget })}
+										title="Click to change plan"
+										style={{
+											fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
+											color: m.memberPlan === 'PRO' ? '#f59e0b' : m.memberPlan === 'ADVANCED' ? '#a78bfa' : m.memberPlan === 'REGULAR' ? '#60a5fa' : '#9CA3AF',
+											background: m.memberPlan === 'PRO' ? 'rgba(245,158,11,0.1)' : m.memberPlan === 'ADVANCED' ? 'rgba(167,139,250,0.1)' : m.memberPlan === 'REGULAR' ? 'rgba(96,165,250,0.1)' : 'rgba(156,163,175,0.1)',
+											border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
+										}}
+									>
+										{m.memberPlan ?? 'NONE'} ▾
+									</button>
+									<Menu
+										anchorEl={anchorEl[`plan-${m._id}`]}
+										open={Boolean(anchorEl[`plan-${m._id}`])}
+										onClose={() => setAnchorEl({ ...anchorEl, [`plan-${m._id}`]: null })}
+									>
+										{Object.values(MemberPlan).filter((p) => p !== m.memberPlan).map((p) => (
+											<MenuItem key={p} onClick={() => handleUpdate({ _id: m._id, memberPlan: p })}>{p}</MenuItem>
+										))}
+									</Menu>
+								</td>
+							<td style={{ ...tdS, color: muted, fontSize: 13, textAlign: 'center' }}>{m.memberWarnings}</td>
 								<td style={tdS}>
 									<button
 										onClick={(e) => setAnchorEl({ ...anchorEl, [`status-${m._id}`]: e.currentTarget })}
+										title="Click to change status"
 										style={{
 											fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
 											color: STATUS_COLOR[m.memberStatus] ?? muted,
 											background: `${STATUS_COLOR[m.memberStatus] ?? muted}1a`,
-											border: 'none', cursor: 'pointer',
+											border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
 										}}
 									>
-										{m.memberStatus}
+										{m.memberStatus} ▾
 									</button>
 									<Menu
 										anchorEl={anchorEl[`status-${m._id}`]}

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { GET_ALL_PROGRAMS_BY_ADMIN } from '../../../apollo/admin/query';
-import { UPDATE_PROGRAM_BY_ADMIN } from '../../../apollo/admin/mutation';
-import { sweetErrorHandling, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { T } from '../../types/common';
-import { MenuItem, Select, TablePagination } from '@mui/material';
+import { TablePagination } from '@mui/material';
 import moment from 'moment';
 
 const bg = '#111827';
@@ -22,16 +20,6 @@ const STATUS_COLOR: Record<string, string> = {
 
 const TABS = ['ALL', 'ACTIVE', 'DRAFT', 'ARCHIVED'];
 
-const selectSx = {
-	fontSize: 12,
-	minWidth: 110,
-	color: '#e2e8f0',
-	'& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
-	'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
-	'& .MuiSelect-select': { background: '#1a2236' },
-	'& .MuiSvgIcon-root': { color: '#6B7280' },
-};
-
 const AdminPrograms = () => {
 	const [page, setPage] = useState(0);
 	const [limit, setLimit] = useState(10);
@@ -45,8 +33,6 @@ const AdminPrograms = () => {
 		return base;
 	};
 
-	const [updateProgram] = useMutation(UPDATE_PROGRAM_BY_ADMIN);
-
 	const { refetch } = useQuery(GET_ALL_PROGRAMS_BY_ADMIN, {
 		fetchPolicy: 'network-only',
 		variables: { input: buildInquiry() },
@@ -57,16 +43,6 @@ const AdminPrograms = () => {
 	});
 
 	useEffect(() => { refetch({ input: buildInquiry() }).then(); }, [page, limit, statusTab]);
-
-	const updateStatus = async (programId: string, programStatus: string) => {
-		try {
-			await updateProgram({ variables: { input: { _id: programId, programStatus } } });
-			await sweetTopSmallSuccessAlert('Status updated', 800);
-			await refetch({ input: buildInquiry() });
-		} catch (err) {
-			sweetErrorHandling(err).then();
-		}
-	};
 
 	const thS: React.CSSProperties = {
 		textAlign: 'left', padding: '10px 14px', fontSize: 11, fontWeight: 700,
@@ -97,7 +73,7 @@ const AdminPrograms = () => {
 				<table style={{ width: '100%', borderCollapse: 'collapse' }}>
 					<thead>
 						<tr>
-							{['Program', 'Trainer', 'Type', 'Level', 'Price', 'Members', 'Status', 'Created', 'Change'].map((h) => (
+							{['Program', 'Trainer', 'Type', 'Level', 'Price', 'Members', 'Views', 'Status', 'Created'].map((h) => (
 								<th key={h} style={thS}>{h}</th>
 							))}
 						</tr>
@@ -129,6 +105,7 @@ const AdminPrograms = () => {
 								<td style={{ ...tdS, color: muted, fontSize: 12 }}>{p.programLevel}</td>
 								<td style={{ ...tdS, fontSize: 13 }}>${p.programPrice?.toLocaleString()}</td>
 								<td style={{ ...tdS, fontSize: 13, textAlign: 'center' }}>{p.programMembers}</td>
+								<td style={{ ...tdS, color: muted, textAlign: 'center' }}>{p.programViews}</td>
 								<td style={tdS}>
 									<span style={{
 										fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
@@ -139,18 +116,6 @@ const AdminPrograms = () => {
 									</span>
 								</td>
 								<td style={{ ...tdS, color: muted, fontSize: 12 }}>{moment(p.createdAt).format('MMM DD, YY')}</td>
-								<td style={tdS}>
-									<Select
-										value={p.programStatus}
-										size="small"
-										onChange={(e) => updateStatus(p._id, e.target.value)}
-										sx={selectSx}
-									>
-										<MenuItem value="ACTIVE">Activate</MenuItem>
-										<MenuItem value="DRAFT">Set Draft</MenuItem>
-										<MenuItem value="ARCHIVED">Archive</MenuItem>
-									</Select>
-								</td>
 							</tr>
 						))}
 					</tbody>

@@ -23,6 +23,7 @@ const selectSx = {
 	fontSize: 12,
 	minWidth: 120,
 	color: '#e2e8f0',
+	background: '#1a2236',
 	'& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
 	'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
 	'& .MuiSelect-select': { background: '#1a2236' },
@@ -63,7 +64,9 @@ const AdminProductsList = () => {
 		try {
 			await updateProduct({ variables: { input: { _id: productId, productStatus } } });
 			await sweetTopSmallSuccessAlert('Status updated', 800);
-			await refetch({ input: buildInquiry() });
+			const result = await refetch({ input: buildInquiry() });
+			setProducts(result.data?.getAllProductsByAdmin?.list ?? []);
+			setTotal(result.data?.getAllProductsByAdmin?.metaCounter?.[0]?.total ?? 0);
 		} catch (err) {
 			sweetErrorHandling(err).then();
 		}
