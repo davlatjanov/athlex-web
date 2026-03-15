@@ -114,9 +114,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 							<Typography className="title-text">Published</Typography>
 							<Typography className="title-text">Status</Typography>
 							<Typography className="title-text">Views</Typography>
-							{searchFilter.programStatus === 'ACTIVE' && (
-								<Typography className="title-text">Action</Typography>
-							)}
+							<Typography className="title-text">Action</Typography>
 						</Stack>
 
 						{myPrograms?.length === 0 ? (

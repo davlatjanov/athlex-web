@@ -88,36 +88,47 @@
 				border-top: none;
 				background: #111827;
 				box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.3);
-				// Shared 5-column grid: [program] [published] [status] [views] [action]
-				$col-program:   minmax(200px, 1fr);
-				$col-published: 160px;
+				// Shared 5-column table grid: [program] [published] [status] [views] [action]
+				$col-program:   minmax(240px, 1fr);
+				$col-published: 150px;
 				$col-status:    120px;
-				$col-views:     70px;
-				$col-action:    90px;
+				$col-views:     80px;
+				$col-action:    100px;
+				$tbl-grid: $col-program $col-published $col-status $col-views $col-action;
 
 				.listing-title-box {
 					display: grid;
-					grid-template-columns: $col-program $col-published $col-status $col-views $col-action;
+					grid-template-columns: $tbl-grid;
 					align-items: center;
-					padding: 14px 20px;
-					border-radius: 12px;
-					background: #1f2937;
+					padding: 12px 24px;
+					border-radius: 10px;
+					background: #1a2235;
+					border: 1px solid rgba(255,255,255,0.07);
+					// first col left-aligned, rest centered
 					.title-text {
-						color: #aaaaaa;
+						color: #6b7280;
 						font-family: $font;
-						font-size: 12px;
+						font-size: 11px;
 						font-weight: 700;
-						letter-spacing: 1px;
+						letter-spacing: 1.2px;
 						text-transform: uppercase;
+						text-align: center;
+						&:first-child { text-align: left; }
 					}
 				}
+
 				.property-card-box {
 					display: grid;
-					grid-template-columns: $col-program $col-published $col-status $col-views $col-action;
+					grid-template-columns: $tbl-grid;
 					align-items: center;
-					padding: 20px;
-					border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+					min-height: 90px;
+					padding: 16px 24px;
+					border-bottom: 1px solid rgba(255,255,255,0.06);
+					transition: background 0.15s;
+					&:hover { background: rgba(255,255,255,0.02); }
 					&:last-of-type { border-bottom: none; }
+
+					// Column 1 — left-aligned
 					.program-col {
 						display: flex;
 						align-items: center;
@@ -125,17 +136,12 @@
 						cursor: pointer;
 					}
 					.image-box {
-						width: 82px;
-						height: 72px;
+						width: 76px;
+						height: 68px;
 						flex-shrink: 0;
 						overflow: hidden;
-						border-radius: 10px;
-						img {
-							width: 100%;
-							height: 100%;
-							object-fit: cover;
-							border-radius: 10px;
-						}
+						border-radius: 8px;
+						img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
 					}
 					.information-box {
 						display: flex;
@@ -149,10 +155,10 @@
 							line-height: 1.4;
 						}
 						.address {
-							color: #555f6d;
+							color: #4b5563;
 							font-family: $font;
 							font-size: 10px;
-							font-weight: 500;
+							font-weight: 600;
 							text-transform: uppercase;
 							letter-spacing: 0.8px;
 						}
@@ -163,56 +169,64 @@
 							font-weight: 700;
 						}
 					}
+
+					// Columns 2-5 — all centered
 					.date-box {
 						display: flex;
 						align-items: center;
+						justify-content: center;
 						.date {
 							color: #9ca3af;
 							font-family: $font;
 							font-size: 12px;
-							font-weight: 400;
+							text-align: center;
 						}
 					}
 					.status-box {
 						display: flex;
 						align-items: center;
+						justify-content: center;
 						.coloured-box {
-							width: 90px;
-							height: 32px;
+							width: 86px;
+							height: 30px;
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							border-radius: 60px;
+							border-radius: 20px;
 							cursor: pointer;
 							.status {
 								font-family: $font;
-								font-size: 11px;
-								font-weight: 700;
-								letter-spacing: 0.5px;
+								font-size: 10px;
+								font-weight: 800;
+								letter-spacing: 1px;
+								text-transform: uppercase;
 							}
 						}
 					}
 					.views-box {
 						display: flex;
 						align-items: center;
+						justify-content: center;
 						.views {
 							color: #e2e8f0;
 							font-family: $font;
 							font-size: 13px;
-							font-weight: 500;
+							font-weight: 600;
+							text-align: center;
 						}
 					}
 					.action-box {
 						display: flex;
 						align-items: center;
-						gap: 4px;
+						justify-content: center;
+						gap: 6px;
 						.icon-button {
-							width: 36px;
-							height: 36px;
+							width: 34px;
+							height: 34px;
 							border-radius: 8px;
-							&:hover { background: rgba(255,255,255,0.06); }
-							.buttons   { color: #e2e8f0; }
-							.btn-edit  { color: #FACC15; }
+							&:hover { background: rgba(255,255,255,0.07); }
+							.buttons    { color: #e2e8f0; }
+							.btn-edit   { color: #FACC15; }
 							.btn-delete { color: #E92C28; }
 						}
 					}
