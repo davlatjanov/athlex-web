@@ -35,9 +35,10 @@ interface ProgramCardProps {
 	image?: string;
 	rank?: number;
 	rating?: number;
+	comments?: number;
 }
 
-const ProgramCard = ({ id, name, type, level, duration, price, views, likes, members, gradient, image, rank, rating }: ProgramCardProps) => {
+const ProgramCard = ({ id, name, type, level, duration, price, views, likes, members, gradient, image, rank, rating, comments }: ProgramCardProps) => {
 	const user = useReactiveVar(userVar);
 	const { liked, toggle: toggleLike } = useLike('programs', id);
 	const [joined, setJoined] = useState(false);
@@ -134,6 +135,7 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 						<span className={'stat'}>👁 {displayViews}</span>
 						<span className={'stat-sep'}>·</span>
 						<span className={'stat'}>♥ {likes}</span>
+						{comments !== undefined && (<><span className={'stat-sep'}>·</span><span className={'stat'}>💬 {comments}</span></>)}
 						<span className={'stat-sep'}>·</span>
 						<span className={'stat'}>👤 {displayMembers}</span>
 					</div>

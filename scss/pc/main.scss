@@ -140,6 +140,15 @@ body::-webkit-scrollbar {
 						flex-direction: row;
 						align-items: center;
 						gap: 14px;
+						.nav-ai-btn {
+							display: flex;
+							align-items: center;
+							text-decoration: none;
+							cursor: pointer;
+							color: rgba(255, 255, 255, 0.7);
+							transition: color 0.2s;
+							&:hover { color: #ffffff; }
+						}
 						.notification-icon {
 							color: rgba(255, 255, 255, 0.7);
 							cursor: pointer;

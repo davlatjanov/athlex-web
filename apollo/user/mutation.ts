@@ -376,3 +376,9 @@ export const CHAT_WITH_AI = gql`
 		}
 	}
 `;
+
+export const DELETE_CONVERSATION = gql`
+	mutation DeleteConversation($conversationId: String!) {
+		deleteConversation(conversationId: $conversationId)
+	}
+`;

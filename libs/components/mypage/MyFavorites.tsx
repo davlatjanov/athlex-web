@@ -223,6 +223,7 @@ const MyFavorites: NextPage = () => {
 									likes={prog.programLikes}
 									members={prog.programMembers}
 									rank={prog.programRank}
+									comments={prog.programComments}
 									image={prog.programImages?.[0]}
 									gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
 								/>

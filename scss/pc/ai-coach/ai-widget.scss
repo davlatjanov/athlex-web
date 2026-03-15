@@ -42,6 +42,11 @@
 	.ai-widget-panel {
 		width: 360px;
 		height: 500px;
+		min-width: 280px;
+		max-width: 600px;
+		min-height: 340px;
+		max-height: 80vh;
+		resize: both;
 		background: #111827;
 		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 16px;

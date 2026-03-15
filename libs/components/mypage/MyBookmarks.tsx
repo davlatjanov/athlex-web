@@ -36,11 +36,11 @@ const LEVEL_OPTIONS = [
 ];
 
 const SORT_OPTIONS = [
-	{ label: 'Most Popular', value: 'programViews', direction: 'DESC' },
-	{ label: 'Top Rated', value: 'programRank', direction: 'DESC' },
-	{ label: 'Price: Low → High', value: 'programPrice', direction: 'ASC' },
-	{ label: 'Price: High → Low', value: 'programPrice', direction: 'DESC' },
 	{ label: 'Newest', value: 'createdAt', direction: 'DESC' },
+	{ label: 'Most Popular', value: 'itemData.views', direction: 'DESC' },
+	{ label: 'Top Rated', value: 'itemData.rank', direction: 'DESC' },
+	{ label: 'Price: Low → High', value: 'itemData.price', direction: 'ASC' },
+	{ label: 'Price: High → Low', value: 'itemData.price', direction: 'DESC' },
 ];
 
 const PRICE_FILTERS = [

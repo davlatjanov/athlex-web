@@ -11,6 +11,7 @@ import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
@@ -107,9 +108,6 @@ const Top = () => {
 							<Link href={'/products'}>
 								<div>{t('Shop')}</div>
 							</Link>
-							<Link href={'/ai-coach'}>
-								<div>{t('AI Coach')}</div>
-							</Link>
 							<Link href={'/about'}>
 								<div>{t('About')}</div>
 							</Link>
@@ -121,6 +119,9 @@ const Top = () => {
 							</Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>
+							<Link href={'/ai-coach'} className={'nav-ai-btn'} title="AI Coach">
+								<SmartToyOutlinedIcon className={'notification-icon'} />
+							</Link>
 							{user?._id ? (
 								<>
 									{/* Cart icon with badge */}

@@ -268,6 +268,7 @@ export const GET_JOINED_PROGRAMS = gql`
 				programEndDate
 				programViews
 				programLikes
+				programComments
 				programMembers
 				programRank
 				createdAt

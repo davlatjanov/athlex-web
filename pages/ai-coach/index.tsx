@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
-import { useLazyQuery, useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Stack } from '@mui/material';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { ASK_AI, GET_MY_CONVERSATIONS, GET_CONVERSATION } from '../../apollo/user/query';
-import { CHAT_WITH_AI } from '../../apollo/user/mutation';
+import { useLazyQuery, useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
-import { T } from '../../libs/types/common';
-import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
-import moment from 'moment';
+import { ASK_AI, GET_MY_CONVERSATIONS, GET_CONVERSATION } from '../../apollo/user/query';
+import { CHAT_WITH_AI, DELETE_CONVERSATION } from '../../apollo/user/mutation';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -21,28 +20,41 @@ interface ChatMessage {
 	content: string;
 }
 
+const INITIAL_MSG: ChatMessage = {
+	role: 'assistant',
+	content: "Hello! I'm your Athlex AI Coach. Ask me anything about fitness, workouts, or nutrition.",
+};
+
 const AICoachPage: NextPage = () => {
+	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
-	const [messages, setMessages] = useState<ChatMessage[]>([
-		{
-			role: 'assistant',
-			content: "Hello! I'm your Athlex AI Coach. Ask me anything about fitness, workouts, nutrition, or your training programs.",
-		},
-	]);
+
+	const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MSG]);
 	const [input, setInput] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [conversationId, setConversationId] = useState<string | undefined>(undefined);
-	const [showHistory, setShowHistory] = useState(false);
+	const [selectedConvId, setSelectedConvId] = useState<string | undefined>(undefined);
 	const bottomRef = useRef<HTMLDivElement>(null);
 
 	const { data: historyData, refetch: refetchHistory } = useQuery(GET_MY_CONVERSATIONS, {
 		fetchPolicy: 'network-only',
-		skip: !user._id,
+		skip: !user?._id,
+	});
+	const conversations = historyData?.getMyConversations ?? [];
+
+	const [loadConversation] = useLazyQuery(GET_CONVERSATION, {
+		onCompleted: (data: any) => {
+			const conv = data?.getConversation;
+			if (conv?.messages) {
+				setMessages(conv.messages.map((m: any) => ({ role: m.role, content: m.content })));
+				setConversationId(conv._id);
+			}
+		},
 	});
 
 	const [chatWithAI] = useMutation(CHAT_WITH_AI);
 	const [askAI] = useLazyQuery(ASK_AI);
-	const [getConversation] = useLazyQuery(GET_CONVERSATION);
+	const [deleteConversation] = useMutation(DELETE_CONVERSATION);
 
 	useEffect(() => {
 		bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,15 +68,10 @@ const AICoachPage: NextPage = () => {
 		setIsLoading(true);
 
 		try {
-			if (user._id) {
+			if (user?._id) {
 				const allMessages = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }));
 				const { data } = await chatWithAI({
-					variables: {
-						input: {
-							messages: allMessages,
-							...(conversationId ? { conversationId } : {}),
-						},
-					},
+					variables: { input: { messages: allMessages, ...(conversationId ? { conversationId } : {}) } },
 				});
 				const reply = data?.chatWithAI;
 				if (reply?.answer) {
@@ -75,139 +82,98 @@ const AICoachPage: NextPage = () => {
 					}
 				}
 			} else {
-				const { data } = await askAI({
-					variables: { input: { question: userMsg.content } },
-				});
+				const { data } = await askAI({ variables: { input: { question: userMsg.content } } });
 				const reply = data?.askAI;
 				if (reply?.answer) {
 					setMessages((prev) => [...prev, { role: 'assistant', content: reply.answer }]);
 				}
 			}
-		} catch (err: any) {
-			sweetMixinErrorAlert(err.message).then();
-			setMessages((prev) => [
-				...prev,
-				{ role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' },
-			]);
+		} catch {
+			setMessages((prev) => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
-	const loadConversation = async (conv: T) => {
-		setConversationId(conv._id);
-		setShowHistory(false);
-		try {
-			const { data } = await getConversation({ variables: { conversationId: conv._id } });
-			const msgs: ChatMessage[] = (data?.getConversation?.messages ?? []).map((m: T) => ({ role: m.role, content: m.content }));
-			if (msgs.length > 0) setMessages(msgs);
-		} catch { /* keep current messages on error */ }
-	};
-
 	const startNewChat = () => {
-		setMessages([
-			{
-				role: 'assistant',
-				content: "Hello! I'm your Athlex AI Coach. Ask me anything about fitness, workouts, nutrition, or your training programs.",
-			},
-		]);
+		setMessages([INITIAL_MSG]);
 		setConversationId(undefined);
+		setSelectedConvId(undefined);
 	};
 
-	const conversations: T[] = historyData?.getMyConversations ?? [];
+	const openConversation = (id: string) => {
+		setSelectedConvId(id);
+		loadConversation({ variables: { conversationId: id } });
+	};
+
+	const handleDelete = async (e: React.MouseEvent, id: string) => {
+		e.stopPropagation();
+		await deleteConversation({ variables: { conversationId: id } });
+		if (selectedConvId === id) startNewChat();
+		refetchHistory();
+	};
 
 	return (
-		<div id="ai-coach-page">
-			<div className="acp-layout">
-
-				{/* Sidebar: conversation history */}
-				{user._id && (
-					<aside className={`acp-sidebar ${showHistory ? 'visible' : ''}`}>
-						<div className="acp-sidebar-head">
-							<span>Conversations</span>
-							<button className="acp-new-btn" onClick={startNewChat}>
-								+ New
-							</button>
+		<Stack id={'ai-coach-page'}>
+			<Stack className={'container ac-wrap'}>
+				{user?._id && (
+					<aside className={'ac-sidebar'}>
+						<button className={'ac-new-btn'} onClick={startNewChat}>+ New Chat</button>
+						<div className={'ac-history'}>
+							{conversations.map((c: any) => (
+								<div
+									key={c._id}
+									className={`ac-conv-item ${selectedConvId === c._id ? 'active' : ''}`}
+									onClick={() => openConversation(c._id)}
+								>
+									<span className={'ac-conv-title'}>{c.title}</span>
+									<button className={'ac-conv-delete'} onClick={(e) => handleDelete(e, c._id)}>✕</button>
+								</div>
+							))}
 						</div>
-						{conversations.length === 0 ? (
-							<p className="acp-no-history">No conversations yet</p>
-						) : (
-							<div className="acp-conv-list">
-								{conversations.map((conv: T) => (
-									<div
-										key={conv._id}
-										className={`acp-conv-item ${conv._id === conversationId ? 'active' : ''}`}
-										onClick={() => loadConversation(conv)}
-									>
-										<span className="acp-conv-topic">{conv.title || 'Conversation'}</span>
-										<span className="acp-conv-date">{moment(conv.updatedAt).fromNow()}</span>
-									</div>
-								))}
-							</div>
-						)}
 					</aside>
 				)}
 
-				{/* Chat area */}
-				<div className="acp-chat">
-					<div className="acp-chat-header">
-						<div className="acp-bot-info">
-							<span className="acp-bot-icon">🤖</span>
-							<div>
-								<strong>Athlex AI Coach</strong>
-								<span className="acp-online">● Online</span>
-							</div>
-						</div>
-						{user._id && (
-							<button className="acp-history-toggle" onClick={() => setShowHistory((v) => !v)}>
-								📋 History
-							</button>
-						)}
-					</div>
-
-					<div className="acp-messages">
+				<div className={'ac-chat'}>
+					<div className={'ac-messages'}>
 						{messages.map((msg, i) => (
-							<div key={i} className={`acp-msg ${msg.role === 'user' ? 'acp-msg--user' : 'acp-msg--ai'}`}>
-								{msg.role === 'assistant' && <span className="acp-msg-icon">🤖</span>}
-								<div className="acp-msg-bubble">{msg.content}</div>
+							<div key={i} className={`ac-msg ${msg.role === 'user' ? 'ac-msg--user' : 'ac-msg--ai'}`}>
+								{msg.role === 'assistant' && <span className={'ac-msg-icon'}>🤖</span>}
+								<div className={'ac-msg-bubble'}>{msg.content}</div>
 							</div>
 						))}
 						{isLoading && (
-							<div className="acp-msg acp-msg--ai">
-								<span className="acp-msg-icon">🤖</span>
-								<div className="acp-msg-bubble acp-typing">
-									<span />
-									<span />
-									<span />
+							<div className={'ac-msg ac-msg--ai'}>
+								<span className={'ac-msg-icon'}>🤖</span>
+								<div className={'ac-msg-bubble ac-typing'}>
+									<span /><span /><span />
 								</div>
 							</div>
 						)}
 						<div ref={bottomRef} />
 					</div>
 
-					<div className="acp-input-bar">
+					<div className={'ac-input-bar'}>
 						<input
-							className="acp-input"
+							className={'ac-input'}
 							type="text"
-							placeholder="Ask your AI coach…"
+							placeholder={user?._id ? 'Ask your AI coach…' : 'Ask a fitness question (log in to save history)…'}
 							value={input}
 							onChange={(e) => setInput(e.target.value)}
 							onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
 							disabled={isLoading}
 						/>
-						<button className="acp-send-btn" onClick={sendMessage} disabled={isLoading || !input.trim()}>
+						<button
+							className={'ac-send-btn'}
+							onClick={sendMessage}
+							disabled={isLoading || !input.trim()}
+						>
 							➤
 						</button>
 					</div>
-
-					{!user._id && (
-						<p className="acp-guest-note">
-							💡 <a href="/account/join">Sign in</a> to save your conversation history.
-						</p>
-					)}
 				</div>
-			</div>
-		</div>
+			</Stack>
+		</Stack>
 	);
 };
 

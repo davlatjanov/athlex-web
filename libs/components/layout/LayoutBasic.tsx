@@ -42,6 +42,11 @@ const withLayoutBasic = (Component: any) => {
 					break;
 				case '/member':
 					break;
+				case '/ai-coach':
+					title = 'Your AI Fitness Coach';
+					desc = 'Personalized workout advice, nutrition guidance and progress tracking — powered by AI.';
+					bgImage = 'https://i.pinimg.com/1200x/d2/18/f1/d218f135bf31fd237cdf2633be94bbcd.jpg';
+					break;
 				case '/cs':
 					title = 'Customer Support';
 					desc = 'We are here to help you';
