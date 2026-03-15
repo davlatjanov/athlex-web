@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
 								: 'In Stock';
 						return (
 							<Link key={product._id} href={`/products/${product._id}`}>
-								<Box className={'product-card'}>
+								<div className={'product-card'}>
 									<div
 										className={'product-img'}
 										style={{ background: typeGradients[product.productType] ?? typeGradients['SUPPLEMENT'] }}
@@ -73,7 +73,7 @@ const FeaturedProducts = () => {
 										</div>
 										<button className={'btn-add-cart'}>View Product</button>
 									</div>
-								</Box>
+								</div>
 							</Link>
 						);
 					})}

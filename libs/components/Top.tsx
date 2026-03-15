@@ -12,11 +12,23 @@ import Link from 'next/link';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
 import { useCart } from '../context/CartContext';
+import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../apollo/user/query';
+import { MARK_ALL_NOTIFICATIONS_AS_READ, MARK_NOTIFICATION_AS_READ } from '../../apollo/user/mutation';
+import moment from 'moment';
 
+const NOTIF_ICON: Record<string, string> = {
+	NEW_FOLLOWER: '👤',
+	NEW_LIKE: '❤️',
+	PROGRAM_JOINED: '💪',
+	FEEDBACK_RECEIVED: '⭐',
+	ORDER_UPDATE: '🛍️',
+	COMMENT_REPLY: '💬',
+	SYSTEM: '🔔',
+};
 
 const Top = () => {
 	const device = useDeviceDetect();
@@ -30,6 +42,24 @@ const Top = () => {
 	const logoutOpen = Boolean(logoutAnchor);
 	const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null);
 	const notifOpen = Boolean(notifAnchor);
+
+	/** APOLLO **/
+	const { data: countData, refetch: refetchCount } = useQuery(GET_UNREAD_NOTIFICATION_COUNT, {
+		skip: !user?._id,
+		fetchPolicy: 'network-only',
+		pollInterval: 30000,
+	});
+	const unreadCount: number = countData?.getUnreadNotificationCount ?? 0;
+
+	const { data: notifData, refetch: refetchNotifs } = useQuery(GET_MY_NOTIFICATIONS, {
+		skip: !user?._id || !notifOpen,
+		fetchPolicy: 'network-only',
+		variables: { input: { page: 1, limit: 15, sort: 'createdAt', direction: 'DESC' } },
+	});
+	const notifications = notifData?.getMyNotifications?.list ?? [];
+
+	const [markAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
+	const [markAllRead] = useMutation(MARK_ALL_NOTIFICATIONS_AS_READ);
 
 	/** LIFECYCLES **/
 	useEffect(() => {
@@ -59,6 +89,22 @@ const Top = () => {
 	if (typeof window !== 'undefined') {
 		window.addEventListener('scroll', changeNavbarColor);
 	}
+
+	const handleNotifClick = async (notif: any) => {
+		if (!notif.isRead) {
+			await markAsRead({ variables: { notificationId: notif._id } });
+			refetchCount();
+			refetchNotifs();
+		}
+		setNotifAnchor(null);
+		if (notif.notificationLink) router.push(notif.notificationLink);
+	};
+
+	const handleMarkAllRead = async () => {
+		await markAllRead();
+		refetchCount();
+		refetchNotifs();
+	};
 
 	if (device == 'mobile') {
 		return (
@@ -96,27 +142,13 @@ const Top = () => {
 							</Link>
 						</Box>
 						<Box component={'div'} className={'router-box'}>
-							<Link href={'/'}>
-								<div>{t('Home')}</div>
-							</Link>
-							<Link href={'/programs'}>
-								<div>{t('Programs')}</div>
-							</Link>
-							<Link href={'/trainer'}>
-								<div>{t('Trainers')}</div>
-							</Link>
-							<Link href={'/products'}>
-								<div>{t('Shop')}</div>
-							</Link>
-							<Link href={'/about'}>
-								<div>{t('About')}</div>
-							</Link>
-							<Link href={'/cs'}>
-								<div>{t('Support')}</div>
-							</Link>
-							<Link href={'/mypage'}>
-								<div>{t('My Page')}</div>
-							</Link>
+							<Link href={'/'}><div>{t('Home')}</div></Link>
+							<Link href={'/programs'}><div>{t('Programs')}</div></Link>
+							<Link href={'/trainer'}><div>{t('Trainers')}</div></Link>
+							<Link href={'/products'}><div>{t('Shop')}</div></Link>
+							<Link href={'/about'}><div>{t('About')}</div></Link>
+							<Link href={'/cs'}><div>{t('Support')}</div></Link>
+							<Link href={'/mypage'}><div>{t('My Page')}</div></Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>
 							<Link href={'/ai-coach'} className={'nav-ai-btn'} title="AI Coach">
@@ -124,7 +156,7 @@ const Top = () => {
 							</Link>
 							{user?._id ? (
 								<>
-									{/* Cart icon with badge */}
+									{/* Cart */}
 									<Badge
 										badgeContent={cart.totalItems}
 										color="error"
@@ -134,12 +166,11 @@ const Top = () => {
 										<ShoppingBagOutlinedIcon className={'notification-icon'} />
 									</Badge>
 
-									{/* Notifications icon with dropdown */}
+									{/* Notifications */}
 									<Badge
-										badgeContent={0}
+										badgeContent={unreadCount}
 										color="error"
-										variant="dot"
-										invisible={true}
+										invisible={unreadCount === 0}
 										sx={{ cursor: 'pointer' }}
 									>
 										<NotificationsOutlinedIcon
@@ -154,23 +185,78 @@ const Top = () => {
 										sx={{ mt: '5px' }}
 										PaperProps={{
 											sx: {
-												minWidth: 280,
-												maxWidth: 340,
-												maxHeight: 360,
+												minWidth: 300,
+												maxWidth: 360,
+												maxHeight: 420,
 												background: '#1a1f2e',
 												color: '#e2e8f0',
 												border: '1px solid rgba(255,255,255,0.08)',
 											},
 										}}
 									>
-										<div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+										{/* Header */}
+										<div style={{
+											padding: '12px 16px',
+											borderBottom: '1px solid rgba(255,255,255,0.08)',
+											display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+										}}>
 											<strong style={{ fontSize: 15 }}>Notifications</strong>
+											{unreadCount > 0 && (
+												<button
+													onClick={handleMarkAllRead}
+													style={{
+														fontSize: 11, color: '#E92C28', background: 'none',
+														border: 'none', cursor: 'pointer', fontWeight: 600,
+													}}
+												>
+													Mark all read
+												</button>
+											)}
 										</div>
-										<MenuItem disabled sx={{ color: '#6b7280 !important', fontSize: 13, justifyContent: 'center', py: 3 }}>
-											No new notifications
-										</MenuItem>
+
+										{/* List */}
+										{notifications.length === 0 ? (
+											<MenuItem disabled sx={{ color: '#6b7280 !important', fontSize: 13, justifyContent: 'center', py: 3 }}>
+												No new notifications
+											</MenuItem>
+										) : (
+											notifications.map((n: any) => (
+												<MenuItem
+													key={n._id}
+													onClick={() => handleNotifClick(n)}
+													sx={{
+														alignItems: 'flex-start', gap: 1, py: 1.2, px: 2,
+														background: n.isRead ? 'transparent' : 'rgba(233,44,40,0.06)',
+														borderBottom: '1px solid rgba(255,255,255,0.04)',
+														'&:hover': { background: 'rgba(255,255,255,0.04)' },
+													}}
+												>
+													<span style={{ fontSize: 18, lineHeight: 1.4, flexShrink: 0 }}>
+														{NOTIF_ICON[n.notificationType] ?? '🔔'}
+													</span>
+													<div style={{ flex: 1, minWidth: 0 }}>
+														<div style={{ fontSize: 13, fontWeight: n.isRead ? 400 : 600, color: '#e2e8f0', lineHeight: 1.4 }}>
+															{n.notificationTitle}
+														</div>
+														<div style={{ fontSize: 12, color: '#6b7280', marginTop: 2, whiteSpace: 'normal', lineHeight: 1.3 }}>
+															{n.notificationMessage}
+														</div>
+														<div style={{ fontSize: 11, color: '#4b5563', marginTop: 4 }}>
+															{moment(n.createdAt).fromNow()}
+														</div>
+													</div>
+													{!n.isRead && (
+														<span style={{
+															width: 7, height: 7, borderRadius: '50%',
+															background: '#E92C28', flexShrink: 0, marginTop: 5,
+														}} />
+													)}
+												</MenuItem>
+											))
+										)}
 									</Menu>
 
+									{/* User menu */}
 									<div
 										className={'login-user'}
 										onClick={(event: any) => setLogoutAnchor(event.currentTarget)}

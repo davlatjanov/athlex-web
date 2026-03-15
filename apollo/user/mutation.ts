@@ -364,6 +364,25 @@ export const DELETE_PROGRESS_RESULT = gql`
 `;
 
 /**************************
+ *      NOTIFICATION      *
+ *************************/
+
+export const MARK_NOTIFICATION_AS_READ = gql`
+	mutation MarkNotificationAsRead($notificationId: String!) {
+		markNotificationAsRead(notificationId: $notificationId) {
+			_id
+			isRead
+		}
+	}
+`;
+
+export const MARK_ALL_NOTIFICATIONS_AS_READ = gql`
+	mutation MarkAllNotificationsAsRead {
+		markAllNotificationsAsRead
+	}
+`;
+
+/**************************
  *           AI           *
  *************************/
 

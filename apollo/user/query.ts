@@ -560,6 +560,35 @@ export const GET_WORKOUTS_BY_PROGRAM = gql`
 `;
 
 /**************************
+ *      NOTIFICATION      *
+ *************************/
+
+export const GET_MY_NOTIFICATIONS = gql`
+	query GetMyNotifications($input: NotificationsInquiry!) {
+		getMyNotifications(input: $input) {
+			list {
+				_id
+				notificationType
+				notificationTitle
+				notificationMessage
+				notificationLink
+				isRead
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_UNREAD_NOTIFICATION_COUNT = gql`
+	query GetUnreadNotificationCount {
+		getUnreadNotificationCount
+	}
+`;
+
+/**************************
  *           AI           *
  *************************/
 
