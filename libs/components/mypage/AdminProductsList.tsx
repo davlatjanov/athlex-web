@@ -19,6 +19,16 @@ const STATUS_COLOR: Record<string, string> = {
 	OUT_OF_STOCK: '#a78bfa',
 };
 
+const selectSx = {
+	fontSize: 12,
+	minWidth: 120,
+	color: '#e2e8f0',
+	'& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
+	'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
+	'& .MuiSelect-select': { background: '#1a2236' },
+	'& .MuiSvgIcon-root': { color: '#6B7280' },
+};
+
 const AdminProductsList = () => {
 	const [page, setPage] = useState(0);
 	const [limit, setLimit] = useState(10);
@@ -143,7 +153,7 @@ const AdminProductsList = () => {
 										value={p.productStatus}
 										size="small"
 										onChange={(e) => updateStatus(p._id, e.target.value)}
-										sx={{ fontSize: 12, minWidth: 120, color: text }}
+										sx={selectSx}
 									>
 										<MenuItem value="ACTIVE">Activate</MenuItem>
 										<MenuItem value="STOPPED">Stop</MenuItem>

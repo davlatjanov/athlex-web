@@ -22,6 +22,16 @@ const STATUS_COLOR: Record<string, string> = {
 
 const TABS = ['ALL', 'ACTIVE', 'DRAFT', 'ARCHIVED'];
 
+const selectSx = {
+	fontSize: 12,
+	minWidth: 110,
+	color: '#e2e8f0',
+	'& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
+	'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
+	'& .MuiSelect-select': { background: '#1a2236' },
+	'& .MuiSvgIcon-root': { color: '#6B7280' },
+};
+
 const AdminPrograms = () => {
 	const [page, setPage] = useState(0);
 	const [limit, setLimit] = useState(10);
@@ -134,7 +144,7 @@ const AdminPrograms = () => {
 										value={p.programStatus}
 										size="small"
 										onChange={(e) => updateStatus(p._id, e.target.value)}
-										sx={{ fontSize: 12, minWidth: 110, color: text }}
+										sx={selectSx}
 									>
 										<MenuItem value="ACTIVE">Activate</MenuItem>
 										<MenuItem value="DRAFT">Set Draft</MenuItem>
