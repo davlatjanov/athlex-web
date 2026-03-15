@@ -46,18 +46,23 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 	});
 
 	const totalPages = Math.ceil(total / 10);
-	const vars = { memberId, input: { page, limit: 10 } };
 
 	const handleFollow = async (e: React.MouseEvent, id: string) => {
 		e.stopPropagation();
 		setFollowedIds((prev) => new Set(prev).add(id));
-		await subscribeHandler(id, refetch, vars);
+		await subscribeHandler(id, async () => {}, {});
+		const result = await refetch({ memberId, input: { page, limit: 10 } });
+		setMembers(result.data?.getFollowers?.list ?? []);
+		setTotal(result.data?.getFollowers?.metaCounter?.[0]?.total ?? 0);
 	};
 
 	const handleUnfollow = async (e: React.MouseEvent, id: string) => {
 		e.stopPropagation();
 		setFollowedIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
-		await unsubscribeHandler(id, refetch, vars);
+		await unsubscribeHandler(id, async () => {}, {});
+		const result = await refetch({ memberId, input: { page, limit: 10 } });
+		setMembers(result.data?.getFollowers?.list ?? []);
+		setTotal(result.data?.getFollowers?.metaCounter?.[0]?.total ?? 0);
 	};
 
 	return (

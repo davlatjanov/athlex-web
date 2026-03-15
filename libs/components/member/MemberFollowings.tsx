@@ -33,14 +33,12 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	});
 
 	const totalPages = Math.ceil(total / 10);
-	const vars = { memberId, input: { page, limit: 10 } };
 
 	const handleUnfollow = async (e: React.MouseEvent, id: string) => {
 		e.stopPropagation();
-		// Immediately remove from list
 		setMembers((prev) => prev.filter((m) => m._id !== id));
 		setTotal((prev) => prev - 1);
-		await unsubscribeHandler(id, refetch, vars);
+		await unsubscribeHandler(id, async () => {}, {});
 	};
 
 	return (

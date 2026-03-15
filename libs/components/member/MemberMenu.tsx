@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Typography, Button } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
@@ -21,7 +21,13 @@ const MemberMenu = (props: MemberMenuProps) => {
 	const currentUser = useReactiveVar(userVar);
 
 	const [member, setMember] = useState<Member | null>(null);
-	const [isFollowing, setIsFollowing] = useState<boolean>(false);
+	// null = use server data, true/false = optimistic override while mutation is in-flight
+	const [optimisticFollow, setOptimisticFollow] = useState<boolean | null>(null);
+
+	// Reset optimistic state when navigating to a different member
+	useEffect(() => {
+		setOptimisticFollow(null);
+	}, [memberId]);
 
 	/** Fetch viewed member **/
 	const { refetch: getMemberRefetch } = useQuery(GET_MEMBER, {
@@ -34,16 +40,31 @@ const MemberMenu = (props: MemberMenuProps) => {
 		},
 	});
 
-	/** Check if current user already follows this member **/
-	useQuery(GET_FOLLOWINGS, {
+	/** Fetch current user's followings to derive follow state **/
+	const { data: followingsData, refetch: refetchFollowings } = useQuery(GET_FOLLOWINGS, {
 		fetchPolicy: 'network-only',
 		variables: { memberId: currentUser._id, input: { page: 1, limit: 100 } },
 		skip: !currentUser._id || !memberId,
-		onCompleted: (data: T) => {
-			const list: Member[] = data?.getFollowings?.list ?? [];
-			setIsFollowing(list.some((m: any) => m._id === memberId));
-		},
 	});
+
+	const followedIds = new Set((followingsData?.getFollowings?.list ?? []).map((m: any) => m._id));
+	const isFollowing = optimisticFollow !== null ? optimisticFollow : followedIds.has(memberId as string);
+
+	const handleFollow = async () => {
+		setOptimisticFollow(true);
+		await subscribeHandler(member?._id, getMemberRefetch, { memberId });
+		const result = await refetchFollowings();
+		const ids = new Set((result.data?.getFollowings?.list ?? []).map((m: any) => m._id));
+		setOptimisticFollow(ids.has(memberId as string) ? true : null);
+	};
+
+	const handleUnfollow = async () => {
+		setOptimisticFollow(false);
+		await unsubscribeHandler(member?._id, getMemberRefetch, { memberId });
+		const result = await refetchFollowings();
+		const ids = new Set((result.data?.getFollowings?.list ?? []).map((m: any) => m._id));
+		setOptimisticFollow(ids.has(memberId as string) ? true : null);
+	};
 
 	if (device === 'mobile') {
 		return <div>MEMBER MENU MOBILE</div>;
@@ -80,27 +101,13 @@ const MemberMenu = (props: MemberMenuProps) => {
 					<div className={'follow-action'}>
 						{isFollowing ? (
 							<>
-								<Button
-									className="btn-unfollow"
-									variant="outlined"
-									onClick={async () => {
-										setIsFollowing(false);
-										await unsubscribeHandler(member?._id, getMemberRefetch, { memberId });
-									}}
-								>
+								<Button className="btn-unfollow" variant="outlined" onClick={handleUnfollow}>
 									Unfollow
 								</Button>
 								<Typography className="following-label">Following</Typography>
 							</>
 						) : (
-							<Button
-								className="btn-follow"
-								variant="contained"
-								onClick={async () => {
-									setIsFollowing(true);
-									await subscribeHandler(member?._id, getMemberRefetch, { memberId });
-								}}
-							>
+							<Button className="btn-follow" variant="contained" onClick={handleFollow}>
 								Follow
 							</Button>
 						)}
