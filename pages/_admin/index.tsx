@@ -67,17 +67,17 @@ const AdminDashboard: NextPage = () => {
 
 	const { data: programCountData } = useQuery(GET_ALL_PROGRAMS_BY_ADMIN, {
 		fetchPolicy: 'network-only',
-		variables: { input: { page: 1, limit: 1, sort: 'createdAt', search: {} } },
+		variables: { input: { page: 1, limit: 1, sort: 'createdAt' } },
 	});
 
 	const { data: recentProgramData } = useQuery(GET_ALL_PROGRAMS_BY_ADMIN, {
 		fetchPolicy: 'network-only',
-		variables: { input: { page: 1, limit: 5, sort: 'createdAt', search: {} } },
+		variables: { input: { page: 1, limit: 5, sort: 'createdAt' } },
 	});
 
 	const { data: productCountData } = useQuery(GET_ALL_PRODUCTS_BY_ADMIN, {
 		fetchPolicy: 'network-only',
-		variables: { input: { page: 1, limit: 1, sort: 'createdAt', search: {} } },
+		variables: { input: { page: 1, limit: 1, sort: 'createdAt' } },
 	});
 
 	const totalMembers = memberCountData?.getAllMembersByAdmin?.metaCounter?.[0]?.total ?? 0;

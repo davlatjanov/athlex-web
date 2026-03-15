@@ -36,7 +36,6 @@ const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 	const [inquiry, setInquiry] = useState(initialInquiry);
 	const [products, setProducts] = useState<T[]>([]);
 	const [total, setTotal] = useState(0);
-	const [statusFilter, setStatusFilter] = useState('ALL');
 	const [searchText, setSearchText] = useState('');
 
 	const [updateProductByAdmin] = useMutation(UPDATE_PRODUCT_BY_ADMIN);
@@ -63,17 +62,12 @@ const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 		setInquiry({ ...inquiry, limit: parseInt(e.target.value, 10), page: 1 });
 	};
 
-	const handleStatusFilter = (val: string) => {
-		setStatusFilter(val);
+	const handleSearch = () => {
 		setInquiry({
 			...inquiry,
 			page: 1,
-			search: val === 'ALL' ? {} : { productStatus: val },
+			search: searchText ? { productName: searchText } : {},
 		});
-	};
-
-	const handleSearch = () => {
-		setInquiry({ ...inquiry, page: 1, search: { ...inquiry.search, text: searchText } });
 	};
 
 	const updateStatus = async (productId: string, productStatus: string) => {
@@ -87,12 +81,12 @@ const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 	};
 
 	return (
-		<Box className={'content'}>
+		<div className={'content'}>
 			<Typography variant={'h2'} className={'tit'}>
 				Products
 			</Typography>
 
-			<Box className={'table-wrap'}>
+			<div className={'table-wrap'}>
 				{/* Filters */}
 				<Stack className={'search-area'}>
 					<OutlinedInput
@@ -107,20 +101,14 @@ const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 										sx={{ cursor: 'pointer' }}
 										onClick={() => {
 											setSearchText('');
-											setInquiry({ ...inquiry, search: { ...inquiry.search, text: '' } });
+											setInquiry({ ...inquiry, search: {} });
 										}}
 									/>
 								</InputAdornment>
 							) : null
 						}
 					/>
-					<Select value={statusFilter} onChange={(e) => handleStatusFilter(e.target.value)} sx={{ minWidth: 160 }}>
-						<MenuItem value="ALL">All Statuses</MenuItem>
-						<MenuItem value="ACTIVE">Active</MenuItem>
-						<MenuItem value="STOPPED">Stopped</MenuItem>
-						<MenuItem value="OUT_OF_STOCK">Out of Stock</MenuItem>
-					</Select>
-				</Stack>
+					</Stack>
 
 				{/* Table */}
 				<TableContainer>
@@ -203,8 +191,8 @@ const AdminProducts: NextPage = ({ initialInquiry, ...props }: any) => {
 					onRowsPerPageChange={handleRowsPerPageChange}
 					rowsPerPageOptions={[10, 20, 50]}
 				/>
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 };
 
@@ -214,7 +202,6 @@ AdminProducts.defaultProps = {
 		limit: 10,
 		sort: 'createdAt',
 		direction: 'DESC',
-		search: {},
 	},
 };
 

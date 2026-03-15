@@ -64,11 +64,13 @@ const AdminPrograms: NextPage = ({ initialInquiry, ...props }: any) => {
 
 	const handleStatusFilter = (val: string) => {
 		setStatusFilter(val);
-		setInquiry({
-			...inquiry,
-			page: 1,
-			search: val === 'ALL' ? {} : { programStatus: val },
-		});
+		const next: any = { ...inquiry, page: 1 };
+		if (val === 'ALL') {
+			delete next.programStatus;
+		} else {
+			next.programStatus = val;
+		}
+		setInquiry(next);
 	};
 
 	const updateStatus = async (programId: string, programStatus: string) => {
@@ -228,8 +230,6 @@ AdminPrograms.defaultProps = {
 		page: 1,
 		limit: 10,
 		sort: 'createdAt',
-		direction: 'DESC',
-		search: {},
 	},
 };
 
