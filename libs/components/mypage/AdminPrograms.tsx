@@ -15,12 +15,12 @@ const muted = '#6B7280';
 const accent = '#E92C28';
 
 const STATUS_COLOR: Record<string, string> = {
+	DRAFT: '#FFB800',
 	ACTIVE: '#22C55E',
-	STOPPED: '#FFB800',
-	DELETE: '#9CA3AF',
+	ARCHIVED: '#9CA3AF',
 };
 
-const TABS = ['ALL', 'ACTIVE', 'STOPPED', 'DELETE'];
+const TABS = ['ALL', 'ACTIVE', 'DRAFT', 'ARCHIVED'];
 
 const AdminPrograms = () => {
 	const [page, setPage] = useState(0);
@@ -137,8 +137,8 @@ const AdminPrograms = () => {
 										sx={{ fontSize: 12, minWidth: 110, color: text }}
 									>
 										<MenuItem value="ACTIVE">Activate</MenuItem>
-										<MenuItem value="STOPPED">Stop</MenuItem>
-										<MenuItem value="DELETE">Delete</MenuItem>
+										<MenuItem value="DRAFT">Set Draft</MenuItem>
+										<MenuItem value="ARCHIVED">Archive</MenuItem>
 									</Select>
 								</td>
 							</tr>

@@ -23,7 +23,7 @@ const STATUS_COLOR: Record<string, string> = {
 	DELETED: '#9CA3AF',
 };
 
-const TABS = ['ALL', 'ACTIVE', 'BANNED', 'DELETED'];
+const TABS = ['ALL', 'ACTIVE', 'INACTIVE', 'BANNED', 'DELETED'];
 
 const AdminUsers = () => {
 	const [page, setPage] = useState(0);
