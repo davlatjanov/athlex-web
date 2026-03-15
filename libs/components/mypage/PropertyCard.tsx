@@ -4,6 +4,7 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import IconButton from '@mui/material/IconButton';
 import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
+import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
 import { Program } from '../../types/program/program';
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
@@ -120,14 +121,27 @@ export const PropertyCard = (props: ProgramCardProps) => {
 				<Stack className="views-box">
 					<Typography className="views">{program?.programViews?.toLocaleString()}</Typography>
 				</Stack>
-				{!memberPage && program?.programStatus === ProgramStatus.ACTIVE && (
+				{!memberPage && (
 					<Stack className="action-box">
-						<IconButton className="icon-button" onClick={() => pushEditProgram(program._id)}>
-							<ModeIcon className="buttons btn-edit" />
-						</IconButton>
-						<IconButton className="icon-button" onClick={() => deleteProgramHandler(program._id)}>
-							<DeleteIcon className="buttons btn-delete" />
-						</IconButton>
+						{program?.programStatus === ProgramStatus.ACTIVE ? (
+							<>
+								<IconButton className="icon-button" title="Edit" onClick={() => pushEditProgram(program._id)}>
+									<ModeIcon className="buttons btn-edit" />
+								</IconButton>
+								<IconButton className="icon-button" title="Delete" onClick={() => deleteProgramHandler(program._id)}>
+									<DeleteIcon className="buttons btn-delete" />
+								</IconButton>
+							</>
+						) : (
+							<>
+								<IconButton className="icon-button" title="Unarchive" onClick={() => updateProgramHandler(ProgramStatus.ACTIVE, program._id)}>
+									<UnarchiveOutlinedIcon className="buttons btn-unarchive" />
+								</IconButton>
+								<IconButton className="icon-button" title="Delete" onClick={() => deleteProgramHandler(program._id)}>
+									<DeleteIcon className="buttons btn-delete" />
+								</IconButton>
+							</>
+						)}
 					</Stack>
 				)}
 			</Stack>
