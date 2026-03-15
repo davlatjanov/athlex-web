@@ -77,17 +77,17 @@ const AdminMenuList = (props: any) => {
 	const menu_set = [
 		{
 			title: 'Users',
-			icon: <User size={20} color="#bdbdbd" weight="fill" />,
+			icon: <User size={20} color="#6B7280" weight="fill" />,
 			on_click: () => subMenuChangeHandler('Users'),
 		},
 		{
 			title: 'Properties',
-			icon: <UserCircleGear size={20} color="#bdbdbd" weight="fill" />,
+			icon: <UserCircleGear size={20} color="#6B7280" weight="fill" />,
 			on_click: () => subMenuChangeHandler('Properties'),
 		},
 		{
 			title: 'Cs',
-			icon: <Headset size={20} color="#bdbdbd" weight="fill" />,
+			icon: <Headset size={20} color="#6B7280" weight="fill" />,
 			on_click: () => subMenuChangeHandler('Cs'),
 		},
 	];

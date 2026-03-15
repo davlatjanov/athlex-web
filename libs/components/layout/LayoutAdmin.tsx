@@ -68,8 +68,9 @@ const withAdminLayout = (Component: ComponentType) => {
 						sx={{
 							width: `calc(100% - ${drawerWidth}px)`,
 							ml: `${drawerWidth}px`,
-							boxShadow: 'rgb(100 116 139 / 12%) 0px 1px 4px',
-							background: 'none',
+							background: '#0d1117',
+							borderBottom: '1px solid rgba(255,255,255,0.07)',
+							boxShadow: 'none',
 						}}
 					>
 						<Toolbar>
@@ -134,6 +135,8 @@ const withAdminLayout = (Component: ComponentType) => {
 							'& .MuiDrawer-paper': {
 								width: drawerWidth,
 								boxSizing: 'border-box',
+								background: '#0d1117',
+								borderRight: '1px solid rgba(255,255,255,0.07)',
 							},
 						}}
 						variant="permanent"
@@ -150,7 +153,7 @@ const withAdminLayout = (Component: ComponentType) => {
 								direction={'row'}
 								alignItems={'center'}
 								sx={{
-									bgcolor: openMenu ? 'rgba(255, 255, 255, 0.04)' : 'none',
+									bgcolor: 'rgba(255,255,255,0.04)',
 									borderRadius: '8px',
 									px: '24px',
 									py: '11px',
@@ -159,14 +162,14 @@ const withAdminLayout = (Component: ComponentType) => {
 								<Avatar
 									src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
 								/>
-								<Typography variant={'body2'} p={1} ml={1}>
+								<Typography variant={'body2'} p={1} ml={1} sx={{ color: '#e2e8f0', fontSize: 13 }}>
 									{user?.memberNick} <br />
-									{user?.memberPhone}
+									<span style={{ color: '#6B7280', fontSize: 11 }}>{user?.memberPhone}</span>
 								</Typography>
 							</Stack>
 						</Toolbar>
 
-						<Divider />
+						<Divider sx={{ borderColor: 'rgba(255,255,255,0.07)' }} />
 
 						<MenuList />
 					</Drawer>

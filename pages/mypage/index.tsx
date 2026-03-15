@@ -9,6 +9,7 @@ import MyProperties from '../../libs/components/mypage/MyProperties';
 import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
 import AddProperty from '../../libs/components/mypage/AddNewProperty';
+import AddProduct from '../../libs/components/mypage/AddNewProduct';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import MyBookmarks from '../../libs/components/mypage/MyBookmarks';
@@ -64,11 +65,9 @@ const AGENT_TABS = [
 
 const ADMIN_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
-	{ key: 'myProperties', label: 'My Programs' },
-	{ key: 'addProperty', label: 'Add Program' },
+	{ key: 'addProduct', label: 'Add Product' },
 	{ key: 'myFavorites', label: 'My Joinings' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
-	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
 	{ key: 'followers', label: 'Followers' },
 	{ key: 'followings', label: 'Following' },
@@ -92,6 +91,7 @@ const getTabIcon = (key: string) => {
 		case 'followings': return <PersonOutlineIcon fontSize="small" />;
 		case 'myProperties': return <FitnessCenterIcon fontSize="small" />;
 		case 'addProperty': return <AddCircleOutlineIcon fontSize="small" />;
+		case 'addProduct': return <AddCircleOutlineIcon fontSize="small" />;
 		case 'adminPanel': return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
 		default: return null;
 	}
@@ -280,6 +280,7 @@ const MyPage: NextPage = () => {
 					{/* ── Content ── */}
 					<div className={'mp-content'}>
 						{category === 'addProperty' && <AddProperty />}
+					{category === 'addProduct' && <AddProduct />}
 						{category === 'myProperties' && <MyProperties />}
 						{category === 'myFavorites' && <MyFavorites />}
 						{category === 'myBookmarks' && <MyBookmarks />}
