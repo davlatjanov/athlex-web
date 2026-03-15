@@ -88,144 +88,131 @@
 				border-top: none;
 				background: #111827;
 				box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.3);
+				// Shared 5-column grid: [program] [published] [status] [views] [action]
+				$col-program:   minmax(200px, 1fr);
+				$col-published: 160px;
+				$col-status:    120px;
+				$col-views:     70px;
+				$col-action:    90px;
+
 				.listing-title-box {
-					width: 100%;
-					height: auto;
-					flex-direction: row;
-					gap: 90px;
-					padding: 18px 15px 18px 33px;
+					display: grid;
+					grid-template-columns: $col-program $col-published $col-status $col-views $col-action;
+					align-items: center;
+					padding: 14px 20px;
 					border-radius: 12px;
 					background: #1f2937;
 					.title-text {
-						color: #e2e8f0;
+						color: #aaaaaa;
 						font-family: $font;
-						font-size: 15px;
-						font-style: normal;
-						font-weight: 600;
-						line-height: normal;
-					}
-					:first-child {
-						margin-right: 138px;
+						font-size: 12px;
+						font-weight: 700;
+						letter-spacing: 1px;
+						text-transform: uppercase;
 					}
 				}
 				.property-card-box {
-					width: 100%;
-					height: auto;
-					flex-direction: row;
-					margin-top: 30px;
-					padding-bottom: 30px;
+					display: grid;
+					grid-template-columns: $col-program $col-published $col-status $col-views $col-action;
+					align-items: center;
+					padding: 20px;
 					border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+					&:last-of-type { border-bottom: none; }
+					.program-col {
+						display: flex;
+						align-items: center;
+						gap: 14px;
+						cursor: pointer;
+					}
 					.image-box {
-						width: 110px;
-						height: 90px;
+						width: 82px;
+						height: 72px;
+						flex-shrink: 0;
 						overflow: hidden;
-						margin-right: 25px;
-						padding-top: 1px;
+						border-radius: 10px;
 						img {
 							width: 100%;
 							height: 100%;
-							object-fit: contain;
-							border-radius: 12px;
+							object-fit: cover;
+							border-radius: 10px;
 						}
 					}
 					.information-box {
-						width: 200px;
-						height: auto;
-						padding: 5px 0px;
+						display: flex;
+						flex-direction: column;
+						gap: 3px;
 						.name {
-							margin-bottom: 8px;
 							color: #e2e8f0;
 							font-family: $font;
 							font-size: 13px;
-							font-style: normal;
 							font-weight: 600;
-							line-height: normal;
+							line-height: 1.4;
 						}
 						.address {
-							margin-bottom: 13px;
-							color: #717171;
+							color: #555f6d;
 							font-family: $font;
-							font-size: 11px;
-							font-style: normal;
-							font-weight: 400;
-							line-height: normal;
+							font-size: 10px;
+							font-weight: 500;
+							text-transform: uppercase;
+							letter-spacing: 0.8px;
 						}
 						.price {
-							color: #e2e8f0;
+							color: #22C55E;
 							font-family: $font;
-							font-size: 15px;
-							font-style: normal;
-							font-weight: 400;
-							line-height: normal;
+							font-size: 13px;
+							font-weight: 700;
 						}
 					}
 					.date-box {
-						width: 135px;
-						height: 100%;
+						display: flex;
 						align-items: center;
-						justify-content: center;
-						margin-right: 55px;
 						.date {
-							color: #e2e8f0;
+							color: #9ca3af;
 							font-family: $font;
 							font-size: 12px;
-							font-style: normal;
 							font-weight: 400;
-							line-height: 26px;
 						}
 					}
 					.status-box {
-						width: 100px;
-						height: 100%;
+						display: flex;
 						align-items: center;
-						justify-content: center;
-						margin-right: 60px;
 						.coloured-box {
-							width: 93px;
-							height: 36px;
+							width: 90px;
+							height: 32px;
+							display: flex;
 							align-items: center;
 							justify-content: center;
 							border-radius: 60px;
 							cursor: pointer;
 							.status {
 								font-family: $font;
-								font-size: 12px;
-								font-style: normal;
-								font-weight: 400;
-								line-height: 26px;
+								font-size: 11px;
+								font-weight: 700;
+								letter-spacing: 0.5px;
 							}
 						}
 					}
 					.views-box {
-						width: 35px;
-						height: 100%;
+						display: flex;
 						align-items: center;
-						justify-content: center;
-						margin-right: 75px;
 						.views {
 							color: #e2e8f0;
 							font-family: $font;
-							font-size: 12px;
-							font-style: normal;
-							font-weight: 400;
-							line-height: 26px;
+							font-size: 13px;
+							font-weight: 500;
 						}
 					}
 					.action-box {
-						width: auto;
-						height: 100%;
-						flex-direction: row;
+						display: flex;
 						align-items: center;
-						justify-content: center;
+						gap: 4px;
 						.icon-button {
-							width: 40px;
-							height: 40px;
-							border-radius: 4px;
-							:hover {
-								background: #1f2937;
-							}
-							.buttons { color: #e2e8f0; }
-							.btn-edit { color: #FACC15; }
+							width: 36px;
+							height: 36px;
+							border-radius: 8px;
+							&:hover { background: rgba(255,255,255,0.06); }
+							.buttons   { color: #e2e8f0; }
+							.btn-edit  { color: #FACC15; }
 							.btn-delete { color: #E92C28; }
 						}
 					}

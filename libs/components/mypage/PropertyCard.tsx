@@ -53,16 +53,18 @@ export const PropertyCard = (props: ProgramCardProps) => {
 	} else
 		return (
 			<Stack className="property-card-box">
-				<Stack className="image-box" onClick={() => pushProgramDetail(program?._id)}>
-					<img src={program?.programImages?.[0] || '/img/banner/header1.svg'} alt="" />
-				</Stack>
-				<Stack className="information-box" onClick={() => pushProgramDetail(program?._id)}>
-					<Typography className="name">{program?.programName}</Typography>
-					<Typography className="address">{program?.programType}</Typography>
-					<Typography className="price">
-						<strong>${program?.programPrice?.toLocaleString()}</strong>
-					</Typography>
-				</Stack>
+				<div className="program-col" onClick={() => pushProgramDetail(program?._id)}>
+					<Stack className="image-box">
+						<img src={program?.programImages?.[0] || '/img/banner/header1.svg'} alt="" />
+					</Stack>
+					<Stack className="information-box">
+						<Typography className="name">{program?.programName}</Typography>
+						<Typography className="address">{program?.programType}</Typography>
+						<Typography className="price">
+							<strong>${program?.programPrice?.toLocaleString()}</strong>
+						</Typography>
+					</Stack>
+				</div>
 				<Stack className="date-box">
 					<Typography className="date">
 						<Moment format="DD MMMM, YYYY">{program?.createdAt}</Moment>
