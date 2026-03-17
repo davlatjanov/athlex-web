@@ -4,12 +4,13 @@
 		.mo-title {
 			font-size: 18px;
 			font-weight: 800;
-			color: #fff;
+			color: $color-text;
 			margin: 0 0 20px;
+			font-family: $font;
 			span {
 				font-size: 13px;
 				font-weight: 500;
-				color: #6b7280;
+				color: $color-text-dim;
 				margin-left: 8px;
 			}
 		}
@@ -21,7 +22,7 @@
 			justify-content: center;
 			padding: 60px 20px;
 			gap: 12px;
-			color: #6b7280;
+			color: $color-text-dim;
 			span { font-size: 40px; opacity: 0.4; }
 			p { margin: 0; font-size: 14px; }
 		}
@@ -33,8 +34,8 @@
 		}
 
 		.mo-card {
-			background: rgba(255,255,255,0.03);
-			border: 1px solid rgba(255,255,255,0.07);
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid $color-border;
 			border-radius: 12px;
 			overflow: hidden;
 		}
@@ -46,7 +47,7 @@
 			padding: 14px 18px;
 			cursor: pointer;
 			transition: background 0.15s;
-			&:hover { background: rgba(255,255,255,0.04); }
+			&:hover { background: rgba(255, 255, 255, 0.04); }
 		}
 
 		.mo-card-left {
@@ -58,13 +59,13 @@
 		.mo-id {
 			font-size: 12px;
 			font-weight: 700;
-			color: #9ca3af;
+			color: $color-text-muted;
 			font-family: monospace;
 		}
 
 		.mo-date {
 			font-size: 12px;
-			color: #6b7280;
+			color: $color-text-dim;
 		}
 
 		.mo-card-right {
@@ -76,7 +77,7 @@
 		.mo-total {
 			font-size: 15px;
 			font-weight: 700;
-			color: #E92C28;
+			color: $color-accent;
 		}
 
 		.mo-status {
@@ -92,12 +93,12 @@
 
 		.mo-chevron {
 			font-size: 10px;
-			color: #6b7280;
+			color: $color-text-dim;
 		}
 
 		.mo-card-body {
 			padding: 0 18px 16px;
-			border-top: 1px solid rgba(255,255,255,0.06);
+			border-top: 1px solid $color-border;
 		}
 
 		.mo-items {
@@ -111,10 +112,10 @@
 			display: flex;
 			gap: 10px;
 			font-size: 13px;
-			color: #9ca3af;
-			.mo-item-name { flex: 1; color: #e2e8f0; }
-			.mo-item-qty { color: #6b7280; }
-			.mo-item-price { font-weight: 600; color: #e2e8f0; }
+			color: $color-text-muted;
+			.mo-item-name { flex: 1; color: $color-text; }
+			.mo-item-qty { color: $color-text-dim; }
+			.mo-item-price { font-weight: 600; color: $color-text; }
 		}
 
 		.mo-section-label {
@@ -122,13 +123,13 @@
 			font-weight: 700;
 			letter-spacing: 1.5px;
 			text-transform: uppercase;
-			color: #6b7280;
+			color: $color-text-dim;
 			margin-right: 8px;
 		}
 
 		.mo-shipping, .mo-payment, .mo-notes {
 			font-size: 12px;
-			color: #9ca3af;
+			color: $color-text-muted;
 			margin-top: 6px;
 			p, span { margin: 0; }
 		}
@@ -141,14 +142,15 @@
 			button {
 				padding: 6px 12px;
 				border-radius: 6px;
-				background: rgba(255,255,255,0.05);
-				border: 1px solid rgba(255,255,255,0.1);
-				color: #9ca3af;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid $color-border;
+				color: $color-text-muted;
 				font-size: 12px;
+				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
-				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
 	}
@@ -165,12 +167,13 @@
 		.ao-title {
 			font-size: 18px;
 			font-weight: 800;
-			color: #fff;
+			color: $color-text;
 			margin: 0;
+			font-family: $font;
 			span {
 				font-size: 13px;
 				font-weight: 500;
-				color: #6b7280;
+				color: $color-text-dim;
 				margin-left: 8px;
 			}
 		}
@@ -178,7 +181,7 @@
 		.ao-empty {
 			text-align: center;
 			padding: 60px 20px;
-			color: #6b7280;
+			color: $color-text-dim;
 			font-size: 14px;
 		}
 
@@ -189,8 +192,8 @@
 		}
 
 		.ao-card {
-			background: rgba(255,255,255,0.03);
-			border: 1px solid rgba(255,255,255,0.07);
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid $color-border;
 			border-radius: 12px;
 			overflow: hidden;
 		}
@@ -204,7 +207,7 @@
 			transition: background 0.15s;
 			flex-wrap: wrap;
 			gap: 10px;
-			&:hover { background: rgba(255,255,255,0.04); }
+			&:hover { background: rgba(255, 255, 255, 0.04); }
 		}
 
 		.ao-card-left {
@@ -223,30 +226,30 @@
 				border-radius: 50%;
 				object-fit: cover;
 			}
-			span { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+			span { font-size: 13px; font-weight: 600; color: $color-text; }
 		}
 
 		.ao-member-initial {
 			width: 28px;
 			height: 28px;
 			border-radius: 50%;
-			background: #1f2937;
+			background: $color-card;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			font-size: 12px;
 			font-weight: 700;
-			color: #9ca3af;
+			color: $color-text-muted;
 		}
 
 		.ao-id {
 			font-size: 11px;
 			font-weight: 700;
-			color: #6b7280;
+			color: $color-text-dim;
 			font-family: monospace;
 		}
 
-		.ao-date { font-size: 11px; color: #6b7280; }
+		.ao-date { font-size: 11px; color: $color-text-dim; }
 
 		.ao-card-right {
 			display: flex;
@@ -257,14 +260,14 @@
 		.ao-total {
 			font-size: 14px;
 			font-weight: 700;
-			color: #E92C28;
+			color: $color-accent;
 		}
 
-		.ao-chevron { font-size: 10px; color: #6b7280; }
+		.ao-chevron { font-size: 10px; color: $color-text-dim; }
 
 		.ao-card-body {
 			padding: 0 16px 14px;
-			border-top: 1px solid rgba(255,255,255,0.06);
+			border-top: 1px solid $color-border;
 		}
 
 		.ao-items {
@@ -278,14 +281,14 @@
 			display: flex;
 			gap: 10px;
 			font-size: 12px;
-			color: #9ca3af;
-			span:first-child { flex: 1; color: #e2e8f0; }
+			color: $color-text-muted;
+			span:first-child { flex: 1; color: $color-text; }
 			span:last-child { font-weight: 600; }
 		}
 
 		.ao-shipping-addr, .ao-payment, .ao-notes {
 			font-size: 12px;
-			color: #9ca3af;
+			color: $color-text-muted;
 			margin: 4px 0 0;
 		}
 
@@ -297,14 +300,15 @@
 			button {
 				padding: 6px 12px;
 				border-radius: 6px;
-				background: rgba(255,255,255,0.05);
-				border: 1px solid rgba(255,255,255,0.1);
-				color: #9ca3af;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid $color-border;
+				color: $color-text-muted;
 				font-size: 12px;
+				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
-				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
 	}
@@ -321,34 +325,36 @@
 		.ac-title, .af-title {
 			font-size: 18px;
 			font-weight: 800;
-			color: #fff;
+			color: $color-text;
 			margin: 0;
-			span { font-size: 13px; font-weight: 500; color: #6b7280; margin-left: 8px; }
+			font-family: $font;
+			span { font-size: 13px; font-weight: 500; color: $color-text-dim; margin-left: 8px; }
 		}
 
 		.ac-filter-select, .af-filter-select {
-			background: #1a2236;
-			border: 1px solid rgba(255,255,255,0.12);
-			color: #e2e8f0;
+			background: $color-bg-mid;
+			border: 1px solid $color-border;
+			color: $color-text;
 			border-radius: 8px;
 			padding: 6px 12px;
 			font-size: 12px;
 			font-weight: 600;
+			font-family: $font;
 			cursor: pointer;
 			outline: none;
-			&:hover { border-color: rgba(255,255,255,0.25); }
+			&:hover { border-color: rgba(255, 255, 255, 0.25); }
 		}
 
 		.ac-empty, .af-empty {
 			text-align: center;
 			padding: 60px 20px;
-			color: #6b7280;
+			color: $color-text-dim;
 			font-size: 14px;
 		}
 
 		.ac-card, .af-card {
-			background: rgba(255,255,255,0.02);
-			border: 1px solid rgba(255,255,255,0.07);
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid $color-border;
 			border-radius: 12px;
 			overflow: hidden;
 		}
@@ -359,7 +365,7 @@
 			font-size: 13px;
 
 			thead tr {
-				background: rgba(255,255,255,0.04);
+				background: rgba(255, 255, 255, 0.04);
 			}
 
 			th {
@@ -369,19 +375,19 @@
 				font-weight: 700;
 				letter-spacing: 1.5px;
 				text-transform: uppercase;
-				color: #6b7280;
-				border-bottom: 1px solid rgba(255,255,255,0.07);
+				color: $color-text-dim;
+				border-bottom: 1px solid $color-border;
 			}
 
 			td {
 				padding: 13px 16px;
-				color: #9ca3af;
-				border-bottom: 1px solid rgba(255,255,255,0.04);
+				color: $color-text-muted;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 				vertical-align: middle;
 			}
 
 			tbody tr:last-child td { border-bottom: none; }
-			tbody tr:hover td { background: rgba(255,255,255,0.025); }
+			tbody tr:hover td { background: rgba(255, 255, 255, 0.025); }
 		}
 
 		.ac-member, .af-member {
@@ -400,7 +406,7 @@
 			span {
 				font-size: 13px;
 				font-weight: 600;
-				color: #e2e8f0;
+				color: $color-text;
 			}
 		}
 
@@ -408,13 +414,13 @@
 			width: 30px;
 			height: 30px;
 			border-radius: 50%;
-			background: #1f2937;
+			background: $color-card;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			font-size: 12px;
 			font-weight: 700;
-			color: #9ca3af;
+			color: $color-text-muted;
 			flex-shrink: 0;
 		}
 
@@ -425,37 +431,38 @@
 			text-transform: uppercase;
 			padding: 3px 10px;
 			border-radius: 20px;
-			background: rgba(255,255,255,0.06);
-			color: #9ca3af;
-			border: 1px solid rgba(255,255,255,0.1);
+			background: rgba(255, 255, 255, 0.06);
+			color: $color-text-muted;
+			border: 1px solid $color-border;
 			white-space: nowrap;
 		}
 
 		.ac-content, .af-content {
 			max-width: 340px;
-			color: #e2e8f0;
+			color: $color-text;
 			font-size: 13px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
 
-		.ac-date, .af-date { font-size: 11px; color: #6b7280; white-space: nowrap; }
+		.ac-date, .af-date { font-size: 11px; color: $color-text-dim; white-space: nowrap; }
 
 		.ac-stars { font-size: 13px; white-space: nowrap; }
 
+		// Delete is a destructive action — intentionally red, no variable exists
 		.ac-delete-btn, .af-delete-btn {
 			padding: 5px 12px;
 			border-radius: 6px;
-			background: rgba(233,44,40,0.1);
-			border: 1px solid rgba(233,44,40,0.3);
+			background: rgba(233, 44, 40, 0.1);
+			border: 1px solid rgba(233, 44, 40, 0.3);
 			color: #E92C28;
 			font-size: 11px;
 			font-weight: 700;
 			cursor: pointer;
 			white-space: nowrap;
 			letter-spacing: 0.5px;
-			&:hover { background: rgba(233,44,40,0.2); }
+			&:hover { background: rgba(233, 44, 40, 0.2); }
 		}
 
 		.ac-pagination, .af-pagination {
@@ -467,14 +474,15 @@
 			button {
 				padding: 6px 12px;
 				border-radius: 6px;
-				background: rgba(255,255,255,0.05);
-				border: 1px solid rgba(255,255,255,0.1);
-				color: #9ca3af;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid $color-border;
+				color: $color-text-muted;
 				font-size: 12px;
+				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
-				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
 	}

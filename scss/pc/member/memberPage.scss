@@ -4,7 +4,6 @@
 		min-height: 100vh;
 		color: $color-text;
 
-
 		/* ── PROFILE STRIP ── */
 		.member-profile-strip {
 			background: $color-bg;
@@ -67,10 +66,10 @@
 							letter-spacing: 2px;
 							text-transform: uppercase;
 							color: $color-accent;
-							background: rgba(34,197,94,0.12);
+							background: rgba(34, 197, 94, 0.12);
 							padding: 3px 10px;
 							border-radius: 20px;
-							border: 1px solid rgba(34,197,94,0.3);
+							border: 1px solid rgba(34, 197, 94, 0.3);
 						}
 
 						.stat {
@@ -109,10 +108,11 @@
 						background: $color-accent !important;
 						color: #fff !important;
 						border: none !important;
-						box-shadow: 0 0 20px rgba(34,197,94,0.3) !important;
+						box-shadow: 0 0 20px rgba(34, 197, 94, 0.3) !important;
 						&:hover { background: $color-accent-dark !important; }
 					}
 
+					// Unfollow is a destructive action — intentionally red
 					.btn-unfollow {
 						background: #E92C28 !important;
 						color: #fff !important;
@@ -171,7 +171,7 @@
 					}
 
 					&:hover:not(.active) {
-						color: rgba(255,255,255,0.7);
+						color: rgba(255, 255, 255, 0.7);
 					}
 				}
 			}
@@ -218,22 +218,24 @@
 		.mp-section-title {
 			font-size: 18px;
 			font-weight: 800;
-			color: #fff;
+			color: $color-text;
 			margin: 0;
-			span { font-size: 13px; font-weight: 500; color: #6b7280; margin-left: 8px; }
+			font-family: $font;
+			span { font-size: 13px; font-weight: 500; color: $color-text-dim; margin-left: 8px; }
 		}
 
 		.mp-add-btn {
 			padding: 8px 18px;
 			border-radius: 8px;
-			background: #E92C28;
+			background: $color-accent;
 			color: #fff;
 			border: none;
 			font-size: 12px;
 			font-weight: 700;
+			font-family: $font;
 			letter-spacing: 0.5px;
 			cursor: pointer;
-			&:hover { background: #c0231f; }
+			&:hover { background: $color-accent-dark; }
 		}
 
 		.mp-delete-btn {
@@ -243,9 +245,9 @@
 			width: 22px;
 			height: 22px;
 			border-radius: 50%;
-			background: rgba(0,0,0,0.7);
+			background: rgba(0, 0, 0, 0.7);
 			border: none;
-			color: #fff;
+			color: $color-text;
 			font-size: 10px;
 			cursor: pointer;
 			display: flex;
@@ -262,7 +264,7 @@
 		.mp-modal-backdrop {
 			position: fixed;
 			inset: 0;
-			background: rgba(0,0,0,0.7);
+			background: rgba(0, 0, 0, 0.7);
 			z-index: 9999;
 			display: flex;
 			align-items: center;
@@ -270,8 +272,8 @@
 		}
 
 		.mp-modal {
-			background: #1a1f2e;
-			border: 1px solid rgba(255,255,255,0.1);
+			background: $color-bg-mid;
+			border: 1px solid $color-border;
 			border-radius: 14px;
 			width: 480px;
 			max-width: 94vw;
@@ -283,17 +285,17 @@
 			align-items: center;
 			justify-content: space-between;
 			padding: 18px 20px;
-			border-bottom: 1px solid rgba(255,255,255,0.07);
+			border-bottom: 1px solid $color-border;
 
-			h3 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+			h3 { margin: 0; font-size: 16px; font-weight: 700; color: $color-text; font-family: $font; }
 
 			button {
 				background: none;
 				border: none;
-				color: #6b7280;
+				color: $color-text-dim;
 				font-size: 16px;
 				cursor: pointer;
-				&:hover { color: #fff; }
+				&:hover { color: $color-text; }
 			}
 		}
 
@@ -311,13 +313,13 @@
 			justify-content: center;
 			gap: 6px;
 			min-height: 150px;
-			border: 2px dashed rgba(255,255,255,0.12);
+			border: 2px dashed $color-border;
 			border-radius: 10px;
 			cursor: pointer;
 			transition: border-color 0.2s;
 			position: relative;
 			overflow: hidden;
-			&:hover { border-color: rgba(255,255,255,0.25); }
+			&:hover { border-color: rgba(255, 255, 255, 0.25); }
 		}
 
 		.mp-upload-preview {
@@ -332,62 +334,64 @@
 			position: relative;
 			z-index: 1;
 			font-size: 12px;
-			color: #fff;
-			background: rgba(0,0,0,0.6);
+			color: $color-text;
+			background: rgba(0, 0, 0, 0.6);
 			padding: 4px 12px;
 			border-radius: 20px;
 		}
 
 		.mp-upload-icon { font-size: 32px; opacity: 0.5; }
-		.mp-upload-hint { font-size: 13px; color: #9ca3af; }
-		.mp-upload-sub { font-size: 11px; color: #4b5563; }
+		.mp-upload-hint { font-size: 13px; color: $color-text-muted; }
+		.mp-upload-sub { font-size: 11px; color: $color-text-dim; }
 
 		.mp-modal-textarea {
 			width: 100%;
 			padding: 10px 14px;
-			background: rgba(255,255,255,0.05);
-			border: 1px solid rgba(255,255,255,0.1);
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid $color-border;
 			border-radius: 8px;
-			color: #e2e8f0;
+			color: $color-text;
 			font-size: 13px;
 			resize: none;
 			outline: none;
-			font-family: inherit;
+			font-family: $font;
 			box-sizing: border-box;
-			&::placeholder { color: #4b5563; }
+			&::placeholder { color: $color-text-dim; }
 		}
 
 		.mp-modal-footer {
 			display: flex;
 			gap: 10px;
 			padding: 16px 20px;
-			border-top: 1px solid rgba(255,255,255,0.07);
+			border-top: 1px solid $color-border;
 			justify-content: flex-end;
 		}
 
 		.mp-modal-cancel {
 			padding: 9px 20px;
 			border-radius: 8px;
-			background: rgba(255,255,255,0.05);
-			border: 1px solid rgba(255,255,255,0.1);
-			color: #9ca3af;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid $color-border;
+			color: $color-text-muted;
 			font-size: 13px;
 			font-weight: 600;
+			font-family: $font;
 			cursor: pointer;
-			&:hover { background: rgba(255,255,255,0.09); }
+			&:hover { background: rgba(255, 255, 255, 0.09); }
 		}
 
 		.mp-modal-submit {
 			padding: 9px 24px;
 			border-radius: 8px;
-			background: #E92C28;
+			background: $color-accent;
 			border: none;
 			color: #fff;
 			font-size: 13px;
 			font-weight: 700;
+			font-family: $font;
 			cursor: pointer;
 			&:disabled { opacity: 0.4; cursor: not-allowed; }
-			&:not(:disabled):hover { background: #c0231f; }
+			&:not(:disabled):hover { background: $color-accent-dark; }
 		}
 
 		.mp-empty {
@@ -396,7 +400,7 @@
 			align-items: center;
 			padding: 60px 20px;
 			gap: 12px;
-			color: #6b7280;
+			color: $color-text-dim;
 			span { font-size: 40px; opacity: 0.3; }
 			p { margin: 0; font-size: 14px; }
 		}
@@ -413,7 +417,7 @@
 			border-radius: 10px;
 			overflow: hidden;
 			cursor: pointer;
-			background: rgba(255,255,255,0.05);
+			background: rgba(255, 255, 255, 0.05);
 
 			img {
 				width: 100%;
@@ -434,7 +438,7 @@
 			.mp-post-overlay {
 				position: absolute;
 				inset: 0;
-				background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+				background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
 				opacity: 0;
 				transition: opacity 0.2s;
 				display: flex;
@@ -445,14 +449,14 @@
 				p {
 					margin: 0 0 4px;
 					font-size: 12px;
-					color: #fff;
+					color: $color-text;
 					display: -webkit-box;
 					-webkit-line-clamp: 2;
 					-webkit-box-orient: vertical;
 					overflow: hidden;
 				}
 
-				span { font-size: 10px; color: rgba(255,255,255,0.6); }
+				span { font-size: 10px; color: rgba(255, 255, 255, 0.6); }
 			}
 
 			&:hover .mp-post-overlay { opacity: 1; }
@@ -461,7 +465,7 @@
 		.mp-lightbox {
 			position: fixed;
 			inset: 0;
-			background: rgba(0,0,0,0.85);
+			background: rgba(0, 0, 0, 0.85);
 			z-index: 9999;
 			display: flex;
 			align-items: center;
@@ -469,7 +473,7 @@
 		}
 
 		.mp-lightbox-inner {
-			background: #1a1f2e;
+			background: $color-bg-mid;
 			border-radius: 14px;
 			padding: 24px;
 			max-width: 540px;
@@ -482,8 +486,8 @@
 				margin-bottom: 14px;
 			}
 
-			p { font-size: 14px; color: #e2e8f0; margin: 0 0 8px; }
-			span { font-size: 12px; color: #6b7280; }
+			p { font-size: 14px; color: $color-text; margin: 0 0 8px; }
+			span { font-size: 12px; color: $color-text-dim; }
 
 			button {
 				position: absolute;
@@ -491,10 +495,10 @@
 				right: 14px;
 				background: none;
 				border: none;
-				color: #9ca3af;
+				color: $color-text-muted;
 				font-size: 18px;
 				cursor: pointer;
-				&:hover { color: #fff; }
+				&:hover { color: $color-text; }
 			}
 		}
 
@@ -506,14 +510,15 @@
 			button {
 				padding: 6px 12px;
 				border-radius: 6px;
-				background: rgba(255,255,255,0.05);
-				border: 1px solid rgba(255,255,255,0.1);
-				color: #9ca3af;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid $color-border;
+				color: $color-text-muted;
 				font-size: 12px;
+				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
-				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
 	}
@@ -525,9 +530,10 @@
 		.mr-title {
 			font-size: 18px;
 			font-weight: 800;
-			color: #fff;
+			color: $color-text;
 			margin: 0 0 20px;
-			span { font-size: 13px; font-weight: 500; color: #6b7280; margin-left: 8px; }
+			font-family: $font;
+			span { font-size: 13px; font-weight: 500; color: $color-text-dim; margin-left: 8px; }
 		}
 
 		.mr-empty {
@@ -536,7 +542,7 @@
 			align-items: center;
 			padding: 60px 20px;
 			gap: 12px;
-			color: #6b7280;
+			color: $color-text-dim;
 			span { font-size: 40px; opacity: 0.3; }
 			p { margin: 0; font-size: 14px; }
 		}
@@ -548,8 +554,8 @@
 		}
 
 		.mr-card {
-			background: rgba(255,255,255,0.03);
-			border: 1px solid rgba(255,255,255,0.07);
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid $color-border;
 			border-radius: 10px;
 			padding: 14px 16px;
 		}
@@ -570,14 +576,14 @@
 			text-transform: uppercase;
 			padding: 2px 8px;
 			border-radius: 20px;
-			background: rgba(255,255,255,0.06);
-			color: #9ca3af;
-			border: 1px solid rgba(255,255,255,0.1);
+			background: rgba(255, 255, 255, 0.06);
+			color: $color-text-muted;
+			border: 1px solid $color-border;
 		}
 
-		.mr-date { font-size: 11px; color: #6b7280; margin-left: auto; }
+		.mr-date { font-size: 11px; color: $color-text-dim; margin-left: auto; }
 
-		.mr-content { margin: 0; font-size: 13px; color: #9ca3af; line-height: 1.5; }
+		.mr-content { margin: 0; font-size: 13px; color: $color-text-muted; line-height: 1.5; }
 
 		.mr-pagination {
 			display: flex;
@@ -587,14 +593,15 @@
 			button {
 				padding: 6px 12px;
 				border-radius: 6px;
-				background: rgba(255,255,255,0.05);
-				border: 1px solid rgba(255,255,255,0.1);
-				color: #9ca3af;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid $color-border;
+				color: $color-text-muted;
 				font-size: 12px;
+				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
-				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
 	}
