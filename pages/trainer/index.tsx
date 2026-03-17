@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -123,11 +124,12 @@ const TrainerList: NextPage = () => {
 	const totalPages = Math.ceil(total / PER_PAGE);
 
 	if (device === 'mobile') {
-		return <div id="trainer-list-page"><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
+		return <div id="trainer-list-page"><Head><title>Athlex | Trainers</title></Head><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
 	}
 
 	return (
 		<div id="trainer-list-page">
+			<Head><title>Athlex | Trainers</title></Head>
 			<div className="tl-container">
 				<main className="tl-main" style={{ width: '100%' }}>
 					<form className="tl-search-bar" onSubmit={handleSearch}>

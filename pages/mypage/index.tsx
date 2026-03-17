@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -222,6 +223,7 @@ const MyPage: NextPage = () => {
 	} else {
 		return (
 			<div id="my-page">
+				<Head><title>Athlex | My Dashboard</title></Head>
 				<div className={'container mp-wrap'}>
 					{/* ── Profile Card ── */}
 					<div className={'mp-card'}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { Stack } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -115,6 +116,7 @@ const AICoachPage: NextPage = () => {
 
 	return (
 		<Stack id={'ai-coach-page'}>
+			<Head><title>Athlex | AI Coach</title></Head>
 			<Stack className={'container ac-wrap'}>
 				{user?._id && (
 					<aside className={'ac-sidebar'}>

@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutMain from '../libs/components/layout/LayoutHome';
 import { Stack } from '@mui/material';
@@ -28,6 +29,7 @@ const Home: NextPage = () => {
 	if (device === 'mobile') {
 		return (
 			<Stack className={'home-page'}>
+				<Head><title>Athlex | Home</title></Head>
 				<StatsBanner />
 				<ProgramCategories />
 				<TrendPrograms />
@@ -44,6 +46,7 @@ const Home: NextPage = () => {
 	} else {
 		return (
 			<Stack className={'home-page'}>
+				<Head><title>Athlex | Home</title></Head>
 				<StatsBanner />
 				<ProgramCategories />
 				<TrendPrograms />

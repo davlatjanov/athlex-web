@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
@@ -60,6 +61,7 @@ const Join: NextPage = () => {
 
 	return (
 		<Stack className={'join-page'}>
+			<Head><title>Athlex | Sign In</title></Head>
 			<Stack className={'container'}>
 				<Stack className={'main'}>
 

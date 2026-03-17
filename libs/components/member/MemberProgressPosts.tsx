@@ -8,6 +8,7 @@ import { T } from '../../types/common';
 import moment from 'moment';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
+import { sweetMixinErrorAlert } from '../../sweetAlert';
 
 const MemberProgressPosts = () => {
 	const router = useRouter();
@@ -65,7 +66,7 @@ const MemberProgressPosts = () => {
 			});
 			setImageUrl(res.data?.data?.imageUploader ?? '');
 		} catch (err) {
-			console.error('Image upload failed:', err);
+			sweetMixinErrorAlert((err as any)?.message || 'Something went wrong').then();
 		} finally {
 			setUploading(false);
 		}
@@ -91,7 +92,7 @@ const MemberProgressPosts = () => {
 			setTotal(result.data?.getProgressResults?.metaCounter?.[0]?.total ?? 0);
 			setPage(1);
 		} catch (err) {
-			console.error('Create post failed:', err);
+			sweetMixinErrorAlert((err as any)?.message || 'Something went wrong').then();
 		} finally {
 			setSubmitting(false);
 		}

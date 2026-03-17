@@ -6,7 +6,7 @@ import axios from 'axios';
 import { CREATE_PROGRAM, UPDATE_PROGRAM } from '../../../apollo/user/mutation';
 import { GET_ONE_PROGRAM } from '../../../apollo/user/query';
 import { ProgramType, ProgramLevel, ProgramStatus } from '../../enums/training-program.enum';
-import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 import { getJwtToken } from '../../auth';
 import { T } from '../../types/common';
 
@@ -163,7 +163,7 @@ const AddProgram: NextPage = ({ initialValues, ...props }: any) => {
 			const url: string = res.data.data.imageUploader;
 			setFormData((prev) => ({ ...prev, programImages: [...prev.programImages, url] }));
 		} catch (err) {
-			console.log('Upload error:', err);
+			sweetMixinErrorAlert('Image upload failed. Please try again.').then();
 		} finally {
 			setUploading(false);
 			e.target.value = '';
@@ -428,7 +428,7 @@ const AddProgram: NextPage = ({ initialValues, ...props }: any) => {
 				<div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
 					{formData.programImages.map((img, idx) => (
 						<div key={idx} style={{ position: 'relative', width: 120, height: 90 }}>
-							<img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+							<img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} onError={(e) => { (e.target as HTMLImageElement).src = '/img/program-placeholder.svg'; }} />
 							<button onClick={() => removeImage(idx)} style={{
 								position: 'absolute', top: 4, right: 4, width: 22, height: 22,
 								background: C.accent, border: 'none', borderRadius: '50%',

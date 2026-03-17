@@ -93,7 +93,7 @@ const AdminPrograms = () => {
 								<td style={tdS}>
 									<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
 										{p.programImages?.[0] && (
-											<img src={p.programImages[0]} alt="" style={{ width: 38, height: 34, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />
+											<img src={p.programImages[0]} alt="" style={{ width: 38, height: 34, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} onError={(e) => { (e.target as HTMLImageElement).src = '/img/program-placeholder.svg'; }} />
 										)}
 										<span style={{ fontWeight: 600, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
 											{p.programName}

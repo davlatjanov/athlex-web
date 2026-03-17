@@ -128,7 +128,7 @@ const AdminProductsList = () => {
 												src={p.productImages[0]}
 												alt=""
 												style={{ width: 38, height: 34, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
-												onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+												onError={(e) => { (e.target as HTMLImageElement).src = '/img/program-placeholder.svg'; }}
 											/>
 										)}
 										<span style={{ fontWeight: 600, maxWidth: 150, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>

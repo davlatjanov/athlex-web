@@ -9,7 +9,7 @@ import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { MemberUpdate } from '../../types/member/member.update';
 import { UPDATE_MEMBER } from '../../../apollo/user/mutation';
-import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 
 const MyProfile: NextPage = ({ initialValues }: any) => {
 	const device = useDeviceDetect();
@@ -64,7 +64,7 @@ const MyProfile: NextPage = ({ initialValues }: any) => {
 			const responseImage = response.data.data.imageUploader;
 			setUpdateData({ ...updateData, memberImage: responseImage });
 		} catch (err) {
-			console.log('Error, uploadImage:', err);
+			sweetMixinErrorAlert('Image upload failed. Please try again.').then();
 		}
 	};
 
@@ -104,7 +104,7 @@ const MyProfile: NextPage = ({ initialValues }: any) => {
 						<Typography className="title">Photo</Typography>
 						<Stack className="image-big-box">
 							<Stack className="image-box">
-								<img src={updateData?.memberImage || '/img/profile/defaultUser.svg'} alt="" />
+								<img src={updateData?.memberImage || '/img/profile/defaultUser.svg'} alt="" onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }} />
 							</Stack>
 							<Stack className="upload-big-box">
 								<input

@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
+import { ProductCardSkeleton } from '../../libs/components/common/Skeleton';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../apollo/user/query';
@@ -167,11 +169,12 @@ const ProductsPage: NextPage = () => {
 	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
 	if (device === 'mobile') {
-		return <div id="products-page"><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
+		return <div id="products-page"><Head><title>Athlex | Shop</title></Head><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
 	}
 
 	return (
 		<div id="products-page">
+			<Head><title>Athlex | Shop</title></Head>
 			<div className="shop-container">
 
 				{/* ── SIDEBAR ─────────────────────────────────────── */}
@@ -255,7 +258,9 @@ const ProductsPage: NextPage = () => {
 					</div>
 
 					{loading && allProducts.length === 0 ? (
-						<div className="shop-empty"><span>⏳</span><p>Loading products…</p></div>
+						<div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+							{[...Array(8)].map((_, i) => <ProductCardSkeleton key={i} />)}
+						</div>
 					) : paginated.length === 0 ? (
 						<div className="shop-empty">
 							<span>🛒</span>

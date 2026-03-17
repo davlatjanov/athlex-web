@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
@@ -133,6 +134,7 @@ const MemberPage: NextPage = () => {
 	} else {
 		return (
 			<div id="member-page" style={{ position: 'relative' }}>
+				<Head><title>Athlex | Member Profile</title></Head>
 				{/* Hero — same structure as other pages */}
 				<div className="header-basic member-header">
 					<div className="container hb-container">

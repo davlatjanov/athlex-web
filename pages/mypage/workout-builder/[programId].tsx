@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import withLayoutBasic from '../../../libs/components/layout/LayoutBasic';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
@@ -298,11 +299,20 @@ const WorkoutBuilderPage: NextPage = () => {
 	const toggleArrayItem = (arr: string[], item: string): string[] =>
 		arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
 
-	if (!program) return <div className="wb-root"><div className="wb-loading">Loading program...</div></div>;
+	if (!program) return (
+		<div className="wb-root">
+			<div style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+				{[...Array(3)].map((_, i) => (
+					<div key={i} className="skeleton-pulse" style={{ height: '80px', borderRadius: '12px' }} />
+				))}
+			</div>
+		</div>
+	);
 
 	return (
 		<div className="wb-root">
 		<div className="wb-page">
+			<Head><title>Athlex | Workout Builder</title></Head>
 			{/* Header */}
 			<div className="wb-header">
 				<button className="wb-back-btn" onClick={() => router.push('/mypage?category=myProperty')}>

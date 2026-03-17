@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Stack } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import ProgramCard from '../../libs/components/homepage/ProgramCard';
+import { ProgramCardSkeleton } from '../../libs/components/common/Skeleton';
 import { useQuery } from '@apollo/client';
 import { GET_PROGRAMS } from '../../apollo/user/query';
 import { Program } from '../../libs/types/program/program';
@@ -136,6 +138,7 @@ const ProgramsPage: NextPage = () => {
 	if (device === 'mobile') {
 		return (
 			<Stack className={'programs-page-mobile'}>
+				<Head><title>Athlex | Programs</title></Head>
 				<h2>Programs</h2>
 				<Stack className={'mobile-grid'}>
 					{filtered.map((prog) => (
@@ -162,6 +165,7 @@ const ProgramsPage: NextPage = () => {
 
 	return (
 		<div id="programs-page">
+			<Head><title>Athlex | Programs</title></Head>
 			<div className={'programs-container'}>
 				<aside className={'filter-sidebar'}>
 					<div className={'filter-block'}>
@@ -249,7 +253,9 @@ const ProgramsPage: NextPage = () => {
 					</div>
 
 					{loading ? (
-						<div className={'loading-state'}>Loading programs...</div>
+						<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 300px)', gap: '24px' }}>
+							{[...Array(6)].map((_, i) => <ProgramCardSkeleton key={i} />)}
+						</div>
 					) : filtered.length === 0 ? (
 						<div className={'empty-state'}>
 							<span>No programs match your filters.</span>

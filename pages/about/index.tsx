@@ -1,5 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
@@ -13,6 +14,7 @@ const About: NextPage = () => {
 	} else {
 		return (
 			<Stack className={'about-page'}>
+				<Head><title>Athlex | About</title></Head>
 
 				{/* ── Welcome / Intro ── */}
 				<section className={'ab-intro'}>

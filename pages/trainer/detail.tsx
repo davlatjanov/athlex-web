@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { CircularProgress } from '@mui/material';
@@ -192,6 +193,7 @@ const TrainerDetail: NextPage = () => {
 
 	return (
 		<div id="trainer-detail-page">
+			<Head><title>Athlex | Trainer Profile</title></Head>
 
 			{/* ─── HERO SPLIT ────────────────────────────────────────── */}
 			<div className="tdp-hero-wrap">
@@ -229,7 +231,7 @@ const TrainerDetail: NextPage = () => {
 							src={trainer.memberImage}
 							alt={trainer.memberFullName || trainer.memberNick}
 							className="tdp-hero-img"
-							onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+							onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }}
 						/>
 					) : (
 						<div className="tdp-hero-img-placeholder">
@@ -269,7 +271,7 @@ const TrainerDetail: NextPage = () => {
 											<div className="tpc-banner" style={{ background: typeGradients[prog.programType] ?? typeGradients['STRENGTH'] }}>
 												<div className="tpc-overlay" />
 												{prog.programImages?.[0] && (
-													<img src={prog.programImages[0]} alt={prog.programName} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+													<img src={prog.programImages[0]} alt={prog.programName} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} onError={(e) => { (e.target as HTMLImageElement).src = '/img/program-placeholder.svg'; }} />
 												)}
 											</div>
 											<div className="tpc-body">
@@ -367,7 +369,7 @@ const TrainerDetail: NextPage = () => {
 						<div className="tdp-ac-top">
 							<div className="tdp-ac-avatar-row">
 								{trainer.memberImage ? (
-									<img src={trainer.memberImage} alt={trainer.memberNick} className="tdp-ac-avatar" />
+									<img src={trainer.memberImage} alt={trainer.memberNick} className="tdp-ac-avatar" onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }} />
 								) : (
 									<div className="tdp-ac-avatar-placeholder">
 										{(trainer.memberFullName || trainer.memberNick || '?')[0].toUpperCase()}

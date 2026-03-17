@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import axios from 'axios';
 import { CREATE_PRODUCT_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { ProductType, ProductStatus, ProductBrand } from '../../enums/product.enum';
-import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 import { getJwtToken } from '../../auth';
 
 /* ─── shared style tokens ─── */
@@ -118,7 +118,7 @@ const AddNewProduct: NextPage = () => {
 			const url: string = res.data.data.imageUploader;
 			setFormData((prev) => ({ ...prev, productImages: [...prev.productImages, url] }));
 		} catch (err) {
-			console.log('Upload error:', err);
+			sweetMixinErrorAlert('Image upload failed. Please try again.').then();
 		} finally {
 			setUploading(false);
 			e.target.value = '';

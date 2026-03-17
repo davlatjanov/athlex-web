@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { GET_MY_NOTIFICATIONS } from '../../apollo/user/query';
@@ -81,6 +82,7 @@ const NotificationsPage: NextPage = () => {
 
 	return (
 		<div id="notifications-page">
+			<Head><title>Athlex | Notifications</title></Head>
 			<div className="nf-container">
 
 				{/* Header */}

@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -457,6 +458,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	if (device === 'mobile') {
 		return (
 			<div id="program-detail-page">
+				<Head><title>Athlex | {program?.programName ?? 'Program'}</title></Head>
 				{heroBlock}
 				<div className="pdp-mobile-body">
 					{statPills}
@@ -509,6 +511,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	/** DESKTOP **/
 	return (
 		<div id="program-detail-page">
+			<Head><title>Athlex | {program?.programName ?? 'Program'}</title></Head>
 			{heroBlock}
 
 			<div className="pdp-body">
