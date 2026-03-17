@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
+import withLayoutBasic from '../../../libs/components/layout/LayoutBasic';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
@@ -246,9 +247,10 @@ const WorkoutBuilderPage: NextPage = () => {
 	const toggleArrayItem = (arr: string[], item: string): string[] =>
 		arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
 
-	if (!program) return <div className="wb-loading">Loading program...</div>;
+	if (!program) return <div className="wb-root"><div className="wb-loading">Loading program...</div></div>;
 
 	return (
+		<div className="wb-root">
 		<div className="wb-page">
 			{/* Header */}
 			<div className="wb-header">
@@ -571,7 +573,8 @@ const WorkoutBuilderPage: NextPage = () => {
 				</div>
 			)}
 		</div>
+		</div>
 	);
 };
 
-export default WorkoutBuilderPage;
+export default withLayoutBasic(WorkoutBuilderPage);
