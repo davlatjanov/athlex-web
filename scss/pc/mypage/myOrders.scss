@@ -309,7 +309,7 @@
 		}
 	}
 
-	// ── Admin Comments ────────────────────────────────
+	// ── Admin Comments & Feedback ─────────────────────
 	#admin-comments, #admin-feedback {
 		.ac-header, .af-header {
 			display: flex;
@@ -326,11 +326,31 @@
 			span { font-size: 13px; font-weight: 500; color: #6b7280; margin-left: 8px; }
 		}
 
+		.ac-filter-select, .af-filter-select {
+			background: #1a2236;
+			border: 1px solid rgba(255,255,255,0.12);
+			color: #e2e8f0;
+			border-radius: 8px;
+			padding: 6px 12px;
+			font-size: 12px;
+			font-weight: 600;
+			cursor: pointer;
+			outline: none;
+			&:hover { border-color: rgba(255,255,255,0.25); }
+		}
+
 		.ac-empty, .af-empty {
 			text-align: center;
 			padding: 60px 20px;
 			color: #6b7280;
 			font-size: 14px;
+		}
+
+		.ac-card, .af-card {
+			background: rgba(255,255,255,0.02);
+			border: 1px solid rgba(255,255,255,0.07);
+			border-radius: 12px;
+			overflow: hidden;
 		}
 
 		.ac-table, .af-table {
@@ -343,52 +363,78 @@
 			}
 
 			th {
-				padding: 10px 14px;
+				padding: 11px 16px;
 				text-align: left;
-				font-size: 11px;
+				font-size: 10px;
 				font-weight: 700;
-				letter-spacing: 1px;
+				letter-spacing: 1.5px;
 				text-transform: uppercase;
 				color: #6b7280;
 				border-bottom: 1px solid rgba(255,255,255,0.07);
 			}
 
 			td {
-				padding: 12px 14px;
+				padding: 13px 16px;
 				color: #9ca3af;
-				border-bottom: 1px solid rgba(255,255,255,0.05);
+				border-bottom: 1px solid rgba(255,255,255,0.04);
 				vertical-align: middle;
 			}
 
-			tbody tr:hover td { background: rgba(255,255,255,0.02); }
+			tbody tr:last-child td { border-bottom: none; }
+			tbody tr:hover td { background: rgba(255,255,255,0.025); }
 		}
 
 		.ac-member, .af-member {
-			color: #e2e8f0;
-			font-size: 12px;
 			display: flex;
 			align-items: center;
-			gap: 6px;
+			gap: 8px;
+
+			img {
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				object-fit: cover;
+				flex-shrink: 0;
+			}
+
+			span {
+				font-size: 13px;
+				font-weight: 600;
+				color: #e2e8f0;
+			}
 		}
 
-		.ac-member-id { font-family: monospace; font-size: 11px; color: #6b7280; }
+		.ac-avatar-initial, .af-avatar-initial {
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			background: #1f2937;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 12px;
+			font-weight: 700;
+			color: #9ca3af;
+			flex-shrink: 0;
+		}
 
 		.ac-group-badge, .af-group-badge {
 			font-size: 10px;
 			font-weight: 700;
 			letter-spacing: 1px;
 			text-transform: uppercase;
-			padding: 2px 8px;
+			padding: 3px 10px;
 			border-radius: 20px;
 			background: rgba(255,255,255,0.06);
 			color: #9ca3af;
 			border: 1px solid rgba(255,255,255,0.1);
+			white-space: nowrap;
 		}
 
 		.ac-content, .af-content {
-			max-width: 320px;
+			max-width: 340px;
 			color: #e2e8f0;
-			font-size: 12px;
+			font-size: 13px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -396,17 +442,20 @@
 
 		.ac-date, .af-date { font-size: 11px; color: #6b7280; white-space: nowrap; }
 
+		.ac-stars { font-size: 13px; white-space: nowrap; }
+
 		.ac-delete-btn, .af-delete-btn {
-			padding: 4px 10px;
+			padding: 5px 12px;
 			border-radius: 6px;
-			background: rgba(239,68,68,0.1);
-			border: 1px solid rgba(239,68,68,0.3);
-			color: #ef4444;
+			background: rgba(233,44,40,0.1);
+			border: 1px solid rgba(233,44,40,0.3);
+			color: #E92C28;
 			font-size: 11px;
-			font-weight: 600;
+			font-weight: 700;
 			cursor: pointer;
 			white-space: nowrap;
-			&:hover { background: rgba(239,68,68,0.2); }
+			letter-spacing: 0.5px;
+			&:hover { background: rgba(233,44,40,0.2); }
 		}
 
 		.ac-pagination, .af-pagination {

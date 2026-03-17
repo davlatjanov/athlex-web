@@ -8,17 +8,7 @@ import moment from 'moment';
 const GROUP_LABEL: Record<string, string> = {
 	PROGRAM: 'Program',
 	PRODUCT: 'Product',
-};
-
-const selectSx = {
-	background: '#1a2236',
-	border: '1px solid rgba(255,255,255,0.12)',
-	color: '#e2e8f0',
-	borderRadius: 6,
-	padding: '4px 8px',
-	fontSize: 12,
-	cursor: 'pointer',
-	outline: 'none',
+	TRAINER: 'Trainer',
 };
 
 const AdminComments = () => {
@@ -67,44 +57,62 @@ const AdminComments = () => {
 		<div id="admin-comments">
 			<div className="ac-header">
 				<h3 className="ac-title">Comments <span>{total}</span></h3>
-				<select style={selectSx} value={groupFilter} onChange={(e) => handleFilterChange(e.target.value)}>
-					<option value="ALL">All</option>
+				<select
+					className="ac-filter-select"
+					value={groupFilter}
+					onChange={(e) => handleFilterChange(e.target.value)}
+				>
+					<option value="ALL">All Types</option>
 					<option value="PROGRAM">Program</option>
 					<option value="PRODUCT">Product</option>
+					<option value="TRAINER">Trainer</option>
 				</select>
 			</div>
 
 			{comments.length === 0 ? (
 				<div className="ac-empty"><p>No comments found.</p></div>
 			) : (
-				<table className="ac-table">
-					<thead>
-						<tr>
-							<th>Member</th>
-							<th>Type</th>
-							<th>Comment</th>
-							<th>Date</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{comments.map((c: T) => (
-							<tr key={c._id}>
-								<td className="ac-member">
-									<span className="ac-member-id">{c.memberId?.toString().slice(-6)}</span>
-								</td>
-								<td>
-									<span className="ac-group-badge">{GROUP_LABEL[c.commentGroup] ?? c.commentGroup}</span>
-								</td>
-								<td className="ac-content">{c.commentContent}</td>
-								<td className="ac-date">{moment(c.createdAt).format('MMM D, YYYY')}</td>
-								<td>
-									<button className="ac-delete-btn" onClick={() => handleDelete(c._id)}>Delete</button>
-								</td>
+				<div className="ac-card">
+					<table className="ac-table">
+						<thead>
+							<tr>
+								<th>Member</th>
+								<th>Type</th>
+								<th>Comment</th>
+								<th>Date</th>
+								<th></th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{comments.map((c: T) => {
+								const nick = c.memberData?.memberNick ?? c.memberId?.toString().slice(-6);
+								const img = c.memberData?.memberImage;
+								return (
+									<tr key={c._id}>
+										<td>
+											<div className="ac-member">
+												{img ? (
+													<img src={img} alt={nick} />
+												) : (
+													<div className="ac-avatar-initial">{nick?.[0]?.toUpperCase()}</div>
+												)}
+												<span>{nick}</span>
+											</div>
+										</td>
+										<td>
+											<span className="ac-group-badge">{GROUP_LABEL[c.commentGroup] ?? c.commentGroup}</span>
+										</td>
+										<td className="ac-content">{c.commentContent}</td>
+										<td className="ac-date">{moment(c.createdAt).format('MMM D, YYYY')}</td>
+										<td>
+											<button className="ac-delete-btn" onClick={() => handleDelete(c._id)}>Delete</button>
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
 			)}
 
 			{totalPages > 1 && (

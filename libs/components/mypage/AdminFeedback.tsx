@@ -12,23 +12,12 @@ const GROUP_LABEL: Record<string, string> = {
 	PRODUCT: 'Product',
 };
 
-const selectSx = {
-	background: '#1a2236',
-	border: '1px solid rgba(255,255,255,0.12)',
-	color: '#e2e8f0',
-	borderRadius: 6,
-	padding: '4px 8px',
-	fontSize: 12,
-	cursor: 'pointer',
-	outline: 'none',
-};
-
 const Stars = ({ scale }: { scale: string }) => {
 	const n = SCALE_MAP[scale] ?? 0;
 	return (
-		<span>
+		<span className="ac-stars">
 			{Array.from({ length: 5 }, (_, i) => (
-				<span key={i} style={{ color: i < n ? '#f59e0b' : '#374151', fontSize: 14 }}>★</span>
+				<span key={i} style={{ color: i < n ? '#f59e0b' : '#374151' }}>★</span>
 			))}
 		</span>
 	);
@@ -80,8 +69,8 @@ const AdminFeedback = () => {
 		<div id="admin-feedback">
 			<div className="af-header">
 				<h3 className="af-title">Reviews <span>{total}</span></h3>
-				<select style={selectSx} value={groupFilter} onChange={(e) => handleFilterChange(e.target.value)}>
-					<option value="ALL">All</option>
+				<select className="af-filter-select" value={groupFilter} onChange={(e) => handleFilterChange(e.target.value)}>
+					<option value="ALL">All Types</option>
 					<option value="TRAINING_PROGRAM">Program</option>
 					<option value="TRAINER">Trainer</option>
 					<option value="PRODUCT">Product</option>
@@ -91,35 +80,45 @@ const AdminFeedback = () => {
 			{feedbacks.length === 0 ? (
 				<div className="af-empty"><p>No reviews found.</p></div>
 			) : (
-				<table className="af-table">
-					<thead>
-						<tr>
-							<th>Member</th>
-							<th>Type</th>
-							<th>Rating</th>
-							<th>Review</th>
-							<th>Date</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{feedbacks.map((fb: T) => (
-							<tr key={fb._id}>
-								<td className="af-member">
-									{fb.memberData?.memberImage ? (
-										<img src={fb.memberData.memberImage} alt="" style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', marginRight: 8, verticalAlign: 'middle' }} />
-									) : null}
-									<span>{fb.memberData?.memberNick ?? fb.memberId?.toString().slice(-6)}</span>
-								</td>
-								<td><span className="af-group-badge">{GROUP_LABEL[fb.feedbackGroup] ?? fb.feedbackGroup}</span></td>
-								<td><Stars scale={fb.feedbackScale} /></td>
-								<td className="af-content">{fb.feedbackContent}</td>
-								<td className="af-date">{moment(fb.createdAt).format('MMM D, YYYY')}</td>
-								<td><button className="af-delete-btn" onClick={() => handleDelete(fb._id)}>Delete</button></td>
+				<div className="af-card">
+					<table className="af-table">
+						<thead>
+							<tr>
+								<th>Member</th>
+								<th>Type</th>
+								<th>Rating</th>
+								<th>Review</th>
+								<th>Date</th>
+								<th></th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{feedbacks.map((fb: T) => {
+								const nick = fb.memberData?.memberNick ?? fb.memberId?.toString().slice(-6);
+								const img = fb.memberData?.memberImage;
+								return (
+									<tr key={fb._id}>
+										<td>
+											<div className="af-member">
+												{img ? (
+													<img src={img} alt={nick} />
+												) : (
+													<div className="af-avatar-initial">{nick?.[0]?.toUpperCase()}</div>
+												)}
+												<span>{nick}</span>
+											</div>
+										</td>
+										<td><span className="af-group-badge">{GROUP_LABEL[fb.feedbackGroup] ?? fb.feedbackGroup}</span></td>
+										<td><Stars scale={fb.feedbackScale} /></td>
+										<td className="af-content">{fb.feedbackContent}</td>
+										<td className="af-date">{moment(fb.createdAt).format('MMM D, YYYY')}</td>
+										<td><button className="af-delete-btn" onClick={() => handleDelete(fb._id)}>Delete</button></td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
 			)}
 
 			{totalPages > 1 && (

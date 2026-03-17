@@ -190,6 +190,11 @@ export const GET_COMMENTS = gql`
 				memberId
 				createdAt
 				updatedAt
+				memberData {
+					_id
+					memberNick
+					memberImage
+				}
 			}
 			metaCounter {
 				total
