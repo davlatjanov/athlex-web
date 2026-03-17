@@ -515,52 +515,6 @@ const WorkoutBuilderPage: NextPage = () => {
 						<div className="wb-modal-body wb-two-col">
 							{/* Left column */}
 							<div className="wb-col">
-								{/* Image upload */}
-								<div className="wb-label">
-									<span>Demo Photo</span>
-									<div className="wb-image-upload" onClick={() => imageInputRef.current?.click()}>
-										{imagePreview ? (
-											<>
-												<img src={imagePreview} alt="preview" className="wb-image-preview" />
-												<div className="wb-image-overlay">
-													<span>Change Photo</span>
-												</div>
-											</>
-										) : (
-											<div className="wb-image-placeholder">
-												<span className="wb-image-icon">📷</span>
-												<span>Click to upload a demo photo</span>
-												<span className="wb-image-hint">JPG, PNG, WebP</span>
-											</div>
-										)}
-									</div>
-									<input
-										ref={imageInputRef}
-										type="file"
-										accept="image/*"
-										style={{ display: 'none' }}
-										onChange={handleImageSelect}
-									/>
-									{imagePreview && (
-										<button className="wb-remove-image" onClick={() => { setImageFile(null); setImagePreview(''); setExerciseForm((p) => ({ ...p, exerciseImage: '' })); }}>
-											✕ Remove photo
-										</button>
-									)}
-								</div>
-
-								{/* Video URL */}
-								<label className="wb-label">
-									<span>Video URL (YouTube / any link)</span>
-									<input className="wb-input" value={exerciseForm.exerciseVideo}
-										placeholder="https://youtube.com/watch?v=..."
-										onChange={(e) => setExerciseForm((p) => ({ ...p, exerciseVideo: e.target.value }))} />
-									{exerciseForm.exerciseVideo && (
-										<a href={exerciseForm.exerciseVideo} target="_blank" rel="noreferrer" className="wb-video-link">
-											▶ Preview link
-										</a>
-									)}
-								</label>
-
 								<label className="wb-label">
 									<span>Exercise Name *</span>
 									<input className="wb-input" value={exerciseForm.exerciseName} placeholder="e.g. Bench Press"
@@ -625,6 +579,52 @@ const WorkoutBuilderPage: NextPage = () => {
 
 							{/* Right column */}
 							<div className="wb-col">
+								{/* Image upload */}
+								<div className="wb-label">
+									<span>Demo Photo</span>
+									<div className="wb-image-upload" onClick={() => imageInputRef.current?.click()}>
+										{imagePreview ? (
+											<>
+												<img src={imagePreview} alt="preview" className="wb-image-preview" />
+												<div className="wb-image-overlay">
+													<span>Change Photo</span>
+												</div>
+											</>
+										) : (
+											<div className="wb-image-placeholder">
+												<span className="wb-image-icon">📷</span>
+												<span>Click to upload a demo photo</span>
+												<span className="wb-image-hint">JPG, PNG, WebP</span>
+											</div>
+										)}
+									</div>
+									<input
+										ref={imageInputRef}
+										type="file"
+										accept="image/*"
+										style={{ display: 'none' }}
+										onChange={handleImageSelect}
+									/>
+									{imagePreview && (
+										<button className="wb-remove-image" onClick={() => { setImageFile(null); setImagePreview(''); setExerciseForm((p) => ({ ...p, exerciseImage: '' })); }}>
+											✕ Remove photo
+										</button>
+									)}
+								</div>
+
+								{/* Video URL */}
+								<label className="wb-label">
+									<span>Video URL (YouTube / any link)</span>
+									<input className="wb-input" value={exerciseForm.exerciseVideo}
+										placeholder="https://youtube.com/watch?v=..."
+										onChange={(e) => setExerciseForm((p) => ({ ...p, exerciseVideo: e.target.value }))} />
+									{exerciseForm.exerciseVideo && (
+										<a href={exerciseForm.exerciseVideo} target="_blank" rel="noreferrer" className="wb-video-link">
+											▶ Preview link
+										</a>
+									)}
+								</label>
+
 								<div className="wb-label">
 									<span>Primary Muscle *</span>
 									<div className="wb-chip-grid">
