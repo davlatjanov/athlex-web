@@ -30,10 +30,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 		return digits;
 	};
 
-	const isValid = name.trim().length > 1 &&
-		cardNumber.replace(/\s/g, '').length === 16 &&
-		expiry.length === 5 &&
-		cvv.length >= 3;
+	const isValid = name.trim().length > 0 &&
+		cardNumber.trim().length > 0 &&
+		expiry.trim().length > 0 &&
+		cvv.trim().length > 0;
 
 	const handlePay = async () => {
 		if (!isValid || paying) return;
