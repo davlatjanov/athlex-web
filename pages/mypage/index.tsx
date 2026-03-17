@@ -143,8 +143,9 @@ const MyPage: NextPage = () => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
-	const category: any = router.query?.category ?? 'myFavorites';
 	const u = user as any;
+	const rawCategory = router.query?.category as string | undefined;
+	const category: string = rawCategory ?? (u?.memberType === 'ADMIN' ? 'adminUsers' : 'myFavorites');
 
 	const getTabs = () => {
 		if (u?.memberType === 'TRAINER') return AGENT_TABS;
