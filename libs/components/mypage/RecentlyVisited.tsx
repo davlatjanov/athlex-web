@@ -7,7 +7,19 @@ import { T } from '../../types/common';
 import ProgramCard from '../homepage/ProgramCard';
 
 const VISITED_KEY = 'athlex_recently_visited';
+const VISITED_TS_KEY = 'athlex_recently_visited_ts';
 const MAX_VISITED = 30;
+const ONE_HOUR_MS = 60 * 60 * 1000;
+
+function clearIfExpired() {
+	try {
+		const ts = Number(localStorage.getItem(VISITED_TS_KEY) ?? '0');
+		if (ts && Date.now() - ts > ONE_HOUR_MS) {
+			localStorage.removeItem(VISITED_KEY);
+			localStorage.removeItem(VISITED_TS_KEY);
+		}
+	} catch {}
+}
 
 interface VisitedEntry {
 	id: string;
@@ -17,20 +29,24 @@ interface VisitedEntry {
 export function trackProgramVisit(id: string) {
 	if (typeof window === 'undefined' || !id) return;
 	try {
+		clearIfExpired();
 		const list: VisitedEntry[] = JSON.parse(localStorage.getItem(VISITED_KEY) ?? '[]');
 		const filtered = list.filter((e) => !(e.id === id && e.type === 'PROGRAM'));
 		filtered.unshift({ id, type: 'PROGRAM' });
 		localStorage.setItem(VISITED_KEY, JSON.stringify(filtered.slice(0, MAX_VISITED)));
+		if (!localStorage.getItem(VISITED_TS_KEY)) localStorage.setItem(VISITED_TS_KEY, String(Date.now()));
 	} catch {}
 }
 
 export function trackProductVisit(id: string) {
 	if (typeof window === 'undefined' || !id) return;
 	try {
+		clearIfExpired();
 		const list: VisitedEntry[] = JSON.parse(localStorage.getItem(VISITED_KEY) ?? '[]');
 		const filtered = list.filter((e) => !(e.id === id && e.type === 'PRODUCT'));
 		filtered.unshift({ id, type: 'PRODUCT' });
 		localStorage.setItem(VISITED_KEY, JSON.stringify(filtered.slice(0, MAX_VISITED)));
+		if (!localStorage.getItem(VISITED_TS_KEY)) localStorage.setItem(VISITED_TS_KEY, String(Date.now()));
 	} catch {}
 }
 
@@ -106,6 +122,7 @@ const RecentlyVisited: NextPage = () => {
 
 	useEffect(() => {
 		try {
+			clearIfExpired();
 			const raw = localStorage.getItem(VISITED_KEY) ?? '[]';
 			const parsed = JSON.parse(raw);
 			if (parsed.length > 0 && typeof parsed[0] === 'string') {
