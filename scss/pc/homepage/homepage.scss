@@ -216,7 +216,7 @@ $border-accent: rgba(34, 197, 94, 0.4);
 					}
 				}
 
-	
+
 				.card-name-overlay {
 					padding: 10px 14px 14px;
 					background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, transparent 100%);
@@ -958,4 +958,103 @@ $border-accent: rgba(34, 197, 94, 0.4);
 			}
 		}
 	}
+}
+}
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1200px) {
+  #pc-wrap .home-page {
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+    .plans-grid { grid-template-columns: repeat(2, 1fr); }
+    .event-cards { grid-template-columns: repeat(2, 1fr); }
+
+    .ai-coach-teaser .container { gap: 40px; }
+  }
+}
+
+@media (max-width: 900px) {
+  #pc-wrap .home-page {
+    %section-padding { padding: 70px 0; }
+
+    h2 { font-size: 30px !important; }
+    .section-header h2 { font-size: 30px !important; }
+
+    .stats-banner .container {
+      padding: 20px 24px;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+
+      .stat-item::after { display: none; }
+      strong { font-size: 28px; }
+    }
+
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .ai-coach-teaser .container {
+      flex-direction: column;
+      gap: 32px;
+      .ai-left { h2 { font-size: 28px !important; } }
+      .ai-right .chat-window { max-width: 100%; }
+    }
+
+    .community-board .community-main {
+      flex-direction: column;
+      gap: 32px;
+      .center-divider { display: none; }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap .home-page {
+    .info-box {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .stats-banner {
+      padding: 16px 0;
+      .container { border-radius: 10px; padding: 20px 16px; }
+      .stat-item strong { font-size: 24px; }
+    }
+
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+    .products-grid { grid-template-columns: repeat(1, 1fr); }
+    .plans-grid { grid-template-columns: repeat(1, 1fr); }
+    .event-cards { grid-template-columns: repeat(1, 1fr); margin-top: 24px; }
+
+    .top-trainers .wrapper {
+      .switch-btn { display: none; }
+    }
+
+    .community-board .community-left .card-wrap .vertical-card {
+      width: calc(50% - 8px);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap .home-page {
+    h2 { font-size: 24px !important; }
+    .section-header h2 { font-size: 24px !important; }
+
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+    .program-card { width: 260px; }
+
+    .ai-coach-teaser {
+      .container { flex-direction: column; }
+      .ai-left h2 { font-size: 22px !important; }
+    }
+
+    .community-board .community-left .card-wrap .vertical-card {
+      width: 100%;
+    }
+  }
 }

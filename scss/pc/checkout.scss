@@ -169,3 +169,17 @@
 		&:disabled { opacity: 0.45; cursor: not-allowed; }
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 480px) {
+  .checkout-modal {
+    padding: 20px;
+    gap: 18px;
+    max-width: 100%;
+
+    .co-title { font-size: 16px; }
+    .co-field-row { flex-direction: column; }
+    .co-pay-btn { font-size: 14px; padding: 12px; }
+  }
+}

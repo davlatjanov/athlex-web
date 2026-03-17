@@ -487,3 +487,25 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #my-page .my-orders {
+    .order-card {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .order-items-row { flex-wrap: wrap; gap: 10px; }
+
+    .order-meta { flex-wrap: wrap; gap: 8px; }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #my-page .my-orders {
+    .order-card { padding: 14px; }
+    .order-status-badge { align-self: flex-start; }
+  }
+}

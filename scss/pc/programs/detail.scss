@@ -1343,3 +1343,53 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1100px) {
+  #pc-wrap #program-detail-page {
+    .detail-container { gap: 24px; }
+    .detail-sidebar { width: 280px; }
+  }
+}
+
+@media (max-width: 900px) {
+  #pc-wrap #program-detail-page {
+    .detail-container {
+      flex-direction: column;
+    }
+    .detail-sidebar {
+      width: 100%;
+      position: static;
+    }
+    .detail-main { min-width: 0; }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap #program-detail-page {
+    padding: 24px 0 60px;
+
+    .detail-container { padding: 0 16px; }
+
+    .pdp-hero { height: 240px; }
+
+    .pdp-title { font-size: 22px !important; }
+
+    .pdp-meta-row { flex-wrap: wrap; gap: 10px; }
+
+    .pdp-tabs { overflow-x: auto; }
+
+    .reviews-grid, .comments-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #program-detail-page {
+    .pdp-hero { height: 180px; }
+    .pdp-title { font-size: 18px !important; }
+    .pdp-info-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+}

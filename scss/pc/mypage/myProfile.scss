@@ -293,3 +293,20 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #my-page .my-profile-page {
+    .profile-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .profile-sidebar { width: 100%; }
+
+    .profile-form-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+}

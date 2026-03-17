@@ -1550,3 +1550,63 @@ body::-webkit-scrollbar {
 	border-radius: 2px;
 	margin-right: 8px;
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1200px) {
+  #pc-wrap {
+    #top .navbar .navbar-main .container {
+      padding: 0 20px;
+      .router-box { gap: 20px; div { font-size: 14px; } }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  #pc-wrap {
+    #top .navbar .navbar-main .container {
+      .router-box { gap: 14px; div { font-size: 13px; } }
+      .user-box { gap: 8px; }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap {
+    #top .navbar .navbar-main {
+      height: 64px;
+      padding: 12px 0;
+
+      .container {
+        padding: 0 16px;
+
+        .router-box { display: none; }
+
+        .logo-box img { width: 30px; height: 30px; }
+        .logo-box .logo-name { font-size: 15px; }
+
+        .user-box {
+          gap: 6px;
+
+          .nav-search-expanded { width: 160px; }
+
+          .user-info-box {
+            .user-name { display: none; }
+          }
+        }
+      }
+    }
+  }
+
+  .container {
+    padding: 0 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap {
+    #top .navbar .navbar-main .container {
+      .user-box .nav-search-expanded { width: 120px; }
+    }
+  }
+}

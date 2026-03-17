@@ -774,3 +774,38 @@
 		background: #c9221e;
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1100px) {
+  #pc-wrap #my-page .workout-builder {
+    .wb-columns { gap: 16px; }
+    .wb-left { min-width: 220px; }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap #my-page .workout-builder {
+    .wb-layout {
+      flex-direction: column;
+    }
+
+    .wb-left {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .wb-days-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .wb-day-card { min-width: 0; }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #my-page .workout-builder {
+    .wb-days-grid { grid-template-columns: 1fr !important; }
+    .wb-header { flex-direction: column; gap: 12px; }
+  }
+}

@@ -332,3 +332,56 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #my-page {
+    .mp-card {
+      flex-wrap: wrap;
+      padding: 20px 20px;
+      gap: 16px;
+    }
+    .mp-card-actions {
+      margin-left: 0;
+      width: 100%;
+    }
+    .mp-stats-row { gap: 16px; }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap #my-page {
+    .mp-wrap { padding-top: 80px; padding-bottom: 60px; }
+
+    .mp-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 16px;
+    }
+
+    .mp-name { font-size: 18px; }
+
+    .mp-tab {
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+
+    .mp-content { padding: 20px 0 60px; }
+
+    .list-config { gap: 12px; }
+    .card-config { width: 100%; }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #my-page {
+    .mp-card-actions {
+      flex-direction: column;
+      gap: 8px;
+      .mp-edit-btn, .mp-logout-btn { width: 100%; justify-content: center; }
+    }
+    .mp-stats-row { flex-wrap: wrap; gap: 12px; }
+    .mp-tab { padding: 8px 10px; font-size: 11px; }
+  }
+}

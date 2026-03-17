@@ -523,3 +523,45 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #trainer-detail-page {
+    .tdp-hero { height: 220px; }
+
+    .tdp-body-container {
+      flex-direction: column !important;
+    }
+
+    .tdp-sidebar {
+      width: 100% !important;
+      position: static !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap #trainer-detail-page {
+    padding: 0 0 60px;
+
+    .tdp-hero { height: 180px; }
+
+    .tdp-profile-strip .container {
+      padding: 0 16px 16px !important;
+    }
+
+    .tdp-programs-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .program-card { width: 100% !important; }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #trainer-detail-page {
+    .tdp-name { font-size: 18px !important; }
+    .tdp-stats-row { flex-wrap: wrap; gap: 12px; }
+  }
+}

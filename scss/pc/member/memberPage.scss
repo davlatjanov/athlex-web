@@ -910,3 +910,70 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #member-page {
+    .member-profile-strip .container {
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .member-stats-dashboard {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .member-tab-content .container {
+      flex-direction: column;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap #member-page {
+    .member-cover { height: 160px; }
+
+    .member-profile-strip .container {
+      padding: 0 16px 16px !important;
+      margin-top: -40px;
+
+      .avatar-wrap img { width: 80px; height: 80px; }
+      .nick { font-size: 18px; }
+    }
+
+    .member-tabs-bar {
+      overflow-x: auto;
+      scrollbar-width: none;
+      &::-webkit-scrollbar { display: none; }
+    }
+
+    .member-tab { padding: 10px 14px; font-size: 13px; }
+
+    .member-stats-dashboard {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 10px !important;
+      padding: 16px !important;
+    }
+
+    .member-rank-card { padding: 16px !important; }
+
+    .member-programs-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #member-page {
+    .member-profile-strip .container {
+      .follow-action { width: 100%; button { flex: 1; } }
+    }
+
+    .member-stats-dashboard {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .member-tab { padding: 8px 10px; font-size: 12px; }
+  }
+}
