@@ -7,7 +7,6 @@ import { sweetErrorHandling, sweetTopSmallSuccessAlert } from '../../sweetAlert'
 import { T } from '../../types/common';
 import { Avatar, Menu, MenuItem, Select, TablePagination } from '@mui/material';
 import moment from 'moment';
-import { REACT_APP_API_URL } from '../../config';
 
 const bg = '#111827';
 const border = 'rgba(255,255,255,0.07)';
@@ -145,7 +144,7 @@ const AdminUsers = () => {
 								<td style={tdS}>
 									<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
 										<Avatar
-											src={m.memberImage ? `${REACT_APP_API_URL}/${m.memberImage}` : '/img/profile/defaultUser.svg'}
+											src={m.memberImage || '/img/profile/defaultUser.svg'}
 											sx={{ width: 30, height: 30, border: '1px solid rgba(255,255,255,0.1)' }}
 										/>
 										<div>
