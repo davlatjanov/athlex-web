@@ -12,6 +12,8 @@ import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } f
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import MemberProgressPosts from '../../libs/components/member/MemberProgressPosts';
 import MemberReviews from '../../libs/components/member/MemberReviews';
+import MemberActivity from '../../libs/components/member/MemberActivity';
+import MemberJoinedPrograms from '../../libs/components/member/MemberJoinedPrograms';
 import { userVar } from '../../apollo/store';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
@@ -246,6 +248,20 @@ const MemberPage: NextPage = () => {
 						>
 							Reviews
 						</Link>
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'activity' } }}
+							scroll={false}
+							className={category === 'activity' ? 'active' : ''}
+						>
+							Activity
+						</Link>
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'joined' } }}
+							scroll={false}
+							className={category === 'joined' ? 'active' : ''}
+						>
+							Joined Programs
+						</Link>
 					</div>
 				</nav>
 
@@ -273,6 +289,8 @@ const MemberPage: NextPage = () => {
 								)}
 								{category === 'progress' && <MemberProgressPosts />}
 								{category === 'reviews' && <MemberReviews />}
+								{category === 'activity' && <MemberActivity />}
+								{category === 'joined' && <MemberJoinedPrograms />}
 							</div>
 						</div>
 					</Stack>
