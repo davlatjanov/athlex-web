@@ -14,9 +14,9 @@
 }
 
 .wb-page {
-	max-width: 900px;
+	max-width: 1100px;
 	margin: 0 auto;
-	padding: 32px 24px 80px;
+	padding: 48px 40px 100px;
 }
 
 /* Header */
@@ -52,10 +52,11 @@
 }
 
 .wb-title {
-	font-size: 24px;
-	font-weight: 700;
+	font-size: 28px;
+	font-weight: 800;
 	color: #f1f5f9;
-	margin: 0 0 4px;
+	margin: 0 0 6px;
+	letter-spacing: -0.5px;
 }
 
 .wb-subtitle {
@@ -68,11 +69,11 @@
 /* Week label */
 .wb-week-label {
 	font-size: 12px;
-	font-weight: 600;
+	font-weight: 700;
 	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: #6b7280;
-	margin-bottom: 12px;
+	letter-spacing: 1.5px;
+	color: #4b5563;
+	margin-bottom: 16px;
 
 	span {
 		font-weight: 400;
@@ -86,24 +87,29 @@
 .wb-days {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 12px;
 }
 
 /* Day card */
 .wb-day-card {
 	background: #111827;
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	border-radius: 14px;
 	overflow: hidden;
-	transition: border-color 0.2s;
+	transition: border-color 0.2s, box-shadow 0.2s;
+
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.12);
+	}
 
 	&.has-workout {
-		border-color: rgba(233, 44, 40, 0.2);
+		border-color: rgba(233, 44, 40, 0.25);
+		box-shadow: 0 0 0 1px rgba(233, 44, 40, 0.08);
 	}
 
 	&.rest {
 		border-color: rgba(255, 255, 255, 0.04);
-		opacity: 0.75;
+		opacity: 0.7;
 	}
 }
 
@@ -111,27 +117,31 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 14px 16px;
+	padding: 22px 28px;
 }
 
 .wb-day-label {
 	display: flex;
-	align-items: baseline;
-	gap: 8px;
+	align-items: center;
+	gap: 14px;
 }
 
 .wb-day-num {
-	font-size: 13px;
-	font-weight: 700;
+	font-size: 17px;
+	font-weight: 800;
 	color: #e2e8f0;
+	letter-spacing: -0.3px;
 }
 
 .wb-day-name {
-	font-size: 11px;
-	font-weight: 600;
-	color: #4b5563;
-	letter-spacing: 1px;
+	font-size: 12px;
+	font-weight: 700;
+	color: #374151;
+	letter-spacing: 2px;
 	text-transform: uppercase;
+	background: rgba(255, 255, 255, 0.04);
+	padding: 3px 10px;
+	border-radius: 4px;
 }
 
 .wb-day-actions {
@@ -145,9 +155,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 30px;
-	height: 30px;
-	border-radius: 6px;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
 	background: rgba(255, 255, 255, 0.05);
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	color: #9ca3af;
@@ -175,10 +185,10 @@
 .wb-add-btn, .wb-rest-btn {
 	display: flex;
 	align-items: center;
-	gap: 4px;
-	padding: 6px 12px;
-	border-radius: 6px;
-	font-size: 12px;
+	gap: 6px;
+	padding: 9px 18px;
+	border-radius: 8px;
+	font-size: 13px;
 	font-weight: 600;
 	cursor: pointer;
 	transition: all 0.15s;
@@ -208,8 +218,8 @@
 
 /* Workout info inside card */
 .wb-workout-info {
-	padding: 0 16px 14px;
-	border-top: 1px solid rgba(255, 255, 255, 0.04);
+	padding: 0 28px 22px;
+	border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .wb-rest-info {
@@ -229,19 +239,19 @@
 .wb-workout-meta {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	padding-top: 8px;
-	margin-bottom: 6px;
+	gap: 10px;
+	padding-top: 14px;
+	margin-bottom: 10px;
 }
 
 .wb-fit-icon {
-	font-size: 16px !important;
+	font-size: 20px !important;
 	color: #E92C28;
 }
 
 .wb-workout-name {
-	font-size: 14px;
-	font-weight: 600;
+	font-size: 16px;
+	font-weight: 700;
 	color: #e2e8f0;
 	flex: 1;
 }
@@ -250,71 +260,73 @@
 	font-size: 12px;
 	color: #6b7280;
 	background: rgba(255, 255, 255, 0.05);
-	padding: 2px 8px;
-	border-radius: 4px;
+	padding: 4px 10px;
+	border-radius: 6px;
 }
 
 .wb-body-parts {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 4px;
-	margin-bottom: 4px;
+	gap: 6px;
+	margin-bottom: 8px;
 }
 
 .wb-bp-chip {
-	font-size: 10px;
+	font-size: 11px;
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 	color: #6b7280;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	border-radius: 4px;
-	padding: 2px 7px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 6px;
+	padding: 4px 10px;
 }
 
 .wb-ex-count {
-	font-size: 12px;
+	font-size: 13px;
 	color: #4b5563;
+	margin-top: 4px;
+	display: block;
 }
 
 /* Exercises list */
 .wb-exercises {
 	border-top: 1px solid rgba(255, 255, 255, 0.06);
-	padding: 8px 16px 12px;
+	padding: 14px 28px 20px;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 8px;
 }
 
 .wb-no-exercises {
-	font-size: 12px;
+	font-size: 13px;
 	color: #374151;
-	padding: 8px 0;
+	padding: 16px 0;
 	text-align: center;
 }
 
 .wb-exercise-row {
 	display: flex;
 	align-items: center;
-	gap: 10px;
-	background: rgba(255, 255, 255, 0.02);
-	border: 1px solid rgba(255, 255, 255, 0.04);
-	border-radius: 6px;
-	padding: 8px 10px;
+	gap: 14px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	border-radius: 10px;
+	padding: 14px 16px;
 
 	&:hover {
-		background: rgba(255, 255, 255, 0.04);
+		background: rgba(255, 255, 255, 0.05);
 	}
 }
 
 .wb-ex-order {
-	width: 22px;
-	height: 22px;
+	width: 28px;
+	height: 28px;
 	border-radius: 50%;
 	background: rgba(233, 44, 40, 0.15);
 	color: #E92C28;
-	font-size: 11px;
+	font-size: 13px;
 	font-weight: 700;
 	display: flex;
 	align-items: center;
@@ -329,35 +341,35 @@
 
 .wb-ex-name {
 	display: block;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: 600;
 	color: #e2e8f0;
 }
 
 .wb-ex-meta {
 	display: block;
-	font-size: 11px;
+	font-size: 12px;
 	color: #4b5563;
-	margin-top: 1px;
+	margin-top: 3px;
 }
 
 .wb-ex-actions {
 	display: flex;
-	gap: 4px;
+	gap: 6px;
 }
 
 .wb-add-exercise-btn {
 	display: flex;
 	align-items: center;
-	gap: 4px;
-	margin-top: 6px;
-	font-size: 12px;
+	gap: 6px;
+	margin-top: 8px;
+	font-size: 13px;
 	font-weight: 600;
 	color: #E92C28;
 	background: none;
 	border: 1px dashed rgba(233, 44, 40, 0.3);
-	border-radius: 6px;
-	padding: 6px 12px;
+	border-radius: 8px;
+	padding: 10px 16px;
 	cursor: pointer;
 	width: 100%;
 	justify-content: center;
