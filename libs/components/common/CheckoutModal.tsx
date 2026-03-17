@@ -166,20 +166,18 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 					</div>
 				)}
 
-				{/* Trust badges */}
-				<div className="co-trust">
-					<span>🔒 Secure payment</span>
-					<span>· Instant access</span>
-					<span>· Cancel anytime</span>
-				</div>
-
-				<button
-					className="co-pay-btn"
-					onClick={handlePay}
-					disabled={!isValid || paying}
-				>
-					{paying ? 'Processing…' : `Pay $${price.toFixed(2)}`}
-				</button>
+				{!submitted && (
+					<>
+						<div className="co-trust">
+							<span>Secure payment</span>
+							<span>· Instant access</span>
+							<span>· Cancel anytime</span>
+						</div>
+						<button className="co-pay-btn" onClick={handlePay} disabled={!isValid}>
+							{`Pay $${price.toFixed(2)}`}
+						</button>
+					</>
+				)}
 			</div>
 		</div>
 	);
