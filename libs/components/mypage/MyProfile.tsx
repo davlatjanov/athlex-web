@@ -104,7 +104,7 @@ const MyProfile: NextPage = ({ initialValues }: any) => {
 						<Typography className="title">Photo</Typography>
 						<Stack className="image-big-box">
 							<Stack className="image-box">
-								<img src={updateData?.memberImage || '/img/profile/avatar-placeholder.png'} alt="" />
+								<img src={updateData?.memberImage || '/img/profile/defaultUser.svg'} alt="" />
 							</Stack>
 							<Stack className="upload-big-box">
 								<input

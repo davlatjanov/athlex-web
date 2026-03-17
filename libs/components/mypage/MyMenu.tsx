@@ -47,7 +47,7 @@ const MyMenu = () => {
 			<div className={'mm-profile'}>
 				<div className={'mm-avatar-wrap'}>
 					<img
-						src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+						src={user?.memberImage || '/img/profile/defaultUser.svg'}
 						alt={user?.memberNick}
 						className={'mm-avatar'}
 						onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }}
