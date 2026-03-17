@@ -35,6 +35,23 @@ export const GET_MEMBER = gql`
 	}
 `;
 
+export const GET_MEMBERS = gql`
+	query GetMembers($input: MembersInquiry!) {
+		getMembers(input: $input) {
+			list {
+				_id
+				memberType
+				memberNick
+				memberFullName
+				memberImage
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
 export const GET_TRAINERS = gql`
 	query GetTrainers($input: TrainersInquiry!) {
 		getTrainers(input: $input) {

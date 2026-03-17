@@ -11,6 +11,7 @@ import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import CartDrawer from './common/CartDrawer';
+import NavSearch from './common/NavSearch';
 import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
@@ -151,6 +152,7 @@ const Top = () => {
 							<Link href={'/mypage'}><div>{t('My Page')}</div></Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>
+							<NavSearch />
 							<Link href={'/ai-coach'} className={'nav-ai-btn'} title="AI Coach">
 								<SmartToyOutlinedIcon className={'notification-icon'} />
 							</Link>

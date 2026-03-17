@@ -146,6 +146,7 @@ export const logOut = () => {
 
 const deleteStorage = () => {
 	localStorage.removeItem('accessToken');
+	localStorage.removeItem('athlex_recently_visited');
 	window.localStorage.setItem('logout', Date.now().toString());
 };
 
