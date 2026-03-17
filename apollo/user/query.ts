@@ -589,6 +589,69 @@ export const GET_UNREAD_NOTIFICATION_COUNT = gql`
 `;
 
 /**************************
+ *         ORDERS         *
+ *************************/
+
+export const GET_MY_ORDERS = gql`
+	query GetMyOrders($input: OrdersInquiry!) {
+		getMyOrders(input: $input) {
+			list {
+				_id
+				memberId
+				items {
+					productId
+					productName
+					productPrice
+					quantity
+				}
+				totalAmount
+				orderStatus
+				shippingAddress {
+					street
+					city
+					state
+					zipCode
+					country
+				}
+				paymentMethod
+				notes
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_ONE_ORDER = gql`
+	query GetOneOrder($orderId: String!) {
+		getOneOrder(orderId: $orderId) {
+			_id
+			items {
+				productId
+				productName
+				productPrice
+				quantity
+			}
+			totalAmount
+			orderStatus
+			shippingAddress {
+				street
+				city
+				state
+				zipCode
+				country
+			}
+			paymentMethod
+			notes
+			createdAt
+		}
+	}
+`;
+
+/**************************
  *           AI           *
  *************************/
 

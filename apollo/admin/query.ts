@@ -1,6 +1,47 @@
 import { gql } from '@apollo/client';
 
 /**************************
+ *         ORDERS         *
+ *************************/
+
+export const GET_ALL_ORDERS_BY_ADMIN = gql`
+	query GetAllOrdersByAdmin($input: OrdersInquiry!) {
+		getAllOrdersByAdmin(input: $input) {
+			list {
+				_id
+				memberId
+				memberData {
+					memberNick
+					memberImage
+				}
+				items {
+					productId
+					productName
+					productPrice
+					quantity
+				}
+				totalAmount
+				orderStatus
+				shippingAddress {
+					street
+					city
+					state
+					zipCode
+					country
+				}
+				paymentMethod
+				notes
+				createdAt
+				updatedAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+/**************************
  *         MEMBER         *
  *************************/
 

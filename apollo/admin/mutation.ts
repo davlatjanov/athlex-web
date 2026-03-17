@@ -1,6 +1,20 @@
 import { gql } from '@apollo/client';
 
 /**************************
+ *         ORDERS         *
+ *************************/
+
+export const UPDATE_ORDER_STATUS = gql`
+	mutation UpdateOrderStatus($input: OrderUpdateInput!) {
+		updateOrderStatus(input: $input) {
+			_id
+			orderStatus
+			updatedAt
+		}
+	}
+`;
+
+/**************************
  *         MEMBER         *
  *************************/
 

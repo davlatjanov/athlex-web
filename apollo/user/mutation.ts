@@ -401,3 +401,18 @@ export const DELETE_CONVERSATION = gql`
 		deleteConversation(conversationId: $conversationId)
 	}
 `;
+
+/**************************
+ *         ORDERS         *
+ *************************/
+
+export const CREATE_ORDER = gql`
+	mutation CreateOrder($input: CreateOrderInput!) {
+		createOrder(input: $input) {
+			_id
+			totalAmount
+			orderStatus
+			createdAt
+		}
+	}
+`;

@@ -10,12 +10,12 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import CartDrawer from './common/CartDrawer';
 import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { Logout } from '@mui/icons-material';
-import { useCart } from '../context/CartContext';
+
 import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../apollo/user/query';
 import { MARK_ALL_NOTIFICATIONS_AS_READ, MARK_NOTIFICATION_AS_READ } from '../../apollo/user/mutation';
 import moment from 'moment';
@@ -35,7 +35,7 @@ const Top = () => {
 	const user = useReactiveVar(userVar);
 	const { t } = useTranslation('common');
 	const router = useRouter();
-	const cart = useCart();
+
 	const [colorChange, setColorChange] = useState(false);
 	const [bgColor, setBgColor] = useState<boolean>(false);
 	const [logoutAnchor, setLogoutAnchor] = React.useState<null | HTMLElement>(null);
@@ -156,15 +156,8 @@ const Top = () => {
 							</Link>
 							{user?._id ? (
 								<>
-									{/* Cart */}
-									<Badge
-										badgeContent={cart.totalItems}
-										color="error"
-										sx={{ cursor: 'pointer', mr: 1 }}
-										onClick={() => router.push('/products')}
-									>
-										<ShoppingBagOutlinedIcon className={'notification-icon'} />
-									</Badge>
+									{/* Cart Drawer */}
+									<CartDrawer />
 
 									{/* Notifications */}
 									<Badge

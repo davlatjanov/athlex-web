@@ -1,0 +1,311 @@
+#pc-wrap {
+	// ── My Orders ─────────────────────────────────────
+	#my-orders {
+		.mo-title {
+			font-size: 18px;
+			font-weight: 800;
+			color: #fff;
+			margin: 0 0 20px;
+			span {
+				font-size: 13px;
+				font-weight: 500;
+				color: #6b7280;
+				margin-left: 8px;
+			}
+		}
+
+		.mo-empty {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 60px 20px;
+			gap: 12px;
+			color: #6b7280;
+			span { font-size: 40px; opacity: 0.4; }
+			p { margin: 0; font-size: 14px; }
+		}
+
+		.mo-list {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.mo-card {
+			background: rgba(255,255,255,0.03);
+			border: 1px solid rgba(255,255,255,0.07);
+			border-radius: 12px;
+			overflow: hidden;
+		}
+
+		.mo-card-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 14px 18px;
+			cursor: pointer;
+			transition: background 0.15s;
+			&:hover { background: rgba(255,255,255,0.04); }
+		}
+
+		.mo-card-left {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+		}
+
+		.mo-id {
+			font-size: 12px;
+			font-weight: 700;
+			color: #9ca3af;
+			font-family: monospace;
+		}
+
+		.mo-date {
+			font-size: 12px;
+			color: #6b7280;
+		}
+
+		.mo-card-right {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+		}
+
+		.mo-total {
+			font-size: 15px;
+			font-weight: 700;
+			color: #E92C28;
+		}
+
+		.mo-status {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			padding: 3px 10px;
+			border-radius: 20px;
+			border: 1px solid currentColor;
+			background: rgba(currentColor, 0.06);
+		}
+
+		.mo-chevron {
+			font-size: 10px;
+			color: #6b7280;
+		}
+
+		.mo-card-body {
+			padding: 0 18px 16px;
+			border-top: 1px solid rgba(255,255,255,0.06);
+		}
+
+		.mo-items {
+			padding: 12px 0 8px;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.mo-item {
+			display: flex;
+			gap: 10px;
+			font-size: 13px;
+			color: #9ca3af;
+			.mo-item-name { flex: 1; color: #e2e8f0; }
+			.mo-item-qty { color: #6b7280; }
+			.mo-item-price { font-weight: 600; color: #e2e8f0; }
+		}
+
+		.mo-section-label {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			color: #6b7280;
+			margin-right: 8px;
+		}
+
+		.mo-shipping, .mo-payment, .mo-notes {
+			font-size: 12px;
+			color: #9ca3af;
+			margin-top: 6px;
+			p, span { margin: 0; }
+		}
+
+		.mo-pagination {
+			display: flex;
+			gap: 6px;
+			margin-top: 20px;
+			justify-content: center;
+			button {
+				padding: 6px 12px;
+				border-radius: 6px;
+				background: rgba(255,255,255,0.05);
+				border: 1px solid rgba(255,255,255,0.1);
+				color: #9ca3af;
+				font-size: 12px;
+				cursor: pointer;
+				&:disabled { opacity: 0.3; cursor: default; }
+				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+			}
+		}
+	}
+
+	// ── Admin Orders ─────────────────────────────────
+	#admin-orders {
+		.ao-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 20px;
+		}
+
+		.ao-title {
+			font-size: 18px;
+			font-weight: 800;
+			color: #fff;
+			margin: 0;
+			span {
+				font-size: 13px;
+				font-weight: 500;
+				color: #6b7280;
+				margin-left: 8px;
+			}
+		}
+
+		.ao-empty {
+			text-align: center;
+			padding: 60px 20px;
+			color: #6b7280;
+			font-size: 14px;
+		}
+
+		.ao-list {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.ao-card {
+			background: rgba(255,255,255,0.03);
+			border: 1px solid rgba(255,255,255,0.07);
+			border-radius: 12px;
+			overflow: hidden;
+		}
+
+		.ao-card-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 12px 16px;
+			cursor: pointer;
+			transition: background 0.15s;
+			flex-wrap: wrap;
+			gap: 10px;
+			&:hover { background: rgba(255,255,255,0.04); }
+		}
+
+		.ao-card-left {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.ao-member {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			img {
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				object-fit: cover;
+			}
+			span { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+		}
+
+		.ao-member-initial {
+			width: 28px;
+			height: 28px;
+			border-radius: 50%;
+			background: #1f2937;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 12px;
+			font-weight: 700;
+			color: #9ca3af;
+		}
+
+		.ao-id {
+			font-size: 11px;
+			font-weight: 700;
+			color: #6b7280;
+			font-family: monospace;
+		}
+
+		.ao-date { font-size: 11px; color: #6b7280; }
+
+		.ao-card-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.ao-total {
+			font-size: 14px;
+			font-weight: 700;
+			color: #E92C28;
+		}
+
+		.ao-chevron { font-size: 10px; color: #6b7280; }
+
+		.ao-card-body {
+			padding: 0 16px 14px;
+			border-top: 1px solid rgba(255,255,255,0.06);
+		}
+
+		.ao-items {
+			padding: 10px 0 6px;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+		}
+
+		.ao-item {
+			display: flex;
+			gap: 10px;
+			font-size: 12px;
+			color: #9ca3af;
+			span:first-child { flex: 1; color: #e2e8f0; }
+			span:last-child { font-weight: 600; }
+		}
+
+		.ao-shipping-addr, .ao-payment, .ao-notes {
+			font-size: 12px;
+			color: #9ca3af;
+			margin: 4px 0 0;
+		}
+
+		.ao-pagination {
+			display: flex;
+			gap: 6px;
+			margin-top: 20px;
+			justify-content: center;
+			button {
+				padding: 6px 12px;
+				border-radius: 6px;
+				background: rgba(255,255,255,0.05);
+				border: 1px solid rgba(255,255,255,0.1);
+				color: #9ca3af;
+				font-size: 12px;
+				cursor: pointer;
+				&:disabled { opacity: 0.3; cursor: default; }
+				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+			}
+		}
+	}
+}

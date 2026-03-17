@@ -13,6 +13,8 @@ import AddProduct from '../../libs/components/mypage/AddNewProduct';
 import AdminUsers from '../../libs/components/mypage/AdminUsers';
 import AdminPrograms from '../../libs/components/mypage/AdminPrograms';
 import AdminProductsList from '../../libs/components/mypage/AdminProductsList';
+import MyOrders from '../../libs/components/mypage/MyOrders';
+import AdminOrders from '../../libs/components/mypage/AdminOrders';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import MyBookmarks from '../../libs/components/mypage/MyBookmarks';
@@ -39,6 +41,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -49,6 +52,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 const USER_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myFavorites', label: 'My Joinings' },
+	{ key: 'myOrders', label: 'My Orders' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
 	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
@@ -61,6 +65,7 @@ const AGENT_TABS = [
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
 	{ key: 'myFavorites', label: 'My Joinings' },
+	{ key: 'myOrders', label: 'My Orders' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
 	{ key: 'myProgress', label: 'My Progress' },
 	{ key: 'recentlyVisited', label: 'Recently Visited' },
@@ -78,6 +83,7 @@ const ADMIN_TABS = [
 	{ key: 'followings', label: 'Following' },
 	{ key: 'adminUsers', label: 'Users' },
 	{ key: 'adminPrograms', label: 'Programs' },
+	{ key: 'adminOrders', label: 'Orders' },
 	{ key: 'adminProducts', label: 'Products' },
 ];
 
@@ -103,6 +109,8 @@ const getTabIcon = (key: string) => {
 		case 'adminPrograms': return <PlayCircleOutlineIcon fontSize="small" />;
 		case 'adminProducts': return <StorefrontOutlinedIcon fontSize="small" />;
 		case 'adminPanel': return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
+		case 'myOrders': return <ShoppingCartOutlinedIcon fontSize="small" />;
+		case 'adminOrders': return <ShoppingCartOutlinedIcon fontSize="small" />;
 		default: return null;
 	}
 };
@@ -305,9 +313,11 @@ const MyPage: NextPage = () => {
 								redirectToMemberPageHandler={redirectToMemberPageHandler}
 							/>
 						)}
+						{category === 'myOrders' && <MyOrders />}
 						{category === 'adminUsers' && <AdminUsers />}
 						{category === 'adminPrograms' && <AdminPrograms />}
 						{category === 'adminProducts' && <AdminProductsList />}
+						{category === 'adminOrders' && <AdminOrders />}
 					</div>
 
 				</div>
