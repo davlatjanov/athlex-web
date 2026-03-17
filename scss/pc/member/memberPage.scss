@@ -114,11 +114,11 @@
 
 					// Unfollow is a destructive action — intentionally red
 					.btn-unfollow {
-						background: #E92C28 !important;
+						background: $color-danger !important;
 						color: #fff !important;
 						border: none !important;
 						box-shadow: none !important;
-						&:hover { background: #c0201d !important; }
+						&:hover { background: $color-danger-dark !important; }
 					}
 
 					.following-label {

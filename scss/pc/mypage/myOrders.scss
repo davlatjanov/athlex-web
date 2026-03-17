@@ -456,13 +456,13 @@
 			border-radius: 6px;
 			background: rgba(233, 44, 40, 0.1);
 			border: 1px solid rgba(233, 44, 40, 0.3);
-			color: #E92C28;
+			color: $color-danger;
 			font-size: 11px;
 			font-weight: 700;
 			cursor: pointer;
 			white-space: nowrap;
 			letter-spacing: 0.5px;
-			&:hover { background: rgba(233, 44, 40, 0.2); }
+			&:hover { background: rgba(233, 44, 40, 0.2); } // rgba kept — no variable for opacity variants
 		}
 
 		.ac-pagination, .af-pagination {
