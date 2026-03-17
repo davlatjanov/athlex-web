@@ -17,6 +17,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 	const [cvv, setCvv] = useState('');
 	const [name, setName] = useState('');
 	const [paying, setPaying] = useState(false);
+	const [submitted, setSubmitted] = useState(false);
 
 	const [createOrder] = useMutation(CREATE_ORDER);
 	const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS);
@@ -35,9 +36,14 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 		expiry.trim().length > 0 &&
 		cvv.trim().length > 0;
 
-	const handlePay = async () => {
+	const handlePay = () => {
 		if (!isValid || paying) return;
+		setSubmitted(true);
 		setPaying(true);
+		void processPayment();
+	};
+
+	const processPayment = async () => {
 		try {
 			// Step 1: Create order with programId stored in notes as payment reference
 			const orderRes = await createOrder({
@@ -102,8 +108,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 					</div>
 				</div>
 
-				{/* Card form — hidden while processing */}
-				{!paying && (
+				{/* Card form — hidden immediately on submit */}
+				{!submitted && (
 					<div className="co-form">
 						<div className="co-field">
 							<label>Cardholder Name</label>
@@ -153,7 +159,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 					</div>
 				)}
 
-				{paying && (
+				{submitted && (
 					<div className="co-processing">
 						<div className="co-spinner" />
 						<p>Processing payment…</p>
