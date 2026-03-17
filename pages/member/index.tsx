@@ -7,7 +7,7 @@ import MemberMenu from '../../libs/components/member/MemberMenu';
 import MemberProperties from '../../libs/components/member/MemberProperties';
 import { useRouter } from 'next/router';
 import MemberFollowers from '../../libs/components/member/MemberFollowers';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import MemberProgressPosts from '../../libs/components/member/MemberProgressPosts';
@@ -15,6 +15,7 @@ import MemberReviews from '../../libs/components/member/MemberReviews';
 import { userVar } from '../../apollo/store';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
+import { GET_MEMBER } from '../../apollo/user/query';
 import { Messages } from '../../libs/config';
 import Link from 'next/link';
 
@@ -28,11 +29,14 @@ const MemberPage: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const category: any = router.query?.category;
+	const memberId = router.query?.memberId as string;
 	const user = useReactiveVar(userVar);
 
 	/** APOLLO REQUESTS **/
 	const [followMember] = useMutation(FOLLOW_MEMBER);
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
+	const { data: memberData } = useQuery(GET_MEMBER, { variables: { memberId }, skip: !memberId });
+	const isTrainer = memberData?.getMember?.memberType === 'TRAINER';
 
 
 	/** LIFECYCLES **/
@@ -42,13 +46,13 @@ const MemberPage: NextPage = () => {
 			router.replace(
 				{
 					pathname: router.pathname,
-					query: { ...router.query, category: 'programs' },
+					query: { ...router.query, category: isTrainer ? 'programs' : 'followers' },
 				},
 				undefined,
 				{ shallow: true },
 			);
 		}
-	}, [category, router]);
+	}, [category, router, isTrainer]);
 
 	/** HANDLERS **/
 	const subscribeHandler = async (id: string, refetch: any, query: any) => {
@@ -143,13 +147,15 @@ const MemberPage: NextPage = () => {
 				{/* Tab Navigation */}
 				<nav className="member-tabs">
 					<div className="container">
-						<Link
-							href={{ pathname: '/member', query: { ...router.query, category: 'programs' } }}
-							scroll={false}
-							className={category === 'programs' ? 'active' : ''}
-						>
-							Programs
-						</Link>
+						{isTrainer && (
+							<Link
+								href={{ pathname: '/member', query: { ...router.query, category: 'programs' } }}
+								scroll={false}
+								className={category === 'programs' ? 'active' : ''}
+							>
+								Programs
+							</Link>
+						)}
 						<Link
 							href={{ pathname: '/member', query: { ...router.query, category: 'followers' } }}
 							scroll={false}
@@ -186,7 +192,7 @@ const MemberPage: NextPage = () => {
 					<Stack className={'member-page'}>
 						<div className="member-content">
 							<div className="list-config">
-								{category === 'programs' && <MemberProperties />}
+								{category === 'programs' && isTrainer && <MemberProperties />}
 								{category === 'followers' && (
 									<MemberFollowers
 										subscribeHandler={subscribeHandler}
