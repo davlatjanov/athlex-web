@@ -10,6 +10,7 @@ import { Product } from '../../libs/types/product/product';
 import { ProductType, ProductBrand } from '../../libs/enums/product.enum';
 import { useLike } from '../../libs/hooks/useInteractions';
 import { T } from '../../libs/types/common';
+import { useCart } from '../../libs/context/CartContext';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -49,8 +50,22 @@ const PER_PAGE = 12;
 
 const ProductCard = ({ product }: { product: Product }) => {
 	const { liked, toggle: toggleLike } = useLike('programs', product._id);
+	const { addItem } = useCart();
+	const [added, setAdded] = useState(false);
 	const isOutOfStock = product.productStatus === 'OUT_OF_STOCK';
 	const image = product.productImages?.[0];
+
+	const handleAddToCart = (e: React.MouseEvent) => {
+		e.preventDefault();
+		addItem({
+			productId: product._id,
+			productName: product.productName,
+			productImage: image ?? '',
+			productPrice: product.productPrice,
+		});
+		setAdded(true);
+		setTimeout(() => setAdded(false), 1500);
+	};
 
 	return (
 		<div className={`product-card ${isOutOfStock ? 'out-of-stock' : ''}`}>
@@ -80,8 +95,8 @@ const ProductCard = ({ product }: { product: Product }) => {
 					</div>
 					<div className="pc-footer">
 						<span className="pc-price">${product.productPrice.toFixed(2)}</span>
-						<button className="pc-btn" disabled={isOutOfStock}>
-							{isOutOfStock ? 'Out of Stock' : 'Shop Now →'}
+						<button className="pc-btn" disabled={isOutOfStock} onClick={isOutOfStock ? undefined : handleAddToCart}>
+							{isOutOfStock ? 'Out of Stock' : added ? '✓ Added' : 'Add to Cart'}
 						</button>
 					</div>
 				</div>
