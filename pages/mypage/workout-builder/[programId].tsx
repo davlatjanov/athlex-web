@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import { NextPage } from 'next';
 import withLayoutBasic from '../../../libs/components/layout/LayoutBasic';
 import { useRouter } from 'next/router';
@@ -14,6 +15,7 @@ import {
 	DELETE_EXERCISE,
 } from '../../../apollo/user/mutation';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../../libs/sweetAlert';
+import { getJwtToken } from '../../../libs/auth';
 import { Workout, Exercise } from '../../../libs/types/program/program';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
@@ -61,6 +63,8 @@ const defaultExerciseForm = {
 	difficulty: 'INTERMEDIATE',
 	instructions: [''],
 	tips: [] as string[],
+	exerciseImage: '',   // existing Cloudinary URL (when editing)
+	exerciseVideo: '',   // YouTube / video URL
 };
 
 const WorkoutBuilderPage: NextPage = () => {
@@ -73,6 +77,10 @@ const WorkoutBuilderPage: NextPage = () => {
 	const [exerciseModal, setExerciseModal] = useState<{ open: boolean; workoutId: string; existing?: Exercise } | null>(null);
 	const [workoutForm, setWorkoutForm] = useState({ ...defaultWorkoutForm });
 	const [exerciseForm, setExerciseForm] = useState({ ...defaultExerciseForm });
+	const [imageFile, setImageFile] = useState<File | null>(null);
+	const [imagePreview, setImagePreview] = useState<string>('');
+	const [uploading, setUploading] = useState(false);
+	const imageInputRef = useRef<HTMLInputElement>(null);
 
 	/** APOLLO **/
 	const { data, refetch } = useQuery(GET_PROGRAM_WITH_WORKOUTS, {
@@ -193,21 +201,60 @@ const WorkoutBuilderPage: NextPage = () => {
 				difficulty: existing.difficulty,
 				instructions: existing.instructions?.length ? [...existing.instructions] : [''],
 				tips: [...(existing.tips ?? [])],
+				exerciseImage: existing.exerciseImage ?? '',
+				exerciseVideo: existing.exerciseVideo ?? '',
 			});
+			setImagePreview(existing.exerciseImage ?? '');
 		} else {
 			setExerciseForm({ ...defaultExerciseForm });
+			setImagePreview('');
 		}
+		setImageFile(null);
 		setExerciseModal({ open: true, workoutId, existing });
 	};
 
 	const closeExerciseModal = () => {
 		setExerciseModal(null);
 		setExerciseForm({ ...defaultExerciseForm });
+		setImageFile(null);
+		setImagePreview('');
+	};
+
+	const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		setImageFile(file);
+		setImagePreview(URL.createObjectURL(file));
+		if (imageInputRef.current) imageInputRef.current.value = '';
+	};
+
+	const uploadImageToCloudinary = async (file: File): Promise<string> => {
+		const token = getJwtToken();
+		const query = `mutation ImagesUploader($files: [Upload!]!, $target: String!) {
+			imagesUploader(files: $files, target: $target)
+		}`;
+		const variables = { files: [null], target: 'exercises' };
+		const formData = new FormData();
+		formData.append('operations', JSON.stringify({ query, variables }));
+		formData.append('map', JSON.stringify({ '0': ['variables.files.0'] }));
+		formData.append('0', file);
+		const res = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
+			headers: { 'Content-Type': 'multipart/form-data', 'apollo-require-preflight': true, Authorization: `Bearer ${token}` },
+		});
+		if (res.data?.errors?.length) throw new Error(res.data.errors[0].message);
+		return res.data?.data?.imagesUploader?.[0] ?? '';
 	};
 
 	const submitExercise = async () => {
 		try {
 			if (!exerciseModal) return;
+			setUploading(true);
+
+			let exerciseImage = exerciseForm.exerciseImage;
+			if (imageFile) {
+				exerciseImage = await uploadImageToCloudinary(imageFile);
+			}
+
 			const payload = {
 				exerciseName: exerciseForm.exerciseName,
 				exerciseDesc: exerciseForm.exerciseDesc,
@@ -220,6 +267,8 @@ const WorkoutBuilderPage: NextPage = () => {
 				difficulty: exerciseForm.difficulty,
 				instructions: exerciseForm.instructions.filter(Boolean),
 				tips: exerciseForm.tips.filter(Boolean),
+				exerciseImage: exerciseImage || undefined,
+				exerciseVideo: exerciseForm.exerciseVideo || undefined,
 			};
 			if (exerciseModal.existing) {
 				await updateExercise({ variables: { exerciseId: exerciseModal.existing._id, input: payload } });
@@ -230,6 +279,8 @@ const WorkoutBuilderPage: NextPage = () => {
 			closeExerciseModal();
 		} catch (err) {
 			await sweetErrorHandling(err);
+		} finally {
+			setUploading(false);
 		}
 	};
 
@@ -365,6 +416,9 @@ const WorkoutBuilderPage: NextPage = () => {
 										workout.exercises.map((ex, idx) => (
 											<div key={ex._id} className="wb-exercise-row">
 												<div className="wb-ex-order">{idx + 1}</div>
+												{ex.exerciseImage && (
+													<img src={ex.exerciseImage} alt="" className="wb-ex-thumb" />
+												)}
 												<div className="wb-ex-info">
 													<span className="wb-ex-name">{ex.exerciseName}</span>
 													<span className="wb-ex-meta">
@@ -461,6 +515,52 @@ const WorkoutBuilderPage: NextPage = () => {
 						<div className="wb-modal-body wb-two-col">
 							{/* Left column */}
 							<div className="wb-col">
+								{/* Image upload */}
+								<div className="wb-label">
+									<span>Demo Photo</span>
+									<div className="wb-image-upload" onClick={() => imageInputRef.current?.click()}>
+										{imagePreview ? (
+											<>
+												<img src={imagePreview} alt="preview" className="wb-image-preview" />
+												<div className="wb-image-overlay">
+													<span>Change Photo</span>
+												</div>
+											</>
+										) : (
+											<div className="wb-image-placeholder">
+												<span className="wb-image-icon">📷</span>
+												<span>Click to upload a demo photo</span>
+												<span className="wb-image-hint">JPG, PNG, WebP</span>
+											</div>
+										)}
+									</div>
+									<input
+										ref={imageInputRef}
+										type="file"
+										accept="image/*"
+										style={{ display: 'none' }}
+										onChange={handleImageSelect}
+									/>
+									{imagePreview && (
+										<button className="wb-remove-image" onClick={() => { setImageFile(null); setImagePreview(''); setExerciseForm((p) => ({ ...p, exerciseImage: '' })); }}>
+											✕ Remove photo
+										</button>
+									)}
+								</div>
+
+								{/* Video URL */}
+								<label className="wb-label">
+									<span>Video URL (YouTube / any link)</span>
+									<input className="wb-input" value={exerciseForm.exerciseVideo}
+										placeholder="https://youtube.com/watch?v=..."
+										onChange={(e) => setExerciseForm((p) => ({ ...p, exerciseVideo: e.target.value }))} />
+									{exerciseForm.exerciseVideo && (
+										<a href={exerciseForm.exerciseVideo} target="_blank" rel="noreferrer" className="wb-video-link">
+											▶ Preview link
+										</a>
+									)}
+								</label>
+
 								<label className="wb-label">
 									<span>Exercise Name *</span>
 									<input className="wb-input" value={exerciseForm.exerciseName} placeholder="e.g. Bench Press"
@@ -564,9 +664,9 @@ const WorkoutBuilderPage: NextPage = () => {
 							</div>
 						</div>
 						<div className="wb-modal-footer">
-							<button className="wb-btn-cancel" onClick={closeExerciseModal}>Cancel</button>
-							<button className="wb-btn-save" onClick={submitExercise}>
-								{exerciseModal.existing ? 'Save Changes' : 'Add Exercise'}
+							<button className="wb-btn-cancel" onClick={closeExerciseModal} disabled={uploading}>Cancel</button>
+							<button className="wb-btn-save" onClick={submitExercise} disabled={uploading}>
+								{uploading ? (imageFile ? 'Uploading photo…' : 'Saving…') : (exerciseModal.existing ? 'Save Changes' : 'Add Exercise')}
 							</button>
 						</div>
 					</div>
