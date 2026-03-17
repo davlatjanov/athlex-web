@@ -15,6 +15,8 @@ import AdminPrograms from '../../libs/components/mypage/AdminPrograms';
 import AdminProductsList from '../../libs/components/mypage/AdminProductsList';
 import MyOrders from '../../libs/components/mypage/MyOrders';
 import AdminOrders from '../../libs/components/mypage/AdminOrders';
+import AdminComments from '../../libs/components/mypage/AdminComments';
+import AdminFeedback from '../../libs/components/mypage/AdminFeedback';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import MyBookmarks from '../../libs/components/mypage/MyBookmarks';
@@ -76,15 +78,12 @@ const AGENT_TABS = [
 const ADMIN_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'addProduct', label: 'Add Product' },
-	{ key: 'myFavorites', label: 'My Joinings' },
-	{ key: 'myBookmarks', label: 'Saved Items' },
-	{ key: 'recentlyVisited', label: 'Recently Visited' },
-	{ key: 'followers', label: 'Followers' },
-	{ key: 'followings', label: 'Following' },
 	{ key: 'adminUsers', label: 'Users' },
 	{ key: 'adminPrograms', label: 'Programs' },
-	{ key: 'adminOrders', label: 'Orders' },
 	{ key: 'adminProducts', label: 'Products' },
+	{ key: 'adminOrders', label: 'Orders' },
+	{ key: 'adminComments', label: 'Comments' },
+	{ key: 'adminFeedback', label: 'Reviews' },
 ];
 
 const PLAN_LABEL: Record<string, string> = {
@@ -96,22 +95,42 @@ const PLAN_LABEL: Record<string, string> = {
 
 const getTabIcon = (key: string) => {
 	switch (key) {
-		case 'myProfile': return <PersonOutlineIcon fontSize="small" />;
-		case 'myFavorites': return <CheckCircleOutlineIcon fontSize="small" />;
-		case 'myBookmarks': return <BookmarkBorderIcon fontSize="small" />;
-		case 'recentlyVisited': return <HistoryIcon fontSize="small" />;
-		case 'followers': return <PeopleOutlineIcon fontSize="small" />;
-		case 'followings': return <PersonOutlineIcon fontSize="small" />;
-		case 'myProperties': return <FitnessCenterIcon fontSize="small" />;
-		case 'addProperty': return <AddCircleOutlineIcon fontSize="small" />;
-		case 'addProduct': return <AddCircleOutlineIcon fontSize="small" />;
-		case 'adminUsers': return <PeopleOutlineIcon fontSize="small" />;
-		case 'adminPrograms': return <PlayCircleOutlineIcon fontSize="small" />;
-		case 'adminProducts': return <StorefrontOutlinedIcon fontSize="small" />;
-		case 'adminPanel': return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
-		case 'myOrders': return <ShoppingCartOutlinedIcon fontSize="small" />;
-		case 'adminOrders': return <ShoppingCartOutlinedIcon fontSize="small" />;
-		default: return null;
+		case 'myProfile':
+			return <PersonOutlineIcon fontSize="small" />;
+		case 'myFavorites':
+			return <CheckCircleOutlineIcon fontSize="small" />;
+		case 'myBookmarks':
+			return <BookmarkBorderIcon fontSize="small" />;
+		case 'recentlyVisited':
+			return <HistoryIcon fontSize="small" />;
+		case 'followers':
+			return <PeopleOutlineIcon fontSize="small" />;
+		case 'followings':
+			return <PersonOutlineIcon fontSize="small" />;
+		case 'myProperties':
+			return <FitnessCenterIcon fontSize="small" />;
+		case 'addProperty':
+			return <AddCircleOutlineIcon fontSize="small" />;
+		case 'addProduct':
+			return <AddCircleOutlineIcon fontSize="small" />;
+		case 'adminUsers':
+			return <PeopleOutlineIcon fontSize="small" />;
+		case 'adminPrograms':
+			return <PlayCircleOutlineIcon fontSize="small" />;
+		case 'adminProducts':
+			return <StorefrontOutlinedIcon fontSize="small" />;
+		case 'adminPanel':
+			return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
+		case 'myOrders':
+			return <ShoppingCartOutlinedIcon fontSize="small" />;
+		case 'adminOrders':
+			return <ShoppingCartOutlinedIcon fontSize="small" />;
+		case 'adminComments':
+			return <PeopleOutlineIcon fontSize="small" />;
+		case 'adminFeedback':
+			return <StorefrontOutlinedIcon fontSize="small" />;
+		default:
+			return null;
 	}
 };
 
@@ -200,7 +219,6 @@ const MyPage: NextPage = () => {
 		return (
 			<div id="my-page">
 				<div className={'container mp-wrap'}>
-
 					{/* ── Profile Card ── */}
 					<div className={'mp-card'}>
 						<div className={'mp-avatar-wrap'}>
@@ -214,9 +232,7 @@ const MyPage: NextPage = () => {
 									}}
 								/>
 							) : (
-								<div className={'mp-avatar-initial'}>
-									{(u?.memberNick || 'A')[0].toUpperCase()}
-								</div>
+								<div className={'mp-avatar-initial'}>{(u?.memberNick || 'A')[0].toUpperCase()}</div>
 							)}
 						</div>
 
@@ -274,11 +290,7 @@ const MyPage: NextPage = () => {
 					{/* ── Tab Bar ── */}
 					<div className={'mp-tabs-bar'}>
 						{tabs.map((tab) => (
-							<Link
-								key={tab.key}
-								href={{ pathname: '/mypage', query: { category: tab.key } }}
-								scroll={false}
-							>
+							<Link key={tab.key} href={{ pathname: '/mypage', query: { category: tab.key } }} scroll={false}>
 								<div className={`mp-tab ${category === tab.key ? 'active' : ''}`}>
 									{getTabIcon(tab.key)}
 									<span>{tab.label}</span>
@@ -290,7 +302,7 @@ const MyPage: NextPage = () => {
 					{/* ── Content ── */}
 					<div className={'mp-content'}>
 						{category === 'addProperty' && <AddProperty />}
-					{category === 'addProduct' && <AddProduct />}
+						{category === 'addProduct' && <AddProduct />}
 						{category === 'myProperties' && <MyProperties />}
 						{category === 'myFavorites' && <MyFavorites />}
 						{category === 'myBookmarks' && <MyBookmarks />}
@@ -318,8 +330,9 @@ const MyPage: NextPage = () => {
 						{category === 'adminPrograms' && <AdminPrograms />}
 						{category === 'adminProducts' && <AdminProductsList />}
 						{category === 'adminOrders' && <AdminOrders />}
+						{category === 'adminComments' && <AdminComments />}
+						{category === 'adminFeedback' && <AdminFeedback />}
 					</div>
-
 				</div>
 			</div>
 		);

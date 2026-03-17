@@ -10,6 +10,8 @@ import MemberFollowers from '../../libs/components/member/MemberFollowers';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import MemberFollowings from '../../libs/components/member/MemberFollowings';
+import MemberProgressPosts from '../../libs/components/member/MemberProgressPosts';
+import MemberReviews from '../../libs/components/member/MemberReviews';
 import { userVar } from '../../apollo/store';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
@@ -162,6 +164,20 @@ const MemberPage: NextPage = () => {
 						>
 							Followings
 						</Link>
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'progress' } }}
+							scroll={false}
+							className={category === 'progress' ? 'active' : ''}
+						>
+							Progress
+						</Link>
+						<Link
+							href={{ pathname: '/member', query: { ...router.query, category: 'reviews' } }}
+							scroll={false}
+							className={category === 'reviews' ? 'active' : ''}
+						>
+							Reviews
+						</Link>
 					</div>
 				</nav>
 
@@ -187,6 +203,8 @@ const MemberPage: NextPage = () => {
 										redirectToMemberPageHandler={redirectToMemberPageHandler}
 									/>
 								)}
+								{category === 'progress' && <MemberProgressPosts />}
+								{category === 'reviews' && <MemberReviews />}
 							</div>
 						</div>
 					</Stack>

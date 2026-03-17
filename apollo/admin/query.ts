@@ -150,6 +150,34 @@ export const GET_ALL_PROGRAMS_BY_ADMIN = gql`
  *         COMMENT        *
  *************************/
 
+/**************************
+ *        FEEDBACK        *
+ *************************/
+
+export const GET_FEEDBACKS_BY_ADMIN = gql`
+	query GetFeedbacks($input: FeedbackInquiry!) {
+		getFeedbacks(input: $input) {
+			list {
+				_id
+				feedbackContent
+				feedbackScale
+				feedbackGroup
+				feedbackRefId
+				memberId
+				memberData {
+					_id
+					memberNick
+					memberImage
+				}
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
 export const GET_COMMENTS = gql`
 	query GetComments($input: CommentInquiry!) {
 		getComments(input: $input) {

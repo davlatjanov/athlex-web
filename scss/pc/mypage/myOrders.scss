@@ -87,7 +87,7 @@
 			padding: 3px 10px;
 			border-radius: 20px;
 			border: 1px solid currentColor;
-			background: rgba(currentColor, 0.06);
+			background: rgba(255, 255, 255, 0.05);
 		}
 
 		.mo-chevron {
@@ -294,6 +294,127 @@
 			gap: 6px;
 			margin-top: 20px;
 			justify-content: center;
+			button {
+				padding: 6px 12px;
+				border-radius: 6px;
+				background: rgba(255,255,255,0.05);
+				border: 1px solid rgba(255,255,255,0.1);
+				color: #9ca3af;
+				font-size: 12px;
+				cursor: pointer;
+				&:disabled { opacity: 0.3; cursor: default; }
+				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
+				&:hover:not(:disabled):not(.active) { background: rgba(255,255,255,0.08); }
+			}
+		}
+	}
+
+	// ── Admin Comments ────────────────────────────────
+	#admin-comments, #admin-feedback {
+		.ac-header, .af-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 20px;
+		}
+
+		.ac-title, .af-title {
+			font-size: 18px;
+			font-weight: 800;
+			color: #fff;
+			margin: 0;
+			span { font-size: 13px; font-weight: 500; color: #6b7280; margin-left: 8px; }
+		}
+
+		.ac-empty, .af-empty {
+			text-align: center;
+			padding: 60px 20px;
+			color: #6b7280;
+			font-size: 14px;
+		}
+
+		.ac-table, .af-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 13px;
+
+			thead tr {
+				background: rgba(255,255,255,0.04);
+			}
+
+			th {
+				padding: 10px 14px;
+				text-align: left;
+				font-size: 11px;
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+				color: #6b7280;
+				border-bottom: 1px solid rgba(255,255,255,0.07);
+			}
+
+			td {
+				padding: 12px 14px;
+				color: #9ca3af;
+				border-bottom: 1px solid rgba(255,255,255,0.05);
+				vertical-align: middle;
+			}
+
+			tbody tr:hover td { background: rgba(255,255,255,0.02); }
+		}
+
+		.ac-member, .af-member {
+			color: #e2e8f0;
+			font-size: 12px;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.ac-member-id { font-family: monospace; font-size: 11px; color: #6b7280; }
+
+		.ac-group-badge, .af-group-badge {
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			padding: 2px 8px;
+			border-radius: 20px;
+			background: rgba(255,255,255,0.06);
+			color: #9ca3af;
+			border: 1px solid rgba(255,255,255,0.1);
+		}
+
+		.ac-content, .af-content {
+			max-width: 320px;
+			color: #e2e8f0;
+			font-size: 12px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.ac-date, .af-date { font-size: 11px; color: #6b7280; white-space: nowrap; }
+
+		.ac-delete-btn, .af-delete-btn {
+			padding: 4px 10px;
+			border-radius: 6px;
+			background: rgba(239,68,68,0.1);
+			border: 1px solid rgba(239,68,68,0.3);
+			color: #ef4444;
+			font-size: 11px;
+			font-weight: 600;
+			cursor: pointer;
+			white-space: nowrap;
+			&:hover { background: rgba(239,68,68,0.2); }
+		}
+
+		.ac-pagination, .af-pagination {
+			display: flex;
+			gap: 6px;
+			margin-top: 20px;
+			justify-content: center;
+
 			button {
 				padding: 6px 12px;
 				border-radius: 6px;

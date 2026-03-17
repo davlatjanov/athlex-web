@@ -247,7 +247,17 @@ const Top = () => {
 												</MenuItem>
 											))
 										)}
-									</Menu>
+									{/* View all link */}
+									<div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '8px 16px' }}>
+										<a
+											href="/notifications"
+											onClick={() => setNotifAnchor(null)}
+											style={{ fontSize: 12, color: '#9ca3af', textDecoration: 'none', display: 'block', textAlign: 'center' }}
+										>
+											View all notifications →
+										</a>
+									</div>
+								</Menu>
 
 									{/* User menu */}
 									<div
