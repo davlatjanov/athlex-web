@@ -718,6 +718,23 @@ export const GET_MY_CONVERSATIONS = gql`
 	}
 `;
 
+export const GET_MY_STUDENTS = gql`
+	query GetMyStudents($page: Float, $limit: Float) {
+		getMyStudents(page: $page, limit: $limit) {
+			list {
+				memberId
+				memberNick
+				memberImage
+				memberFullName
+				programId
+				programName
+				enrolledAt
+			}
+			total
+		}
+	}
+`;
+
 export const GET_CONVERSATION = gql`
 	query GetConversation($conversationId: String!) {
 		getConversation(conversationId: $conversationId) {

@@ -1,0 +1,140 @@
+.my-students {
+	padding: 24px 0;
+
+	.ms-header {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 28px;
+	}
+
+	.ms-title {
+		font-size: 22px;
+		font-weight: 700;
+		color: #fff;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		margin: 0;
+	}
+
+	.ms-count {
+		font-size: 13px;
+		color: #9CA3AF;
+		background: rgba(255, 255, 255, 0.07);
+		padding: 3px 10px;
+		border-radius: 20px;
+	}
+
+	.ms-empty {
+		text-align: center;
+		color: #6B7280;
+		padding: 60px 0;
+		font-size: 15px;
+	}
+
+	.ms-program-group {
+		margin-bottom: 32px;
+	}
+
+	.ms-program-label {
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		color: #E92C28;
+		border-left: 3px solid #E92C28;
+		padding-left: 10px;
+		margin-bottom: 14px;
+	}
+
+	.ms-members {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.ms-member-card {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		background: #1E293B;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 10px;
+		padding: 14px 18px;
+		cursor: pointer;
+		transition: background 0.2s, border-color 0.2s;
+
+		&:hover {
+			background: #243044;
+			border-color: rgba(233, 44, 40, 0.3);
+		}
+	}
+
+	.ms-avatar {
+		width: 46px;
+		height: 46px;
+		border-radius: 50%;
+		overflow: hidden;
+		flex-shrink: 0;
+		background: #374151;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		font-weight: 700;
+		color: #fff;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.ms-info {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		flex: 1;
+	}
+
+	.ms-nick {
+		font-size: 15px;
+		font-weight: 600;
+		color: #fff;
+	}
+
+	.ms-fullname {
+		font-size: 13px;
+		color: #9CA3AF;
+	}
+
+	.ms-enrolled {
+		font-size: 12px;
+		color: #6B7280;
+		margin-top: 2px;
+	}
+
+	.ms-pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16px;
+		margin-top: 28px;
+		color: #9CA3AF;
+		font-size: 14px;
+	}
+
+	.ms-page-btn {
+		background: #1E293B;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: #fff;
+		padding: 6px 18px;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: background 0.2s;
+
+		&:hover:not(:disabled) { background: #243044; }
+		&:disabled { opacity: 0.35; cursor: not-allowed; }
+	}
+}

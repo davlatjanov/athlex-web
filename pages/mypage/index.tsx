@@ -20,6 +20,7 @@ import AdminFeedback from '../../libs/components/mypage/AdminFeedback';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyProgressResults from '../../libs/components/mypage/MyProgressResults';
 import MyBookmarks from '../../libs/components/mypage/MyBookmarks';
+import MyStudents from '../../libs/components/mypage/MyStudents';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { GET_MEMBER } from '../../apollo/user/query';
@@ -66,7 +67,7 @@ const AGENT_TABS = [
 	{ key: 'myProfile', label: 'Profile' },
 	{ key: 'myProperties', label: 'My Programs' },
 	{ key: 'addProperty', label: 'Add Program' },
-	{ key: 'myFavorites', label: 'My Joinings' },
+	{ key: 'myStudents', label: 'My Students' },
 	{ key: 'myOrders', label: 'My Orders' },
 	{ key: 'myBookmarks', label: 'Saved Items' },
 	{ key: 'myProgress', label: 'My Progress' },
@@ -99,6 +100,8 @@ const getTabIcon = (key: string) => {
 			return <PersonOutlineIcon fontSize="small" />;
 		case 'myFavorites':
 			return <CheckCircleOutlineIcon fontSize="small" />;
+		case 'myStudents':
+			return <PeopleOutlineIcon fontSize="small" />;
 		case 'myBookmarks':
 			return <BookmarkBorderIcon fontSize="small" />;
 		case 'recentlyVisited':
@@ -305,6 +308,7 @@ const MyPage: NextPage = () => {
 						{category === 'addProduct' && <AddProduct />}
 						{category === 'myProperties' && <MyProperties />}
 						{category === 'myFavorites' && <MyFavorites />}
+						{category === 'myStudents' && <MyStudents />}
 						{category === 'myBookmarks' && <MyBookmarks />}
 						{category === 'myProgress' && <MyProgressResults />}
 						{category === 'recentlyVisited' && <RecentlyVisited />}
