@@ -15,22 +15,30 @@ const NavSearch: React.FC = () => {
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 	const [text, setText] = useState('');
-	const [results, setResults] = useState<T[]>([]);
+	const [allMembers, setAllMembers] = useState<T[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const wrapRef = useRef<HTMLDivElement>(null);
 
-	const [searchMembers] = useLazyQuery(GET_MEMBERS, {
+	const [fetchMembers] = useLazyQuery(GET_MEMBERS, {
 		fetchPolicy: 'network-only',
-		onCompleted: (data) => setResults(data?.getMembers?.list ?? []),
+		onCompleted: (data) => {
+			const list: T[] = data?.getMembers?.list ?? [];
+			// Sort: admins first, then trainers, then members
+			const sorted = [...list].sort((a, b) => {
+				const order = (t: string) => t === 'ADMIN' ? 0 : t === 'TRAINER' ? 1 : 2;
+				return order(a.memberType) - order(b.memberType);
+			});
+			setAllMembers(sorted);
+		},
 	});
 
-	useEffect(() => {
-		if (!text.trim()) { setResults([]); return; }
-		const timer = setTimeout(() => {
-			searchMembers({ variables: { input: { page: 1, limit: 8, search: { text } } } });
-		}, 300);
-		return () => clearTimeout(timer);
-	}, [text]);
+	// Filter client-side
+	const filtered = text.trim()
+		? allMembers.filter((m) =>
+				m.memberNick?.toLowerCase().includes(text.toLowerCase()) ||
+				m.memberFullName?.toLowerCase().includes(text.toLowerCase())
+		  )
+		: allMembers;
 
 	// Close on outside click
 	useEffect(() => {
@@ -38,7 +46,6 @@ const NavSearch: React.FC = () => {
 			if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
 				setOpen(false);
 				setText('');
-				setResults([]);
 			}
 		};
 		document.addEventListener('mousedown', handler);
@@ -48,12 +55,14 @@ const NavSearch: React.FC = () => {
 	const handleOpen = () => {
 		setOpen(true);
 		setTimeout(() => inputRef.current?.focus(), 50);
+		if (allMembers.length === 0) {
+			fetchMembers({ variables: { input: { page: 1, limit: 100 } } });
+		}
 	};
 
 	const handleSelect = (member: T) => {
 		setOpen(false);
 		setText('');
-		setResults([]);
 		router.push(`/member?memberId=${member._id}`);
 	};
 
@@ -74,9 +83,9 @@ const NavSearch: React.FC = () => {
 						onChange={(e) => setText(e.target.value)}
 						onKeyDown={(e) => e.key === 'Escape' && setOpen(false)}
 					/>
-					{results.length > 0 && (
-						<div className="nav-search-dropdown">
-							{results.map((m: T) => {
+					<div className="nav-search-dropdown">
+						{filtered.length > 0 ? (
+							filtered.map((m: T) => {
 								const type = TYPE_LABEL[m.memberType] ?? TYPE_LABEL.USER;
 								return (
 									<div className="nav-search-item" key={m._id} onClick={() => handleSelect(m)}>
@@ -93,14 +102,11 @@ const NavSearch: React.FC = () => {
 										<span className="nav-search-type" style={{ color: type.color }}>{type.label}</span>
 									</div>
 								);
-							})}
-						</div>
-					)}
-					{text.trim() && results.length === 0 && (
-						<div className="nav-search-dropdown">
+							})
+						) : (
 							<div className="nav-search-empty">No members found</div>
-						</div>
-					)}
+						)}
+					</div>
 				</div>
 			)}
 		</div>
