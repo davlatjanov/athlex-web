@@ -36,7 +36,17 @@ const MemberPage: NextPage = () => {
 	const [followMember] = useMutation(FOLLOW_MEMBER);
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 	const { data: memberData } = useQuery(GET_MEMBER, { variables: { memberId }, skip: !memberId });
-	const isTrainer = memberData?.getMember?.memberType === 'TRAINER';
+	const m = memberData?.getMember;
+	const isTrainer = m?.memberType === 'TRAINER';
+
+	const getRank = (points: number) => {
+		if (points >= 10000) return { label: 'Elite', color: '#FFD700', next: null, progress: 100 };
+		if (points >= 5000) return { label: 'Platinum', color: '#E5E4E2', next: 10000, progress: ((points - 5000) / 5000) * 100 };
+		if (points >= 1000) return { label: 'Gold', color: '#FFA500', next: 5000, progress: ((points - 1000) / 4000) * 100 };
+		if (points >= 300) return { label: 'Silver', color: '#C0C0C0', next: 1000, progress: ((points - 300) / 700) * 100 };
+		return { label: 'Bronze', color: '#CD7F32', next: 300, progress: (points / 300) * 100 };
+	};
+	const rank = getRank(m?.memberPoints ?? 0);
 
 
 	/** LIFECYCLES **/
@@ -143,6 +153,58 @@ const MemberPage: NextPage = () => {
 						<MemberMenu subscribeHandler={subscribeHandler} unsubscribeHandler={unsubscribeHandler} />
 					</div>
 				</div>
+
+				{/* Stats + Rank Dashboard */}
+				{m && (
+					<div className="member-dashboard">
+						<div className="container">
+							{/* Stats Row */}
+							<div className="md-stats">
+								<div className="md-stat">
+									<span className="md-stat-value">{m.memberPrograms ?? 0}</span>
+									<span className="md-stat-label">Programs</span>
+								</div>
+								<div className="md-stat">
+									<span className="md-stat-value">{m.memberFollowers ?? 0}</span>
+									<span className="md-stat-label">Followers</span>
+								</div>
+								<div className="md-stat">
+									<span className="md-stat-value">{m.memberFollowings ?? 0}</span>
+									<span className="md-stat-label">Following</span>
+								</div>
+								<div className="md-stat">
+									<span className="md-stat-value">{m.memberLikes ?? 0}</span>
+									<span className="md-stat-label">Likes</span>
+								</div>
+								<div className="md-stat">
+									<span className="md-stat-value">{m.memberViews ?? 0}</span>
+									<span className="md-stat-label">Profile Views</span>
+								</div>
+							</div>
+
+							{/* Rank Card */}
+							<div className="md-rank-card">
+								<div className="md-rank-left">
+									<span className="md-rank-badge" style={{ color: rank.color, borderColor: rank.color }}>
+										{rank.label}
+									</span>
+									<div className="md-rank-info">
+										<span className="md-points">{(m.memberPoints ?? 0).toLocaleString()} pts</span>
+										{rank.next && (
+											<span className="md-rank-next">{rank.next.toLocaleString()} pts to next tier</span>
+										)}
+									</div>
+								</div>
+								<div className="md-rank-bar-wrap">
+									<div className="md-rank-bar">
+										<div className="md-rank-bar-fill" style={{ width: `${rank.progress}%`, background: rank.color }} />
+									</div>
+									{rank.next && <span className="md-rank-pct">{Math.round(rank.progress)}%</span>}
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
 
 				{/* Tab Navigation */}
 				<nav className="member-tabs">
