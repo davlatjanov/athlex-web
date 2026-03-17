@@ -9,17 +9,6 @@ import { Message } from '../../enums/common.enum';
 
 const JOINED_KEY = 'athlex_joined_programs';
 
-const typeIcons: Record<string, string> = {
-	MASS_GAIN: '💪',
-	WEIGHT_LOSS: '🔥',
-	STRENGTH: '🏋️',
-	CARDIO: '🏃',
-	YOGA: '🧘',
-	FUNCTIONAL: '⚡',
-	REHABILITATION: '🩺',
-	MOBILITY: '🤸',
-	BEGINNERS: '🌱',
-};
 
 interface ProgramCardProps {
 	id: string;
@@ -43,7 +32,6 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 	const { liked, toggle: toggleLike } = useLike('programs', id);
 	const [joined, setJoined] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const icon = typeIcons[type] ?? '🏅';
 
 	const [joinProgram] = useMutation(JOIN_PROGRAM);
 	const [leaveProgram] = useMutation(LEAVE_PROGRAM);
@@ -119,8 +107,7 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 							</button>
 						</div>
 					</div>
-					<div className={'card-center-icon'}>{icon}</div>
-					<div className={'card-name-overlay'}>
+						<div className={'card-name-overlay'}>
 						<strong className={'card-name'}>{name}</strong>
 					</div>
 				</div>
@@ -132,12 +119,12 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 					</div>
 
 					<div className={'card-stats'}>
-						<span className={'stat'}>👁 {displayViews}</span>
+						<span className={'stat'}>{displayViews} views</span>
 						<span className={'stat-sep'}>·</span>
 						<span className={'stat'}>♥ {likes}</span>
-						{comments !== undefined && (<><span className={'stat-sep'}>·</span><span className={'stat'}>💬 {comments}</span></>)}
+						{comments !== undefined && (<><span className={'stat-sep'}>·</span><span className={'stat'}>{comments} comments</span></>)}
 						<span className={'stat-sep'}>·</span>
-						<span className={'stat'}>👤 {displayMembers}</span>
+						<span className={'stat'}>{displayMembers} members</span>
 					</div>
 
 					{rating && (

@@ -216,19 +216,7 @@ $border-accent: rgba(34, 197, 94, 0.4);
 					}
 				}
 
-				.card-center-icon {
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translate(-50%, -52%);
-					font-size: 64px;
-					line-height: 1;
-					opacity: 0.88;
-					filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6));
-					transition: transform 0.3s ease;
-					z-index: 1;
-				}
-
+	
 				.card-name-overlay {
 					padding: 10px 14px 14px;
 					background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, transparent 100%);
@@ -249,10 +237,6 @@ $border-accent: rgba(34, 197, 94, 0.4);
 						white-space: nowrap;
 					}
 				}
-			}
-
-			&:hover .card-center-icon {
-				transform: translate(-50%, -52%) scale(1.14);
 			}
 
 			.card-body {
