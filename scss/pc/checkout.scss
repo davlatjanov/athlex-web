@@ -128,6 +128,29 @@
 		justify-content: center;
 	}
 
+	.co-processing {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 14px;
+		padding: 16px 0;
+		color: #9CA3AF;
+		font-size: 14px;
+	}
+
+	.co-spinner {
+		width: 36px;
+		height: 36px;
+		border: 3px solid rgba(255, 255, 255, 0.1);
+		border-top-color: #E92C28;
+		border-radius: 50%;
+		animation: co-spin 0.8s linear infinite;
+	}
+
+	@keyframes co-spin {
+		to { transform: rotate(360deg); }
+	}
+
 	.co-pay-btn {
 		background: #E92C28;
 		color: #fff;

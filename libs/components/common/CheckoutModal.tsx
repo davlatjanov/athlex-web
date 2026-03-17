@@ -102,54 +102,63 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, p
 					</div>
 				</div>
 
-				{/* Card form */}
-				<div className="co-form">
-					<div className="co-field">
-						<label>Cardholder Name</label>
-						<input
-							type="text"
-							placeholder="John Smith"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-							autoComplete="cc-name"
-						/>
-					</div>
-					<div className="co-field">
-						<label>Card Number</label>
-						<input
-							type="text"
-							placeholder="1234 5678 9012 3456"
-							value={cardNumber}
-							onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-							autoComplete="cc-number"
-							inputMode="numeric"
-						/>
-					</div>
-					<div className="co-field-row">
+				{/* Card form — hidden while processing */}
+				{!paying && (
+					<div className="co-form">
 						<div className="co-field">
-							<label>Expiry</label>
+							<label>Cardholder Name</label>
 							<input
 								type="text"
-								placeholder="MM/YY"
-								value={expiry}
-								onChange={(e) => setExpiry(formatExpiry(e.target.value))}
-								autoComplete="cc-exp"
-								inputMode="numeric"
+								placeholder="John Smith"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								autoComplete="cc-name"
 							/>
 						</div>
 						<div className="co-field">
-							<label>CVV</label>
+							<label>Card Number</label>
 							<input
 								type="text"
-								placeholder="123"
-								value={cvv}
-								onChange={(e) => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-								autoComplete="cc-csc"
+								placeholder="1234 5678 9012 3456"
+								value={cardNumber}
+								onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+								autoComplete="cc-number"
 								inputMode="numeric"
 							/>
 						</div>
+						<div className="co-field-row">
+							<div className="co-field">
+								<label>Expiry</label>
+								<input
+									type="text"
+									placeholder="MM/YY"
+									value={expiry}
+									onChange={(e) => setExpiry(formatExpiry(e.target.value))}
+									autoComplete="cc-exp"
+									inputMode="numeric"
+								/>
+							</div>
+							<div className="co-field">
+								<label>CVV</label>
+								<input
+									type="text"
+									placeholder="123"
+									value={cvv}
+									onChange={(e) => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
+									autoComplete="cc-csc"
+									inputMode="numeric"
+								/>
+							</div>
+						</div>
 					</div>
-				</div>
+				)}
+
+				{paying && (
+					<div className="co-processing">
+						<div className="co-spinner" />
+						<p>Processing payment…</p>
+					</div>
+				)}
 
 				{/* Trust badges */}
 				<div className="co-trust">
