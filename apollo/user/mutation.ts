@@ -403,6 +403,108 @@ export const DELETE_CONVERSATION = gql`
 `;
 
 /**************************
+ *        WORKOUT         *
+ *************************/
+
+export const CREATE_WORKOUT = gql`
+	mutation CreateWorkout($input: WorkoutInput!) {
+		createWorkout(input: $input) {
+			_id
+			workoutName
+			workoutDesc
+			workoutDay
+			workoutDuration
+			bodyParts
+			isRestDay
+			programId
+			createdAt
+		}
+	}
+`;
+
+export const UPDATE_WORKOUT = gql`
+	mutation UpdateWorkout($workoutId: String!, $input: WorkoutUpdate!) {
+		updateWorkout(workoutId: $workoutId, input: $input) {
+			_id
+			workoutName
+			workoutDesc
+			workoutDay
+			workoutDuration
+			bodyParts
+			isRestDay
+			programId
+			createdAt
+		}
+	}
+`;
+
+export const DELETE_WORKOUT = gql`
+	mutation DeleteWorkout($workoutId: String!) {
+		deleteWorkout(workoutId: $workoutId) {
+			_id
+			workoutName
+		}
+	}
+`;
+
+/**************************
+ *        EXERCISE        *
+ *************************/
+
+export const CREATE_EXERCISE = gql`
+	mutation CreateExercise($input: ExerciseInput!) {
+		createExercise(input: $input) {
+			_id
+			exerciseName
+			exerciseDesc
+			primaryMuscle
+			secondaryMuscles
+			sets
+			reps
+			restTime
+			equipment
+			difficulty
+			orderInWorkout
+			instructions
+			tips
+			workoutId
+			createdAt
+		}
+	}
+`;
+
+export const UPDATE_EXERCISE = gql`
+	mutation UpdateExercise($exerciseId: String!, $input: ExerciseUpdate!) {
+		updateExercise(exerciseId: $exerciseId, input: $input) {
+			_id
+			exerciseName
+			exerciseDesc
+			primaryMuscle
+			secondaryMuscles
+			sets
+			reps
+			restTime
+			equipment
+			difficulty
+			orderInWorkout
+			instructions
+			tips
+			workoutId
+			createdAt
+		}
+	}
+`;
+
+export const DELETE_EXERCISE = gql`
+	mutation DeleteExercise($exerciseId: String!) {
+		deleteExercise(exerciseId: $exerciseId) {
+			_id
+			exerciseName
+		}
+	}
+`;
+
+/**************************
  *         ORDERS         *
  *************************/
 

@@ -548,6 +548,32 @@ export const GET_MY_PROGRESS_RESULTS = gql`
  *     WORKOUT/EXERCISE   *
  *************************/
 
+export const GET_EXERCISES_BY_WORKOUT = gql`
+	query GetExercisesByWorkout($workoutId: String!) {
+		getExercisesByWorkout(workoutId: $workoutId) {
+			_id
+			exerciseName
+			exerciseDesc
+			exerciseImage
+			exerciseVideo
+			exerciseGif
+			primaryMuscle
+			secondaryMuscles
+			sets
+			reps
+			restTime
+			tempo
+			equipment
+			difficulty
+			orderInWorkout
+			instructions
+			tips
+			workoutId
+			createdAt
+		}
+	}
+`;
+
 export const GET_WORKOUTS_BY_PROGRAM = gql`
 	query GetWorkoutsByProgram($programId: String!) {
 		getWorkoutsByProgram(programId: $programId) {

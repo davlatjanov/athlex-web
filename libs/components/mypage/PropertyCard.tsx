@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import { Program } from '../../types/program/program';
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
@@ -125,6 +126,10 @@ export const PropertyCard = (props: ProgramCardProps) => {
 					<Stack className="action-box">
 						{program?.programStatus === ProgramStatus.ACTIVE ? (
 							<>
+								<IconButton className="icon-button" title="Manage Workouts"
+									onClick={() => router.push(`/mypage/workout-builder/${program._id}`)}>
+									<FitnessCenterIcon className="buttons btn-workouts" />
+								</IconButton>
 								<IconButton className="icon-button" title="Edit" onClick={() => pushEditProgram(program._id)}>
 									<ModeIcon className="buttons btn-edit" />
 								</IconButton>
