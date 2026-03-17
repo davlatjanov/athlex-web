@@ -51,7 +51,12 @@ const ProductDetail: NextPage = () => {
 
 	const [qty, setQty] = useState(1);
 	const [addedToCart, setAddedToCart] = useState(false);
-	const [bookmarked, setBookmarked] = useState(false);
+	const [bookmarked, setBookmarked] = useState(() => {
+		try {
+			const list: string[] = JSON.parse(localStorage.getItem('athlex_saved_products') ?? '[]');
+			return list.includes(productId as string);
+		} catch { return false; }
+	});
 	const [liked, setLiked] = useState(false);
 	const [selectedImage, setSelectedImage] = useState<string>('');
 
@@ -86,7 +91,15 @@ const ProductDetail: NextPage = () => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			await toggleBookmark({ variables: { input: { bookmarkGroup: 'PRODUCT', bookmarkRefId: productId } } });
-			setBookmarked(!bookmarked);
+			setBookmarked((prev) => {
+				const next = !prev;
+				try {
+					const list: string[] = JSON.parse(localStorage.getItem('athlex_saved_products') ?? '[]');
+					const updated = next ? Array.from(new Set([...list, productId as string])) : list.filter((i) => i !== productId);
+					localStorage.setItem('athlex_saved_products', JSON.stringify(updated));
+				} catch {}
+				return next;
+			});
 			await sweetTopSmallSuccessAlert(bookmarked ? 'Removed from saved' : 'Saved!', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();

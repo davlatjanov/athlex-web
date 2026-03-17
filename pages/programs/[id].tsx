@@ -226,7 +226,15 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			await toggleBookmark({ variables: { input: { bookmarkGroup: 'PROGRAM', bookmarkRefId: id } } });
-			setSaved((prev) => !prev);
+			setSaved((prev) => {
+				const next = !prev;
+				try {
+					const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) ?? '[]');
+					const updated = next ? Array.from(new Set([...list, id as string])) : list.filter((i) => i !== id);
+					localStorage.setItem(SAVED_KEY, JSON.stringify(updated));
+				} catch {}
+				return next;
+			});
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
