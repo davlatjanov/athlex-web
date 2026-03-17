@@ -12,14 +12,14 @@ import { userVar } from '../../../apollo/store';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
-interface PropertyCardType {
+interface ProgramCardType {
 	property: Property;
 	likePropertyHandler?: any;
 	myFavorites?: boolean;
 	recentlyVisited?: boolean;
 }
 
-const PropertyCard = (props: PropertyCardType) => {
+const ProgramCard = (props: ProgramCardType) => {
 	const { property, likePropertyHandler, myFavorites, recentlyVisited } = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
@@ -121,4 +121,4 @@ const PropertyCard = (props: PropertyCardType) => {
 	}
 };
 
-export default PropertyCard;
+export default ProgramCard;

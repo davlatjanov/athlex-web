@@ -10,12 +10,12 @@ import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
-interface TopPropertyCardProps {
+interface TopProgramCardProps {
 	property: Property;
 	likePropertyHandler: any;
 }
 
-const TopPropertyCard = (props: TopPropertyCardProps) => {
+const TopProgramCard = (props: TopProgramCardProps) => {
 	const { property, likePropertyHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -154,4 +154,4 @@ const TopPropertyCard = (props: TopPropertyCardProps) => {
 	}
 };
 
-export default TopPropertyCard;
+export default TopProgramCard;

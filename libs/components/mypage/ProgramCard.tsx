@@ -18,7 +18,7 @@ interface ProgramCardProps {
 	updateProgramHandler?: any;
 }
 
-export const PropertyCard = (props: ProgramCardProps) => {
+export const ProgramCard = (props: ProgramCardProps) => {
 	const { program, deleteProgramHandler, memberPage, updateProgramHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();

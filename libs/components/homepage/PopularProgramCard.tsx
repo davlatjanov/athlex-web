@@ -9,11 +9,11 @@ import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
-interface PopularPropertyCardProps {
+interface PopularProgramCardProps {
 	property: Property;
 }
 
-const PopularPropertyCard = (props: PopularPropertyCardProps) => {
+const PopularProgramCard = (props: PopularProgramCardProps) => {
 	const { property } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -146,4 +146,4 @@ const PopularPropertyCard = (props: PopularPropertyCardProps) => {
 	}
 };
 
-export default PopularPropertyCard;
+export default PopularProgramCard;

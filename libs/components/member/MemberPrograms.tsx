@@ -60,7 +60,7 @@ const typeGradients: Record<string, string> = {
 
 const LIMIT = 9;
 
-const MemberProperties: NextPage = () => {
+const MemberPrograms: NextPage = () => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const { memberId } = router.query;
@@ -266,4 +266,4 @@ const MemberProperties: NextPage = () => {
 	);
 };
 
-export default MemberProperties;
+export default MemberPrograms;

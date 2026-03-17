@@ -10,12 +10,12 @@ import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 
-interface TrendPropertyCardProps {
+interface TrendProgramCardProps {
 	property: Property;
 	likePropertyHandler: any;
 }
 
-const TrendPropertyCard = (props: TrendPropertyCardProps) => {
+const TrendProgramCard = (props: TrendProgramCardProps) => {
 	const { property, likePropertyHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -152,4 +152,4 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 	}
 };
 
-export default TrendPropertyCard;
+export default TrendProgramCard;

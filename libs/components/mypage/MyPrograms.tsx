@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { PropertyCard } from './PropertyCard';
+import { ProgramCard } from './ProgramCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { Program } from '../../types/program/program';
 import { T } from '../../types/common';
@@ -13,7 +13,7 @@ import { UPDATE_PROGRAM, DELETE_PROGRAM } from '../../../apollo/user/mutation';
 import { GET_MY_PROGRAMS } from '../../../apollo/user/query';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
 
-const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
+const MyPrograms: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const [searchFilter, setSearchFilter] = useState<any>(initialInput);
 	const [myPrograms, setAgentProperties] = useState<Program[]>([]);
@@ -125,7 +125,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 						) : (
 							myPrograms.map((program: Program) => {
 								return (
-									<PropertyCard
+									<ProgramCard
 										program={program}
 										deleteProgramHandler={deleteProgramHandler}
 										updateProgramHandler={updateProgramHandler}
@@ -158,7 +158,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	}
 };
 
-MyProperties.defaultProps = {
+MyPrograms.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 5,
@@ -167,4 +167,4 @@ MyProperties.defaultProps = {
 	},
 };
 
-export default MyProperties;
+export default MyPrograms;

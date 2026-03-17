@@ -5,10 +5,10 @@ import Link from 'next/link';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import withAuth from '../../libs/components/layout/withAuth';
-import MyProperties from '../../libs/components/mypage/MyProperties';
+import MyPrograms from '../../libs/components/mypage/MyPrograms';
 import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
-import AddProperty from '../../libs/components/mypage/AddNewProperty';
+import AddProgram from '../../libs/components/mypage/AddNewProgram';
 import AddProduct from '../../libs/components/mypage/AddNewProduct';
 import AdminUsers from '../../libs/components/mypage/AdminUsers';
 import AdminPrograms from '../../libs/components/mypage/AdminPrograms';
@@ -45,6 +45,7 @@ import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettin
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -304,9 +305,9 @@ const MyPage: NextPage = () => {
 
 					{/* ── Content ── */}
 					<div className={'mp-content'}>
-						{category === 'addProperty' && <AddProperty />}
+						{category === 'addProperty' && <AddProgram />}
 						{category === 'addProduct' && <AddProduct />}
-						{category === 'myProperties' && <MyProperties />}
+						{category === 'myProperties' && <MyPrograms />}
 						{category === 'myFavorites' && <MyFavorites />}
 						{category === 'myStudents' && <MyStudents />}
 						{category === 'myBookmarks' && <MyBookmarks />}

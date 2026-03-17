@@ -12,12 +12,12 @@ import { useRouter } from 'next/router';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { T } from '../../types/common';
 
-interface PropertyBigCardProps {
+interface ProgramBigCardProps {
 	property: Property;
 	likePropertyHandler?: any;
 }
 
-const PropertyBigCard = (props: PropertyBigCardProps) => {
+const ProgramBigCard = (props: ProgramBigCardProps) => {
 	const { property, likePropertyHandler } = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
@@ -97,4 +97,4 @@ const PropertyBigCard = (props: PropertyBigCardProps) => {
 	}
 };
 
-export default PropertyBigCard;
+export default ProgramBigCard;

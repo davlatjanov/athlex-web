@@ -100,7 +100,7 @@ const EMPTY_FORM: ProgramFormData = {
 };
 
 /* ─────────────────────────── component ─────────────────────────── */
-const AddProperty: NextPage = ({ initialValues, ...props }: any) => {
+const AddProgram: NextPage = ({ initialValues, ...props }: any) => {
 	const router = useRouter();
 	const { propertyId } = router.query;
 	const isEditMode = Boolean(propertyId);
@@ -524,8 +524,8 @@ const AddProperty: NextPage = ({ initialValues, ...props }: any) => {
 	);
 };
 
-AddProperty.defaultProps = {
+AddProgram.defaultProps = {
 	initialValues: {},
 };
 
-export default AddProperty;
+export default AddProgram;

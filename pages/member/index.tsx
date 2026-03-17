@@ -4,7 +4,7 @@ import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
 import MemberMenu from '../../libs/components/member/MemberMenu';
-import MemberProperties from '../../libs/components/member/MemberProperties';
+import MemberPrograms from '../../libs/components/member/MemberPrograms';
 import { useRouter } from 'next/router';
 import MemberFollowers from '../../libs/components/member/MemberFollowers';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
@@ -270,7 +270,7 @@ const MemberPage: NextPage = () => {
 					<Stack className={'member-page'}>
 						<div className="member-content">
 							<div className="list-config">
-								{category === 'programs' && isTrainer && <MemberProperties />}
+								{category === 'programs' && isTrainer && <MemberPrograms />}
 								{category === 'followers' && (
 									<MemberFollowers
 										subscribeHandler={subscribeHandler}
