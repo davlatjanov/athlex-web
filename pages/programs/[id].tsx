@@ -29,6 +29,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { trackProgramVisit } from '../../libs/components/mypage/RecentlyVisited';
+import CheckoutModal from '../../libs/components/common/CheckoutModal';
 
 const SAVED_KEY = 'athlex_saved_programs';
 const JOINED_KEY = 'athlex_joined_programs';
@@ -51,6 +52,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const [slideImage, setSlideImage] = useState<string>('');
 	const [joined, setJoined] = useState(false);
 	const [saved, setSaved] = useState(false);
+	const [showCheckout, setShowCheckout] = useState(false);
 	const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
 	const [programComments, setProgramComments] = useState<Comment[]>([]);
 	const [commentTotal, setCommentTotal] = useState(0);
@@ -187,20 +189,19 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
 				localStorage.setItem(JOINED_KEY, JSON.stringify(list.filter((i) => i !== id)));
 				sweetTopSmallSuccessAlert('Left program', 800);
+				getProgramRefetch({ programId: id }).then((res) => {
+					const updated = res.data?.getOneProgramWithMember;
+					if (updated) setProgram(updated);
+				}).catch(() => {});
+			} else if ((program?.programPrice ?? 0) > 0) {
+				// Paid program — open checkout modal
+				setShowCheckout(true);
 			} else {
-				await joinProgram({ variables: { programId } });
-				setJoined(true);
-				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
-				if (!list.includes(id as string)) localStorage.setItem(JOINED_KEY, JSON.stringify([...list, id]));
-				sweetTopSmallSuccessAlert('Enrolled!', 800);
+				// Free program — enroll directly
+				await enrollAfterPayment();
 			}
-			getProgramRefetch({ programId: id }).then((res) => {
-				const updated = res.data?.getOneProgramWithMember;
-				if (updated) setProgram(updated);
-			}).catch(() => {});
 		} catch (err: any) {
 			const msg: string = err.message ?? '';
-			// Backend says already joined → silently mark as enrolled
 			if (msg.toLowerCase().includes('already')) {
 				setJoined(true);
 				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
@@ -208,6 +209,24 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 			} else {
 				sweetMixinErrorAlert(msg).then();
 			}
+		}
+	};
+
+	const enrollAfterPayment = async () => {
+		try {
+			const programId = program?._id ?? id;
+			await joinProgram({ variables: { programId } });
+			setJoined(true);
+			setShowCheckout(false);
+			const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
+			if (!list.includes(id as string)) localStorage.setItem(JOINED_KEY, JSON.stringify([...list, id]));
+			sweetTopSmallSuccessAlert('Enrolled! Welcome to the program.', 1200);
+			getProgramRefetch({ programId: id }).then((res) => {
+				const updated = res.data?.getOneProgramWithMember;
+				if (updated) setProgram(updated);
+			}).catch(() => {});
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
 		}
 	};
 
@@ -734,6 +753,16 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 					)}
 				</section>
 			</div>
+
+			{showCheckout && program && (
+				<CheckoutModal
+					programId={String(program._id ?? id)}
+					programName={program.programName}
+					price={program.programPrice}
+					onClose={() => setShowCheckout(false)}
+					onSuccess={enrollAfterPayment}
+				/>
+			)}
 		</div>
 	);
 };

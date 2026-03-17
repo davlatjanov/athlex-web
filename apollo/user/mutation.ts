@@ -518,3 +518,12 @@ export const CREATE_ORDER = gql`
 		}
 	}
 `;
+
+export const UPDATE_ORDER_STATUS = gql`
+	mutation UpdateOrderStatus($input: OrderUpdateInput!) {
+		updateOrderStatus(input: $input) {
+			_id
+			orderStatus
+		}
+	}
+`;
