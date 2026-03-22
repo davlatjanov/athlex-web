@@ -97,11 +97,7 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 					<div className={'card-top-row'}>
 						<span className={'type-badge'}>{type}</span>
 						<div className={'card-top-right'}>
-							{rank ? (
-								<span className={'rank-badge'}>#{rank}</span>
-							) : (
-								<span className={'level-top'}>{level}</span>
-							)}
+							<span className={'level-top'}>{level}</span>
 							<button className={`card-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
 								{liked ? '♥' : '♡'}
 							</button>

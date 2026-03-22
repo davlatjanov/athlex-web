@@ -1234,6 +1234,274 @@
 			display: none;
 		}
 
+		// ─── ENROLLED WORKOUT PLAN ───────────────────────────────
+		.wplan-days {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.wday-card {
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			border-radius: 10px;
+			overflow: hidden;
+			transition: border-color 0.2s;
+
+			&:hover { border-color: rgba(34, 197, 94, 0.2); }
+
+			&.is-rest {
+				background: #0d1117;
+				border-color: rgba(255, 255, 255, 0.04);
+			}
+		}
+
+		.wday-header {
+			padding: 14px 18px;
+			background: rgba(255, 255, 255, 0.03);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.wday-title-row {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.wday-label {
+			min-width: 40px;
+			padding: 3px 8px;
+			background: #22C55E;
+			color: #000;
+			font-family: $font;
+			font-size: 9px;
+			font-weight: 800;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			border-radius: 3px;
+			flex-shrink: 0;
+
+			.is-rest & {
+				background: #1F2937;
+				color: #4B5563;
+			}
+		}
+
+		.wday-name {
+			color: #ffffff;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+			flex: 1;
+		}
+
+		.wday-duration {
+			padding: 3px 9px;
+			background: rgba(34, 197, 94, 0.08);
+			border: 1px solid rgba(34, 197, 94, 0.2);
+			color: #22C55E;
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 600;
+			border-radius: 20px;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.wday-muscles {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+		}
+
+		.wday-muscle-tag {
+			padding: 2px 8px;
+			background: rgba(255, 255, 255, 0.04);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			color: #6B7280;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			border-radius: 3px;
+		}
+
+		.wday-rest-msg {
+			padding: 16px 18px;
+			color: #374151;
+			font-family: $font;
+			font-size: 13px;
+			font-style: italic;
+		}
+
+		.wday-exercises {
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+
+			.ex-item {
+				padding: 14px 18px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				transition: background 0.15s;
+
+				&:last-child { border-bottom: none; }
+				&:hover { background: rgba(255, 255, 255, 0.02); }
+			}
+		}
+
+		.ex-top {
+			display: flex;
+			align-items: flex-start;
+			gap: 12px;
+
+			.ex-top-right {
+				margin-left: auto;
+			}
+		}
+
+		.ex-num {
+			width: 26px;
+			height: 26px;
+			background: rgba(34, 197, 94, 0.08);
+			border: 1px solid rgba(34, 197, 94, 0.2);
+			color: #22C55E;
+			font-family: $font;
+			font-size: 11px;
+			font-weight: 800;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			margin-top: 2px;
+		}
+
+		.ex-info {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.ex-name {
+			color: #ffffff;
+			font-family: $font;
+			font-size: 14px;
+			font-weight: 700;
+		}
+
+		.ex-params {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 6px;
+			color: #6B7280;
+			font-family: $font;
+			font-size: 12px;
+		}
+
+		.ex-top-right {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-shrink: 0;
+		}
+
+		.ex-video-btn {
+			padding: 4px 12px;
+			background: #FF0000;
+			border-radius: 4px;
+			color: #ffffff;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			cursor: pointer;
+			transition: background 0.2s, transform 0.15s;
+			white-space: nowrap;
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			text-decoration: none;
+
+			&:hover { background: #cc0000; transform: scale(1.04); }
+		}
+
+		.ex-diff-badge {
+			padding: 3px 9px;
+			border-radius: 4px;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			text-transform: uppercase;
+			flex-shrink: 0;
+
+			&.diff-beginner { background: rgba(34, 197, 94, 0.1); color: #22C55E; }
+			&.diff-intermediate { background: rgba(251, 191, 36, 0.1); color: #fbbf24; }
+			&.diff-advanced { background: rgba(233, 44, 40, 0.1); color: #E92C28; }
+		}
+
+		.ex-equipment {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			padding-left: 38px;
+		}
+
+		.eq-tag {
+			padding: 3px 9px;
+			background: rgba(255, 255, 255, 0.03);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			color: #555555;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 600;
+			letter-spacing: 0.3px;
+			text-transform: uppercase;
+			border-radius: 4px;
+		}
+
+		.ex-instructions {
+			margin: 0;
+			padding: 0 0 0 52px;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+
+			li {
+				color: #9CA3AF;
+				font-family: $font;
+				font-size: 12px;
+				line-height: 1.6;
+				list-style: decimal;
+			}
+		}
+
+		.ex-tips {
+			padding-left: 38px;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+
+			.ex-tip {
+				color: #4B5563;
+				font-family: $font;
+				font-size: 12px;
+				line-height: 1.5;
+				margin: 0;
+				font-style: italic;
+			}
+		}
+
 		// ─── RELATED ─────────────────────────────────────────────
 		.pdp-related {
 			border-top: 1px solid rgba(255, 255, 255, 0.04);

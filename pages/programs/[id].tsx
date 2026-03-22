@@ -343,6 +343,109 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		</div>
 	);
 
+	const enrolledWorkoutPlan = joined && (
+		<section className="pdp-section">
+			<h2 className="pdp-section-title">Your Workout Plan</h2>
+			{workouts.length === 0 ? (
+				<p className="pdp-desc" style={{ color: '#4B5563' }}>
+					Your trainer is preparing the workout plan. Check back soon!
+				</p>
+			) : (
+				<div className="wplan-days">
+					{workouts
+						.slice()
+						.sort((a, b) => a.workoutDay - b.workoutDay)
+						.map((workout) => {
+							const dayLabel = DAY_LABELS[workout.workoutDay - 1] ?? `Day ${workout.workoutDay}`;
+							return (
+								<div key={workout._id} className={`wday-card ${workout.isRestDay ? 'is-rest' : ''}`}>
+									<div className="wday-header">
+										<div className="wday-title-row">
+											<span className="wday-label">{dayLabel}</span>
+											<span className="wday-name">{workout.isRestDay ? 'Rest Day' : workout.workoutName}</span>
+											{!workout.isRestDay && (workout.workoutDuration ?? 0) > 0 && (
+												<span className="wday-duration">{workout.workoutDuration} min</span>
+											)}
+										</div>
+										{!workout.isRestDay && (workout.bodyParts?.length ?? 0) > 0 && (
+											<div className="wday-muscles">
+												{workout.bodyParts?.map((bp) => (
+													<span key={bp} className="wday-muscle-tag">{bp.replace(/_/g, ' ')}</span>
+												))}
+											</div>
+										)}
+									</div>
+
+									{workout.isRestDay ? (
+										<div className="wday-rest-msg">
+											😴 Rest and recover — your muscles grow during downtime.
+										</div>
+									) : (
+										<div className="wday-exercises">
+											{(workout.exercises ?? []).length === 0 ? (
+												<p style={{ color: '#4B5563', fontSize: 13, margin: 0 }}>Exercises are being added. Check back soon.</p>
+											) : (
+												workout.exercises!
+													.slice()
+													.sort((a, b) => a.orderInWorkout - b.orderInWorkout)
+													.map((ex, idx) => (
+														<div key={ex._id} className="ex-item">
+															<div className="ex-top">
+																<span className="ex-num">{idx + 1}</span>
+																<div className="ex-info">
+																	<span className="ex-name">{ex.exerciseName}</span>
+																	<div className="ex-params">
+																		<span>{ex.sets} sets × {ex.reps} reps</span>
+																		{(ex.restTime ?? 0) > 0 && <span>· {ex.restTime}s rest</span>}
+																		{ex.primaryMuscle && <span>· {ex.primaryMuscle.replace(/_/g, ' ')}</span>}
+																	</div>
+																</div>
+																<div className="ex-top-right">
+																	{ex.difficulty && (
+																		<span className={`ex-diff-badge diff-${ex.difficulty.toLowerCase()}`}>{ex.difficulty}</span>
+																	)}
+																	{ex.exerciseVideo && (
+																		<a
+																			href={ex.exerciseVideo}
+																			target="_blank"
+																			rel="noopener noreferrer"
+																			className="ex-video-btn"
+																		>
+																			▶ Watch Tutorial
+																		</a>
+																	)}
+																</div>
+															</div>
+																						{(ex.equipment?.length ?? 0) > 0 && (
+																<div className="ex-equipment">
+																	{ex.equipment?.map((eq) => (
+																		<span key={eq} className="eq-tag">{eq.replace(/_/g, ' ')}</span>
+																	))}
+																</div>
+															)}
+															{(ex.instructions?.length ?? 0) > 0 && (
+																<ol className="ex-instructions">
+																	{ex.instructions?.map((inst, i) => <li key={i}>{inst}</li>)}
+																</ol>
+															)}
+															{(ex.tips?.length ?? 0) > 0 && (
+																<div className="ex-tips">
+																	{ex.tips?.map((tip, i) => <p key={i} className="ex-tip">💡 {tip}</p>)}
+																</div>
+															)}
+														</div>
+													))
+											)}
+										</div>
+									)}
+								</div>
+							);
+						})}
+				</div>
+			)}
+		</section>
+	);
+
 	const weekSchedule = workouts.length > 0 && (
 		<section className="pdp-section">
 			<h2 className="pdp-section-title">Sample Week</h2>
@@ -493,6 +596,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 					)}
 
 					{weekSchedule}
+					{enrolledWorkoutPlan}
 					{trainerSection}
 					{reviewsSection}
 					{leaveReviewSection}
@@ -671,6 +775,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 			{/* ── Full-width: Reviews + Rating ── */}
 			<div className="pdp-full-width">
+				{enrolledWorkoutPlan}
 				{reviewsSection}
 				{leaveReviewSection}
 

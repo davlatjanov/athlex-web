@@ -106,7 +106,8 @@ function createIsomorphicLink() {
 						}
 						return;
 					}
-					if (!message.includes('input')) sweetErrorAlert(message);
+					const silent = message.includes('input') || message.toLowerCase().includes('not found') || message.toLowerCase().includes('no data') || message.toLowerCase().includes('cannot find') || message.toLowerCase().includes('does not exist');
+					if (!silent) sweetErrorAlert(message);
 				});
 			}
 			if (networkError) console.log(`[Network error]: ${networkError}`);
