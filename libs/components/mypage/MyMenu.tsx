@@ -4,7 +4,7 @@ import { Stack } from '@mui/material';
 import Link from 'next/link';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
-import { REACT_APP_API_URL } from '../../config';
+import { NEXT_PUBLIC_API_URL } from '../../config';
 import { logOut } from '../../auth';
 import { sweetConfirmAlert } from '../../sweetAlert';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
