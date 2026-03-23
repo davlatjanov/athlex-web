@@ -1,0 +1,264 @@
+#pc-wrap {
+	#my-page {
+		#my-programs-page {
+			width: 100%;
+			height: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 57px;
+			.main-title-box {
+				width: auto;
+				height: auto;
+				flex-direction: row;
+				justify-content: space-between;
+				.right-box {
+					width: 315px;
+					.main-title {
+						color: #e2e8f0;
+						font-family: $font;
+						font-size: 30px;
+						font-style: normal;
+						font-weight: 600;
+						line-height: normal;
+						letter-spacing: 0.6px;
+						text-transform: capitalize;
+					}
+					.sub-title {
+						color: #e2e8f0;
+						font-family: $font;
+						font-size: 14px;
+						font-style: normal;
+						font-weight: 400;
+						line-height: 26px;
+					}
+				}
+			}
+			.property-list-box {
+				width: 100%;
+				height: auto;
+				.tab-name-box {
+					width: 100%;
+					height: 49px;
+					flex-direction: row;
+					justify-content: center;
+					align-items: flex-end;
+					gap: 10px;
+					border-radius: 12px 12px 0px 0px;
+					background: rgba(255, 255, 255, 0.05);
+					border-radius: 12px 12px 0px 0px;
+					border: 1px solid rgba(255, 255, 255, 0.1);
+					.tab-name {
+						width: 110px;
+						height: 32px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						cursor: pointer;
+						color: #e2e8f0;
+						font-family: $font;
+						font-size: 16px;
+						font-style: normal;
+						font-weight: 500;
+						line-height: 26px;
+					}
+					.active-tab-name {
+						width: 110px;
+						height: 32px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						border-bottom: 2px solid #E92C28;
+						cursor: pointer;
+						color: #E92C28;
+						font-family: $font;
+						font-size: 16px;
+						font-style: normal;
+						font-weight: 600;
+						line-height: 26px;
+					}
+				}
+			}
+			.list-box {
+				width: 100%;
+				height: auto;
+				min-height: 700px;
+				padding: 30px 28px;
+				border-radius: 0px 0px 12px 12px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-top: none;
+				background: #111827;
+				box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.3);
+				// Shared 5-column table grid: [program] [published] [status] [views] [action]
+				$col-program:   minmax(240px, 1fr);
+				$col-published: 150px;
+				$col-status:    120px;
+				$col-views:     80px;
+				$col-action:    100px;
+				$tbl-grid: $col-program $col-published $col-status $col-views $col-action;
+
+				.listing-title-box {
+					display: grid;
+					grid-template-columns: $tbl-grid;
+					align-items: center;
+					padding: 12px 24px;
+					border-radius: 10px;
+					background: #1a2235;
+					border: 1px solid rgba(255,255,255,0.07);
+					// first col left-aligned, rest centered
+					.title-text {
+						color: #6b7280;
+						font-family: $font;
+						font-size: 11px;
+						font-weight: 700;
+						letter-spacing: 1.2px;
+						text-transform: uppercase;
+						text-align: center;
+						&:first-child { text-align: left; }
+					}
+				}
+
+				.property-card-box {
+					display: grid;
+					grid-template-columns: $tbl-grid;
+					align-items: center;
+					min-height: 90px;
+					padding: 16px 24px;
+					border-bottom: 1px solid rgba(255,255,255,0.06);
+					transition: background 0.15s;
+					&:hover { background: rgba(255,255,255,0.02); }
+					&:last-of-type { border-bottom: none; }
+
+					// Column 1 — left-aligned
+					.program-col {
+						display: flex;
+						align-items: center;
+						gap: 14px;
+						cursor: pointer;
+					}
+					.image-box {
+						width: 76px;
+						height: 68px;
+						flex-shrink: 0;
+						overflow: hidden;
+						border-radius: 8px;
+						img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+					}
+					.information-box {
+						display: flex;
+						flex-direction: column;
+						gap: 3px;
+						.name {
+							color: #e2e8f0;
+							font-family: $font;
+							font-size: 13px;
+							font-weight: 600;
+							line-height: 1.4;
+						}
+						.address {
+							color: #4b5563;
+							font-family: $font;
+							font-size: 10px;
+							font-weight: 600;
+							text-transform: uppercase;
+							letter-spacing: 0.8px;
+						}
+						.price {
+							color: #22C55E;
+							font-family: $font;
+							font-size: 13px;
+							font-weight: 700;
+						}
+					}
+
+					// Columns 2-5 — all centered
+					.date-box {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						.date {
+							color: #9ca3af;
+							font-family: $font;
+							font-size: 12px;
+							text-align: center;
+						}
+					}
+					.status-box {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						.coloured-box {
+							width: 86px;
+							height: 30px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							border-radius: 20px;
+							cursor: pointer;
+							.status {
+								font-family: $font;
+								font-size: 10px;
+								font-weight: 800;
+								letter-spacing: 1px;
+								text-transform: uppercase;
+							}
+						}
+					}
+					.views-box {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						.views {
+							color: #e2e8f0;
+							font-family: $font;
+							font-size: 13px;
+							font-weight: 600;
+							text-align: center;
+						}
+					}
+					.action-box {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						gap: 6px;
+						.icon-button {
+							width: 34px;
+							height: 34px;
+							border-radius: 8px;
+							&:hover { background: rgba(255,255,255,0.07); }
+							.buttons    { color: #e2e8f0; }
+							.btn-edit      { color: #FACC15; }
+							.btn-unarchive { color: #22C55E; }
+							.btn-delete { color: #E92C28; }
+						}
+					}
+				}
+				.pagination-config {
+					width: 100%;
+					height: auto;
+					justify-content: center;
+					align-items: center;
+					margin-top: 30px;
+					.MuiPagination-root {
+						.MuiPaginationItem-root {
+							color: #aaaaaa;
+							&.Mui-selected { background: #22C55E; color: #fff; border-color: #22C55E; }
+							&:hover:not(.Mui-selected) { background: rgba(34,197,94,0.1); color: #22C55E; }
+						}
+						.MuiPaginationItem-previousNext { color: #22C55E; }
+					}
+					.total-result {
+						p {
+							color: #e2e8f0;
+							text-align: center;
+							font-family: $font;
+							font-size: 14px;
+							font-style: normal;
+							font-weight: 400;
+							line-height: 26px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

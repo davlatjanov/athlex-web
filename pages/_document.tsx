@@ -5,7 +5,11 @@ export default function Document() {
 		<Html lang="en">
 			<Head>
 				<meta name="robots" content="index,follow" />
-				<link rel="icon" type="image/png" href="/img/logo/favicon.svg" />
+				<link
+					rel="icon"
+					type="image/png"
+					href="https://cdn.dribbble.com/userupload/39481834/file/original-8136b8ed9dc3eda88a2c8a4b91ceca8f.jpg?resize=1024x781&vertical=center"
+				/>
 
 				{/* SEO */}
 				<meta name="keyword" content={'nestar, nestar.uz, devex mern, mern nestjs fullstack'} />

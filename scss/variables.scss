@@ -3,3 +3,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 $font: 'Poppins', sans-serif;
+
+// ── Color Palette ──────────────────────────────────────────
+$color-accent:       #22C55E;   // Action Green
+$color-accent-dark:  #16a34a;   // Green hover
+$color-accent-teal:  #14b8a6;   // Teal gradient end
+$color-bg:           #0F172A;   // Deep Charcoal (main bg)
+$color-bg-mid:       #111827;   // Dark surface
+$color-card:         #1F2937;   // Card Surface
+$color-text:         #FFFFFF;
+$color-text-muted:   #9CA3AF;   // Cool Grey
+$color-text-dim:     #6B7280;   // Muted Grey
+$color-border:       rgba(255, 255, 255, 0.08);
+$color-danger:       #E92C28;   // Destructive Red
+$color-danger-dark:  #c0201d;   // Red hover

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add -A)",
+      "Bash(git commit -m \"fix: remove all legacy article/community components \\(no backend\\):*)",
+      "Bash(git add apollo/user/query.ts libs/components/layout/LayoutBasic.tsx libs/components/member/MemberFollowers.tsx libs/components/member/MemberFollowings.tsx libs/components/member/MemberMenu.tsx libs/components/member/MemberProperties.tsx libs/components/mypage/MyBookmarks.tsx libs/components/mypage/MyFavorites.tsx libs/components/mypage/RecentlyVisited.tsx pages/member/index.tsx pages/mypage/index.tsx pages/products/[id].tsx pages/trainer/detail.tsx scss/pc/member/memberFollows.scss scss/pc/member/memberPage.scss scss/pc/mypage/myFavorites.scss scss/pc/mypage/mySaved.scss scss/pc/programs/programs.scss scss/pc/trainer/detail.scss)",
+      "Bash(sed -i '' 's/<Box className={''''product-card''''}>/\\\\<div className={''''product-card''''}>/' /Users/davlatjanov/Desktop/athlex-web/libs/components/homepage/FeaturedProducts.tsx)",
+      "Bash(sed -i '' 's/<\\\\/Box>\\\\n.*<\\\\/Link>/<\\\\/div>/' /Users/davlatjanov/Desktop/athlex-web/libs/components/homepage/FeaturedProducts.tsx)"
+    ]
+  }
+}

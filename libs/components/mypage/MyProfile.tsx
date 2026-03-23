@@ -3,15 +3,15 @@ import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Button, Stack, Typography } from '@mui/material';
 import axios from 'axios';
-import { Messages, REACT_APP_API_URL } from '../../config';
+import { Messages } from '../../config';
 import { getJwtToken, updateStorage, updateUserInfo } from '../../auth';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { MemberUpdate } from '../../types/member/member.update';
 import { UPDATE_MEMBER } from '../../../apollo/user/mutation';
-import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 
-const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
+const MyProfile: NextPage = ({ initialValues }: any) => {
 	const device = useDeviceDetect();
 	const token = getJwtToken();
 	const user = useReactiveVar(userVar);
@@ -26,7 +26,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			...updateData,
 			memberNick: user.memberNick,
 			memberPhone: user.memberPhone,
-			memberAddress: user.memberAddress,
+			memberFullName: user.memberFullName,
+			memberDesc: user.memberDesc,
 			memberImage: user.memberImage,
 		});
 	}, [user]);
@@ -35,7 +36,6 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const uploadImage = async (e: any) => {
 		try {
 			const image = e.target.files[0];
-			console.log('+image:', image);
 
 			const formData = new FormData();
 			formData.append(
@@ -43,19 +43,14 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 				JSON.stringify({
 					query: `mutation ImageUploader($file: Upload!, $target: String!) {
 						imageUploader(file: $file, target: $target)
-				  }`,
+					}`,
 					variables: {
 						file: null,
 						target: 'member',
 					},
 				}),
 			);
-			formData.append(
-				'map',
-				JSON.stringify({
-					'0': ['variables.file'],
-				}),
-			);
+			formData.append('map', JSON.stringify({ '0': ['variables.file'] }));
 			formData.append('0', image);
 
 			const response = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
@@ -67,48 +62,31 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 			});
 
 			const responseImage = response.data.data.imageUploader;
-			console.log('+responseImage: ', responseImage);
-			updateData.memberImage = responseImage;
-			setUpdateData({ ...updateData });
-
-			return `${REACT_APP_API_URL}/${responseImage}`;
+			setUpdateData({ ...updateData, memberImage: responseImage });
 		} catch (err) {
-			console.log('Error, uploadImage:', err);
+			sweetMixinErrorAlert('Image upload failed. Please try again.').then();
 		}
 	};
 
-	const updatePropertyHandler = useCallback(async () => {
+	const updateProfileHandler = useCallback(async () => {
 		try {
 			if (!user._id) throw new Error(Messages.error2);
 			updateData._id = user._id;
-			const result = await updateMember({
-				variables: {
-					input: updateData,
-				},
-			});
+			const result = await updateMember({ variables: { input: updateData } });
 
 			//@ts-ignore
 			const jwtToken = result.data.updateMember?.accessToken;
 			await updateStorage({ jwtToken });
-			updateUserInfo(result.data.updateMember?.accessToken);
-			await sweetMixinSuccessAlert('information updated successfully');
+			updateUserInfo(jwtToken);
+			sweetMixinSuccessAlert('Profile updated successfully');
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
 	}, [updateData]);
 
 	const doDisabledCheck = () => {
-		if (
-			updateData.memberNick === '' ||
-			updateData.memberPhone === '' ||
-			updateData.memberAddress === '' ||
-			updateData.memberImage === ''
-		) {
-			return true;
-		}
+		return !updateData.memberNick || !updateData.memberPhone;
 	};
-
-	console.log('+updateData', updateData);
 
 	if (device === 'mobile') {
 		return <>MY PROFILE PAGE MOBILE</>;
@@ -126,14 +104,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 						<Typography className="title">Photo</Typography>
 						<Stack className="image-big-box">
 							<Stack className="image-box">
-								<img
-									src={
-										updateData?.memberImage
-											? `${REACT_APP_API_URL}/${updateData?.memberImage}`
-											: `/img/profile/defaultUser.svg`
-									}
-									alt=""
-								/>
+								<img src={updateData?.memberImage || '/img/profile/defaultUser.svg'} alt="" onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }} />
 							</Stack>
 							<Stack className="upload-big-box">
 								<input
@@ -156,7 +127,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your username"
-								value={updateData.memberNick}
+								value={updateData.memberNick ?? ''}
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
 							/>
 						</Stack>
@@ -164,23 +135,32 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<Typography className="title">Phone</Typography>
 							<input
 								type="text"
-								placeholder="Your Phone"
-								value={updateData.memberPhone}
+								placeholder="Your phone"
+								value={updateData.memberPhone ?? ''}
 								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
 							/>
 						</Stack>
+						<Stack className="input-box">
+							<Typography className="title">Full Name</Typography>
+							<input
+								type="text"
+								placeholder="Your full name"
+								value={updateData.memberFullName ?? ''}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberFullName: value })}
+							/>
+						</Stack>
 					</Stack>
-					<Stack className="address-box">
-						<Typography className="title">Address</Typography>
-						<input
-							type="text"
-							placeholder="Your address"
-							value={updateData.memberAddress}
-							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberAddress: value })}
+					<Stack className="desc-box">
+						<Typography className="title">Bio</Typography>
+						<textarea
+							rows={4}
+							placeholder="Tell something about yourself..."
+							value={updateData.memberDesc ?? ''}
+							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberDesc: value })}
 						/>
 					</Stack>
 					<Stack className="about-me-box">
-						<Button className="update-button" onClick={updatePropertyHandler} disabled={doDisabledCheck()}>
+						<Button className="update-button" onClick={updateProfileHandler} disabled={doDisabledCheck()}>
 							<Typography>Update Profile</Typography>
 							<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
 								<g clipPath="url(#clip0_7065_6985)">
@@ -208,7 +188,8 @@ MyProfile.defaultProps = {
 		memberImage: '',
 		memberNick: '',
 		memberPhone: '',
-		memberAddress: '',
+		memberFullName: '',
+		memberDesc: '',
 	},
 };
 

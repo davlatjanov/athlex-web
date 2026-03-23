@@ -45,7 +45,7 @@
 			bottom: 20px;
 			border-radius: 6px;
 			background: #fff;
-			color: #181a20;
+			color: #e2e8f0;
 			font-family: $font;
 			font-size: 15px;
 			font-style: normal;
@@ -64,7 +64,7 @@
 		background: #fff;
 		.title {
 			overflow: hidden;
-			color: #181a20;
+			color: #e2e8f0;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			font-family: $font;
@@ -101,7 +101,7 @@
 					height: 17px;
 				}
 				span {
-					color: #181a20;
+					color: #e2e8f0;
 					font-family: $font;
 					font-size: 13px;
 					font-style: normal;
@@ -123,7 +123,7 @@
 				justify-content: space-between;
 			}
 			p {
-				color: #181a20;
+				color: #e2e8f0;
 				font-family: $font;
 				font-size: 13px;
 				font-style: normal;
@@ -195,7 +195,7 @@
 			display: flex;
 			flex-direction: column;
 			strong {
-				color: #181a20;
+				color: #e2e8f0;
 				font-family: $font;
 				font-size: 15px;
 				font-style: normal;
@@ -204,7 +204,7 @@
 				cursor: pointer;
 			}
 			span {
-				color: #181a20;
+				color: #e2e8f0;
 				font-family: $font;
 				font-size: 15px;
 				font-style: normal;
@@ -229,6 +229,63 @@
 		}
 	}
 }
+// ─── SKELETON LOADERS ─────────────────────────────────────────────────────────
+
+@keyframes skeleton-shimmer {
+	0% { background-position: -400px 0; }
+	100% { background-position: 400px 0; }
+}
+
+.skeleton-pulse {
+	background: linear-gradient(
+		90deg,
+		#1F2937 25%,
+		#2D3748 50%,
+		#1F2937 75%
+	);
+	background-size: 800px 100%;
+	animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-card {
+	background: #1F2937;
+	border: 1px solid rgba(255,255,255,0.08);
+	border-radius: 12px;
+	overflow: hidden;
+	width: 300px;
+
+	.skeleton-card-img {
+		width: 100%;
+		height: 210px;
+	}
+
+	.skeleton-card-body {
+		padding: 14px 16px 16px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+}
+
+.skeleton-trainer-card {
+	background: #1F2937;
+	border: 1px solid rgba(255,255,255,0.08);
+	border-radius: 12px;
+	width: 200px;
+	padding: 24px 16px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+
+	.skeleton-avatar {
+		width: 90px;
+		height: 90px;
+		border-radius: 50%;
+		margin-bottom: 4px;
+	}
+}
+
 .community-general-card-config {
 	position: relative;
 	height: auto;
@@ -260,7 +317,7 @@
 			line-height: normal;
 		}
 		.desc {
-			color: #181a20;
+			color: #e2e8f0;
 			font-family: $font;
 			font-size: 15px;
 			font-style: normal;
@@ -296,7 +353,7 @@
 		background: #fff;
 		box-shadow: 0px 6px 15px 0px rgba(64, 79, 104, 0.05);
 		.month {
-			color: #181a20;
+			color: #e2e8f0;
 			text-align: center;
 			font-family: $font;
 			font-size: 13px;
@@ -305,7 +362,7 @@
 			line-height: normal;
 		}
 		.day {
-			color: #181a20;
+			color: #e2e8f0;
 			font-family: $font;
 			font-size: 20px;
 			font-style: normal;

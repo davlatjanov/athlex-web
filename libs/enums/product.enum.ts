@@ -1,0 +1,23 @@
+export enum ProductType {
+	SUPPLEMENT = 'SUPPLEMENT',
+	EQUIPMENT = 'EQUIPMENT',
+	WEARABLE = 'WEARABLE',
+	ACCESSORY = 'ACCESSORY',
+	DRINK = 'DRINK',
+}
+
+export enum ProductStatus {
+	ACTIVE = 'ACTIVE',
+	STOPPED = 'STOPPED',
+	OUT_OF_STOCK = 'OUT_OF_STOCK',
+}
+
+export enum ProductBrand {
+	NONE = 'NONE',
+	OPTIMUM = 'OPTIMUM',
+	MUSCLETECH = 'MUSCLETECH',
+	NUTREX = 'NUTREX',
+	MYPROTEIN = 'MYPROTEIN',
+	NIKE = 'NIKE',
+	ADIDAS = 'ADIDAS',
+}

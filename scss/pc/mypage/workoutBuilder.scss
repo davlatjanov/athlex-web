@@ -1,0 +1,811 @@
+.wb-root {
+	background: #0F172A;
+	min-height: 100vh;
+	padding-top: 87px;
+}
+
+.wb-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 60vh;
+	color: #6b7280;
+	font-size: 15px;
+}
+
+.wb-page {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 48px 40px 100px;
+}
+
+/* Header */
+.wb-header {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	margin-bottom: 32px;
+}
+
+.wb-back-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: #9ca3af;
+	border-radius: 8px;
+	padding: 8px 14px;
+	font-size: 13px;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: background 0.2s;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1);
+		color: #e2e8f0;
+	}
+}
+
+.wb-header-info {
+	flex: 1;
+}
+
+.wb-title {
+	font-size: 28px;
+	font-weight: 800;
+	color: #f1f5f9;
+	margin: 0 0 6px;
+	letter-spacing: -0.5px;
+}
+
+.wb-subtitle {
+	font-size: 13px;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+/* Week label */
+.wb-week-label {
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	color: #4b5563;
+	margin-bottom: 16px;
+
+	span {
+		font-weight: 400;
+		text-transform: none;
+		letter-spacing: 0;
+		color: #4b5563;
+	}
+}
+
+/* Days container */
+.wb-days {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+/* Day card */
+.wb-day-card {
+	background: #111827;
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	border-radius: 14px;
+	overflow: hidden;
+	transition: border-color 0.2s, box-shadow 0.2s;
+
+	&:hover {
+		border-color: rgba(255, 255, 255, 0.12);
+	}
+
+	&.has-workout {
+		border-color: rgba(233, 44, 40, 0.25);
+		box-shadow: 0 0 0 1px rgba(233, 44, 40, 0.08);
+	}
+
+	&.rest {
+		border-color: rgba(255, 255, 255, 0.04);
+		opacity: 0.7;
+	}
+}
+
+.wb-day-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 22px 28px;
+}
+
+.wb-day-label {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.wb-day-num {
+	font-size: 17px;
+	font-weight: 800;
+	color: #e2e8f0;
+	letter-spacing: -0.3px;
+}
+
+.wb-day-name {
+	font-size: 12px;
+	font-weight: 700;
+	color: #374151;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background: rgba(255, 255, 255, 0.04);
+	padding: 3px 10px;
+	border-radius: 4px;
+}
+
+.wb-day-actions {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* Icon buttons */
+.wb-icon-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	color: #9ca3af;
+	cursor: pointer;
+	transition: all 0.15s;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1);
+		color: #e2e8f0;
+	}
+
+	&.danger {
+		&:hover {
+			background: rgba(233, 44, 40, 0.15);
+			color: #E92C28;
+			border-color: rgba(233, 44, 40, 0.3);
+		}
+	}
+}
+
+.wb-expand-btn {
+	@extend .wb-icon-btn;
+}
+
+.wb-add-btn, .wb-rest-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 9px 18px;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.15s;
+	border: 1px solid;
+}
+
+.wb-add-btn {
+	background: rgba(233, 44, 40, 0.12);
+	border-color: rgba(233, 44, 40, 0.3);
+	color: #E92C28;
+
+	&:hover {
+		background: rgba(233, 44, 40, 0.2);
+	}
+}
+
+.wb-rest-btn {
+	background: rgba(255, 255, 255, 0.04);
+	border-color: rgba(255, 255, 255, 0.1);
+	color: #6b7280;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.08);
+		color: #9ca3af;
+	}
+}
+
+/* Workout info inside card */
+.wb-workout-info {
+	padding: 0 28px 22px;
+	border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.wb-rest-info {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: #4b5563;
+	font-size: 13px;
+	padding-top: 8px;
+}
+
+.wb-rest-icon {
+	font-size: 18px !important;
+	color: #374151;
+}
+
+.wb-workout-meta {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding-top: 14px;
+	margin-bottom: 10px;
+}
+
+.wb-fit-icon {
+	font-size: 20px !important;
+	color: #E92C28;
+}
+
+.wb-workout-name {
+	font-size: 16px;
+	font-weight: 700;
+	color: #e2e8f0;
+	flex: 1;
+}
+
+.wb-duration {
+	font-size: 12px;
+	color: #6b7280;
+	background: rgba(255, 255, 255, 0.05);
+	padding: 4px 10px;
+	border-radius: 6px;
+}
+
+.wb-body-parts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 8px;
+}
+
+.wb-bp-chip {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #6b7280;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 6px;
+	padding: 4px 10px;
+}
+
+.wb-ex-count {
+	font-size: 13px;
+	color: #4b5563;
+	margin-top: 4px;
+	display: block;
+}
+
+/* Exercises list */
+.wb-exercises {
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
+	padding: 14px 28px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.wb-no-exercises {
+	font-size: 13px;
+	color: #374151;
+	padding: 16px 0;
+	text-align: center;
+}
+
+.wb-exercise-row {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	border-radius: 10px;
+	padding: 14px 16px;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.05);
+	}
+}
+
+.wb-ex-order {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: rgba(233, 44, 40, 0.15);
+	color: #E92C28;
+	font-size: 13px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.wb-ex-thumb {
+	width: 44px;
+	height: 44px;
+	border-radius: 6px;
+	object-fit: cover;
+	flex-shrink: 0;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wb-ex-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.wb-ex-name {
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	color: #e2e8f0;
+}
+
+.wb-ex-meta {
+	display: block;
+	font-size: 12px;
+	color: #4b5563;
+	margin-top: 3px;
+}
+
+.wb-ex-actions {
+	display: flex;
+	gap: 6px;
+}
+
+.wb-add-exercise-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #E92C28;
+	background: none;
+	border: 1px dashed rgba(233, 44, 40, 0.3);
+	border-radius: 8px;
+	padding: 10px 16px;
+	cursor: pointer;
+	width: 100%;
+	justify-content: center;
+	transition: all 0.15s;
+
+	&:hover {
+		background: rgba(233, 44, 40, 0.06);
+	}
+}
+
+/* Exercise image upload */
+.wb-image-upload {
+	position: relative;
+	width: 100%;
+	height: 180px;
+	border: 2px dashed rgba(255, 255, 255, 0.12);
+	border-radius: 10px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: border-color 0.2s;
+
+	&:hover {
+		border-color: rgba(233, 44, 40, 0.4);
+
+		.wb-image-overlay {
+			opacity: 1;
+		}
+	}
+}
+
+.wb-image-preview {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.wb-image-overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.55);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: opacity 0.2s;
+
+	span {
+		color: #fff;
+		font-size: 13px;
+		font-weight: 600;
+		background: rgba(233, 44, 40, 0.8);
+		padding: 6px 14px;
+		border-radius: 6px;
+	}
+}
+
+.wb-image-placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	color: #4b5563;
+
+	span {
+		font-size: 13px;
+	}
+}
+
+.wb-image-icon {
+	font-size: 28px !important;
+	margin-bottom: 2px;
+}
+
+.wb-image-hint {
+	font-size: 11px !important;
+	color: #374151 !important;
+}
+
+.wb-remove-image {
+	font-size: 12px;
+	color: #E92C28;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 2px 0;
+	text-align: left;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.wb-video-link {
+	font-size: 12px;
+	color: #6b7280;
+	text-decoration: none;
+	margin-top: 2px;
+
+	&:hover {
+		color: #9ca3af;
+		text-decoration: underline;
+	}
+}
+
+/* PropertyCard workout icon */
+.btn-workouts {
+	color: #E92C28 !important;
+}
+
+/* ======= MODAL ======= */
+.wb-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+}
+
+.wb-modal {
+	background: #111827;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 14px;
+	width: 100%;
+	max-width: 520px;
+	max-height: 90vh;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+
+	&.wb-modal-wide {
+		max-width: 880px;
+	}
+}
+
+.wb-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 24px 16px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	position: sticky;
+	top: 0;
+	background: #111827;
+	z-index: 1;
+
+	h2 {
+		font-size: 16px;
+		font-weight: 700;
+		color: #f1f5f9;
+		margin: 0;
+	}
+}
+
+.wb-modal-close {
+	background: none;
+	border: none;
+	color: #6b7280;
+	font-size: 18px;
+	cursor: pointer;
+	padding: 4px;
+	line-height: 1;
+
+	&:hover {
+		color: #e2e8f0;
+	}
+}
+
+.wb-modal-body {
+	padding: 20px 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+
+	&.wb-two-col {
+		flex-direction: row;
+		align-items: stretch;
+		gap: 0;
+		padding: 0;
+		overflow: hidden;
+
+		.wb-col {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+			padding: 20px 24px;
+			overflow-y: auto;
+			max-height: calc(90vh - 120px); // subtract header + footer
+
+			&:first-child {
+				border-right: 1px solid rgba(255, 255, 255, 0.06);
+			}
+		}
+	}
+}
+
+.wb-label {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	> span:first-child {
+		font-size: 12px;
+		font-weight: 600;
+		color: #9ca3af;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	/* rest day checkbox inline */
+	&:has(input[type=checkbox]) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 8px;
+		padding: 10px 14px;
+
+		> span {
+			color: #e2e8f0;
+			text-transform: none;
+			letter-spacing: 0;
+			font-size: 14px;
+		}
+
+		input[type=checkbox] {
+			width: 18px;
+			height: 18px;
+			accent-color: #E92C28;
+			cursor: pointer;
+		}
+	}
+}
+
+.wb-input {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+	padding: 10px 12px;
+	color: #e2e8f0;
+	font-size: 14px;
+	outline: none;
+	width: 100%;
+	box-sizing: border-box;
+
+	&::placeholder {
+		color: #374151;
+	}
+
+	&:focus {
+		border-color: rgba(233, 44, 40, 0.4);
+	}
+}
+
+.wb-textarea {
+	@extend .wb-input;
+	resize: vertical;
+	font-family: inherit;
+}
+
+.wb-select {
+	@extend .wb-input;
+	cursor: pointer;
+
+	option {
+		background: #1a1f2e;
+		color: #e2e8f0;
+	}
+}
+
+.wb-row-3 {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 10px;
+}
+
+.wb-chip-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.wb-chip {
+	padding: 5px 10px;
+	border-radius: 6px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	color: #6b7280;
+	cursor: pointer;
+	transition: all 0.15s;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.08);
+		color: #9ca3af;
+	}
+
+	&.selected {
+		background: rgba(233, 44, 40, 0.15);
+		border-color: rgba(233, 44, 40, 0.4);
+		color: #E92C28;
+	}
+}
+
+.wb-instruction-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.wb-step-num {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.06);
+	color: #6b7280;
+	font-size: 11px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.wb-add-step-btn {
+	font-size: 12px;
+	color: #6b7280;
+	background: none;
+	border: 1px dashed rgba(255, 255, 255, 0.1);
+	border-radius: 6px;
+	padding: 6px 12px;
+	cursor: pointer;
+	margin-top: 2px;
+
+	&:hover {
+		color: #9ca3af;
+		border-color: rgba(255, 255, 255, 0.2);
+	}
+}
+
+.wb-modal-footer {
+	padding: 16px 24px 20px;
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	position: sticky;
+	bottom: 0;
+	background: #111827;
+}
+
+.wb-btn-cancel {
+	padding: 9px 18px;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: #9ca3af;
+	cursor: pointer;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.08);
+		color: #e2e8f0;
+	}
+}
+
+.wb-btn-save {
+	padding: 9px 20px;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 700;
+	background: #E92C28;
+	border: none;
+	color: #fff;
+	cursor: pointer;
+	transition: background 0.15s;
+
+	&:hover {
+		background: #c9221e;
+	}
+}
+
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 1100px) {
+  #pc-wrap #my-page .workout-builder {
+    .wb-columns { gap: 16px; }
+    .wb-left { min-width: 220px; }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap #my-page .workout-builder {
+    .wb-layout {
+      flex-direction: column;
+    }
+
+    .wb-left {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .wb-days-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .wb-day-card { min-width: 0; }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #my-page .workout-builder {
+    .wb-days-grid { grid-template-columns: 1fr !important; }
+    .wb-header { flex-direction: column; gap: 12px; }
+  }
+}

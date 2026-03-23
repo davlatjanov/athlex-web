@@ -1,0 +1,142 @@
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { CREATE_ORDER } from '../../../apollo/user/mutation';
+import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
+
+interface CheckoutModalProps {
+	programId: string;
+	programName: string;
+	price: number;
+	onClose: () => void;
+	onSuccess: () => void;
+}
+
+const CheckoutModal: React.FC<CheckoutModalProps> = ({ programId, programName, price, onClose, onSuccess }) => {
+	const [cardNumber, setCardNumber] = useState('');
+	const [expiry, setExpiry] = useState('');
+	const [cvv, setCvv] = useState('');
+	const [name, setName] = useState('');
+	const [paying, setPaying] = useState(false);
+	const [submitted, setSubmitted] = useState(false);
+
+	const [createOrder] = useMutation(CREATE_ORDER);
+
+	const formatCardNumber = (val: string) =>
+		val.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+
+	const formatExpiry = (val: string) => {
+		const digits = val.replace(/\D/g, '').slice(0, 4);
+		if (digits.length >= 3) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+		return digits;
+	};
+
+	const isValid = name.trim().length > 0 &&
+		cardNumber.trim().length > 0 &&
+		expiry.trim().length > 0 &&
+		cvv.trim().length > 0;
+
+	const handlePay = () => {
+		if (!isValid || paying) return;
+		setSubmitted(true);
+		setPaying(true);
+		void processPayment();
+	};
+
+	const processPayment = async () => {
+		try {
+			const orderRes = await createOrder({
+				variables: {
+					input: {
+						items: [{
+							productId: programId,
+							productName: programName,
+							productPrice: price,
+							quantity: 1,
+						}],
+						paymentMethod: 'CARD',
+						notes: programId,
+					},
+				},
+			});
+
+			if (!orderRes.data?.createOrder?._id) throw new Error('Order creation failed');
+
+			await sweetTopSmallSuccessAlert('Payment successful!', 1000);
+			onSuccess();
+		} catch (err: any) {
+			sweetMixinErrorAlert(err.message).then();
+			setSubmitted(false);
+			setPaying(false);
+		}
+	};
+
+	return (
+		<div className="checkout-backdrop" onClick={onClose}>
+			<div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
+				<div className="co-header">
+					<div>
+						<h3 className="co-title">Complete Enrollment</h3>
+						<p className="co-program">{programName}</p>
+					</div>
+					<button className="co-close" onClick={onClose}>✕</button>
+				</div>
+
+				<div className="co-summary">
+					<div className="co-row">
+						<span>Program access</span>
+						<span>${price.toFixed(2)}</span>
+					</div>
+					<div className="co-row co-total">
+						<span>Total</span>
+						<span>${price.toFixed(2)}</span>
+					</div>
+				</div>
+
+				{!submitted && (
+					<div className="co-form">
+						<div className="co-field">
+							<label>Cardholder Name</label>
+							<input type="text" placeholder="John Smith" value={name} onChange={(e) => setName(e.target.value)} autoComplete="cc-name" />
+						</div>
+						<div className="co-field">
+							<label>Card Number</label>
+							<input type="text" placeholder="1234 5678 9012 3456" value={cardNumber} onChange={(e) => setCardNumber(formatCardNumber(e.target.value))} autoComplete="cc-number" inputMode="numeric" />
+						</div>
+						<div className="co-field-row">
+							<div className="co-field">
+								<label>Expiry</label>
+								<input type="text" placeholder="MM/YY" value={expiry} onChange={(e) => setExpiry(formatExpiry(e.target.value))} autoComplete="cc-exp" inputMode="numeric" />
+							</div>
+							<div className="co-field">
+								<label>CVV</label>
+								<input type="text" placeholder="123" value={cvv} onChange={(e) => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))} autoComplete="cc-csc" inputMode="numeric" />
+							</div>
+						</div>
+					</div>
+				)}
+
+				{submitted && (
+					<div className="co-processing">
+						<div className="co-spinner" />
+						<p>Processing payment…</p>
+					</div>
+				)}
+
+				{!submitted && (
+					<>
+						<div className="co-trust">
+							<span>Secure payment</span>
+							<span>· Instant access</span>
+							<span>· Cancel anytime</span>
+						</div>
+						<button className="co-pay-btn" onClick={handlePay} disabled={!isValid}>
+							{`Pay $${price.toFixed(2)}`}
+						</button>
+					</>
+				)}
+			</div>
+		</div>
+	);
+};
+
+export default CheckoutModal;

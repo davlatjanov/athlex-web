@@ -1,17 +1,24 @@
 export enum MemberType {
 	USER = 'USER',
-	AGENT = 'AGENT',
+	TRAINER = 'TRAINER',
 	ADMIN = 'ADMIN',
 }
 
 export enum MemberStatus {
 	ACTIVE = 'ACTIVE',
-	BLOCK = 'BLOCK',
-	DELETE = 'DELETE',
+	INACTIVE = 'INACTIVE',
+	BANNED = 'BANNED',
+	DELETED = 'DELETED',
 }
 
 export enum MemberAuthType {
 	PHONE = 'PHONE',
 	EMAIL = 'EMAIL',
-	TELEGRAM = 'TELEGRAM',
+}
+
+export enum MemberPlan {
+	BEGINNER = 'BEGINNER',
+	REGULAR = 'REGULAR',
+	ADVANCED = 'ADVANCED',
+	PRO = 'PRO',
 }
