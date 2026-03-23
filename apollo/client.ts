@@ -5,8 +5,9 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
 import { getJwtToken } from '../libs/auth';
-import { TokenRefreshLink } from 'apollo-link-token-refresh';
+import decodeJWT from 'jwt-decode';
 import { sweetErrorAlert } from '../libs/sweetAlert';
+// apollo-link-token-refresh removed: backend issues 30-day tokens with no refresh endpoint
 import { socketVar } from './store';
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -18,15 +19,28 @@ function getHeaders() {
 	return headers;
 }
 
-const tokenRefreshLink = new TokenRefreshLink({
-	accessTokenField: 'accessToken',
-	isTokenValidOrUndefined: () => {
-		return true;
-	}, // @ts-ignore
-	fetchAccessToken: () => {
-		// execute refresh token
-		return null;
-	},
+/** Returns true if the stored token is missing or still valid, false if it has expired. */
+function isTokenValid(): boolean {
+	const token = getJwtToken();
+	if (!token) return true; // no token — unauthenticated user, let it through
+	try {
+		const { exp } = decodeJWT<{ exp?: number }>(token);
+		if (!exp) return true;
+		return Date.now() < exp * 1000;
+	} catch {
+		return false;
+	}
+}
+
+/** Link that checks token expiry before every request and redirects to login if expired. */
+const tokenExpiryLink = new ApolloLink((operation, forward) => {
+	if (!isTokenValid()) {
+		localStorage.removeItem('accessToken');
+		if (typeof window !== 'undefined' && !window.location.pathname.includes('/account/join')) {
+			window.location.href = '/account/join';
+		}
+	}
+	return forward(operation);
 });
 
 class LoggingWebSocket {
@@ -129,7 +143,7 @@ function createIsomorphicLink() {
 			authLink.concat(link),
 		);
 
-		return from([errorLink, tokenRefreshLink, splitLink]);
+		return from([tokenExpiryLink, errorLink, splitLink]);
 	}
 }
 

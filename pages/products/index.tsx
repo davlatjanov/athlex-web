@@ -48,7 +48,7 @@ const statusColor: Record<string, string> = {
 	OUT_OF_STOCK: '#E92C28',
 };
 
-const PER_PAGE = 12;
+const PER_PAGE = 9;
 
 const ProductCard = ({ product }: { product: Product }) => {
 	const { liked, toggle: toggleLike } = useLike('programs', product._id);

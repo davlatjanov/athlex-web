@@ -343,6 +343,14 @@ $border-accent: rgba(34, 197, 94, 0.4);
 						transition: background 0.2s;
 
 						&:hover { background: $accent-hover; }
+
+						&.btn-paid {
+							background: #22c55e;
+							border: none;
+							color: #fff;
+							cursor: pointer;
+							&:hover { background: #16a34a; }
+						}
 					}
 				}
 			}

@@ -132,13 +132,17 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 
 					<div className={'card-bottom'}>
 						<span className={'level-tag'}>{level}</span>
-						<button
-							className={`btn-enroll ${joined ? 'enrolled' : ''}`}
-							onClick={enrollHandler}
-							disabled={loading}
-						>
-							{loading ? '...' : joined ? '✓ Enrolled' : 'Enroll →'}
-						</button>
+						{price > 0 && !joined ? (
+							<span className={'btn-enroll btn-paid'}>View Program →</span>
+						) : (
+							<button
+								className={`btn-enroll ${joined ? 'enrolled' : ''}`}
+								onClick={enrollHandler}
+								disabled={loading}
+							>
+								{loading ? '...' : joined ? '✓ Enrolled' : 'Enroll →'}
+							</button>
+						)}
 					</div>
 				</div>
 			</div>

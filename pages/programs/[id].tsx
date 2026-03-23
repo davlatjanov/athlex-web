@@ -449,17 +449,24 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const weekSchedule = workouts.length > 0 && (
 		<section className="pdp-section">
 			<h2 className="pdp-section-title">Sample Week</h2>
-			<div className="week-grid">
+			<div className="week-list">
 				{DAY_LABELS.map((day, i) => {
 					const workout = workouts.find((w) => w.workoutDay === i + 1);
 					const isRest = !workout || workout.isRestDay;
 					return (
-						<div key={day} className={`week-day ${isRest ? 'is-rest' : 'is-workout'}`}>
-							<span className="wd-name">{day}</span>
-							<span className="wd-icon">{isRest ? '😴' : '💪'}</span>
-							<span className="wd-label">{isRest ? 'Rest' : workout?.workoutName}</span>
+						<div key={day} className={`wl-row ${isRest ? 'is-rest' : 'is-workout'}`}>
+							<span className="wl-day">{day}</span>
+							<span className={`wl-dot ${isRest ? 'dot-rest' : 'dot-active'}`} />
+							<span className="wl-name">{isRest ? 'Rest & Recovery' : workout?.workoutName}</span>
 							{!isRest && (workout?.bodyParts?.length ?? 0) > 0 && (
-								<span className="wd-muscles">{workout?.bodyParts?.slice(0, 2).join(', ')}</span>
+								<div className="wl-tags">
+									{workout?.bodyParts?.slice(0, 3).map((bp) => (
+										<span key={bp} className="wl-tag">{bp.replace(/_/g, ' ')}</span>
+									))}
+								</div>
+							)}
+							{!isRest && (workout?.workoutDuration ?? 0) > 0 && (
+								<span className="wl-duration">{workout?.workoutDuration} min</span>
 							)}
 						</div>
 					);

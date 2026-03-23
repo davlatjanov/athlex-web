@@ -15,7 +15,7 @@ import {
 	UPDATE_EXERCISE,
 	DELETE_EXERCISE,
 } from '../../../apollo/user/mutation';
-import { sweetConfirmAlert, sweetErrorHandling } from '../../../libs/sweetAlert';
+import { sweetConfirmAlert, sweetErrorHandling, sweetMixinErrorAlert } from '../../../libs/sweetAlert';
 import { getJwtToken } from '../../../libs/auth';
 import { Workout, Exercise } from '../../../libs/types/program/program';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -249,6 +249,30 @@ const WorkoutBuilderPage: NextPage = () => {
 	const submitExercise = async () => {
 		try {
 			if (!exerciseModal) return;
+
+			// Validate required fields before hitting the backend
+			if (!exerciseForm.exerciseName.trim()) {
+				await sweetMixinErrorAlert('Exercise name is required');
+				return;
+			}
+			if (!exerciseForm.exerciseDesc.trim()) {
+				await sweetMixinErrorAlert('Description is required');
+				return;
+			}
+			if (!exerciseForm.primaryMuscle) {
+				await sweetMixinErrorAlert('Please select a primary muscle');
+				return;
+			}
+			if (exerciseForm.equipment.length === 0) {
+				await sweetMixinErrorAlert('Please select at least one equipment type');
+				return;
+			}
+			const validInstructions = exerciseForm.instructions.filter(Boolean);
+			if (validInstructions.length === 0) {
+				await sweetMixinErrorAlert('Please add at least one instruction step');
+				return;
+			}
+
 			setUploading(true);
 
 			let exerciseImage = exerciseForm.exerciseImage;
@@ -266,7 +290,7 @@ const WorkoutBuilderPage: NextPage = () => {
 				restTime: Number(exerciseForm.restTime),
 				equipment: exerciseForm.equipment,
 				difficulty: exerciseForm.difficulty,
-				instructions: exerciseForm.instructions.filter(Boolean),
+				instructions: validInstructions,
 				tips: exerciseForm.tips.filter(Boolean),
 				exerciseImage: exerciseImage || undefined,
 				exerciseVideo: exerciseForm.exerciseVideo || undefined,
