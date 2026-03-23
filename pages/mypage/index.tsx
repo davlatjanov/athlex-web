@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import withAuth from '../../libs/components/layout/withAuth';
 import MyPrograms from '../../libs/components/mypage/MyPrograms';
@@ -140,7 +139,6 @@ const getTabIcon = (key: string) => {
 };
 
 const MyPage: NextPage = () => {
-	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
 	const u = user as any;
@@ -219,10 +217,7 @@ const MyPage: NextPage = () => {
 		}
 	};
 
-	if (device === 'mobile') {
-		return <div>MY PAGE</div>;
-	} else {
-		return (
+	return (
 			<div id="my-page">
 				<Head><title>Athlex | My Dashboard</title></Head>
 				<div className={'container mp-wrap'}>
@@ -343,8 +338,7 @@ const MyPage: NextPage = () => {
 					</div>
 				</div>
 			</div>
-		);
-	}
+	);
 };
 
 export default withAuth(withLayoutBasic(MyPage));

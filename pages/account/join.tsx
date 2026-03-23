@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -17,7 +16,6 @@ export const getStaticProps = async ({ locale }: any) => ({
 
 const Join: NextPage = () => {
 	const router = useRouter();
-	const device = useDeviceDetect();
 	const [input, setInput] = useState({ nick: '', password: '', phone: '', type: 'USER' });
 	const [loginView, setLoginView] = useState<boolean>(true);
 	const [selectedType, setSelectedType] = useState<'USER' | 'TRAINER'>('USER');
@@ -54,10 +52,6 @@ const Join: NextPage = () => {
 		setSelectedType(type);
 		handleInput('type', type);
 	};
-
-	if (device === 'mobile') {
-		return <div>LOGIN MOBILE</div>;
-	}
 
 	return (
 		<Stack className={'join-page'}>

@@ -327,3 +327,48 @@
 		}
 	}
 }
+
+@media (max-width: 768px) {
+  #pc-wrap .about-page {
+    .ab-intro-inner {
+      flex-direction: column;
+      gap: 32px;
+      .ab-intro-left { max-width: 100%; }
+      .ab-intro-right {
+        width: 100%;
+        .ab-img-main img { height: 240px; object-fit: cover; border-radius: 12px; }
+        .ab-img-thumbs { display: none; }
+      }
+    }
+
+    .ab-stats-inner {
+      flex-wrap: wrap;
+      gap: 20px;
+      .ab-stat-divider { display: none; }
+      .ab-stat { width: calc(50% - 10px); }
+    }
+
+    .ab-offers-inner {
+      flex-direction: column;
+      gap: 32px;
+      .ab-offers-img { width: 100%; img { height: 220px; object-fit: cover; border-radius: 12px; } }
+    }
+
+    .ab-cta-content {
+      .ab-cta-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        button { width: 100%; max-width: 300px; }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap .about-page {
+    .ab-heading { font-size: 22px; }
+    .ab-cta-title { font-size: 24px; }
+    .ab-stat { width: 100%; text-align: center; }
+  }
+}

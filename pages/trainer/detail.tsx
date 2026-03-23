@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { CircularProgress } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { GET_MEMBER, GET_PROGRAMS, GET_FEEDBACKS } from '../../apollo/user/query';
 import { FOLLOW_MEMBER, LIKE_TARGET_ITEM, CREATE_FEEDBACK } from '../../apollo/user/mutation';
@@ -67,7 +66,6 @@ const SCALE_TO_NUM: Record<string, number> = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4
 const toNum = (v: any): number => typeof v === 'number' ? v : (SCALE_TO_NUM[v] ?? 0);
 
 const TrainerDetail: NextPage = () => {
-	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const { id } = router.query;
@@ -169,14 +167,6 @@ const TrainerDetail: NextPage = () => {
 					<h2>Trainer not found</h2>
 					<Link href="/trainer"><button>Browse Trainers</button></Link>
 				</div>
-			</div>
-		);
-	}
-
-	if (device === 'mobile') {
-		return (
-			<div id="trainer-detail-page">
-				<div className="tdp-not-found"><span>📱</span><p>Mobile view coming soon.</p></div>
 			</div>
 		);
 	}

@@ -292,7 +292,7 @@
         }
       }
 
-      .join-form-panel {
+      .join-form {
         width: 100%;
         padding: 28px 24px;
         overflow-y: auto;
@@ -303,6 +303,6 @@
 
 @media (max-width: 480px) {
   #pc-wrap .join-page .container .main {
-    .join-form-panel { padding: 20px 16px; }
+    .join-form { padding: 20px 16px; }
   }
 }

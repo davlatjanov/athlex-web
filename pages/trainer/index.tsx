@@ -4,7 +4,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useQuery } from '@apollo/client';
 import { GET_TRAINERS } from '../../apollo/user/query';
 import { useLike } from '../../libs/hooks/useInteractions';
@@ -87,7 +86,6 @@ const TrainerCard = ({ trainer }: { trainer: any }) => {
 };
 
 const TrainerList: NextPage = () => {
-	const device = useDeviceDetect();
 	const [sortIdx, setSortIdx] = useState(0);
 	const [page, setPage] = useState(1);
 	const [searchText, setSearchText] = useState('');
@@ -122,10 +120,6 @@ const TrainerList: NextPage = () => {
 	};
 
 	const totalPages = Math.ceil(total / PER_PAGE);
-
-	if (device === 'mobile') {
-		return <div id="trainer-list-page"><Head><title>Athlex | Trainers</title></Head><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
-	}
 
 	return (
 		<div id="trainer-list-page">

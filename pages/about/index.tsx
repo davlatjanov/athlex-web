@@ -1,19 +1,13 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { Stack } from '@mui/material';
 import Link from 'next/link';
 
 const About: NextPage = () => {
-	const device = useDeviceDetect();
-
-	if (device === 'mobile') {
-		return <div>ABOUT PAGE MOBILE</div>;
-	} else {
-		return (
-			<Stack className={'about-page'}>
+	return (
+		<Stack className={'about-page'}>
 				<Head><title>Athlex | About</title></Head>
 
 				{/* ── Welcome / Intro ── */}
@@ -146,8 +140,7 @@ const About: NextPage = () => {
 				</section>
 
 			</Stack>
-		);
-	}
+	);
 };
 
 export default withLayoutBasic(About);

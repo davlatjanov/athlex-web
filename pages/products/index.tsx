@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { ProductCardSkeleton } from '../../libs/components/common/Skeleton';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../apollo/user/query';
 import { Product } from '../../libs/types/product/product';
@@ -108,7 +107,6 @@ const ProductCard = ({ product }: { product: Product }) => {
 };
 
 const ProductsPage: NextPage = () => {
-	const device = useDeviceDetect();
 	const [selectedTypes, setSelectedTypes] = useState<ProductType[]>([]);
 	const [selectedBrands, setSelectedBrands] = useState<ProductBrand[]>([]);
 	const [selectedPrice, setSelectedPrice] = useState('all');
@@ -167,10 +165,6 @@ const ProductsPage: NextPage = () => {
 
 	const totalPages = Math.ceil(filtered.length / PER_PAGE);
 	const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
-
-	if (device === 'mobile') {
-		return <div id="products-page"><Head><title>Athlex | Shop</title></Head><p style={{ color: '#fff', padding: 40 }}>Mobile view coming soon.</p></div>;
-	}
 
 	return (
 		<div id="products-page">
