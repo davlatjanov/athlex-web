@@ -239,7 +239,7 @@ const WorkoutBuilderPage: NextPage = () => {
 		formData.append('operations', JSON.stringify({ query, variables }));
 		formData.append('map', JSON.stringify({ '0': ['variables.files.0'] }));
 		formData.append('0', file);
-		const res = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
+		const res = await axios.post(`${process.env.NEXT_PUBLIC_API_GRAPHQL_URL}`, formData, {
 			headers: { 'Content-Type': 'multipart/form-data', 'apollo-require-preflight': true, Authorization: `Bearer ${token}` },
 		});
 		if (res.data?.errors?.length) throw new Error(res.data.errors[0].message);

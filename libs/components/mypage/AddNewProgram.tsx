@@ -157,7 +157,7 @@ const AddProgram: NextPage = ({ initialValues, ...props }: any) => {
 			}));
 			fd.append('map', JSON.stringify({ '0': ['variables.file'] }));
 			fd.append('0', file);
-			const res = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, fd, {
+			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_GRAPHQL_URL}`, fd, {
 				headers: { 'Content-Type': 'multipart/form-data', 'apollo-require-preflight': true, Authorization: `Bearer ${token}` },
 			});
 			const url: string = res.data.data.imageUploader;

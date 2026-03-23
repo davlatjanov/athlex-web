@@ -48,7 +48,7 @@ const MyProgressResults: React.FC = () => {
 
 		if (!hasFiles) {
 			// No files — plain JSON request
-			const res = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`,
+			const res = await axios.post(`${process.env.NEXT_PUBLIC_API_GRAPHQL_URL}`,
 				{ query, variables },
 				{ headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } },
 			);
@@ -63,7 +63,7 @@ const MyProgressResults: React.FC = () => {
 		files.forEach((_, i) => { map[String(i)] = [`variables.files.${i}`]; });
 		formData.append('map', JSON.stringify(map));
 		files.forEach((file, i) => formData.append(String(i), file));
-		const res = await axios.post(`${process.env.REACT_APP_API_GRAPHQL_URL}`, formData, {
+		const res = await axios.post(`${process.env.NEXT_PUBLIC_API_GRAPHQL_URL}`, formData, {
 			headers: { 'Content-Type': 'multipart/form-data', 'apollo-require-preflight': true, Authorization: `Bearer ${token}` },
 		});
 		if (res.data?.errors?.length) throw new Error(res.data.errors[0].message);
