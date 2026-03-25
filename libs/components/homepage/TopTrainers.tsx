@@ -30,7 +30,7 @@ const TopTrainers = () => {
 
 		return (
 			<Link href={`/trainer/detail?id=${String(trainer._id)}`}>
-				<Box className={'trainer-card'}>
+				<div className={'trainer-card'}>
 					<div className={'trainer-avatar'}>
 						{trainer.memberImage ? (
 							<img
