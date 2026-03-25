@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import WestIcon from '@mui/icons-material/West';
-import EastIcon from '@mui/icons-material/East';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import Link from 'next/link';
@@ -24,7 +21,6 @@ const typeGradients: Record<string, string> = {
 };
 
 const TopPrograms = () => {
-	const device = useDeviceDetect();
 	const [programs, setPrograms] = useState<any[]>([]);
 
 	useQuery(GET_PROGRAMS, {
@@ -55,51 +51,27 @@ const TopPrograms = () => {
 		</SwiperSlide>
 	));
 
-	if (device === 'mobile') {
-		return (
-			<Stack className={'top-programs'}>
-				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<span className={'section-label'}>TOP RATED</span>
-						<h2>Top Programs</h2>
-					</Stack>
-					<Stack className={'card-box'}>
-						<Swiper
-							className={'program-swiper'}
-							slidesPerView={'auto'}
-							centeredSlides
-							spaceBetween={15}
-							modules={[Autoplay]}
-						>
-							{slides}
-						</Swiper>
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	}
-
 	return (
-		<Stack className={'top-programs'}>
-			<Stack className={'container'}>
-				<Stack className={'info-box'}>
-					<Box component={'div'} className={'left'}>
+		<div className={'top-programs'}>
+			<div className={'container'}>
+				<div className={'info-box'}>
+					<div className={'left'}>
 						<span className={'section-label'}>TOP RATED</span>
 						<h2>Top Programs</h2>
 						<p>Our highest-ranked training programs</p>
-					</Box>
-					<Box component={'div'} className={'right'}>
+					</div>
+					<div className={'right'}>
 						<div className={'pagination-box'}>
-							<WestIcon className={'swiper-top-prev'} />
+							<ChevronLeft className={'swiper-top-prev'} />
 							<div className={'swiper-top-pagination'} />
-							<EastIcon className={'swiper-top-next'} />
+							<ChevronRight className={'swiper-top-next'} />
 						</div>
 						<Link href={'/programs'}>
 							<span className={'see-all-link'}>See All →</span>
 						</Link>
-					</Box>
-				</Stack>
-				<Stack className={'card-box'}>
+					</div>
+				</div>
+				<div className={'card-box'}>
 					<Swiper
 						className={'program-swiper'}
 						slidesPerView={'auto'}
@@ -114,9 +86,9 @@ const TopPrograms = () => {
 					>
 						{slides}
 					</Swiper>
-				</Stack>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

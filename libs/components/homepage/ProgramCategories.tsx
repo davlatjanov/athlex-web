@@ -1,5 +1,4 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
 import Link from 'next/link';
 
 const categories = [
@@ -15,26 +14,26 @@ const categories = [
 
 const ProgramCategories = () => {
 	return (
-		<Stack className={'program-categories'}>
-			<Stack className={'container'}>
-				<Box component={'div'} className={'section-header'}>
+		<div className={'program-categories'}>
+			<div className={'container'}>
+				<div className={'section-header'}>
 					<span className={'section-label'}>EXPLORE BY TYPE</span>
 					<h2 className={'section-title'}>FIND YOUR PROGRAM</h2>
-				</Box>
-				<Box component={'div'} className={'categories-grid'}>
+				</div>
+				<div className={'categories-grid'}>
 					{categories.map((cat) => (
 						<Link href={`/programs?type=${cat.type}`} key={cat.type}>
-							<Box component={'div'} className={'category-card'}>
+							<div className={'category-card'}>
 								<img src={cat.image} alt={cat.label} className={'cat-bg-img'} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
 								<div className={'cat-overlay'} />
 								<strong className={'cat-name'}>{cat.label}</strong>
 								<span className={'cat-count'}>{cat.count}</span>
-							</Box>
+							</div>
 						</Link>
 					))}
-				</Box>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
 import Link from 'next/link';
 
 const plans = [
@@ -71,16 +70,16 @@ const plans = [
 
 const MembershipPlans = () => {
 	return (
-		<Stack className={'membership-plans'}>
-			<Stack className={'container'}>
-				<Box component={'div'} className={'section-header'}>
+		<div className={'membership-plans'}>
+			<div className={'container'}>
+				<div className={'section-header'}>
 					<span className={'section-label'}>PRICING</span>
 					<h2 className={'section-title'}>CHOOSE YOUR PLAN</h2>
 					<p className={'section-desc'}>Start free, upgrade when you are ready. No hidden fees.</p>
-				</Box>
-				<Box component={'div'} className={'plans-grid'}>
+				</div>
+				<div className={'plans-grid'}>
 					{plans.map((plan) => (
-						<Box key={plan.name} className={'plan-card'}>
+						<div key={plan.name} className={'plan-card'}>
 							{plan.badge && <span className={'plan-badge'}>{plan.badge}</span>}
 							<div className={'plan-header'}>
 								<strong className={'plan-name'}>{plan.name}</strong>
@@ -101,11 +100,11 @@ const MembershipPlans = () => {
 							<Link href={plan.href}>
 								<button className={'btn-outline'}>{plan.cta}</button>
 							</Link>
-						</Box>
+						</div>
 					))}
-				</Box>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

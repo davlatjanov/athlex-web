@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
 import Link from 'next/link';
@@ -10,7 +8,6 @@ import { GET_TRAINERS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 
 const TopTrainers = () => {
-	const device = useDeviceDetect();
 	const [trainers, setTrainers] = useState<any[]>([]);
 
 	useQuery(GET_TRAINERS, {
@@ -60,50 +57,26 @@ const TopTrainers = () => {
 		</SwiperSlide>
 	));
 
-	if (device === 'mobile') {
-		return (
-			<Stack className={'top-trainers'}>
-				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<span className={'section-label'}>OUR COACHES</span>
-						<h2>Top Trainers</h2>
-					</Stack>
-					<Stack className={'wrapper'}>
-						<Swiper
-							className={'trainers-swiper'}
-							slidesPerView={'auto'}
-							centeredSlides
-							spaceBetween={20}
-							modules={[Autoplay]}
-						>
-							{slides}
-						</Swiper>
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	}
-
 	return (
-		<Stack className={'top-trainers'}>
-			<Stack className={'container'}>
-				<Stack className={'info-box'}>
-					<Box component={'div'} className={'left'}>
+		<div className={'top-trainers'}>
+			<div className={'container'}>
+				<div className={'info-box'}>
+					<div className={'left'}>
 						<span className={'section-label'}>MEET THE COACHES</span>
 						<h2>Top Trainers</h2>
 						<p>Expert coaches ready to guide your journey</p>
-					</Box>
-					<Box component={'div'} className={'right'}>
+					</div>
+					<div className={'right'}>
 						<Link href={'/trainer'}>
 							<span className={'see-all-link'}>See All Trainers →</span>
 						</Link>
-					</Box>
-				</Stack>
-				<Stack className={'wrapper'}>
-					<Box component={'div'} className={'switch-btn swiper-trainers-prev'}>
-						<ArrowBackIosNewIcon />
-					</Box>
-					<Box component={'div'} className={'card-wrapper'}>
+					</div>
+				</div>
+				<div className={'wrapper'}>
+					<div className={'switch-btn swiper-trainers-prev'}>
+						<ChevronLeft />
+					</div>
+					<div className={'card-wrapper'}>
 						<Swiper
 							className={'trainers-swiper'}
 							slidesPerView={'auto'}
@@ -117,13 +90,13 @@ const TopTrainers = () => {
 						>
 							{slides}
 						</Swiper>
-					</Box>
-					<Box component={'div'} className={'switch-btn swiper-trainers-next'}>
-						<ArrowBackIosNewIcon />
-					</Box>
-				</Stack>
-			</Stack>
-		</Stack>
+					</div>
+					<div className={'switch-btn swiper-trainers-next'}>
+						<ChevronRight />
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 };
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
@@ -26,16 +25,16 @@ const FeaturedProducts = () => {
 	});
 
 	return (
-		<Stack className={'featured-products'}>
-			<Stack className={'container'}>
-				<Box component={'div'} className={'section-header'}>
+		<div className={'featured-products'}>
+			<div className={'container'}>
+				<div className={'section-header'}>
 					<span className={'section-label'}>SHOP</span>
 					<h2 className={'section-title'}>FEATURED PRODUCTS</h2>
 					<Link href={'/products'}>
 						<span className={'see-all'}>See All Products →</span>
 					</Link>
-				</Box>
-				<Box component={'div'} className={'products-grid'}>
+				</div>
+				<div className={'products-grid'}>
 					{products.map((product) => {
 						const stockLabel = product.productStock === 0
 							? 'Out of Stock'
@@ -77,9 +76,9 @@ const FeaturedProducts = () => {
 							</Link>
 						);
 					})}
-				</Box>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

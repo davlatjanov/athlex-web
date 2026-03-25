@@ -1,18 +1,17 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
 import Link from 'next/link';
 
 const HeroSection = () => {
 	return (
-		<Stack className={'hero-root'}>
+		<div className={'hero-root'}>
 			<img
 				src="https://i.pinimg.com/736x/b4/af/45/b4af45aa415fad2f0399bc69477a06a2.jpg"
 				alt=""
 				className={'hero-bg-img'}
 			/>
 			<div className={'hero-bg-overlay'} />
-			<Stack className={'container hero-content-wrapper'}>
-				<Box component={'div'} className={'hero-inner'}>
+			<div className={'container hero-content-wrapper'}>
+				<div className={'hero-inner'}>
 					<span className={'hero-eyebrow'}>PREMIUM FITNESS PLATFORM</span>
 					<h1 className={'hero-title'}>
 						FORGE YOUR
@@ -36,7 +35,7 @@ const HeroSection = () => {
 						<span>✓ Cancel anytime</span>
 						<span>✓ 7-day free trial</span>
 					</div>
-				</Box>
+				</div>
 				<div className={'hero-stats-row'}>
 					<div className={'hero-stat-item'}>
 						<span className={'hsi-val'}>10K+</span>
@@ -58,8 +57,8 @@ const HeroSection = () => {
 						<span className={'hsi-lbl'}>Expert Coaches</span>
 					</div>
 				</div>
-			</Stack>
-		</Stack>
+			</div>
+		</div>
 	);
 };
 

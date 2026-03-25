@@ -1,6 +1,4 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
 
 const gymEvents = [
 	{
@@ -38,44 +36,17 @@ const gymEvents = [
 ];
 
 const Events = () => {
-	const device = useDeviceDetect();
-
-	if (device === 'mobile') {
-		return (
-			<Stack className={'gym-events'}>
-				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<span className={'section-label'}>UPCOMING</span>
-						<h2>Events</h2>
-					</Stack>
-					<Stack className={'event-cards'}>
-						{gymEvents.map((event) => (
-							<div key={event.title} className={'event-card'} style={{ background: event.gradient }}>
-								<div className={'event-top'}>
-									<span className={'event-category'}>{event.category}</span>
-									<span className={'event-date'}>{event.date}</span>
-								</div>
-								<strong className={'event-title'}>{event.title}</strong>
-								<span className={'event-location'}>📍 {event.location}</span>
-							</div>
-						))}
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	}
-
 	return (
-		<Stack className={'gym-events'}>
-			<Stack className={'container'}>
-				<Stack className={'info-box'}>
-					<Box component={'div'} className={'left'}>
+		<div className={'gym-events'}>
+			<div className={'container'}>
+				<div className={'info-box'}>
+					<div className={'left'}>
 						<span className={'section-label'}>UPCOMING EVENTS</span>
 						<h2 className={'white'}>Events & Competitions</h2>
 						<p className={'white'}>Don&apos;t miss what&apos;s coming next</p>
-					</Box>
-				</Stack>
-				<Stack className={'event-cards'}>
+					</div>
+				</div>
+				<div className={'event-cards'}>
 					{gymEvents.map((event) => (
 						<div key={event.title} className={'event-card'} style={{ background: event.gradient }}>
 							<div className={'event-top'}>
@@ -88,9 +59,9 @@ const Events = () => {
 							<button className={'btn-event'}>Learn More</button>
 						</div>
 					))}
-				</Stack>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

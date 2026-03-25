@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import WestIcon from '@mui/icons-material/West';
-import EastIcon from '@mui/icons-material/East';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import Link from 'next/link';
@@ -24,7 +21,6 @@ const typeGradients: Record<string, string> = {
 };
 
 const TrendPrograms = () => {
-	const device = useDeviceDetect();
 	const [programs, setPrograms] = useState<any[]>([]);
 
 	useQuery(GET_PROGRAMS, {
@@ -54,51 +50,27 @@ const TrendPrograms = () => {
 		</SwiperSlide>
 	));
 
-	if (device === 'mobile') {
-		return (
-			<Stack className={'trend-programs'}>
-				<Stack className={'container'}>
-					<Stack className={'info-box'}>
-						<span className={'section-label'}>TRENDING</span>
-						<h2>Trending Programs</h2>
-					</Stack>
-					<Stack className={'card-box'}>
-						<Swiper
-							className={'program-swiper'}
-							slidesPerView={'auto'}
-							centeredSlides
-							spaceBetween={15}
-							modules={[Autoplay]}
-						>
-							{slides}
-						</Swiper>
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	}
-
 	return (
-		<Stack className={'trend-programs'}>
-			<Stack className={'container'}>
-				<Stack className={'info-box'}>
-					<Box component={'div'} className={'left'}>
+		<div className={'trend-programs'}>
+			<div className={'container'}>
+				<div className={'info-box'}>
+					<div className={'left'}>
 						<span className={'section-label'}>TRENDING NOW</span>
 						<h2>Trending Programs</h2>
 						<p>Ranked by community likes</p>
-					</Box>
-					<Box component={'div'} className={'right'}>
+					</div>
+					<div className={'right'}>
 						<div className={'pagination-box'}>
-							<WestIcon className={'swiper-trend-prev'} />
+							<ChevronLeft className={'swiper-trend-prev'} />
 							<div className={'swiper-trend-pagination'} />
-							<EastIcon className={'swiper-trend-next'} />
+							<ChevronRight className={'swiper-trend-next'} />
 						</div>
 						<Link href={'/programs'}>
 							<span className={'see-all-link'}>See All →</span>
 						</Link>
-					</Box>
-				</Stack>
-				<Stack className={'card-box'}>
+					</div>
+				</div>
+				<div className={'card-box'}>
 					<Swiper
 						className={'program-swiper'}
 						slidesPerView={'auto'}
@@ -113,9 +85,9 @@ const TrendPrograms = () => {
 					>
 						{slides}
 					</Swiper>
-				</Stack>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

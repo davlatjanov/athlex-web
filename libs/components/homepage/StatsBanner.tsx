@@ -1,5 +1,4 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
 
 const stats = [
 	{ value: '500+', label: 'Training Programs' },
@@ -10,16 +9,16 @@ const stats = [
 
 const StatsBanner = () => {
 	return (
-		<Stack className={'stats-banner'}>
-			<Stack className={'container'}>
+		<div className={'stats-banner'}>
+			<div className={'container'}>
 				{stats.map((stat, index) => (
-					<Box key={index} className={'stat-item'}>
+					<div key={index} className={'stat-item'}>
 						<strong>{stat.value}</strong>
 						<span>{stat.label}</span>
-					</Box>
+					</div>
 				))}
-			</Stack>
-		</Stack>
+			</div>
+		</div>
 	);
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
 import Link from 'next/link';
 
 const mockMessages = [
@@ -14,9 +13,9 @@ const mockMessages = [
 
 const AICoachTeaser = () => {
 	return (
-		<Stack className={'ai-coach-teaser'}>
-			<Stack className={'container'}>
-				<Box component={'div'} className={'ai-left'}>
+		<div className={'ai-coach-teaser'}>
+			<div className={'container'}>
+				<div className={'ai-left'}>
 					<span className={'section-label'}>POWERED BY AI</span>
 					<h2 className={'section-title'}>MEET YOUR AI COACH</h2>
 					<p className={'ai-desc'}>
@@ -44,8 +43,8 @@ const AICoachTeaser = () => {
 					<Link href={'/ai-coach'}>
 						<button className={'btn-primary'}>Try AI Coach Free</button>
 					</Link>
-				</Box>
-				<Box component={'div'} className={'ai-right'}>
+				</div>
+				<div className={'ai-right'}>
 					<div className={'chat-window'}>
 						<div className={'chat-header'}>
 							<div className={'chat-avatar'}>🤖</div>
@@ -67,9 +66,9 @@ const AICoachTeaser = () => {
 							<button className={'send-btn'}>➤</button>
 						</div>
 					</div>
-				</Box>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 
