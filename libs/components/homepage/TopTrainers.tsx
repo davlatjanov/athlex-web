@@ -49,7 +49,7 @@ const TopTrainers = () => {
 						<span>👤 {displayFollowers}</span>
 						<span>🏋️ {trainer.memberPrograms ?? 0} programs</span>
 					</div>
-				</Box>
+				</div>
 			</Link>
 		);
 	};
