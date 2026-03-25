@@ -1,26 +1,11 @@
 import React, { useState } from 'react';
-import { Drawer, IconButton, Badge } from '@mui/material';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { ShoppingBag, X, ArrowLeft, Trash2 } from 'lucide-react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { useCart } from '../../context/CartContext';
 import { CREATE_ORDER } from '../../../apollo/user/mutation';
-import { sweetTopSmallSuccessAlert } from '../../sweetAlert';
 
 type View = 'cart' | 'checkout' | 'success';
-
-const STATUS_COLOR: Record<string, string> = {
-	PENDING: '#f59e0b',
-	CONFIRMED: '#3b82f6',
-	PAID: '#22c55e',
-	SHIPPED: '#8b5cf6',
-	DELIVERED: '#10b981',
-	CANCELLED: '#ef4444',
-	REFUNDED: '#6b7280',
-};
 
 const CartDrawer = () => {
 	const user = useReactiveVar(userVar) as any;
@@ -74,40 +59,36 @@ const CartDrawer = () => {
 
 	return (
 		<>
-			{/* Trigger button — matches navbar icon style */}
-			<Badge
-				badgeContent={totalItems}
-				color="error"
-				invisible={totalItems === 0}
-				sx={{ cursor: 'pointer', mr: 1 }}
-				onClick={handleOpen}
-			>
-				<ShoppingBagOutlinedIcon className={'notification-icon'} />
-			</Badge>
+			{/* Trigger button */}
+			<div className="relative cursor-pointer mr-1" onClick={handleOpen}>
+				<ShoppingBag className={'notification-icon'} />
+				{totalItems > 0 && (
+					<span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-[3px] rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+						{totalItems}
+					</span>
+				)}
+			</div>
 
-			<Drawer
-				anchor="right"
-				open={open}
-				onClose={handleClose}
-				PaperProps={{
-					sx: {
-						width: 420,
-						background: '#0f172a',
-						color: '#e2e8f0',
-						border: 'none',
-						borderLeft: '1px solid rgba(255,255,255,0.08)',
-						display: 'flex',
-						flexDirection: 'column',
-					},
+			{/* Backdrop */}
+			{open && <div className="fixed inset-0 bg-black/50 z-40" onClick={handleClose} />}
+
+			{/* Drawer panel */}
+			<div
+				className="fixed top-0 right-0 h-full w-[420px] z-50 flex flex-col transition-transform duration-300"
+				style={{
+					background: '#0f172a',
+					color: '#e2e8f0',
+					borderLeft: '1px solid rgba(255,255,255,0.08)',
+					transform: open ? 'translateX(0)' : 'translateX(100%)',
 				}}
 			>
 				{/* Header */}
 				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
 					<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
 						{view === 'checkout' && (
-							<IconButton onClick={() => setView('cart')} sx={{ color: '#9ca3af', p: 0.5, mr: 0.5 }}>
-								<ArrowBackIcon fontSize="small" />
-							</IconButton>
+							<button onClick={() => setView('cart')} style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: '2px 4px', marginRight: 2 }}>
+								<ArrowLeft size={16} />
+							</button>
 						)}
 						<span style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>
 							{view === 'cart' ? 'CART' : view === 'checkout' ? 'CHECKOUT' : 'ORDER PLACED'}
@@ -118,9 +99,9 @@ const CartDrawer = () => {
 							</span>
 						)}
 					</div>
-					<IconButton onClick={handleClose} sx={{ color: '#9ca3af', p: 0.5 }}>
-						<CloseIcon fontSize="small" />
-					</IconButton>
+					<button onClick={handleClose} style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: 2 }}>
+						<X size={16} />
+					</button>
 				</div>
 
 				{/* Body */}
@@ -131,7 +112,7 @@ const CartDrawer = () => {
 						<>
 							{items.length === 0 ? (
 								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 300, gap: 12, color: '#6b7280' }}>
-									<ShoppingBagOutlinedIcon sx={{ fontSize: 48, opacity: 0.3 }} />
+									<ShoppingBag size={48} style={{ opacity: 0.3 }} />
 									<p style={{ margin: 0, fontSize: 14 }}>Your cart is empty</p>
 								</div>
 							) : (
@@ -152,9 +133,12 @@ const CartDrawer = () => {
 													<button onClick={() => updateQty(item.productId, item.qty + 1)} style={qtyBtn}> + </button>
 												</div>
 											</div>
-											<IconButton onClick={() => removeItem(item.productId)} sx={{ color: '#6b7280', alignSelf: 'flex-start', p: 0.5, '&:hover': { color: '#ef4444' } }}>
-												<DeleteOutlineIcon fontSize="small" />
-											</IconButton>
+											<button onClick={() => removeItem(item.productId)} style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', alignSelf: 'flex-start', padding: 2 }}
+												onMouseEnter={(e) => (e.currentTarget.style.color = '#ef4444')}
+												onMouseLeave={(e) => (e.currentTarget.style.color = '#6b7280')}
+											>
+												<Trash2 size={16} />
+											</button>
 										</div>
 									))}
 								</div>
@@ -261,7 +245,7 @@ const CartDrawer = () => {
 						</button>
 					</div>
 				)}
-			</Drawer>
+			</div>
 		</>
 	);
 };

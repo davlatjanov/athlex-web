@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { GET_MEMBERS } from '../../../apollo/user/query';
 import { useRouter } from 'next/router';
-import SearchIcon from '@mui/icons-material/Search';
+import { Search as SearchIcon } from 'lucide-react';
 import { T } from '../../types/common';
 
 const TYPE_LABEL: Record<string, { label: string; color: string }> = {
@@ -70,11 +70,11 @@ const NavSearch: React.FC = () => {
 		<div className="nav-search" ref={wrapRef}>
 			{!open ? (
 				<button className="nav-search-icon" onClick={handleOpen} title="Search members">
-					<SearchIcon fontSize="small" />
+					<SearchIcon size={18} />
 				</button>
 			) : (
 				<div className="nav-search-expanded">
-					<SearchIcon fontSize="small" className="nav-search-ic" />
+					<SearchIcon size={18} className="nav-search-ic" />
 					<input
 						ref={inputRef}
 						className="nav-search-input"

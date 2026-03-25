@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import { Pagination, Stack, Typography } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { ProgramCard } from './ProgramCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { Program } from '../../types/program/program';
@@ -14,7 +12,6 @@ import { GET_MY_PROGRAMS } from '../../../apollo/user/query';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
 
 const MyPrograms: NextPage = ({ initialInput, ...props }: any) => {
-	const device = useDeviceDetect();
 	const [searchFilter, setSearchFilter] = useState<any>(initialInput);
 	const [myPrograms, setAgentProperties] = useState<Program[]>([]);
 	const [total, setTotal] = useState<number>(0);
@@ -41,7 +38,7 @@ const MyPrograms: NextPage = ({ initialInput, ...props }: any) => {
 	});
 
 	/** HANDLERS **/
-	const paginationHandler = (e: T, value: number) => {
+	const paginationHandler = (_: T, value: number) => {
 		setSearchFilter({ ...searchFilter, page: value });
 	};
 
@@ -82,80 +79,86 @@ const MyPrograms: NextPage = ({ initialInput, ...props }: any) => {
 		router.back();
 	}
 
-	if (device === 'mobile') {
-		return <div>MY PROGRAMS MOBILE</div>;
-	} else {
-		return (
-			<div id="my-programs-page">
-				<Stack className="main-title-box">
-					<Stack className="right-box">
-						<Typography className="main-title">My Programs</Typography>
-						<Typography className="sub-title">Manage the training programs you coach.</Typography>
-					</Stack>
-				</Stack>
-				<Stack className="property-list-box">
-					<Stack className="tab-name-box">
-						<Typography
-							onClick={() => changeStatusHandler(ProgramStatus.ACTIVE)}
-							className={searchFilter.programStatus === 'ACTIVE' ? 'active-tab-name' : 'tab-name'}
-						>
-							Active
-						</Typography>
-						<Typography
-							onClick={() => changeStatusHandler(ProgramStatus.ARCHIVED)}
-							className={searchFilter.programStatus === 'ARCHIVED' ? 'active-tab-name' : 'tab-name'}
-						>
-							Archived
-						</Typography>
-					</Stack>
-					<Stack className="list-box">
-						<Stack className="listing-title-box">
-							<Typography className="title-text">Program</Typography>
-							<Typography className="title-text">Published</Typography>
-							<Typography className="title-text">Status</Typography>
-							<Typography className="title-text">Views</Typography>
-							<Typography className="title-text">Action</Typography>
-						</Stack>
+	const totalPages = Math.ceil(total / searchFilter.limit);
 
-						{myPrograms?.length === 0 ? (
-							<div className={'no-data'}>
-								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No programs found yet.</p>
-							</div>
-						) : (
-							myPrograms.map((program: Program) => {
-								return (
-									<ProgramCard
-										program={program}
-										deleteProgramHandler={deleteProgramHandler}
-										updateProgramHandler={updateProgramHandler}
-										key={program._id}
-									/>
-								);
-							})
-						)}
-
-						{myPrograms.length !== 0 && (
-							<Stack className="pagination-config">
-								<Stack className="pagination-box">
-									<Pagination
-										count={Math.ceil(total / searchFilter.limit)}
-										page={searchFilter.page}
-										shape="circular"
-										color="primary"
-										onChange={paginationHandler}
-									/>
-								</Stack>
-								<Stack className="total-result">
-									<Typography>{total} program{total === 1 ? '' : 's'} available</Typography>
-								</Stack>
-							</Stack>
-						)}
-					</Stack>
-				</Stack>
+	return (
+		<div id="my-programs-page">
+			<div className="main-title-box">
+				<div className="right-box">
+					<span className="main-title">My Programs</span>
+					<span className="sub-title">Manage the training programs you coach.</span>
+				</div>
 			</div>
-		);
-	}
+			<div className="property-list-box">
+				<div className="tab-name-box">
+					<span
+						onClick={() => changeStatusHandler(ProgramStatus.ACTIVE)}
+						className={searchFilter.programStatus === 'ACTIVE' ? 'active-tab-name' : 'tab-name'}
+					>
+						Active
+					</span>
+					<span
+						onClick={() => changeStatusHandler(ProgramStatus.ARCHIVED)}
+						className={searchFilter.programStatus === 'ARCHIVED' ? 'active-tab-name' : 'tab-name'}
+					>
+						Archived
+					</span>
+				</div>
+				<div className="list-box">
+					<div className="listing-title-box">
+						<span className="title-text">Program</span>
+						<span className="title-text">Published</span>
+						<span className="title-text">Status</span>
+						<span className="title-text">Views</span>
+						<span className="title-text">Action</span>
+					</div>
+
+					{myPrograms?.length === 0 ? (
+						<div className={'no-data'}>
+							<img src="/img/icons/icoAlert.svg" alt="" />
+							<p>No programs found yet.</p>
+						</div>
+					) : (
+						myPrograms.map((program: Program) => {
+							return (
+								<ProgramCard
+									program={program}
+									deleteProgramHandler={deleteProgramHandler}
+									updateProgramHandler={updateProgramHandler}
+									key={program._id}
+								/>
+							);
+						})
+					)}
+
+					{myPrograms.length !== 0 && (
+						<div className="pagination-config">
+							<div className="pagination-box">
+								{Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+									<button
+										key={n}
+										onClick={() => paginationHandler(null, n)}
+										style={{
+											width: 32, height: 32, borderRadius: '50%',
+											background: searchFilter.page === n ? '#E92C28' : 'transparent',
+											color: searchFilter.page === n ? '#fff' : '#9CA3AF',
+											border: searchFilter.page === n ? 'none' : '1px solid rgba(255,255,255,0.1)',
+											cursor: 'pointer', fontSize: 13, fontWeight: 600,
+										}}
+									>
+										{n}
+									</button>
+								))}
+							</div>
+							<div className="total-result">
+								<span>{total} program{total === 1 ? '' : 's'} available</span>
+							</div>
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 MyPrograms.defaultProps = {

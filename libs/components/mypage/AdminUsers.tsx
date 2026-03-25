@@ -5,7 +5,6 @@ import { UPDATE_MEMBER_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { MemberPlan, MemberStatus, MemberType } from '../../enums/member.enum';
 import { sweetErrorHandling, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { T } from '../../types/common';
-import { Avatar, Menu, MenuItem, Select, TablePagination } from '@mui/material';
 import moment from 'moment';
 
 const bg = '#111827';
@@ -32,7 +31,7 @@ const AdminUsers = () => {
 	const [typeFilter, setTypeFilter] = useState('ALL');
 	const [members, setMembers] = useState<T[]>([]);
 	const [total, setTotal] = useState(0);
-	const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
+	const [openKey, setOpenKey] = useState<string | null>(null);
 
 	const buildSearch = () => {
 		const s: any = {};
@@ -63,7 +62,7 @@ const AdminUsers = () => {
 		try {
 			await updateMember({ variables: { input: update } });
 			await sweetTopSmallSuccessAlert('Updated', 800);
-			setAnchorEl({});
+			setOpenKey(null);
 			const result = await refetch({ input: inquiry });
 			setMembers(result.data?.getAllMembersByAdmin?.list ?? []);
 			setTotal(result.data?.getAllMembersByAdmin?.metaCounter?.[0]?.total ?? 0);
@@ -82,8 +81,25 @@ const AdminUsers = () => {
 		borderBottom: `1px solid rgba(255,255,255,0.04)`,
 	};
 
+	const dropdownStyle: React.CSSProperties = {
+		position: 'absolute', top: '100%', left: 0, zIndex: 50, marginTop: 4,
+		background: '#1a2236', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6,
+		boxShadow: '0 4px 12px rgba(0,0,0,0.4)', minWidth: 100, overflow: 'hidden',
+	};
+	const dropdownItemStyle: React.CSSProperties = {
+		padding: '8px 14px', fontSize: 13, color: '#e2e8f0', cursor: 'pointer',
+	};
+
+	const canPrev = page > 0;
+	const canNext = (page + 1) * limit < total;
+
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+			{/* Close dropdown on outside click */}
+			{openKey && (
+				<div style={{ position: 'fixed', inset: 0, zIndex: 40 }} onClick={() => setOpenKey(null)} />
+			)}
 
 			{/* Filters */}
 			<div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -143,9 +159,11 @@ const AdminUsers = () => {
 							>
 								<td style={tdS}>
 									<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-										<Avatar
+										<img
 											src={m.memberImage || '/img/profile/defaultUser.svg'}
-											sx={{ width: 30, height: 30, border: '1px solid rgba(255,255,255,0.1)' }}
+											alt=""
+											onError={(e) => { (e.target as HTMLImageElement).src = '/img/profile/defaultUser.svg'; }}
+											style={{ width: 30, height: 30, borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}
 										/>
 										<div>
 											<div style={{ fontWeight: 600, fontSize: 13 }}>{m.memberNick}</div>
@@ -154,77 +172,96 @@ const AdminUsers = () => {
 									</div>
 								</td>
 								<td style={{ ...tdS, color: muted, fontSize: 12 }}>{m.memberPhone}</td>
+
+								{/* Type dropdown */}
 								<td style={tdS}>
-									<button
-										id={`type-btn-${m._id}`}
-										onClick={(e) => setAnchorEl({ ...anchorEl, [`type-${m._id}`]: e.currentTarget })}
-										title="Click to change type"
-										style={{
-											fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
-											color: m.memberType === 'TRAINER' ? '#60a5fa' : m.memberType === 'ADMIN' ? accent : '#9CA3AF',
-											background: m.memberType === 'TRAINER' ? 'rgba(96,165,250,0.1)' : m.memberType === 'ADMIN' ? 'rgba(233,44,40,0.1)' : 'rgba(156,163,175,0.1)',
-											border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
-										}}
-									>
-										{m.memberType} ▾
-									</button>
-									<Menu
-										anchorEl={anchorEl[`type-${m._id}`]}
-										open={Boolean(anchorEl[`type-${m._id}`])}
-										onClose={() => setAnchorEl({ ...anchorEl, [`type-${m._id}`]: null })}
-									>
-										{Object.values(MemberType).filter((t) => t !== m.memberType).map((t) => (
-											<MenuItem key={t} onClick={() => handleUpdate({ _id: m._id, memberType: t })}>{t}</MenuItem>
-										))}
-									</Menu>
+									<div style={{ position: 'relative', display: 'inline-block' }}>
+										<button
+											onClick={() => setOpenKey(openKey === `type-${m._id}` ? null : `type-${m._id}`)}
+											title="Click to change type"
+											style={{
+												fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
+												color: m.memberType === 'TRAINER' ? '#60a5fa' : m.memberType === 'ADMIN' ? accent : '#9CA3AF',
+												background: m.memberType === 'TRAINER' ? 'rgba(96,165,250,0.1)' : m.memberType === 'ADMIN' ? 'rgba(233,44,40,0.1)' : 'rgba(156,163,175,0.1)',
+												border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
+											}}
+										>
+											{m.memberType} ▾
+										</button>
+										{openKey === `type-${m._id}` && (
+											<div style={dropdownStyle}>
+												{Object.values(MemberType).filter((t) => t !== m.memberType).map((t) => (
+													<div key={t} style={dropdownItemStyle}
+														onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+														onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+														onClick={() => handleUpdate({ _id: m._id, memberType: t })}
+													>{t}</div>
+												))}
+											</div>
+										)}
+									</div>
 								</td>
+
+								{/* Plan dropdown */}
 								<td style={tdS}>
-									<button
-										onClick={(e) => setAnchorEl({ ...anchorEl, [`plan-${m._id}`]: e.currentTarget })}
-										title="Click to change plan"
-										style={{
-											fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
-											color: m.memberPlan === 'PRO' ? '#f59e0b' : m.memberPlan === 'ADVANCED' ? '#a78bfa' : m.memberPlan === 'REGULAR' ? '#60a5fa' : '#9CA3AF',
-											background: m.memberPlan === 'PRO' ? 'rgba(245,158,11,0.1)' : m.memberPlan === 'ADVANCED' ? 'rgba(167,139,250,0.1)' : m.memberPlan === 'REGULAR' ? 'rgba(96,165,250,0.1)' : 'rgba(156,163,175,0.1)',
-											border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
-										}}
-									>
-										{m.memberPlan ?? 'NONE'} ▾
-									</button>
-									<Menu
-										anchorEl={anchorEl[`plan-${m._id}`]}
-										open={Boolean(anchorEl[`plan-${m._id}`])}
-										onClose={() => setAnchorEl({ ...anchorEl, [`plan-${m._id}`]: null })}
-									>
-										{Object.values(MemberPlan).filter((p) => p !== m.memberPlan).map((p) => (
-											<MenuItem key={p} onClick={() => handleUpdate({ _id: m._id, memberPlan: p })}>{p}</MenuItem>
-										))}
-									</Menu>
+									<div style={{ position: 'relative', display: 'inline-block' }}>
+										<button
+											onClick={() => setOpenKey(openKey === `plan-${m._id}` ? null : `plan-${m._id}`)}
+											title="Click to change plan"
+											style={{
+												fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
+												color: m.memberPlan === 'PRO' ? '#f59e0b' : m.memberPlan === 'ADVANCED' ? '#a78bfa' : m.memberPlan === 'REGULAR' ? '#60a5fa' : '#9CA3AF',
+												background: m.memberPlan === 'PRO' ? 'rgba(245,158,11,0.1)' : m.memberPlan === 'ADVANCED' ? 'rgba(167,139,250,0.1)' : m.memberPlan === 'REGULAR' ? 'rgba(96,165,250,0.1)' : 'rgba(156,163,175,0.1)',
+												border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
+											}}
+										>
+											{m.memberPlan ?? 'NONE'} ▾
+										</button>
+										{openKey === `plan-${m._id}` && (
+											<div style={dropdownStyle}>
+												{Object.values(MemberPlan).filter((p) => p !== m.memberPlan).map((p) => (
+													<div key={p} style={dropdownItemStyle}
+														onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+														onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+														onClick={() => handleUpdate({ _id: m._id, memberPlan: p })}
+													>{p}</div>
+												))}
+											</div>
+										)}
+									</div>
 								</td>
-							<td style={{ ...tdS, color: muted, fontSize: 13, textAlign: 'center' }}>{m.memberWarnings}</td>
+
+								<td style={{ ...tdS, color: muted, fontSize: 13, textAlign: 'center' }}>{m.memberWarnings}</td>
+
+								{/* Status dropdown */}
 								<td style={tdS}>
-									<button
-										onClick={(e) => setAnchorEl({ ...anchorEl, [`status-${m._id}`]: e.currentTarget })}
-										title="Click to change status"
-										style={{
-											fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
-											color: STATUS_COLOR[m.memberStatus] ?? muted,
-											background: `${STATUS_COLOR[m.memberStatus] ?? muted}1a`,
-											border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
-										}}
-									>
-										{m.memberStatus} ▾
-									</button>
-									<Menu
-										anchorEl={anchorEl[`status-${m._id}`]}
-										open={Boolean(anchorEl[`status-${m._id}`])}
-										onClose={() => setAnchorEl({ ...anchorEl, [`status-${m._id}`]: null })}
-									>
-										{Object.values(MemberStatus).filter((s) => s !== m.memberStatus).map((s) => (
-											<MenuItem key={s} onClick={() => handleUpdate({ _id: m._id, memberStatus: s })}>{s}</MenuItem>
-										))}
-									</Menu>
+									<div style={{ position: 'relative', display: 'inline-block' }}>
+										<button
+											onClick={() => setOpenKey(openKey === `status-${m._id}` ? null : `status-${m._id}`)}
+											title="Click to change status"
+											style={{
+												fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
+												color: STATUS_COLOR[m.memberStatus] ?? muted,
+												background: `${STATUS_COLOR[m.memberStatus] ?? muted}1a`,
+												border: '1px dashed rgba(255,255,255,0.15)', cursor: 'pointer',
+											}}
+										>
+											{m.memberStatus} ▾
+										</button>
+										{openKey === `status-${m._id}` && (
+											<div style={dropdownStyle}>
+												{Object.values(MemberStatus).filter((s) => s !== m.memberStatus).map((s) => (
+													<div key={s} style={dropdownItemStyle}
+														onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+														onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+														onClick={() => handleUpdate({ _id: m._id, memberStatus: s })}
+													>{s}</div>
+												))}
+											</div>
+										)}
+									</div>
 								</td>
+
 								<td style={{ ...tdS, color: muted, fontSize: 12 }}>{moment(m.createdAt).format('MMM DD, YYYY')}</td>
 								<td style={tdS}>
 									<a href={`/member?memberId=${m._id}`} style={{ color: accent, fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
@@ -235,16 +272,18 @@ const AdminUsers = () => {
 						))}
 					</tbody>
 				</table>
-				<TablePagination
-					component="div"
-					count={total}
-					page={page}
-					rowsPerPage={limit}
-					onPageChange={(_, p) => setPage(p)}
-					onRowsPerPageChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(0); }}
-					rowsPerPageOptions={[10, 20, 50]}
-					sx={{ color: '#9CA3AF', borderTop: `1px solid ${border}`, '& .MuiSvgIcon-root': { color: '#9CA3AF' } }}
-				/>
+
+				{/* Pagination */}
+				<div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 14px', borderTop: `1px solid ${border}`, color: '#9CA3AF', fontSize: 13 }}>
+					<span style={{ marginRight: 'auto' }}>{total} total</span>
+					<span>Rows per page:</span>
+					<select value={limit} onChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(0); }} style={{ background: '#1a2236', color: '#9CA3AF', border: `1px solid ${border}`, borderRadius: 4, padding: '2px 6px', fontSize: 12 }}>
+						{[10, 20, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+					</select>
+					<span>{total === 0 ? 0 : page * limit + 1}–{Math.min((page + 1) * limit, total)} of {total}</span>
+					<button onClick={() => setPage((p) => p - 1)} disabled={!canPrev} style={{ background: 'none', border: 'none', color: canPrev ? '#9CA3AF' : 'rgba(156,163,175,0.3)', cursor: canPrev ? 'pointer' : 'default', fontSize: 18, lineHeight: 1 }}>‹</button>
+					<button onClick={() => setPage((p) => p + 1)} disabled={!canNext} style={{ background: 'none', border: 'none', color: canNext ? '#9CA3AF' : 'rgba(156,163,175,0.3)', cursor: canNext ? 'pointer' : 'default', fontSize: 18, lineHeight: 1 }}>›</button>
+				</div>
 			</div>
 		</div>
 	);

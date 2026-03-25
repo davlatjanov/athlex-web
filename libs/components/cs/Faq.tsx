@@ -1,34 +1,12 @@
 import React, { SyntheticEvent, useState } from 'react';
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import { AccordionDetails, Box, Stack, Typography } from '@mui/material';
-import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
-import { styled } from '@mui/material/styles';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-
-const Accordion = styled((props: AccordionProps) => <MuiAccordion disableGutters elevation={0} square {...props} />)(
-	({ theme }) => ({
-		border: `1px solid ${theme.palette.divider}`,
-		'&:not(:last-child)': { borderBottom: 0 },
-		'&:before': { display: 'none' },
-	}),
-);
-
-const AccordionSummary = styled((props: AccordionSummaryProps) => (
-	<MuiAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon sx={{ fontSize: '1.4rem' }} />} {...props} />
-))(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, .05)' : 'rgba(255,255,255,0.03)',
-	'& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': { transform: 'rotate(180deg)' },
-	'& .MuiAccordionSummary-content': { marginLeft: theme.spacing(1) },
-}));
+import { ChevronDown } from 'lucide-react';
 
 const Faq = () => {
-	const device = useDeviceDetect();
 	const [category, setCategory] = useState<string>('programs');
 	const [expanded, setExpanded] = useState<string | false>('panel1');
 
-	const handleChange = (panel: string) => (event: SyntheticEvent, newExpanded: boolean) => {
-		setExpanded(newExpanded ? panel : false);
+	const handleChange = (panel: string) => () => {
+		setExpanded((prev) => (prev === panel ? false : panel));
 	};
 
 	const data: any = {
@@ -69,47 +47,49 @@ const Faq = () => {
 		],
 	};
 
-	if (device === 'mobile') {
-		return <div>FAQ MOBILE</div>;
-	} else {
-		return (
-			<Stack className={'faq-content'}>
-				<Box className={'categories'} component={'div'}>
-					{[
-						{ key: 'programs', label: 'Programs' },
-						{ key: 'trainers', label: 'Trainers' },
-						{ key: 'membership', label: 'Membership' },
-						{ key: 'payment', label: 'Payment' },
-						{ key: 'other', label: 'Other' },
-					].map((cat) => (
-						<div
-							key={cat.key}
-							className={category === cat.key ? 'active' : ''}
-							onClick={() => setCategory(cat.key)}
-						>
-							{cat.label}
+	return (
+		<div className={'faq-content'}>
+			<div className={'categories'}>
+				{[
+					{ key: 'programs', label: 'Programs' },
+					{ key: 'trainers', label: 'Trainers' },
+					{ key: 'membership', label: 'Membership' },
+					{ key: 'payment', label: 'Payment' },
+					{ key: 'other', label: 'Other' },
+				].map((cat) => (
+					<div
+						key={cat.key}
+						className={category === cat.key ? 'active' : ''}
+						onClick={() => setCategory(cat.key)}
+					>
+						{cat.label}
+					</div>
+				))}
+			</div>
+			<div className={'wrap'}>
+				{data[category]?.map((ele: any) => (
+					<div key={ele.id} className={`faq-accordion${expanded === ele.id ? ' expanded' : ''}`}>
+						<div className="question" onClick={handleChange(ele.id)}>
+							<h4 className="badge">Q</h4>
+							<span>{ele.subject}</span>
+							<ChevronDown
+								size={18}
+								style={{ marginLeft: 'auto', flexShrink: 0, transition: 'transform 0.2s', transform: expanded === ele.id ? 'rotate(180deg)' : 'rotate(0deg)' }}
+							/>
 						</div>
-					))}
-				</Box>
-				<Box className={'wrap'} component={'div'}>
-					{data[category]?.map((ele: any) => (
-						<Accordion expanded={expanded === ele.id} onChange={handleChange(ele.id)} key={ele.id}>
-							<AccordionSummary className="question">
-								<Typography className="badge" variant={'h4'}>Q</Typography>
-								<Typography>{ele.subject}</Typography>
-							</AccordionSummary>
-							<AccordionDetails>
-								<Stack className={'answer flex-box'}>
-									<Typography className="badge" variant={'h4'}>A</Typography>
-									<Typography>{ele.content}</Typography>
-								</Stack>
-							</AccordionDetails>
-						</Accordion>
-					))}
-				</Box>
-			</Stack>
-		);
-	}
+						{expanded === ele.id && (
+							<div className="faq-accordion-details">
+								<div className={'answer flex-box'}>
+									<h4 className="badge">A</h4>
+									<span>{ele.content}</span>
+								</div>
+							</div>
+						)}
+					</div>
+				))}
+			</div>
+		</div>
+	);
 };
 
 export default Faq;

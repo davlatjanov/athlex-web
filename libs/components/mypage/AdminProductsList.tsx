@@ -4,7 +4,6 @@ import { GET_ALL_PRODUCTS_BY_ADMIN } from '../../../apollo/admin/query';
 import { UPDATE_PRODUCT_BY_ADMIN } from '../../../apollo/admin/mutation';
 import { sweetErrorHandling, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { T } from '../../types/common';
-import { MenuItem, Select, TablePagination } from '@mui/material';
 import moment from 'moment';
 
 const bg = '#111827';
@@ -17,17 +16,6 @@ const STATUS_COLOR: Record<string, string> = {
 	ACTIVE: '#22C55E',
 	STOPPED: '#FFB800',
 	OUT_OF_STOCK: '#a78bfa',
-};
-
-const selectSx = {
-	fontSize: 12,
-	minWidth: 120,
-	color: '#e2e8f0',
-	background: '#1a2236',
-	'& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.12)' },
-	'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.25)' },
-	'& .MuiSelect-select': { background: '#1a2236' },
-	'& .MuiSvgIcon-root': { color: '#6B7280' },
 };
 
 const AdminProductsList = () => {
@@ -81,6 +69,9 @@ const AdminProductsList = () => {
 		padding: '10px 14px', fontSize: 13, color: text,
 		borderBottom: `1px solid rgba(255,255,255,0.04)`,
 	};
+
+	const canPrev = page > 0;
+	const canNext = (page + 1) * limit < total;
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -152,31 +143,36 @@ const AdminProductsList = () => {
 								</td>
 								<td style={{ ...tdS, color: muted, fontSize: 12 }}>{moment(p.createdAt).format('MMM DD, YY')}</td>
 								<td style={tdS}>
-									<Select
+									<select
 										value={p.productStatus}
-										size="small"
 										onChange={(e) => updateStatus(p._id, e.target.value)}
-										sx={selectSx}
+										style={{
+											fontSize: 12, minWidth: 120, padding: '4px 8px', borderRadius: 4,
+											color: '#e2e8f0', background: '#1a2236',
+											border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer',
+										}}
 									>
-										<MenuItem value="ACTIVE">Activate</MenuItem>
-										<MenuItem value="STOPPED">Stop</MenuItem>
-										<MenuItem value="OUT_OF_STOCK">Out of Stock</MenuItem>
-									</Select>
+										<option value="ACTIVE">Activate</option>
+										<option value="STOPPED">Stop</option>
+										<option value="OUT_OF_STOCK">Out of Stock</option>
+									</select>
 								</td>
 							</tr>
 						))}
 					</tbody>
 				</table>
-				<TablePagination
-					component="div"
-					count={total}
-					page={page}
-					rowsPerPage={limit}
-					onPageChange={(_, p) => setPage(p)}
-					onRowsPerPageChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(0); }}
-					rowsPerPageOptions={[10, 20, 50]}
-					sx={{ color: '#9CA3AF', borderTop: `1px solid ${border}`, '& .MuiSvgIcon-root': { color: '#9CA3AF' } }}
-				/>
+
+				{/* Pagination */}
+				<div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 14px', borderTop: `1px solid ${border}`, color: '#9CA3AF', fontSize: 13 }}>
+					<span style={{ marginRight: 'auto' }}>{total} total</span>
+					<span>Rows per page:</span>
+					<select value={limit} onChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(0); }} style={{ background: '#1a2236', color: '#9CA3AF', border: `1px solid ${border}`, borderRadius: 4, padding: '2px 6px', fontSize: 12 }}>
+						{[10, 20, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+					</select>
+					<span>{total === 0 ? 0 : page * limit + 1}–{Math.min((page + 1) * limit, total)} of {total}</span>
+					<button onClick={() => setPage((p) => p - 1)} disabled={!canPrev} style={{ background: 'none', border: 'none', color: canPrev ? '#9CA3AF' : 'rgba(156,163,175,0.3)', cursor: canPrev ? 'pointer' : 'default', fontSize: 18, lineHeight: 1 }}>‹</button>
+					<button onClick={() => setPage((p) => p + 1)} disabled={!canNext} style={{ background: 'none', border: 'none', color: canNext ? '#9CA3AF' : 'rgba(156,163,175,0.3)', cursor: canNext ? 'pointer' : 'default', fontSize: 18, lineHeight: 1 }}>›</button>
+				</div>
 			</div>
 		</div>
 	);

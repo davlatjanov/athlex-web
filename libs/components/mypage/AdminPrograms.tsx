@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_PROGRAMS_BY_ADMIN } from '../../../apollo/admin/query';
 import { T } from '../../types/common';
-import { TablePagination } from '@mui/material';
 import moment from 'moment';
 
 const bg = '#111827';
@@ -53,6 +52,9 @@ const AdminPrograms = () => {
 		padding: '10px 14px', fontSize: 13, color: text,
 		borderBottom: `1px solid rgba(255,255,255,0.04)`,
 	};
+
+	const canPrev = page > 0;
+	const canNext = (page + 1) * limit < total;
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -120,16 +122,18 @@ const AdminPrograms = () => {
 						))}
 					</tbody>
 				</table>
-				<TablePagination
-					component="div"
-					count={total}
-					page={page}
-					rowsPerPage={limit}
-					onPageChange={(_, p) => setPage(p)}
-					onRowsPerPageChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(0); }}
-					rowsPerPageOptions={[10, 20, 50]}
-					sx={{ color: '#9CA3AF', borderTop: `1px solid ${border}`, '& .MuiSvgIcon-root': { color: '#9CA3AF' } }}
-				/>
+
+				{/* Pagination */}
+				<div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 14px', borderTop: `1px solid ${border}`, color: '#9CA3AF', fontSize: 13 }}>
+					<span style={{ marginRight: 'auto' }}>{total} total</span>
+					<span>Rows per page:</span>
+					<select value={limit} onChange={(e) => { setLimit(parseInt(e.target.value, 10)); setPage(0); }} style={{ background: '#1a2236', color: '#9CA3AF', border: `1px solid ${border}`, borderRadius: 4, padding: '2px 6px', fontSize: 12 }}>
+						{[10, 20, 50].map((n) => <option key={n} value={n}>{n}</option>)}
+					</select>
+					<span>{total === 0 ? 0 : page * limit + 1}–{Math.min((page + 1) * limit, total)} of {total}</span>
+					<button onClick={() => setPage((p) => p - 1)} disabled={!canPrev} style={{ background: 'none', border: 'none', color: canPrev ? '#9CA3AF' : 'rgba(156,163,175,0.3)', cursor: canPrev ? 'pointer' : 'default', fontSize: 18, lineHeight: 1 }}>‹</button>
+					<button onClick={() => setPage((p) => p + 1)} disabled={!canNext} style={{ background: 'none', border: 'none', color: canNext ? '#9CA3AF' : 'rgba(156,163,175,0.3)', cursor: canNext ? 'pointer' : 'default', fontSize: 18, lineHeight: 1 }}>›</button>
+				</div>
 			</div>
 		</div>
 	);

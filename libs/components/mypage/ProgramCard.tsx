@@ -1,11 +1,5 @@
-import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
-import IconButton from '@mui/material/IconButton';
-import ModeIcon from '@mui/icons-material/Mode';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UnarchiveOutlinedIcon from '@mui/icons-material/UnarchiveOutlined';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import { Pencil, Trash2, ArchiveRestore, Dumbbell } from 'lucide-react';
 import { Program } from '../../types/program/program';
 import Moment from 'react-moment';
 import { useRouter } from 'next/router';
@@ -20,10 +14,8 @@ interface ProgramCardProps {
 
 export const ProgramCard = (props: ProgramCardProps) => {
 	const { program, deleteProgramHandler, memberPage, updateProgramHandler } = props;
-	const device = useDeviceDetect();
 	const router = useRouter();
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-	const open = Boolean(anchorEl);
+	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	/** HANDLERS **/
 	const pushEditProgram = async (id: string) => {
@@ -42,113 +34,90 @@ export const ProgramCard = (props: ProgramCardProps) => {
 		else return;
 	};
 
-	const handleClick = (event: any) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	if (device === 'mobile') {
-		return <div>MOBILE PROGRAM CARD</div>;
-	} else
-		return (
-			<Stack className="property-card-box">
-				<div className="program-col" onClick={() => pushProgramDetail(program?._id)}>
-					<Stack className="image-box">
-						<img src={program?.programImages?.[0] || '/img/banner/header1.svg'} alt="" />
-					</Stack>
-					<Stack className="information-box">
-						<Typography className="name">{program?.programName}</Typography>
-						<Typography className="address">{program?.programType}</Typography>
-						<Typography className="price">
-							<strong>${program?.programPrice?.toLocaleString()}</strong>
-						</Typography>
-					</Stack>
+	return (
+		<div className="property-card-box">
+			<div className="program-col" onClick={() => pushProgramDetail(program?._id)}>
+				<div className="image-box">
+					<img src={program?.programImages?.[0] || '/img/banner/header1.svg'} alt="" />
 				</div>
-				<Stack className="date-box">
-					<Typography className="date">
-						<Moment format="DD MMMM, YYYY">{program?.createdAt}</Moment>
-					</Typography>
-				</Stack>
-				<Stack className="status-box">
-					<Stack className="coloured-box"
-						sx={{ background: program?.programStatus === 'ACTIVE' ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.06)' }}
-						onClick={handleClick}
-					>
-						<Typography className="status" sx={{ color: program?.programStatus === 'ACTIVE' ? '#22C55E' : '#aaaaaa', fontWeight: 700 }}>
-							{program?.programStatus}
-						</Typography>
-					</Stack>
-				</Stack>
-				{!memberPage && program?.programStatus !== 'ARCHIVED' && (
-					<Menu
-						anchorEl={anchorEl}
-						open={open}
-						onClose={handleClose}
-						PaperProps={{
-							elevation: 0,
-							sx: {
-								width: '70px',
-								mt: 1,
-								ml: '10px',
-								overflow: 'visible',
-								filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-							},
-							style: {
-								padding: 0,
-								display: 'flex',
-								justifyContent: 'center',
-							},
-						}}
-					>
-						{program?.programStatus === 'ACTIVE' && (
-							<>
-								<MenuItem
-									disableRipple
-									onClick={() => {
-										handleClose();
-										updateProgramHandler(ProgramStatus.ARCHIVED, program?._id);
-									}}
+				<div className="information-box">
+					<span className="name">{program?.programName}</span>
+					<span className="address">{program?.programType}</span>
+					<span className="price">
+						<strong>${program?.programPrice?.toLocaleString()}</strong>
+					</span>
+				</div>
+			</div>
+			<div className="date-box">
+				<span className="date">
+					<Moment format="DD MMMM, YYYY">{program?.createdAt}</Moment>
+				</span>
+			</div>
+			<div className="status-box">
+				<div
+					className="coloured-box"
+					style={{ background: program?.programStatus === 'ACTIVE' ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.06)' }}
+					onClick={() => !memberPage && program?.programStatus !== 'ARCHIVED' && setDropdownOpen((o) => !o)}
+				>
+					<span className="status" style={{ color: program?.programStatus === 'ACTIVE' ? '#22C55E' : '#aaaaaa', fontWeight: 700 }}>
+						{program?.programStatus}
+					</span>
+				</div>
+
+				{/* Status dropdown */}
+				{!memberPage && program?.programStatus !== 'ARCHIVED' && dropdownOpen && (
+					<>
+						<div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
+						<div style={{
+							position: 'absolute', top: '100%', left: 0, zIndex: 50, marginTop: 4,
+							background: '#1a2236', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6,
+							boxShadow: '0 4px 12px rgba(0,0,0,0.4)', minWidth: 80, overflow: 'hidden',
+						}}>
+							{program?.programStatus === 'ACTIVE' && (
+								<div
+									style={{ padding: '8px 14px', fontSize: 13, color: '#e2e8f0', cursor: 'pointer' }}
+									onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+									onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+									onClick={() => { setDropdownOpen(false); updateProgramHandler(ProgramStatus.ARCHIVED, program?._id); }}
 								>
 									Archive
-								</MenuItem>
-							</>
-						)}
-					</Menu>
+								</div>
+							)}
+						</div>
+					</>
 				)}
+			</div>
 
-				<Stack className="views-box">
-					<Typography className="views">{program?.programViews?.toLocaleString()}</Typography>
-				</Stack>
-				{!memberPage && (
-					<Stack className="action-box">
-						{program?.programStatus === ProgramStatus.ACTIVE ? (
-							<>
-								<IconButton className="icon-button" title="Manage Workouts"
-									onClick={() => router.push(`/mypage/workout-builder/${program._id}`)}>
-									<FitnessCenterIcon className="buttons btn-workouts" />
-								</IconButton>
-								<IconButton className="icon-button" title="Edit" onClick={() => pushEditProgram(program._id)}>
-									<ModeIcon className="buttons btn-edit" />
-								</IconButton>
-								<IconButton className="icon-button" title="Delete" onClick={() => deleteProgramHandler(program._id)}>
-									<DeleteIcon className="buttons btn-delete" />
-								</IconButton>
-							</>
-						) : (
-							<>
-								<IconButton className="icon-button" title="Unarchive" onClick={() => updateProgramHandler(ProgramStatus.ACTIVE, program._id)}>
-									<UnarchiveOutlinedIcon className="buttons btn-unarchive" />
-								</IconButton>
-								<IconButton className="icon-button" title="Delete" onClick={() => deleteProgramHandler(program._id)}>
-									<DeleteIcon className="buttons btn-delete" />
-								</IconButton>
-							</>
-						)}
-					</Stack>
-				)}
-			</Stack>
-		);
+			<div className="views-box">
+				<span className="views">{program?.programViews?.toLocaleString()}</span>
+			</div>
+			{!memberPage && (
+				<div className="action-box">
+					{program?.programStatus === ProgramStatus.ACTIVE ? (
+						<>
+							<button className="icon-button" title="Manage Workouts"
+								onClick={() => router.push(`/mypage/workout-builder/${program._id}`)}>
+								<Dumbbell className="buttons btn-workouts" size={18} />
+							</button>
+							<button className="icon-button" title="Edit" onClick={() => pushEditProgram(program._id)}>
+								<Pencil className="buttons btn-edit" size={18} />
+							</button>
+							<button className="icon-button" title="Delete" onClick={() => deleteProgramHandler(program._id)}>
+								<Trash2 className="buttons btn-delete" size={18} />
+							</button>
+						</>
+					) : (
+						<>
+							<button className="icon-button" title="Unarchive" onClick={() => updateProgramHandler(ProgramStatus.ACTIVE, program._id)}>
+								<ArchiveRestore className="buttons btn-unarchive" size={18} />
+							</button>
+							<button className="icon-button" title="Delete" onClick={() => deleteProgramHandler(program._id)}>
+								<Trash2 className="buttons btn-delete" size={18} />
+							</button>
+						</>
+					)}
+				</div>
+			)}
+		</div>
+	);
 };

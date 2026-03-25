@@ -1,10 +1,6 @@
 import React from 'react';
-import { Stack, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
 
 const Notice = () => {
-	const device = useDeviceDetect();
-
 	const data = [
 		{
 			no: 1,
@@ -60,31 +56,27 @@ const Notice = () => {
 		},
 	];
 
-	if (device === 'mobile') {
-		return <div>NOTICE MOBILE</div>;
-	} else {
-		return (
-			<Stack className={'notice-content'}>
-				<span className={'title'}>Announcements</span>
-				<Stack className={'main'}>
-					<Box component={'div'} className={'top'}>
-						<span>No.</span>
-						<span>Title</span>
-						<span>Date</span>
-					</Box>
-					<Stack className={'bottom'}>
-						{data.map((ele: any) => (
-							<div className={`notice-card ${ele?.event ? 'event' : ''}`} key={ele.no}>
-								{ele?.event ? <div>EVENT</div> : <span className={'notice-number'}>{ele.no}</span>}
-								<span className={'notice-title'}>{ele.title}</span>
-								<span className={'notice-date'}>{ele.date}</span>
-							</div>
-						))}
-					</Stack>
-				</Stack>
-			</Stack>
-		);
-	}
+	return (
+		<div className={'notice-content'}>
+			<span className={'title'}>Announcements</span>
+			<div className={'main'}>
+				<div className={'top'}>
+					<span>No.</span>
+					<span>Title</span>
+					<span>Date</span>
+				</div>
+				<div className={'bottom'}>
+					{data.map((ele: any) => (
+						<div className={`notice-card ${ele?.event ? 'event' : ''}`} key={ele.no}>
+							{ele?.event ? <div>EVENT</div> : <span className={'notice-number'}>{ele.no}</span>}
+							<span className={'notice-title'}>{ele.title}</span>
+							<span className={'notice-date'}>{ele.date}</span>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Notice;
