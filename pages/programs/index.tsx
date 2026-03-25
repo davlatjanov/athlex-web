@@ -156,6 +156,7 @@ const ProgramsPage: NextPage = () => {
 							rank={prog.programRank}
 							image={prog.programImages?.[0]}
 							gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+							meLiked={prog.meLiked}
 						/>
 					))}
 				</Stack>

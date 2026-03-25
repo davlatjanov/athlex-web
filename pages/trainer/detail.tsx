@@ -72,6 +72,7 @@ const TrainerDetail: NextPage = () => {
 	const trainerId = typeof id === 'string' ? id : '';
 
 	const [followed, setFollowed] = useState(false);
+	const [liked, setLiked] = useState(false);
 	const [feedbackContent, setFeedbackContent] = useState('');
 	const [feedbackScale, setFeedbackScale] = useState(5);
 	const [trainerPrograms, setTrainerPrograms] = useState<Program[]>([]);
@@ -120,7 +121,8 @@ const TrainerDetail: NextPage = () => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.MEMBER, likeRefId: trainerId } } });
-			await sweetTopSmallSuccessAlert('success', 800);
+			setLiked(!liked);
+			await sweetTopSmallSuccessAlert(liked ? 'Unliked' : 'Liked!', 800);
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
@@ -374,7 +376,7 @@ const TrainerDetail: NextPage = () => {
 								<button className={`tdp-ac-follow ${followed ? 'following' : ''}`} onClick={handleFollow}>
 									{followed ? '✓ Following' : '+ Follow'}
 								</button>
-								<button className="tdp-ac-like" onClick={handleLike}>♡</button>
+								<button className={`tdp-ac-like ${liked ? 'liked' : ''}`} onClick={handleLike}>{liked ? '♥' : '♡'}</button>
 							</div>
 							<Link
 								href={`/member?memberId=${trainerId}&category=programs`}

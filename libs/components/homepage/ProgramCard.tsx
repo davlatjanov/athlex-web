@@ -25,11 +25,17 @@ interface ProgramCardProps {
 	rank?: number;
 	rating?: number;
 	comments?: number;
+	meLiked?: boolean;
 }
 
-const ProgramCard = ({ id, name, type, level, duration, price, views, likes, members, gradient, image, rank, rating, comments }: ProgramCardProps) => {
+const ProgramCard = ({ id, name, type, level, duration, price, views, likes, members, gradient, image, rank, rating, comments, meLiked }: ProgramCardProps) => {
 	const user = useReactiveVar(userVar);
-	const { liked, toggle: toggleLike } = useLike('programs', id);
+	const [likeCount, setLikeCount] = useState(likes);
+	const { liked, toggle: _toggle } = useLike('programs', id, meLiked ?? false);
+	const toggleLike = async (e: React.MouseEvent) => {
+		await _toggle(e);
+		setLikeCount((prev) => liked ? prev - 1 : prev + 1);
+	};
 	const [joined, setJoined] = useState(false);
 	const [loading, setLoading] = useState(false);
 
@@ -117,7 +123,7 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 					<div className={'card-stats'}>
 						<span className={'stat'}>{displayViews} views</span>
 						<span className={'stat-sep'}>·</span>
-						<span className={'stat'}>♥ {likes}</span>
+						<span className={'stat'}>♥ {likeCount}</span>
 						{comments !== undefined && (<><span className={'stat-sep'}>·</span><span className={'stat'}>{comments} comments</span></>)}
 						<span className={'stat-sep'}>·</span>
 						<span className={'stat'}>{displayMembers} members</span>

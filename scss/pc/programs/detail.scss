@@ -839,8 +839,8 @@
 					transition: all 0.15s;
 					svg { font-size: 16px; }
 					&:hover { border-color: #333; color: #888; }
-					&.saved { color: #E92C28; border-color: rgba(233, 44, 40, 0.3); }
-				&.liked { color: #E92C28; border-color: rgba(233, 44, 40, 0.3); }
+					&.saved { color: #E92C28; border-color: rgba(233, 44, 40, 0.3); background: rgba(233, 44, 40, 0.08); }
+					&.liked { color: #E92C28; border-color: rgba(233, 44, 40, 0.3); background: rgba(233, 44, 40, 0.08); svg { color: #E92C28; } }
 				}
 			}
 
@@ -864,7 +864,7 @@
 			.ec-enrolled-btn {
 				width: 100%;
 				padding: 14px;
-				background: #E92C28;
+				background: #22C55E;
 				border: none;
 				border-radius: 8px;
 				color: #ffffff;
@@ -872,9 +872,25 @@
 				font-size: 14px;
 				font-weight: 800;
 				letter-spacing: 0.3px;
+				text-align: center;
+			}
+
+			.ec-leave-btn {
+				width: 100%;
+				padding: 10px;
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				border-radius: 8px;
+				color: #6b7280;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 600;
 				cursor: pointer;
-				transition: background 0.2s;
-				&:hover { background: #c0211e; }
+				transition: border-color 0.2s, color 0.2s;
+				&:hover {
+					border-color: #E92C28;
+					color: #E92C28;
+				}
 			}
 
 			.ec-leave-btn {
@@ -1330,6 +1346,22 @@
 			flex-shrink: 0;
 		}
 
+		.wday-toggle-arrow {
+			margin-left: auto;
+			color: #6b7280;
+			font-size: 12px;
+			flex-shrink: 0;
+			transition: transform 0.25s ease, color 0.2s;
+			&.open {
+				transform: rotate(180deg);
+				color: #22C55E;
+			}
+		}
+
+		.wday-header:hover .wday-toggle-arrow {
+			color: #d1d5db;
+		}
+
 		.wday-muscles {
 			display: flex;
 			flex-wrap: wrap;
@@ -1623,8 +1655,29 @@
 				&:hover { background: #16a34a; }
 
 				&.enrolled {
-					background: #E92C28;
-					&:hover { background: #c0211e; }
+					background: #22C55E;
+					border: none;
+					color: #ffffff;
+					cursor: default;
+					&:hover { background: #22C55E; }
+				}
+			}
+
+			.msc-leave-btn {
+				padding: 14px 18px;
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				border-radius: 8px;
+				color: #9ca3af;
+				font-family: $font;
+				font-size: 13px;
+				font-weight: 600;
+				cursor: pointer;
+				white-space: nowrap;
+				transition: border-color 0.2s, color 0.2s;
+				&:hover {
+					border-color: #E92C28;
+					color: #E92C28;
 				}
 			}
 		}

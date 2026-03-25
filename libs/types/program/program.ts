@@ -67,6 +67,7 @@ export interface Program {
 	programTags: string[];
 	targetAudience: string[];
 	requirements: string[];
+	meLiked?: boolean;
 	memberId: string;
 	memberData?: MemberData;
 	createdAt: Date;

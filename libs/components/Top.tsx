@@ -143,13 +143,13 @@ const Top = () => {
 							</Link>
 						</Box>
 						<Box component={'div'} className={'router-box'}>
-							<Link href={'/'}><div>{t('Home')}</div></Link>
-							<Link href={'/programs'}><div>{t('Programs')}</div></Link>
-							<Link href={'/trainer'}><div>{t('Trainers')}</div></Link>
-							<Link href={'/products'}><div>{t('Shop')}</div></Link>
-							<Link href={'/about'}><div>{t('About')}</div></Link>
-							<Link href={'/cs'}><div>{t('Support')}</div></Link>
-							<Link href={'/mypage'}><div>{t('My Page')}</div></Link>
+							<Link href={'/'}><div className={router.pathname === '/' ? 'active' : ''}>{t('Home')}</div></Link>
+							<Link href={'/programs'}><div className={router.pathname.startsWith('/programs') ? 'active' : ''}>{t('Programs')}</div></Link>
+							<Link href={'/trainer'}><div className={router.pathname.startsWith('/trainer') ? 'active' : ''}>{t('Trainers')}</div></Link>
+							<Link href={'/products'}><div className={router.pathname.startsWith('/products') ? 'active' : ''}>{t('Shop')}</div></Link>
+							<Link href={'/about'}><div className={router.pathname.startsWith('/about') ? 'active' : ''}>{t('About')}</div></Link>
+							<Link href={'/cs'}><div className={router.pathname.startsWith('/cs') ? 'active' : ''}>{t('Support')}</div></Link>
+							<Link href={'/mypage'}><div className={router.pathname.startsWith('/mypage') ? 'active' : ''}>{t('My Page')}</div></Link>
 						</Box>
 						<Box component={'div'} className={'user-box'}>
 							<NavSearch />
