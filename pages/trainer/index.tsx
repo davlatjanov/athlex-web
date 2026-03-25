@@ -23,7 +23,12 @@ const SORT_OPTIONS = [
 ];
 
 const TrainerCard = ({ trainer }: { trainer: any }) => {
-	const { liked, toggle: toggleLike } = useLike('trainers', trainer._id);
+	const [likeCount, setLikeCount] = useState(trainer.memberLikes ?? 0);
+	const { liked, toggle: _toggle } = useLike('trainers', trainer._id);
+	const toggleLike = async (e: React.MouseEvent) => {
+		await _toggle(e);
+		setLikeCount((prev: number) => liked ? prev - 1 : prev + 1);
+	};
 	const displayFollowers = trainer.memberFollowers >= 1000
 		? `${(trainer.memberFollowers / 1000).toFixed(1)}K`
 		: String(trainer.memberFollowers ?? 0);
@@ -68,7 +73,7 @@ const TrainerCard = ({ trainer }: { trainer: any }) => {
 					</div>
 					<div className="tc-stat-sep" />
 					<div className="tc-stat">
-						<span className="ts-val">♥ {trainer.memberLikes ?? 0}</span>
+						<span className="ts-val">♥ {likeCount}</span>
 						<span className="ts-lbl">Likes</span>
 					</div>
 					<div className="tc-stat-sep" />

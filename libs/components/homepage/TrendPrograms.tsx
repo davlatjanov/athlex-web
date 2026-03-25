@@ -49,6 +49,7 @@ const TrendPrograms = () => {
 				members={prog.programMembers}
 				image={prog.programImages?.[0]}
 				gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+				meLiked={prog.meLiked}
 			/>
 		</SwiperSlide>
 	));

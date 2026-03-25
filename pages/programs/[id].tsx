@@ -16,7 +16,7 @@ import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.
 import { CommentGroup } from '../../libs/enums/comment.enum';
 import { Message } from '../../libs/enums/common.enum';
 import { useLike } from '../../libs/hooks/useInteractions';
-import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
+import { sweetConfirmAlert, sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { T } from '../../libs/types/common';
 import moment from 'moment';
 import { CircularProgress, Pagination as MuiPagination, Stack } from '@mui/material';
@@ -71,6 +71,12 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const [ratingCount, setRatingCount] = useState(0);
 	const [ratingDist, setRatingDist] = useState<Record<number,number>>({ 1:0, 2:0, 3:0, 4:0, 5:0 });
 	const [myFeedbackId, setMyFeedbackId] = useState<string | null>(null);
+	const [expandedWorkouts, setExpandedWorkouts] = useState<Set<string>>(new Set());
+	const toggleWorkout = (id: string) => setExpandedWorkouts((prev) => {
+		const next = new Set(prev);
+		next.has(id) ? next.delete(id) : next.add(id);
+		return next;
+	});
 
 	/** HOOKS **/
 	const { data: likedData } = useQuery(CHECK_IF_USER_LIKED, {
@@ -155,17 +161,9 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		}
 	}, [commentInquiry]);
 
-	// Refetch after 400ms so the backend-incremented view count is picked up
 	useEffect(() => {
 		if (!id) return;
 		trackProgramVisit(id as string);
-		const t = setTimeout(() => {
-			getProgramRefetch({ programId: id }).then((res) => {
-				const updated = res.data?.getOneProgramWithMember;
-				if (updated) setProgram(updated);
-			}).catch(() => {});
-		}, 400);
-		return () => clearTimeout(t);
 	}, [id]);
 
 	useEffect(() => {
@@ -183,22 +181,9 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const joinProgramHandler = async () => {
 		try {
 			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-			const programId = program?._id ?? id;
-			if (joined) {
-				await leaveProgram({ variables: { programId } });
-				setJoined(false);
-				const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
-				localStorage.setItem(JOINED_KEY, JSON.stringify(list.filter((i) => i !== id)));
-				sweetTopSmallSuccessAlert('Left program', 800);
-				getProgramRefetch({ programId: id }).then((res) => {
-					const updated = res.data?.getOneProgramWithMember;
-					if (updated) setProgram(updated);
-				}).catch(() => {});
-			} else if ((program?.programPrice ?? 0) > 0) {
-				// Paid program — open checkout modal
+			if ((program?.programPrice ?? 0) > 0) {
 				setShowCheckout(true);
 			} else {
-				// Free program — enroll directly
 				await enrollAfterPayment();
 			}
 		} catch (err: any) {
@@ -210,6 +195,24 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 			} else {
 				sweetMixinErrorAlert(msg).then();
 			}
+		}
+	};
+
+	const leaveProgramHandler = async () => {
+		try {
+			await sweetConfirmAlert('Do you want to leave this program?');
+			const programId = program?._id ?? id;
+			await leaveProgram({ variables: { programId } });
+			setJoined(false);
+			const list: string[] = JSON.parse(localStorage.getItem(JOINED_KEY) ?? '[]');
+			localStorage.setItem(JOINED_KEY, JSON.stringify(list.filter((i) => i !== id)));
+			sweetTopSmallSuccessAlert('You have left the program', 800);
+			getProgramRefetch({ programId: id }).then((res) => {
+				const updated = res.data?.getOneProgramWithMember;
+				if (updated) setProgram(updated);
+			}).catch(() => {});
+		} catch {
+			// user cancelled or error — do nothing
 		}
 	};
 
@@ -357,14 +360,18 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 						.sort((a, b) => a.workoutDay - b.workoutDay)
 						.map((workout) => {
 							const dayLabel = DAY_LABELS[workout.workoutDay - 1] ?? `Day ${workout.workoutDay}`;
-							return (
+						const isExpanded = expandedWorkouts.has(workout._id);
+						return (
 								<div key={workout._id} className={`wday-card ${workout.isRestDay ? 'is-rest' : ''}`}>
-									<div className="wday-header">
+									<div className="wday-header" onClick={() => !workout.isRestDay && toggleWorkout(workout._id)} style={!workout.isRestDay ? { cursor: 'pointer' } : undefined}>
 										<div className="wday-title-row">
 											<span className="wday-label">{dayLabel}</span>
 											<span className="wday-name">{workout.isRestDay ? 'Rest Day' : workout.workoutName}</span>
 											{!workout.isRestDay && (workout.workoutDuration ?? 0) > 0 && (
 												<span className="wday-duration">{workout.workoutDuration} min</span>
+											)}
+											{!workout.isRestDay && (
+												<span className={`wday-toggle-arrow ${isExpanded ? 'open' : ''}`}>▼</span>
 											)}
 										</div>
 										{!workout.isRestDay && (workout.bodyParts?.length ?? 0) > 0 && (
@@ -380,7 +387,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 										<div className="wday-rest-msg">
 											😴 Rest and recover — your muscles grow during downtime.
 										</div>
-									) : (
+									) : isExpanded ? (
 										<div className="wday-exercises">
 											{(workout.exercises ?? []).length === 0 ? (
 												<p style={{ color: '#4B5563', fontSize: 13, margin: 0 }}>Exercises are being added. Check back soon.</p>
@@ -437,7 +444,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 													))
 											)}
 										</div>
-									)}
+									) : null}
 								</div>
 							);
 						})}
@@ -611,9 +618,14 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 				<div className="mobile-sticky-cta">
 					<span className="msc-price">{displayPrice}</span>
-					<button className={`msc-btn ${joined ? 'enrolled' : ''}`} onClick={joinProgramHandler}>
-						{joined ? '✓ ENROLLED' : 'Enroll Now →'}
-					</button>
+					{joined ? (
+						<>
+							<button className="msc-btn enrolled" disabled>✓ ENROLLED</button>
+							<button className="msc-leave-btn" onClick={leaveProgramHandler}>Leave</button>
+						</>
+					) : (
+						<button className="msc-btn" onClick={joinProgramHandler}>Enroll Now →</button>
+					)}
 				</div>
 			</div>
 		);
@@ -705,12 +717,14 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 							</button>
 						</div>
 
-						<button
-							className={joined ? 'ec-enrolled-btn' : 'ec-enroll-btn'}
-							onClick={joinProgramHandler}
-						>
-							{joined ? '✓ ENROLLED' : 'Enroll Now →'}
-						</button>
+						{joined ? (
+							<>
+								<div className="ec-enrolled-btn">✓ ENROLLED</div>
+								<button className="ec-leave-btn" onClick={leaveProgramHandler}>Leave Program</button>
+							</>
+						) : (
+							<button className="ec-enroll-btn" onClick={joinProgramHandler}>Enroll Now →</button>
+						)}
 
 						<div className="trust-row">
 							<div className="trust-item">Instant access after enrollment</div>

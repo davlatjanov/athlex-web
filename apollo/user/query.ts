@@ -103,6 +103,7 @@ export const GET_PROGRAMS = gql`
 				programComments
 				programRank
 				programTags
+				meLiked
 				memberId
 				memberData {
 					_id

@@ -92,7 +92,7 @@ function createIsomorphicLink() {
 
 		/* WEBSOCKET SUBSCRIPTION LINK */
 		const wsLink = new WebSocketLink({
-			uri: process.env.NEXT_PUBLIC_API_WS ?? 'ws://localhost:4000/graphql',
+			uri: process.env.NEXT_PUBLIC_API_WS ?? 'wss://athlex.onrender.com/graphql',
 			options: {
 				reconnect: false,
 				timeout: 30000,

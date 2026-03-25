@@ -499,6 +499,11 @@
 				font-size: 18px; cursor: pointer; transition: all 0.2s;
 				display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 				&:hover { border-color: rgba(233, 44, 40, 0.4); color: #E92C28; }
+				&.liked {
+					background: rgba(233, 44, 40, 0.12);
+					border-color: #E92C28;
+					color: #E92C28;
+				}
 			}
 
 			.tdp-ac-divider { height: 1px; background: rgba(255, 255, 255, 0.06); }

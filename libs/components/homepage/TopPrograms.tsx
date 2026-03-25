@@ -50,6 +50,7 @@ const TopPrograms = () => {
 				rank={idx + 1}
 				image={prog.programImages?.[0]}
 				gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
+				meLiked={prog.meLiked}
 			/>
 		</SwiperSlide>
 	));
