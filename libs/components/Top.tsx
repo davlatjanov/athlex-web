@@ -3,19 +3,13 @@ import { useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
-import { Stack, Box, Badge } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { UserCircle, Bell, Bot, LogOut } from 'lucide-react';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import Link from 'next/link';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import CartDrawer from './common/CartDrawer';
 import NavSearch from './common/NavSearch';
-import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
-import { Logout } from '@mui/icons-material';
 
 import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../apollo/user/query';
 import { MARK_ALL_NOTIFICATIONS_AS_READ, MARK_NOTIFICATION_AS_READ } from '../../apollo/user/mutation';
@@ -39,10 +33,8 @@ const Top = () => {
 
 	const [colorChange, setColorChange] = useState(false);
 	const [bgColor, setBgColor] = useState<boolean>(false);
-	const [logoutAnchor, setLogoutAnchor] = React.useState<null | HTMLElement>(null);
-	const logoutOpen = Boolean(logoutAnchor);
-	const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null);
-	const notifOpen = Boolean(notifAnchor);
+	const [logoutOpen, setLogoutOpen] = useState(false);
+	const [notifOpen, setNotifOpen] = useState(false);
 
 	/** APOLLO **/
 	const { data: countData, refetch: refetchCount } = useQuery(GET_UNREAD_NOTIFICATION_COUNT, {
@@ -97,7 +89,7 @@ const Top = () => {
 			refetchCount();
 			refetchNotifs();
 		}
-		setNotifAnchor(null);
+		setNotifOpen(false);
 		if (notif.notificationLink) router.push(notif.notificationLink);
 	};
 
@@ -109,7 +101,7 @@ const Top = () => {
 
 	if (device == 'mobile') {
 		return (
-			<Stack className={'top'}>
+			<div className={'top'}>
 				<Link href={'/'}>
 					<div>{t('Home')}</div>
 				</Link>
@@ -130,19 +122,19 @@ const Top = () => {
 						</div>
 					</Link>
 				)}
-			</Stack>
+			</div>
 		);
 	} else {
 		return (
-			<Stack className={'navbar'}>
-				<Stack className={`navbar-main ${colorChange ? 'transparent' : ''} ${bgColor ? 'transparent' : ''}`}>
-					<Stack className={'container'}>
-						<Box component={'div'} className={'logo-box'}>
+			<div className={'navbar'}>
+				<div className={`navbar-main ${colorChange ? 'transparent' : ''} ${bgColor ? 'transparent' : ''}`}>
+					<div className={'container'}>
+						<div className={'logo-box'}>
 							<Link href={'/'}>
 								<span className={'logo-name'}>ATHLEX</span>
 							</Link>
-						</Box>
-						<Box component={'div'} className={'router-box'}>
+						</div>
+						<div className={'router-box'}>
 							<Link href={'/'}><div className={router.pathname === '/' ? 'active' : ''}>{t('Home')}</div></Link>
 							<Link href={'/programs'}><div className={router.pathname.startsWith('/programs') ? 'active' : ''}>{t('Programs')}</div></Link>
 							<Link href={'/trainer'}><div className={router.pathname.startsWith('/trainer') ? 'active' : ''}>{t('Trainers')}</div></Link>
@@ -150,11 +142,11 @@ const Top = () => {
 							<Link href={'/about'}><div className={router.pathname.startsWith('/about') ? 'active' : ''}>{t('About')}</div></Link>
 							<Link href={'/cs'}><div className={router.pathname.startsWith('/cs') ? 'active' : ''}>{t('Support')}</div></Link>
 							<Link href={'/mypage'}><div className={router.pathname.startsWith('/mypage') ? 'active' : ''}>{t('My Page')}</div></Link>
-						</Box>
-						<Box component={'div'} className={'user-box'}>
+						</div>
+						<div className={'user-box'}>
 							<NavSearch />
 							<Link href={'/ai-coach'} className={'nav-ai-btn'} title="AI Coach">
-								<SmartToyOutlinedIcon className={'notification-icon'} />
+								<Bot className={'notification-icon'} />
 							</Link>
 							{user?._id ? (
 								<>
@@ -162,144 +154,121 @@ const Top = () => {
 									<CartDrawer />
 
 									{/* Notifications */}
-									<Badge
-										badgeContent={unreadCount}
-										color="error"
-										invisible={unreadCount === 0}
-										sx={{ cursor: 'pointer' }}
-									>
-										<NotificationsOutlinedIcon
-											className={'notification-icon'}
-											onClick={(e: any) => setNotifAnchor(e.currentTarget)}
-										/>
-									</Badge>
-									<Menu
-										anchorEl={notifAnchor}
-										open={notifOpen}
-										onClose={() => setNotifAnchor(null)}
-										sx={{ mt: '5px' }}
-										PaperProps={{
-											sx: {
-												minWidth: 300,
-												maxWidth: 360,
-												maxHeight: 420,
-												background: '#1a1f2e',
-												color: '#e2e8f0',
-												border: '1px solid rgba(255,255,255,0.08)',
-											},
-										}}
-									>
-										{/* Header */}
-										<div style={{
-											padding: '12px 16px',
-											borderBottom: '1px solid rgba(255,255,255,0.08)',
-											display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-										}}>
-											<strong style={{ fontSize: 15 }}>Notifications</strong>
+									<div className="relative">
+										<div className="relative cursor-pointer" onClick={() => setNotifOpen(!notifOpen)}>
+											<Bell className={'notification-icon'} />
 											{unreadCount > 0 && (
-												<button
-													onClick={handleMarkAllRead}
-													style={{
-														fontSize: 11, color: '#E92C28', background: 'none',
-														border: 'none', cursor: 'pointer', fontWeight: 600,
-													}}
-												>
-													Mark all read
-												</button>
+												<span className="absolute -top-1 -right-1 w-4 h-4 bg-[#E92C28] rounded-full text-[10px] flex items-center justify-center text-white font-bold leading-none">
+													{unreadCount}
+												</span>
 											)}
 										</div>
 
-										{/* List */}
-										{notifications.length === 0 ? (
-											<MenuItem disabled sx={{ color: '#6b7280 !important', fontSize: 13, justifyContent: 'center', py: 3 }}>
-												No new notifications
-											</MenuItem>
-										) : (
-											notifications.map((n: any) => (
-												<MenuItem
-													key={n._id}
-													onClick={() => handleNotifClick(n)}
-													sx={{
-														alignItems: 'flex-start', gap: 1, py: 1.2, px: 2,
-														background: n.isRead ? 'transparent' : 'rgba(233,44,40,0.06)',
-														borderBottom: '1px solid rgba(255,255,255,0.04)',
-														'&:hover': { background: 'rgba(255,255,255,0.04)' },
-													}}
-												>
-													<span style={{ fontSize: 18, lineHeight: 1.4, flexShrink: 0 }}>
-														{NOTIF_ICON[n.notificationType] ?? '🔔'}
-													</span>
-													<div style={{ flex: 1, minWidth: 0 }}>
-														<div style={{ fontSize: 13, fontWeight: n.isRead ? 400 : 600, color: '#e2e8f0', lineHeight: 1.4 }}>
-															{n.notificationTitle}
-														</div>
-														<div style={{ fontSize: 12, color: '#6b7280', marginTop: 2, whiteSpace: 'normal', lineHeight: 1.3 }}>
-															{n.notificationMessage}
-														</div>
-														<div style={{ fontSize: 11, color: '#4b5563', marginTop: 4 }}>
-															{moment(n.createdAt).fromNow()}
-														</div>
+										{notifOpen && (
+											<>
+												<div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
+												<div className="absolute right-0 top-full mt-1 w-80 max-h-96 overflow-y-auto bg-[#1a1f2e] border border-white/[0.08] rounded-lg shadow-xl z-50">
+													{/* Header */}
+													<div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
+														<strong className="text-[15px] text-white">Notifications</strong>
+														{unreadCount > 0 && (
+															<button
+																onClick={handleMarkAllRead}
+																className="text-[11px] text-[#E92C28] font-semibold bg-transparent border-none cursor-pointer"
+															>
+																Mark all read
+															</button>
+														)}
 													</div>
-													{!n.isRead && (
-														<span style={{
-															width: 7, height: 7, borderRadius: '50%',
-															background: '#E92C28', flexShrink: 0, marginTop: 5,
-														}} />
+
+													{/* List */}
+													{notifications.length === 0 ? (
+														<div className="text-[#6b7280] text-[13px] text-center py-6">No new notifications</div>
+													) : (
+														notifications.map((n: any) => (
+															<div
+																key={n._id}
+																onClick={() => handleNotifClick(n)}
+																className={`flex items-start gap-2 px-4 py-3 cursor-pointer border-b border-white/[0.04] hover:bg-white/[0.04] ${!n.isRead ? 'bg-[rgba(233,44,40,0.06)]' : ''}`}
+															>
+																<span className="text-[18px] leading-snug shrink-0">{NOTIF_ICON[n.notificationType] ?? '🔔'}</span>
+																<div className="flex-1 min-w-0">
+																	<div className={`text-[13px] text-[#e2e8f0] leading-snug ${!n.isRead ? 'font-semibold' : ''}`}>
+																		{n.notificationTitle}
+																	</div>
+																	<div className="text-[12px] text-[#6b7280] mt-0.5 whitespace-normal leading-snug">
+																		{n.notificationMessage}
+																	</div>
+																	<div className="text-[11px] text-[#4b5563] mt-1">
+																		{moment(n.createdAt).fromNow()}
+																	</div>
+																</div>
+																{!n.isRead && (
+																	<span className="w-2 h-2 rounded-full bg-[#E92C28] shrink-0 mt-1" />
+																)}
+															</div>
+														))
 													)}
-												</MenuItem>
-											))
+
+													{/* View all */}
+													<div className="border-t border-white/[0.08] px-4 py-2">
+														<a
+															href="/notifications"
+															onClick={() => setNotifOpen(false)}
+															className="text-[12px] text-[#9ca3af] block text-center"
+														>
+															View all notifications →
+														</a>
+													</div>
+												</div>
+											</>
 										)}
-									{/* View all link */}
-									<div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '8px 16px' }}>
-										<a
-											href="/notifications"
-											onClick={() => setNotifAnchor(null)}
-											style={{ fontSize: 12, color: '#9ca3af', textDecoration: 'none', display: 'block', textAlign: 'center' }}
-										>
-											View all notifications →
-										</a>
 									</div>
-								</Menu>
 
 									{/* User menu */}
-									<div
-										className={'login-user'}
-										onClick={(event: any) => setLogoutAnchor(event.currentTarget)}
-									>
-										{user?.memberImage ? (
-											<img src={user.memberImage} alt="" />
-										) : (
-											<AccountCircleOutlinedIcon className={'user-avatar-icon'} />
+									<div className="relative">
+										<div
+											className={'login-user'}
+											onClick={() => setLogoutOpen(!logoutOpen)}
+										>
+											{user?.memberImage ? (
+												<img src={user.memberImage} alt="" />
+											) : (
+												<UserCircle className={'user-avatar-icon'} />
+											)}
+											{user?.memberNick && <span className={'user-nick'}>{user.memberNick}</span>}
+										</div>
+
+										{logoutOpen && (
+											<>
+												<div className="fixed inset-0 z-40" onClick={() => setLogoutOpen(false)} />
+												<div className="absolute right-0 top-full mt-1 bg-[#1a1f2e] border border-white/[0.08] rounded-lg shadow-xl z-50 min-w-[140px]">
+													<button
+														onClick={() => logOut()}
+														className="flex items-center gap-2 px-4 py-2.5 text-sm text-white hover:bg-white/[0.05] w-full text-left"
+													>
+														<LogOut size={16} className="text-[#E92C28]" />
+														Logout
+													</button>
+												</div>
+											</>
 										)}
-										{user?.memberNick && <span className={'user-nick'}>{user.memberNick}</span>}
 									</div>
-									<Menu
-										id="basic-menu"
-										anchorEl={logoutAnchor}
-										open={logoutOpen}
-										onClose={() => setLogoutAnchor(null)}
-										sx={{ mt: '5px' }}
-									>
-										<MenuItem onClick={() => logOut()}>
-											<Logout fontSize="small" style={{ color: '#E92C28', marginRight: '10px' }} />
-											Logout
-										</MenuItem>
-									</Menu>
 								</>
 							) : (
 								<Link href={'/account/join'}>
 									<div className={'join-box'}>
-										<AccountCircleOutlinedIcon />
+										<UserCircle />
 										<span>
 											{t('Login')} / {t('Register')}
 										</span>
 									</div>
 								</Link>
 							)}
-						</Box>
-					</Stack>
-				</Stack>
-			</Stack>
+						</div>
+					</div>
+				</div>
+			</div>
 		);
 	}
 };

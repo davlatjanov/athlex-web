@@ -4,7 +4,7 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Head from 'next/head';
 import Top from '../Top';
 import Footer from '../Footer';
-import { Stack } from '@mui/material';
+
 import { getJwtToken, updateUserInfo } from '../../auth';
 import AICoachWidget from '../AICoachWidget';
 import { useTranslation } from 'next-i18next';
@@ -75,19 +75,19 @@ const withLayoutBasic = (Component: any) => {
 						<title>Athlex</title>
 						<meta name={'title'} content={`Athlex`} />
 					</Head>
-					<Stack id="mobile-wrap">
-						<Stack id={'top'}>
+					<div id="mobile-wrap">
+						<div id={'top'}>
 							<Top />
-						</Stack>
+						</div>
 
-						<Stack id={'main'}>
+						<div id={'main'}>
 							<Component {...props} />
-						</Stack>
+						</div>
 
-						<Stack id={'footer'}>
+						<div id={'footer'}>
 							<Footer />
-						</Stack>
-					</Stack>
+						</div>
+					</div>
 				</>
 			);
 		} else {
@@ -97,10 +97,10 @@ const withLayoutBasic = (Component: any) => {
 						<title>Athlex</title>
 						<meta name={'title'} content={`Athlex`} />
 					</Head>
-					<Stack id="pc-wrap">
-						<Stack id={'top'}>
+					<div id="pc-wrap">
+						<div id={'top'}>
 							<Top />
-						</Stack>
+						</div>
 
 						{memoizedValues.title && (
 							<div className={`header-basic ${authHeader ? 'auth' : ''}`}>
@@ -117,16 +117,16 @@ const withLayoutBasic = (Component: any) => {
 							</div>
 						)}
 
-						<Stack id={'main'}>
+						<div id={'main'}>
 							<Component {...props} />
-						</Stack>
+						</div>
 
 						<AICoachWidget />
 
-						<Stack id={'footer'}>
+						<div id={'footer'}>
 							<Footer />
-						</Stack>
-					</Stack>
+						</div>
+					</div>
 				</>
 			);
 		}

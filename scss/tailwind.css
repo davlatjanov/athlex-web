@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-bg:           #0F172A;
+  --color-bg-mid:       #111827;
+  --color-card:         #1F2937;
+  --color-accent:       #22C55E;
+  --color-accent-dark:  #16a34a;
+  --color-accent-teal:  #14b8a6;
+  --color-danger:       #E92C28;
+  --color-danger-dark:  #c0201d;
+  --color-text:         #FFFFFF;
+  --color-text-muted:   #9CA3AF;
+  --color-text-dim:     #6B7280;
+  --color-border:       rgba(255, 255, 255, 0.08);
+
+  /* Font */
+  --font-sans: 'Poppins', sans-serif;
+}

@@ -3,7 +3,7 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Head from 'next/head';
 import Top from '../Top';
 import Footer from '../Footer';
-import { Stack } from '@mui/material';
+
 import HeroSection from '../homepage/HeroSection';
 import { userVar } from '../../../apollo/store';
 import { useReactiveVar } from '@apollo/client';
@@ -34,17 +34,17 @@ const withLayoutMain = (Component: any) => {
 						<meta property={'og:title'} content={'Athlex — Forge Your Limits'} />
 						<meta property={'og:description'} content={'Premium training programs and expert coaches on Athlex.'} />
 					</Head>
-					<Stack id="mobile-wrap">
-						<Stack id={'top'}>
+					<div id="mobile-wrap">
+						<div id={'top'}>
 							<Top />
-						</Stack>
-						<Stack id={'main'}>
+						</div>
+						<div id={'main'}>
 							<Component {...props} />
-						</Stack>
-						<Stack id={'footer'}>
+						</div>
+						<div id={'footer'}>
 							<Footer />
-						</Stack>
-					</Stack>
+						</div>
+					</div>
 				</>
 			);
 		} else {
@@ -57,25 +57,25 @@ const withLayoutMain = (Component: any) => {
 						<meta property={'og:title'} content={'Athlex — Forge Your Limits'} />
 						<meta property={'og:description'} content={'Premium training programs and expert coaches on Athlex.'} />
 					</Head>
-					<Stack id="pc-wrap">
-						<Stack id={'top'}>
+					<div id="pc-wrap">
+						<div id={'top'}>
 							<Top />
-						</Stack>
+						</div>
 
-						<Stack className={'header-main'}>
+						<div className={'header-main'}>
 							<HeroSection />
-						</Stack>
+						</div>
 
-						<Stack id={'main'}>
+						<div id={'main'}>
 							<Component {...props} />
-						</Stack>
+						</div>
 
 						<AICoachWidget />
 
-						<Stack id={'footer'}>
+						<div id={'footer'}>
 							<Footer />
-						</Stack>
-					</Stack>
+						</div>
+					</div>
 				</>
 			);
 		}

@@ -1,9 +1,5 @@
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TelegramIcon from '@mui/icons-material/Telegram';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import { Globe, Camera, MessageCircle, Send } from 'lucide-react';
 import useDeviceDetect from '../hooks/useDeviceDetect';
-import { Stack } from '@mui/material';
 import moment from 'moment';
 import Link from 'next/link';
 
@@ -12,15 +8,15 @@ const Footer = () => {
 
 	if (device == 'mobile') {
 		return (
-			<Stack className={'footer-container'}>
+			<div className={'footer-container'}>
 				<div className={'ft-brand'}>
 					<span className={'ft-logo-name'}>ATHLEX</span>
 					<p className={'ft-tagline'}>Train harder. Recover smarter. Perform better.</p>
 					<div className={'ft-socials'}>
-						<FacebookOutlinedIcon />
-						<InstagramIcon />
-						<TwitterIcon />
-						<TelegramIcon />
+						<Globe />
+						<Camera />
+						<MessageCircle />
+						<Send />
 					</div>
 				</div>
 				<div className={'ft-links'}>
@@ -41,11 +37,11 @@ const Footer = () => {
 				<div className={'ft-bottom'}>
 					<span>© {moment().year()} Athlex. All rights reserved.</span>
 				</div>
-			</Stack>
+			</div>
 		);
 	} else {
 		return (
-			<Stack className={'footer-container'}>
+			<div className={'footer-container'}>
 				{/* ── Top: brand + newsletter ── */}
 				<div className={'ft-top'}>
 					<div className={'ft-brand'}>
@@ -54,10 +50,10 @@ const Footer = () => {
 						</div>
 						<p className={'ft-tagline'}>Train harder. Recover smarter.<br />Perform better.</p>
 						<div className={'ft-socials'}>
-							<a href="#"><FacebookOutlinedIcon /></a>
-							<a href="#"><InstagramIcon /></a>
-							<a href="#"><TwitterIcon /></a>
-							<a href="#"><TelegramIcon /></a>
+							<a href="#"><Globe /></a>
+							<a href="#"><Camera /></a>
+							<a href="#"><MessageCircle /></a>
+							<a href="#"><Send /></a>
 						</div>
 					</div>
 
@@ -112,7 +108,7 @@ const Footer = () => {
 					<span>© {moment().year()} Athlex. All rights reserved.</span>
 					<span>Privacy · Terms · Sitemap</span>
 				</div>
-			</Stack>
+			</div>
 		);
 	}
 };
