@@ -519,69 +519,89 @@
 	}
 }
 
-// ─── MOBILE RESPONSIVE ────────────────────────────────────────────────────────
+// ─── RESPONSIVE ────────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #product-detail-page {
+    .pdp-hero-wrap {
+      grid-template-columns: 1fr;
+      padding: 32px 24px 40px;
+      gap: 28px;
+    }
+    .pdp-hero-right .pdp-hero-img { height: 280px; }
+    .pdp-body {
+      grid-template-columns: 1fr;
+      padding: 0 24px 64px;
+    }
+    .pdp-sidebar { position: static; }
+    .stat-pills { grid-template-columns: repeat(2, 1fr); }
+  }
+}
+
 @media (max-width: 768px) {
-	#product-detail-page {
-		padding-top: 72px;
+  #pc-wrap #product-detail-page {
+    padding-top: 72px;
 
-		.pdp-hero-wrap {
-			grid-template-columns: 1fr;
-			padding: 24px 16px 28px;
-			gap: 20px;
-		}
+    .pdp-hero-wrap {
+      grid-template-columns: 1fr;
+      padding: 24px 16px 28px;
+      gap: 20px;
+    }
 
-		.pdp-hero-right .pdp-hero-img {
-			height: 240px;
-		}
+    .pdp-hero-right .pdp-hero-img { height: 240px; }
 
-		.pdp-hero-title {
-			font-size: 26px;
-		}
+    .pdp-hero-title { font-size: 26px; }
 
-		.pdp-body {
-			display: none;
-		}
+    .pdp-body { display: none; }
 
-		.stat-pills {
-			grid-template-columns: repeat(2, 1fr);
-		}
+    .stat-pills { grid-template-columns: repeat(2, 1fr); }
 
-		.mobile-sticky-cta {
-			display: flex;
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			z-index: 100;
-			padding: 12px 20px 20px;
-			background: #0a0a0a;
-			border-top: 1px solid rgba(255, 255, 255, 0.07);
-			align-items: center;
-			gap: 14px;
+    .pdp-mobile-body { display: flex; }
 
-			.msc-price {
-				color: #ffffff;
-				font-family: $font;
-				font-size: 22px;
-				font-weight: 900;
-				flex-shrink: 0;
-			}
+    .mobile-sticky-cta {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 12px 20px 20px;
+      background: #0a0a0a;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      align-items: center;
+      gap: 14px;
 
-			.msc-btn {
-				flex: 1;
-				padding: 14px;
-				background: #E92C28;
-				border: none;
-				border-radius: 8px;
-				color: #ffffff;
-				font-family: $font;
-				font-size: 14px;
-				font-weight: 800;
-				cursor: pointer;
+      .msc-price {
+        color: #ffffff;
+        font-family: $font;
+        font-size: 22px;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
 
-				&:hover { background: #c0211e; }
-				&.disabled { background: #333; cursor: not-allowed; }
-			}
-		}
-	}
+      .msc-btn {
+        flex: 1;
+        padding: 14px;
+        background: #E92C28;
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-family: $font;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+
+        &:hover { background: #c0211e; }
+        &.disabled { background: #333; cursor: not-allowed; }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #product-detail-page {
+    .pdp-hero-right .pdp-hero-img { height: 200px; }
+    .pdp-hero-title { font-size: 22px; }
+    .stat-pills { grid-template-columns: repeat(2, 1fr); }
+  }
 }

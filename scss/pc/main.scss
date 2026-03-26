@@ -56,6 +56,9 @@ body::-webkit-scrollbar {
 	#pc-wrap {
 		#top {
 			.navbar {
+				// Hidden on desktop — only shown via 768px media query
+				.mobile-menu { display: none !important; }
+
 				.navbar-main {
 					position: fixed;
 					top: 0;
@@ -397,8 +400,6 @@ body::-webkit-scrollbar {
 			}
 		}
 
-		// Mobile menu hidden on desktop
-		#top .navbar .mobile-menu { display: none; }
 	}
 
 	.header-main {

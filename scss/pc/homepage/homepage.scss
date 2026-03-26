@@ -972,13 +972,12 @@ $border-accent: rgba(34, 197, 94, 0.4);
 
 @media (max-width: 1200px) {
   #pc-wrap .home-page {
-    .categories-grid { grid-template-columns: repeat(3, 1fr); }
-    .products-grid { grid-template-columns: repeat(3, 1fr); }
-    .plans-grid { grid-template-columns: repeat(2, 1fr); }
-    .event-cards { grid-template-columns: repeat(2, 1fr); }
-
     .ai-coach-teaser .container { gap: 40px; }
   }
+  #pc-wrap .home-page .program-categories .categories-grid { grid-template-columns: repeat(3, 1fr); }
+  #pc-wrap .home-page .featured-products .products-grid { grid-template-columns: repeat(3, 1fr); }
+  #pc-wrap .home-page .membership-plans .plans-grid { grid-template-columns: repeat(2, 1fr); }
+  #pc-wrap .home-page .gym-events .event-cards { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 900px) {
@@ -998,9 +997,6 @@ $border-accent: rgba(34, 197, 94, 0.4);
       strong { font-size: 28px; }
     }
 
-    .categories-grid { grid-template-columns: repeat(2, 1fr); }
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-
     .ai-coach-teaser .container {
       flex-direction: column;
       gap: 32px;
@@ -1014,6 +1010,8 @@ $border-accent: rgba(34, 197, 94, 0.4);
       .center-divider { display: none; }
     }
   }
+  #pc-wrap .home-page .program-categories .categories-grid { grid-template-columns: repeat(2, 1fr); }
+  #pc-wrap .home-page .featured-products .products-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -1038,17 +1036,16 @@ $border-accent: rgba(34, 197, 94, 0.4);
     .trend-programs,
     .popular-programs,
     .top-programs,
-    .top-trainers {
+    .top-trainers,
+    .ai-coach-teaser,
+    .featured-products,
+    .membership-plans,
+    .gym-events,
+    .community-board {
       padding: 56px 0;
     }
 
     .info-box { margin-bottom: 24px; }
-
-    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-
-    .products-grid { grid-template-columns: repeat(1, 1fr); }
-    .plans-grid { grid-template-columns: repeat(1, 1fr); }
-    .event-cards { grid-template-columns: repeat(1, 1fr); margin-top: 24px; }
 
     .top-trainers .wrapper {
       .switch-btn { display: none; }
@@ -1058,6 +1055,10 @@ $border-accent: rgba(34, 197, 94, 0.4);
       width: calc(50% - 8px);
     }
   }
+  #pc-wrap .home-page .program-categories .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  #pc-wrap .home-page .featured-products .products-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  #pc-wrap .home-page .membership-plans .plans-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  #pc-wrap .home-page .gym-events .event-cards { grid-template-columns: repeat(2, 1fr); margin-top: 20px; }
 }
 
 @media (max-width: 480px) {
@@ -1114,17 +1115,29 @@ $border-accent: rgba(34, 197, 94, 0.4);
       }
     }
 
-    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-
     .program-card { width: 260px; }
 
     .ai-coach-teaser {
-      .container { flex-direction: column; }
+      padding: 36px 0;
+      .container { flex-direction: column; gap: 24px; }
+      .ai-left { gap: 16px; }
       .ai-left h2 { font-size: 22px !important; }
+      .ai-left .btn-primary { width: 100%; text-align: center; }
+    }
+
+    .featured-products,
+    .membership-plans,
+    .gym-events,
+    .community-board {
+      padding: 36px 0;
     }
 
     .community-board .community-left .card-wrap .vertical-card {
       width: 100%;
     }
   }
+  #pc-wrap .home-page .program-categories .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  #pc-wrap .home-page .featured-products .products-grid { grid-template-columns: repeat(1, 1fr); gap: 12px; }
+  #pc-wrap .home-page .membership-plans .plans-grid { grid-template-columns: repeat(1, 1fr); gap: 12px; }
+  #pc-wrap .home-page .gym-events .event-cards { grid-template-columns: repeat(1, 1fr); margin-top: 16px; }
 }

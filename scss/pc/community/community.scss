@@ -179,7 +179,7 @@
 
 // ─── MOBILE ───────────────────────────────────────────────────────────────────
 @media (max-width: 768px) {
-	#community-page {
+	#pc-wrap #community-page {
 		padding-top: 72px;
 
 		.cp-hero {
@@ -195,7 +195,7 @@
 }
 
 @media (max-width: 480px) {
-	#community-page {
+	#pc-wrap #community-page {
 		.cp-hero {
 			padding: 20px 12px 16px;
 			h1 { font-size: 22px; }

@@ -297,16 +297,22 @@
 // ─── RESPONSIVE ────────────────────────────────────────────────────────────────
 
 @media (max-width: 768px) {
-  #pc-wrap #my-page .my-profile-page {
-    .profile-container {
+  #pc-wrap #my-page #my-profile-page {
+    .image-big-box {
       flex-direction: column;
-      gap: 20px;
+      align-items: flex-start;
+      gap: 16px;
     }
 
-    .profile-sidebar { width: 100%; }
-
-    .profile-form-grid {
-      grid-template-columns: 1fr !important;
+    .small-input-box .input-box {
+      width: 100%;
     }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #my-page #my-profile-page {
+    .top-box { padding: 16px; }
+    .main-title-box { flex-direction: column; gap: 8px; }
   }
 }
