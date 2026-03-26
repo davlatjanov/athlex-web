@@ -1620,43 +1620,6 @@ body::-webkit-scrollbar {
 
 @media (max-width: 768px) {
   #pc-wrap {
-    .header-main {
-      height: auto;
-      min-height: 380px;
-      margin-top: 64px;
-
-      .hero-content-wrapper {
-        padding-top: 32px;
-        padding-bottom: 36px;
-      }
-
-      .hero-title {
-        font-size: 52px !important;
-        letter-spacing: -2px !important;
-        margin-bottom: 16px;
-      }
-
-      .hero-desc { font-size: 15px; margin-bottom: 20px; }
-
-      .hero-cta {
-        gap: 10px;
-        margin-bottom: 20px;
-        .btn-primary, .btn-outline { padding: 13px 24px; font-size: 13px; }
-      }
-
-      .hero-badges { display: none; }
-
-      .hero-stats-row {
-        margin-top: 20px;
-        padding-top: 16px;
-        flex-wrap: wrap;
-        gap: 8px 0;
-        .hero-stat-item { padding-right: 20px; }
-        .hero-stat-divider { display: none; }
-        .hsi-val { font-size: 20px; }
-        .hsi-lbl { font-size: 10px; }
-      }
-    }
     .header-basic {
       padding-top: 64px;
       .hb-container { height: 300px; border-radius: 12px; }
@@ -1734,23 +1697,6 @@ body::-webkit-scrollbar {
     #top .navbar .navbar-main .container {
       .user-box .nav-search-expanded { width: 120px; }
     }
-    .header-main {
-      min-height: 320px;
-      height: auto;
-
-      .hero-title {
-        font-size: 40px !important;
-        letter-spacing: -1px !important;
-      }
-
-      .hero-desc { font-size: 14px; }
-
-      .hero-cta {
-        .btn-primary, .btn-outline { padding: 11px 18px; font-size: 12px; }
-      }
-
-      .hero-stats-row { display: none; }
-    }
     .header-basic {
       .hb-container { height: 240px; }
       .hb-title { font-size: 26px; }
@@ -1786,5 +1732,78 @@ body::-webkit-scrollbar {
   #pc-wrap #footer .footer-container {
     padding: 32px 12px 0;
     .ft-links { grid-template-columns: repeat(2, 1fr); }
+  }
+}
+
+// ─── HERO SECTION RESPONSIVE ─────────────────────────────────────────────────
+// Uses full selector chains to match original specificity (no !important needed)
+
+@media (max-width: 768px) {
+  #pc-wrap .header-main {
+    height: auto;
+    min-height: 380px;
+    margin-top: 64px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper {
+    padding-top: 28px;
+    padding-bottom: 32px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-title {
+    font-size: 52px;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-desc {
+    font-size: 15px;
+    margin-bottom: 20px;
+    max-width: 100%;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-cta {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-cta .btn-primary,
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-cta .btn-outline {
+    padding: 13px 24px;
+    font-size: 13px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-badges {
+    display: none;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-stats-row {
+    margin-top: 20px;
+    padding-top: 16px;
+    flex-wrap: wrap;
+    gap: 8px 0;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-stats-row .hero-stat-item {
+    padding-right: 20px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-stats-row .hero-stat-divider {
+    display: none;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-stats-row .hsi-val {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap .header-main {
+    min-height: 300px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-title {
+    font-size: 40px;
+    letter-spacing: -1px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-desc {
+    font-size: 14px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-cta .btn-primary,
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-inner .hero-cta .btn-outline {
+    padding: 11px 18px;
+    font-size: 12px;
+  }
+  #pc-wrap .header-main .hero-root .hero-content-wrapper .hero-stats-row {
+    display: none;
   }
 }
