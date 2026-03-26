@@ -679,6 +679,18 @@
       .programs-main .programs-grid {
         grid-template-columns: 1fr;
       }
+
+      // Stack filter blocks vertically on small phones
+      .filter-sidebar {
+        flex-direction: column;
+        gap: 16px;
+
+        .filter-block {
+          flex: none;
+          min-width: 100%;
+          width: 100%;
+        }
+      }
     }
   }
 }

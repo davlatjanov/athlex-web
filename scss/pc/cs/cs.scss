@@ -286,3 +286,13 @@
     }
   }
 }
+
+@media (max-width: 480px) {
+  #pc-wrap .cs-page {
+    .container { padding: 0 12px; }
+    .cs-main-info {
+      padding: 16px 0 12px;
+      .btns { flex-direction: column; gap: 8px; }
+    }
+  }
+}

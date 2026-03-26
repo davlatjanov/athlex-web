@@ -193,3 +193,15 @@
 		.cp-grid { grid-template-columns: 1fr; }
 	}
 }
+
+@media (max-width: 480px) {
+	#community-page {
+		.cp-hero {
+			padding: 20px 12px 16px;
+			h1 { font-size: 22px; }
+			p { font-size: 14px; }
+		}
+
+		.cp-body { padding: 0 12px 32px; }
+	}
+}
