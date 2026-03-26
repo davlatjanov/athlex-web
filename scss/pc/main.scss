@@ -1631,8 +1631,8 @@ body::-webkit-scrollbar {
       }
 
       .hero-title {
-        font-size: 52px;
-        letter-spacing: -2px;
+        font-size: 52px !important;
+        letter-spacing: -2px !important;
         margin-bottom: 16px;
       }
 
@@ -1739,8 +1739,8 @@ body::-webkit-scrollbar {
       height: auto;
 
       .hero-title {
-        font-size: 40px;
-        letter-spacing: -1px;
+        font-size: 40px !important;
+        letter-spacing: -1px !important;
       }
 
       .hero-desc { font-size: 14px; }
