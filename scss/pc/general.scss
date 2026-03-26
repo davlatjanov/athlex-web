@@ -371,3 +371,10 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 600px) {
+  .skeleton-card { width: 100%; }
+  .skeleton-trainer-card { width: 100%; }
+}

@@ -155,3 +155,22 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #member-page .mf-grid,
+  #pc-wrap #member-page .followers-grid,
+  #pc-wrap #member-page .followings-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  #pc-wrap #member-page .mf-card { padding: 14px 12px; }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #member-page .mf-grid,
+  #pc-wrap #member-page .followers-grid,
+  #pc-wrap #member-page .followings-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

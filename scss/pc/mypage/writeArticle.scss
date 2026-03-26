@@ -73,3 +73,15 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #write-article-page {
+    .main-title-box { flex-direction: column; gap: 12px; }
+    .right-box { width: 100%; }
+    .select { width: 100%; }
+    .input-tit { width: 100%; box-sizing: border-box; }
+    .btn-flex { flex-wrap: wrap; gap: 10px; }
+  }
+}

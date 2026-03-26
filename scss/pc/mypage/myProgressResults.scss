@@ -407,3 +407,19 @@
 		padding-top: 4px;
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #my-page #my-progress-page {
+    .progress-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { flex-wrap: wrap; gap: 12px; }
+  }
+}
+
+@media (max-width: 600px) {
+  #pc-wrap #my-page #my-progress-page {
+    .progress-grid { grid-template-columns: 1fr; }
+    .chart-wrap { overflow-x: auto; }
+  }
+}

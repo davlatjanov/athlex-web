@@ -587,3 +587,15 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #add-program-page {
+    padding: 16px;
+    .right-wrap { padding: 0; }
+    .select { width: 100%; }
+    .input-tit { width: 100%; box-sizing: border-box; }
+    .btn-flex { flex-wrap: wrap; gap: 10px; }
+  }
+}

@@ -254,3 +254,30 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #my-page #my-programs-page {
+    .list-box {
+      padding: 16px 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+
+      .listing-title-box,
+      .property-card-box {
+        min-width: 600px;
+      }
+    }
+    .tab-name-box {
+      gap: 4px;
+      .tab-name, .active-tab-name { width: 90px; font-size: 14px; }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  #pc-wrap #my-page #my-programs-page {
+    .list-box { padding: 12px 8px; }
+  }
+}

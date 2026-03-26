@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Head from 'next/head';
 import Top from '../Top';
 import Footer from '../Footer';
@@ -16,8 +15,7 @@ const withLayoutBasic = (Component: any) => {
 	return (props: any) => {
 		const router = useRouter();
 		const { t } = useTranslation('common');
-		const device = useDeviceDetect();
-		const [authHeader, setAuthHeader] = useState<boolean>(false);
+		const authHeader = false;
 
 		const memoizedValues = useMemo(() => {
 			let title = '',
@@ -52,7 +50,7 @@ const withLayoutBasic = (Component: any) => {
 					desc = 'We are here to help you';
 					bgImage = 'https://i.pinimg.com/1200x/01/96/59/019659b0cdc8c3869ee47a138bfd87b1.jpg';
 					break;
-	
+
 				default:
 					break;
 			}
@@ -66,70 +64,44 @@ const withLayoutBasic = (Component: any) => {
 			if (jwt) updateUserInfo(jwt);
 		}, []);
 
-		/** HANDLERS **/
-
-		if (device == 'mobile') {
-			return (
-				<>
-					<Head>
-						<title>Athlex</title>
-						<meta name={'title'} content={`Athlex`} />
-					</Head>
-					<div id="mobile-wrap">
-						<div id={'top'}>
-							<Top />
-						</div>
-
-						<div id={'main'}>
-							<Component {...props} />
-						</div>
-
-						<div id={'footer'}>
-							<Footer />
-						</div>
+		return (
+			<>
+				<Head>
+					<title>Athlex</title>
+					<meta name={'title'} content={`Athlex`} />
+				</Head>
+				<div id="pc-wrap">
+					<div id={'top'}>
+						<Top />
 					</div>
-				</>
-			);
-		} else {
-			return (
-				<>
-					<Head>
-						<title>Athlex</title>
-						<meta name={'title'} content={`Athlex`} />
-					</Head>
-					<div id="pc-wrap">
-						<div id={'top'}>
-							<Top />
-						</div>
 
-						{memoizedValues.title && (
-							<div className={`header-basic ${authHeader ? 'auth' : ''}`}>
-								<div className={'container hb-container'}>
-									{memoizedValues.bgImage && (
-										<img src={memoizedValues.bgImage} alt="" className={'hb-bg-img'} />
-									)}
-									<div className={'hb-overlay'} />
-									<div className={'hb-text'}>
-										<strong className={'hb-title'}>{t(memoizedValues.title)}</strong>
-										<span className={'hb-desc'}>{t(memoizedValues.desc)}</span>
-									</div>
+					{memoizedValues.title && (
+						<div className={`header-basic ${authHeader ? 'auth' : ''}`}>
+							<div className={'container hb-container'}>
+								{memoizedValues.bgImage && (
+									<img src={memoizedValues.bgImage} alt="" className={'hb-bg-img'} />
+								)}
+								<div className={'hb-overlay'} />
+								<div className={'hb-text'}>
+									<strong className={'hb-title'}>{t(memoizedValues.title)}</strong>
+									<span className={'hb-desc'}>{t(memoizedValues.desc)}</span>
 								</div>
 							</div>
-						)}
-
-						<div id={'main'}>
-							<Component {...props} />
 						</div>
+					)}
 
-						<AICoachWidget />
-
-						<div id={'footer'}>
-							<Footer />
-						</div>
+					<div id={'main'}>
+						<Component {...props} />
 					</div>
-				</>
-			);
-		}
+
+					<AICoachWidget />
+
+					<div id={'footer'}>
+						<Footer />
+					</div>
+				</div>
+			</>
+		);
 	};
 };
 

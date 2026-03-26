@@ -236,3 +236,39 @@
 }
 
 
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap.admin {
+    .aside {
+      width: 220px !important;
+    }
+    #bunker {
+      width: calc(100% - 220px);
+      padding: 88px 20px 40px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  #pc-wrap.admin {
+    .aside {
+      position: fixed;
+      left: -280px;
+      z-index: 200;
+      transition: left 0.3s ease;
+      &.open { left: 0; }
+    }
+    #bunker {
+      width: 100%;
+      padding: 80px 16px 40px;
+      margin-left: 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      table { min-width: 600px; }
+    }
+  }
+}

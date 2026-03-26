@@ -756,7 +756,8 @@
     .footer-container {
       padding: 0 10px;
       margin: 0 auto;
-      width: 1300px;
+      width: 100%;
+      max-width: 1300px;
       height: auto;
       .main {
         display: flex;

@@ -173,3 +173,17 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #member-page .mp-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #pc-wrap #member-page .mp-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

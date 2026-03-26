@@ -55,3 +55,13 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  #pc-wrap #member-page .ma-list {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    .ma-row { min-width: 500px; }
+  }
+}

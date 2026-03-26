@@ -138,3 +138,16 @@
 		&:disabled { opacity: 0.35; cursor: not-allowed; }
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 600px) {
+  .my-students {
+    .ms-member-card {
+      padding: 12px 14px;
+      gap: 10px;
+    }
+    .ms-avatar { width: 38px; height: 38px; font-size: 15px; }
+    .ms-nick { font-size: 14px; }
+  }
+}

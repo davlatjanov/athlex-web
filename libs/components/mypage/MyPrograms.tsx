@@ -38,7 +38,7 @@ const MyPrograms: NextPage = ({ initialInput, ...props }: any) => {
 	});
 
 	/** HANDLERS **/
-	const paginationHandler = (_: T, value: number) => {
+	const paginationHandler = (_: any, value: number) => {
 		setSearchFilter({ ...searchFilter, page: value });
 	};
 

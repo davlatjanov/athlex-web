@@ -315,3 +315,28 @@
 		}
 	}
 }
+
+// ─── RESPONSIVE ──────────────────────────────────────────────────────────────
+
+@media (max-width: 900px) {
+  #pc-wrap #my-page #my-favorites-page {
+    .programs-container { flex-direction: column; }
+    .filter-sidebar {
+      width: 100%;
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+      .filter-block { flex: 1; min-width: 140px; }
+    }
+    .programs-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+}
+
+@media (max-width: 600px) {
+  #pc-wrap #my-page #my-favorites-page {
+    .programs-grid { grid-template-columns: 1fr; }
+    .filter-sidebar { display: none; }
+    .top-bar { flex-direction: column; align-items: flex-start; }
+  }
+}

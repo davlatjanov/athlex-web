@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Head from 'next/head';
 import Top from '../Top';
 import Footer from '../Footer';
@@ -15,9 +13,7 @@ import 'swiper/css/navigation';
 
 const withLayoutFull = (Component: any) => {
 	return (props: any) => {
-		const router = useRouter();
-		const device = useDeviceDetect();
-		const user = useReactiveVar(userVar);
+		useReactiveVar(userVar);
 
 		/** LIFECYCLES **/
 		useEffect(() => {
@@ -25,55 +21,29 @@ const withLayoutFull = (Component: any) => {
 			if (jwt) updateUserInfo(jwt);
 		}, []);
 
-		/** HANDLERS **/
-
-		if (device == 'mobile') {
-			return (
-				<>
-					<Head>
-						<title>Athlex</title>
-						<meta name={'title'} content={`Athlex`} />
-					</Head>
-					<div id="mobile-wrap">
-						<div id={'top'}>
-							<Top />
-						</div>
-
-						<div id={'main'}>
-							<Component {...props} />
-						</div>
-
-						<div id={'footer'}>
-							<Footer />
-						</div>
+		return (
+			<>
+				<Head>
+					<title>Athlex</title>
+					<meta name={'title'} content={`Athlex`} />
+				</Head>
+				<div id="pc-wrap">
+					<div id={'top'}>
+						<Top />
 					</div>
-				</>
-			);
-		} else {
-			return (
-				<>
-					<Head>
-						<title>Athlex</title>
-						<meta name={'title'} content={`Athlex`} />
-					</Head>
-					<div id="pc-wrap">
-						<div id={'top'}>
-							<Top />
-						</div>
 
-						<div id={'main'}>
-							<Component {...props} />
-						</div>
-
-						<Chat />
-
-						<div id={'footer'}>
-							<Footer />
-						</div>
+					<div id={'main'}>
+						<Component {...props} />
 					</div>
-				</>
-			);
-		}
+
+					<Chat />
+
+					<div id={'footer'}>
+						<Footer />
+					</div>
+				</div>
+			</>
+		);
 	};
 };
 

@@ -351,7 +351,21 @@ body::-webkit-scrollbar {
 								color: #ffffff;
 							}
 						}
-						.login-user {
+						// Hamburger — hidden on desktop
+				.hamburger-btn {
+					display: none;
+					background: none;
+					border: none;
+					cursor: pointer;
+					color: rgba(255, 255, 255, 0.8);
+					padding: 4px;
+					align-items: center;
+					justify-content: center;
+					transition: color 0.2s;
+					&:hover { color: #fff; }
+				}
+
+				.login-user {
 							cursor: pointer;
 							display: flex;
 							flex-direction: column;
@@ -382,6 +396,9 @@ body::-webkit-scrollbar {
 				}
 			}
 		}
+
+		// Mobile menu hidden on desktop
+		#top .navbar .mobile-menu { display: none; }
 	}
 
 	.header-main {
@@ -1595,31 +1612,68 @@ body::-webkit-scrollbar {
 
 @media (max-width: 768px) {
   #pc-wrap {
-    #top .navbar .navbar-main {
-      height: 64px;
-      padding: 12px 0;
+    #top .navbar {
+      .navbar-main {
+        height: 64px;
+        padding: 12px 0;
 
-      .container {
-        padding: 0 16px;
+        .container {
+          padding: 0 16px;
 
-        .router-box { display: none; }
+          .router-box { display: none; }
 
-        .logo-box img { width: 30px; height: 30px; }
-        .logo-box .logo-name { font-size: 15px; }
+          .logo-box img { width: 30px; height: 30px; }
+          .logo-box .logo-name { font-size: 15px; }
 
-        .user-box {
-          gap: 6px;
+          .user-box {
+            gap: 6px;
 
-          .nav-search-expanded { width: 160px; }
+            .nav-search-expanded { width: 160px; }
+            .nav-ai-btn { display: none; }
+            .hamburger-btn { display: flex; }
 
-          .user-info-box {
-            .user-name { display: none; }
+            .user-info-box {
+              .user-name { display: none; }
+            }
+          }
+        }
+      }
+
+      // Mobile slide-down menu
+      .mobile-menu {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        z-index: 98;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+
+        &.open { max-height: 400px; }
+
+        .mobile-menu-item {
+          padding: 14px 20px;
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 15px;
+          font-weight: 600;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          transition: color 0.2s, background 0.2s;
+          cursor: pointer;
+
+          &:hover, &.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
           }
         }
       }
     }
   }
-
 }
 
 @media (max-width: 480px) {
