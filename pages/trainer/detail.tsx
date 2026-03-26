@@ -3,7 +3,6 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { CircularProgress } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
@@ -156,7 +155,7 @@ const TrainerDetail: NextPage = () => {
 	if (memberLoading) {
 		return (
 			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-				<CircularProgress size="4rem" />
+				<div className="animate-spin" style={{ width: 56, height: 56, borderRadius: '50%', border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#E92C28' }} />
 			</div>
 		);
 	}

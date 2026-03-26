@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { Stack } from '@mui/material';
 import MemberMenu from '../../libs/components/member/MemberMenu';
 import MemberPrograms from '../../libs/components/member/MemberPrograms';
 import { useRouter } from 'next/router';
@@ -264,7 +263,7 @@ const MemberPage: NextPage = () => {
 
 				{/* Content */}
 				<div className="container">
-					<Stack className={'member-page'}>
+					<div className={'member-page'}>
 						<div className="member-content">
 							<div className="list-config">
 								{category === 'programs' && isTrainer && <MemberPrograms />}
@@ -290,7 +289,7 @@ const MemberPage: NextPage = () => {
 								{category === 'joined' && <MemberJoinedPrograms />}
 							</div>
 						</div>
-					</Stack>
+					</div>
 				</div>
 			</div>
 		);

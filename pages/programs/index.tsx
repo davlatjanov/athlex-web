@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Stack } from '@mui/material';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import ProgramCard from '../../libs/components/homepage/ProgramCard';
@@ -72,7 +70,6 @@ const typeGradients: Record<string, string> = {
 const LIMIT = 9;
 
 const ProgramsPage: NextPage = () => {
-	const device = useDeviceDetect();
 	const router = useRouter();
 
 	const [programType, setProgramType] = useState('');
@@ -134,35 +131,6 @@ const ProgramsPage: NextPage = () => {
 	});
 
 	const totalPages = Math.ceil(total / LIMIT);
-
-	if (device === 'mobile') {
-		return (
-			<Stack className={'programs-page-mobile'}>
-				<Head><title>Athlex | Programs</title></Head>
-				<h2>Programs</h2>
-				<Stack className={'mobile-grid'}>
-					{filtered.map((prog) => (
-						<ProgramCard
-							key={prog._id}
-							id={prog._id}
-							name={prog.programName}
-							type={prog.programType}
-							level={prog.programLevel}
-							duration={prog.programDuration}
-							price={prog.programPrice}
-							views={prog.programViews}
-							likes={prog.programLikes}
-							members={prog.programMembers}
-							rank={prog.programRank}
-							image={prog.programImages?.[0]}
-							gradient={typeGradients[prog.programType] ?? typeGradients['STRENGTH']}
-							meLiked={prog.meLiked}
-						/>
-					))}
-				</Stack>
-			</Stack>
-		);
-	}
 
 	return (
 		<div id="programs-page">

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { Stack } from '@mui/material';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useLazyQuery, useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
@@ -27,7 +25,6 @@ const INITIAL_MSG: ChatMessage = {
 };
 
 const AICoachPage: NextPage = () => {
-	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 
 	const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MSG]);
@@ -115,9 +112,9 @@ const AICoachPage: NextPage = () => {
 	};
 
 	return (
-		<Stack id={'ai-coach-page'}>
+		<div id={'ai-coach-page'}>
 			<Head><title>Athlex | AI Coach</title></Head>
-			<Stack className={'container ac-wrap'}>
+			<div className={'container ac-wrap'}>
 				{user?._id && (
 					<aside className={'ac-sidebar'}>
 						<button className={'ac-new-btn'} onClick={startNewChat}>+ New Chat</button>
@@ -174,8 +171,8 @@ const AICoachPage: NextPage = () => {
 						</button>
 					</div>
 				</div>
-			</Stack>
-		</Stack>
+			</div>
+		</div>
 	);
 };
 

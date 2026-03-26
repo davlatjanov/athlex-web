@@ -32,19 +32,7 @@ import { FOLLOW_MEMBER, LIKE_TARGET_ITEM } from '../../apollo/user/mutation';
 import { Messages } from '../../libs/config';
 import { logOut } from '../../libs/auth';
 import { sweetConfirmAlert } from '../../libs/sweetAlert';
-import LogoutIcon from '@mui/icons-material/Logout';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import HistoryIcon from '@mui/icons-material/History';
-import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { LogOut as LogoutIcon, Pencil as EditOutlinedIcon, Dumbbell as FitnessCenterIcon, Bookmark as BookmarkBorderIcon, CheckCircle as CheckCircleOutlineIcon, History as HistoryIcon, Users as PeopleOutlineIcon, User as PersonOutlineIcon, PlusCircle as AddCircleOutlineIcon, ShieldCheck as AdminPanelSettingsOutlinedIcon, PlayCircle as PlayCircleOutlineIcon, Store as StorefrontOutlinedIcon, ShoppingCart as ShoppingCartOutlinedIcon } from 'lucide-react';
 
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -98,41 +86,41 @@ const PLAN_LABEL: Record<string, string> = {
 const getTabIcon = (key: string) => {
 	switch (key) {
 		case 'myProfile':
-			return <PersonOutlineIcon fontSize="small" />;
+			return <PersonOutlineIcon size={16} />;
 		case 'myFavorites':
-			return <CheckCircleOutlineIcon fontSize="small" />;
+			return <CheckCircleOutlineIcon size={16} />;
 		case 'myStudents':
-			return <PeopleOutlineIcon fontSize="small" />;
+			return <PeopleOutlineIcon size={16} />;
 		case 'myBookmarks':
-			return <BookmarkBorderIcon fontSize="small" />;
+			return <BookmarkBorderIcon size={16} />;
 		case 'recentlyVisited':
-			return <HistoryIcon fontSize="small" />;
+			return <HistoryIcon size={16} />;
 		case 'followers':
-			return <PeopleOutlineIcon fontSize="small" />;
+			return <PeopleOutlineIcon size={16} />;
 		case 'followings':
-			return <PersonOutlineIcon fontSize="small" />;
+			return <PersonOutlineIcon size={16} />;
 		case 'myProperties':
-			return <FitnessCenterIcon fontSize="small" />;
+			return <FitnessCenterIcon size={16} />;
 		case 'addProperty':
-			return <AddCircleOutlineIcon fontSize="small" />;
+			return <AddCircleOutlineIcon size={16} />;
 		case 'addProduct':
-			return <AddCircleOutlineIcon fontSize="small" />;
+			return <AddCircleOutlineIcon size={16} />;
 		case 'adminUsers':
-			return <PeopleOutlineIcon fontSize="small" />;
+			return <PeopleOutlineIcon size={16} />;
 		case 'adminPrograms':
-			return <PlayCircleOutlineIcon fontSize="small" />;
+			return <PlayCircleOutlineIcon size={16} />;
 		case 'adminProducts':
-			return <StorefrontOutlinedIcon fontSize="small" />;
+			return <StorefrontOutlinedIcon size={16} />;
 		case 'adminPanel':
-			return <AdminPanelSettingsOutlinedIcon fontSize="small" />;
+			return <AdminPanelSettingsOutlinedIcon size={16} />;
 		case 'myOrders':
-			return <ShoppingCartOutlinedIcon fontSize="small" />;
+			return <ShoppingCartOutlinedIcon size={16} />;
 		case 'adminOrders':
-			return <ShoppingCartOutlinedIcon fontSize="small" />;
+			return <ShoppingCartOutlinedIcon size={16} />;
 		case 'adminComments':
-			return <PeopleOutlineIcon fontSize="small" />;
+			return <PeopleOutlineIcon size={16} />;
 		case 'adminFeedback':
-			return <StorefrontOutlinedIcon fontSize="small" />;
+			return <StorefrontOutlinedIcon size={16} />;
 		default:
 			return null;
 	}
@@ -278,12 +266,12 @@ const MyPage: NextPage = () => {
 						<div className={'mp-card-actions'}>
 							<Link href={{ pathname: '/mypage', query: { category: 'myProfile' } }} scroll={false}>
 								<button className={'mp-edit-btn'}>
-									<EditOutlinedIcon fontSize="small" />
+									<EditOutlinedIcon size={16} />
 									Edit Profile
 								</button>
 							</Link>
 							<button className={'mp-logout-btn'} onClick={logoutHandler}>
-								<LogoutIcon fontSize="small" />
+								<LogoutIcon size={16} />
 								Logout
 							</button>
 						</div>

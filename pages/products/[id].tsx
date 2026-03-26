@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { CircularProgress } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { GET_ONE_PRODUCT } from '../../apollo/user/query';
 import { LIKE_TARGET_ITEM, TOGGLE_BOOKMARK } from '../../apollo/user/mutation';
@@ -41,7 +39,6 @@ const statusConfig: Record<string, { label: string; color: string }> = {
 };
 
 const ProductDetail: NextPage = () => {
-	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const { id } = router.query;
@@ -123,7 +120,7 @@ const ProductDetail: NextPage = () => {
 	if (loading) {
 		return (
 			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-				<CircularProgress size="4rem" />
+				<div className="animate-spin" style={{ width: 56, height: 56, borderRadius: '50%', border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#E92C28' }} />
 			</div>
 		);
 	}
@@ -136,32 +133,6 @@ const ProductDetail: NextPage = () => {
 					<h2>Product not found</h2>
 					<p>This product may have been removed or doesn&apos;t exist.</p>
 					<button onClick={() => router.push('/products')}>Browse Shop</button>
-				</div>
-			</div>
-		);
-	}
-
-	if (device === 'mobile') {
-		return (
-			<div id="product-detail-page">
-				<div className="pdp-mobile-body">
-					<h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, margin: 0 }}>{product?.productName}</h2>
-					<img
-						src={selectedImage || '/img/banner/header1.svg'}
-						alt={product?.productName}
-						style={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 10 }}
-					/>
-					<p style={{ color: '#9ca3af', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{product?.productDesc}</p>
-					<div className="mobile-sticky-cta">
-						<span className="msc-price">${product?.productPrice?.toFixed(2)}</span>
-						<button
-							className={`msc-btn${product?.productStatus !== 'ACTIVE' ? ' disabled' : ''}`}
-							onClick={handleAddToCart}
-							disabled={product?.productStatus !== 'ACTIVE'}
-						>
-							{product?.productStatus !== 'ACTIVE' ? 'Out of Stock' : 'Add to Cart →'}
-						</button>
-					</div>
 				</div>
 			</div>
 		);

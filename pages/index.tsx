@@ -1,15 +1,12 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import useDeviceDetect from '../libs/hooks/useDeviceDetect';
 import withLayoutMain from '../libs/components/layout/LayoutHome';
-import { Stack } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import StatsBanner from '../libs/components/homepage/StatsBanner';
 import ProgramCategories from '../libs/components/homepage/ProgramCategories';
 import TrendPrograms from '../libs/components/homepage/TrendPrograms';
 import PopularPrograms from '../libs/components/homepage/PopularPrograms';
-import Advertisement from '../libs/components/homepage/Advertisement';
 import TopPrograms from '../libs/components/homepage/TopPrograms';
 import TopTrainers from '../libs/components/homepage/TopTrainers';
 import AICoachTeaser from '../libs/components/homepage/AICoachTeaser';
@@ -24,43 +21,22 @@ export const getStaticProps = async ({ locale }: any) => ({
 });
 
 const Home: NextPage = () => {
-	const device = useDeviceDetect();
+	return (
+		<div className={'home-page'}>
+			<Head><title>Athlex | Home</title></Head>
+			<StatsBanner />
+			<ProgramCategories />
+			<TrendPrograms />
+			<PopularPrograms />
 
-	if (device === 'mobile') {
-		return (
-			<Stack className={'home-page'}>
-				<Head><title>Athlex | Home</title></Head>
-				<StatsBanner />
-				<ProgramCategories />
-				<TrendPrograms />
-				<PopularPrograms />
-
-				<TopPrograms />
-				<TopTrainers />
-				<AICoachTeaser />
-				<FeaturedProducts />
-				<MembershipPlans />
-				<Events />
-			</Stack>
-		);
-	} else {
-		return (
-			<Stack className={'home-page'}>
-				<Head><title>Athlex | Home</title></Head>
-				<StatsBanner />
-				<ProgramCategories />
-				<TrendPrograms />
-				<PopularPrograms />
-
-				<TopPrograms />
-				<TopTrainers />
-				<AICoachTeaser />
-				<FeaturedProducts />
-				<MembershipPlans />
-				<Events />
-			</Stack>
-		);
-	}
+			<TopPrograms />
+			<TopTrainers />
+			<AICoachTeaser />
+			<FeaturedProducts />
+			<MembershipPlans />
+			<Events />
+		</div>
+	);
 };
 
 export default withLayoutMain(Home);

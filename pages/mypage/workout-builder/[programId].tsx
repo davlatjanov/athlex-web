@@ -18,14 +18,7 @@ import {
 import { sweetConfirmAlert, sweetErrorHandling, sweetMixinErrorAlert } from '../../../libs/sweetAlert';
 import { getJwtToken } from '../../../libs/auth';
 import { Workout, Exercise } from '../../../libs/types/program/program';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import HotelIcon from '@mui/icons-material/Hotel';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import { ArrowLeft as ArrowBackIcon, Plus as AddIcon, Pencil as EditIcon, Trash2 as DeleteIcon, ChevronDown as ExpandMoreIcon, ChevronUp as ExpandLessIcon, Moon as HotelIcon, Dumbbell as FitnessCenterIcon } from 'lucide-react';
 
 const BODY_PARTS = [
 	'CHEST', 'BACK', 'SHOULDERS', 'BICEPS', 'TRICEPS', 'FOREARMS',
@@ -340,7 +333,7 @@ const WorkoutBuilderPage: NextPage = () => {
 			{/* Header */}
 			<div className="wb-header">
 				<button className="wb-back-btn" onClick={() => router.push('/mypage?category=myProperty')}>
-					<ArrowBackIcon fontSize="small" /> Back
+					<ArrowBackIcon size={16} /> Back
 				</button>
 				<div className="wb-header-info">
 					<h1 className="wb-title">{program.programName}</h1>
@@ -368,25 +361,25 @@ const WorkoutBuilderPage: NextPage = () => {
 										{!workout.isRestDay && (
 											<button className="wb-icon-btn" title="Add Exercise"
 												onClick={() => { setExpandedDays((p) => new Set([...p, day])); openExerciseModal(workout._id); }}>
-												<AddIcon fontSize="small" />
+												<AddIcon size={16} />
 											</button>
 										)}
 										<button className="wb-icon-btn" title="Edit" onClick={() => openWorkoutModal(day, workout)}>
-											<EditIcon fontSize="small" />
+											<EditIcon size={16} />
 										</button>
 										<button className="wb-icon-btn danger" title="Delete" onClick={() => handleDeleteWorkout(workout._id)}>
-											<DeleteIcon fontSize="small" />
+											<DeleteIcon size={16} />
 										</button>
 										{!workout.isRestDay && (
 											<button className="wb-expand-btn" onClick={() => toggleDay(day)}>
-												{expanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+												{expanded ? <ExpandLessIcon size={16} /> : <ExpandMoreIcon size={16} />}
 											</button>
 										)}
 									</div>
 								) : (
 									<div className="wb-day-actions">
 										<button className="wb-add-btn" onClick={() => openWorkoutModal(day)}>
-											<AddIcon fontSize="small" /> Workout
+											<AddIcon size={16} /> Workout
 										</button>
 										<button className="wb-rest-btn" onClick={() => {
 											setWorkoutForm({ ...defaultWorkoutForm, isRestDay: true, workoutName: 'Rest Day' });
@@ -405,7 +398,7 @@ const WorkoutBuilderPage: NextPage = () => {
 												}).then(() => refetch());
 											}, 0);
 										}}>
-											<HotelIcon fontSize="small" /> Rest
+											<HotelIcon size={16} /> Rest
 										</button>
 									</div>
 								)}
@@ -461,17 +454,17 @@ const WorkoutBuilderPage: NextPage = () => {
 												</div>
 												<div className="wb-ex-actions">
 													<button className="wb-icon-btn" onClick={() => openExerciseModal(workout._id, ex)}>
-														<EditIcon fontSize="small" />
+														<EditIcon size={16} />
 													</button>
 													<button className="wb-icon-btn danger" onClick={() => handleDeleteExercise(ex._id)}>
-														<DeleteIcon fontSize="small" />
+														<DeleteIcon size={16} />
 													</button>
 												</div>
 											</div>
 										))
 									)}
 									<button className="wb-add-exercise-btn" onClick={() => openExerciseModal(workout._id)}>
-										<AddIcon fontSize="small" /> Add Exercise
+										<AddIcon size={16} /> Add Exercise
 									</button>
 								</div>
 							)}

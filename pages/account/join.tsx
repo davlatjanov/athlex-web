@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getJwtToken, logIn, signUp } from '../../libs/auth';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
@@ -87,10 +86,10 @@ const Join: NextPage = () => {
 	);
 
 	return (
-		<Stack className={'join-page'}>
+		<div className={'join-page'}>
 			<Head><title>Athlex | Sign In</title></Head>
-			<Stack className={'container'}>
-				<Stack className={'main'}>
+			<div className={'container'}>
+				<div className={'main'}>
 
 					{/* ── Left: Welcome panel ── */}
 					<div className={'join-welcome'}>
@@ -229,9 +228,9 @@ const Join: NextPage = () => {
 						</div>
 					</div>
 
-				</Stack>
-			</Stack>
-		</Stack>
+				</div>
+			</div>
+		</div>
 	);
 };
 

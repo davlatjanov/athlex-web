@@ -1,7 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Box, Stack } from '@mui/material';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import Notice from '../../libs/components/cs/Notice';
 import Faq from '../../libs/components/cs/Faq';
@@ -30,14 +29,14 @@ const CS: NextPage = () => {
 	const tab = router.query.tab ?? 'notice';
 
 	return (
-		<Stack className={'cs-page'}>
-				<Stack className={'container'}>
-					<Box component={'div'} className={'cs-main-info'}>
-						<Box component={'div'} className={'info'}>
+		<div className={'cs-page'}>
+				<div className={'container'}>
+					<div className={'cs-main-info'}>
+						<div className={'info'}>
 							<span>Support Center</span>
 							<p>Find answers, read announcements, or browse our FAQ</p>
-						</Box>
-						<Box component={'div'} className={'btns'}>
+						</div>
+						<div className={'btns'}>
 							<div
 								className={tab == 'notice' ? 'active' : ''}
 								onClick={() => {
@@ -54,16 +53,16 @@ const CS: NextPage = () => {
 							>
 								FAQ
 							</div>
-						</Box>
-					</Box>
+						</div>
+					</div>
 
-					<Box component={'div'} className={'cs-content'}>
+					<div className={'cs-content'}>
 						{tab === 'notice' && <Notice />}
 
 						{tab === 'faq' && <Faq />}
-					</Box>
-				</Stack>
-		</Stack>
+					</div>
+				</div>
+		</div>
 	);
 };
 

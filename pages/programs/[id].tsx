@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { GET_ONE_PROGRAM_WITH_MEMBER, GET_COMMENTS, GET_PROGRAM_WITH_WORKOUTS, GET_FEEDBACKS, CHECK_IF_USER_LIKED } from '../../apollo/user/query';
 import { CREATE_COMMENT, DELETE_COMMENT, JOIN_PROGRAM, LEAVE_PROGRAM, TOGGLE_BOOKMARK, CREATE_FEEDBACK, UPDATE_FEEDBACK } from '../../apollo/user/mutation';
@@ -19,16 +18,7 @@ import { useLike } from '../../libs/hooks/useInteractions';
 import { sweetConfirmAlert, sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { T } from '../../libs/types/common';
 import moment from 'moment';
-import { CircularProgress, Pagination as MuiPagination, Stack } from '@mui/material';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import IosShareIcon from '@mui/icons-material/IosShare';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import GroupIcon from '@mui/icons-material/Group';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { Eye as RemoveRedEyeIcon, Heart as FavoriteBorderIcon, Bookmark as BookmarkBorderIcon, BookmarkCheck as BookmarkIcon, Share2 as IosShareIcon, Calendar as DateRangeIcon, Users as GroupIcon, MessageCircle as ChatBubbleOutlineIcon, Trophy as EmojiEventsIcon } from 'lucide-react';
 import { trackProgramVisit } from '../../libs/components/mypage/RecentlyVisited';
 import CheckoutModal from '../../libs/components/common/CheckoutModal';
 
@@ -43,7 +33,6 @@ export const getServerSideProps = async ({ locale }: any) => ({
 });
 
 const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
-	const device = useDeviceDetect();
 	const router = useRouter();
 	const { id } = router.query;
 	const user = useReactiveVar(userVar);
@@ -276,9 +265,9 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 	if (loading) {
 		return (
-			<Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '80vh' }}>
-				<CircularProgress size={'4rem'} />
-			</Stack>
+			<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '80vh' }}>
+				<div className="animate-spin" style={{ width: 56, height: 56, borderRadius: '50%', border: '4px solid rgba(255,255,255,0.1)', borderTopColor: '#E92C28' }} />
+			</div>
 		);
 	}
 
@@ -540,13 +529,21 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 				))}
 			</div>
 			{commentTotal > commentInquiry.limit && (
-				<MuiPagination
-					page={commentInquiry.page}
-					count={Math.ceil(commentTotal / commentInquiry.limit)}
-					onChange={commentPaginationChangeHandler}
-					shape="circular"
-					color="primary"
-				/>
+				<div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
+					{Array.from({ length: Math.ceil(commentTotal / commentInquiry.limit) }, (_, i) => i + 1).map((p) => (
+						<button
+							key={p}
+							onClick={(e) => commentPaginationChangeHandler(e as any, p)}
+							style={{
+								width: 32, height: 32, borderRadius: '50%',
+								background: commentInquiry.page === p ? '#E92C28' : 'transparent',
+								color: commentInquiry.page === p ? '#fff' : '#9CA3AF',
+								border: commentInquiry.page === p ? 'none' : '1px solid rgba(255,255,255,0.1)',
+								cursor: 'pointer', fontSize: 13, fontWeight: 600,
+							}}
+						>{p}</button>
+					))}
+				</div>
 			)}
 		</section>
 	);
@@ -571,67 +568,6 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 		</section>
 	);
 
-	/** MOBILE **/
-	if (device === 'mobile') {
-		return (
-			<div id="program-detail-page">
-				<Head><title>Athlex | {program?.programName ?? 'Program'}</title></Head>
-				{heroBlock}
-				<div className="pdp-mobile-body">
-					{statPills}
-
-					{program?.programDesc && (
-						<section className="pdp-section">
-							<h2 className="pdp-section-title">About This Program</h2>
-							<p className="pdp-desc">{program.programDesc}</p>
-						</section>
-					)}
-
-					{(program?.targetAudience?.length ?? 0) > 0 && (
-						<section className="pdp-section">
-							<h2 className="pdp-section-title">Who Is This For?</h2>
-							<div className="req-list">
-								{program?.targetAudience?.map((t, i) => (
-									<div key={i} className="req-item"><span className="req-dot" />{t}</div>
-								))}
-							</div>
-						</section>
-					)}
-
-					{(program?.requirements?.length ?? 0) > 0 && (
-						<section className="pdp-section">
-							<h2 className="pdp-section-title">Requirements</h2>
-							<div className="req-list">
-								{program?.requirements?.map((r, i) => (
-									<div key={i} className="req-item"><span className="req-dot" />{r}</div>
-								))}
-							</div>
-						</section>
-					)}
-
-					{weekSchedule}
-					{enrolledWorkoutPlan}
-					{trainerSection}
-					{reviewsSection}
-					{leaveReviewSection}
-				</div>
-
-				<div className="mobile-sticky-cta">
-					<span className="msc-price">{displayPrice}</span>
-					{joined ? (
-						<>
-							<button className="msc-btn enrolled" disabled>✓ ENROLLED</button>
-							<button className="msc-leave-btn" onClick={leaveProgramHandler}>Leave</button>
-						</>
-					) : (
-						<button className="msc-btn" onClick={joinProgramHandler}>Enroll Now →</button>
-					)}
-				</div>
-			</div>
-		);
-	}
-
-	/** DESKTOP **/
 	return (
 		<div id="program-detail-page">
 			<Head><title>Athlex | {program?.programName ?? 'Program'}</title></Head>
@@ -702,18 +638,18 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 						<div className="ec-actions-row">
 							<div className="ec-action-stat">
-								<RemoveRedEyeIcon fontSize="small" />
+								<RemoveRedEyeIcon size={16} />
 								<span>{program?.programViews}</span>
 							</div>
 							<button className={`ec-action-btn ${programLiked ? 'liked' : ''}`} onClick={async (e) => { await toggleLike(e); getProgramRefetch({ programId: id }).then((res) => { const u = res.data?.getOneProgramWithMember; if (u) setProgram(u); }).catch(() => {}); }} title="Like">
-								<FavoriteBorderIcon fontSize="small" />
+								<FavoriteBorderIcon size={16} />
 								<span>{program?.programLikes}</span>
 							</button>
 							<button className={`ec-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save">
-								{saved ? <BookmarkIcon fontSize="small" /> : <BookmarkBorderIcon fontSize="small" />}
+								{saved ? <BookmarkIcon size={16} /> : <BookmarkBorderIcon size={16} />}
 							</button>
 							<button className="ec-action-btn" onClick={shareHandler} title="Share">
-								<IosShareIcon fontSize="small" />
+								<IosShareIcon size={16} />
 							</button>
 						</div>
 
