@@ -1051,6 +1051,23 @@ $border-accent: rgba(34, 197, 94, 0.4);
     h2 { font-size: 24px !important; }
     .section-header h2 { font-size: 24px !important; }
 
+    .stats-banner {
+      padding: 12px 0;
+      .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 16px;
+        border-radius: 12px;
+      }
+      .stat-item {
+        align-items: center;
+        &::after { display: none; }
+        strong { font-size: 22px; }
+        span { font-size: 10px; letter-spacing: 1px; }
+      }
+    }
+
     .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
     .program-card { width: 260px; }
