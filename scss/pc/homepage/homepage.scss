@@ -1037,7 +1037,8 @@ $border-accent: rgba(34, 197, 94, 0.4);
 
     .trend-programs,
     .popular-programs,
-    .top-programs {
+    .top-programs,
+    .top-trainers {
       padding: 56px 0;
     }
 
@@ -1083,8 +1084,15 @@ $border-accent: rgba(34, 197, 94, 0.4);
 
     .trend-programs,
     .popular-programs,
-    .top-programs {
+    .top-programs,
+    .top-trainers {
       padding: 36px 0;
+    }
+
+    .top-trainers .trainer-card .trainer-stats {
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
     }
 
     .info-box {
