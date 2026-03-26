@@ -1598,6 +1598,9 @@ body::-webkit-scrollbar {
       padding: 0 20px;
       .router-box { gap: 20px; div { font-size: 14px; } }
     }
+    .header-main { height: 680px; }
+    .header-basic .hb-container { height: 560px; }
+    .header-basic .hb-title { font-size: 56px; }
   }
 }
 
@@ -1607,11 +1610,28 @@ body::-webkit-scrollbar {
       .router-box { gap: 14px; div { font-size: 13px; } }
       .user-box { gap: 8px; }
     }
+    .header-main { height: 520px; margin-top: 87px; }
+    .header-basic .hb-container { height: 400px; }
+    .header-basic .hb-title { font-size: 44px; letter-spacing: -1px; }
+    .header-basic .hb-desc { font-size: 15px; }
+    .header-basic .hb-text { padding: 0 32px 48px; }
   }
 }
 
 @media (max-width: 768px) {
   #pc-wrap {
+    .header-main {
+      height: 420px;
+      margin-top: 64px;
+    }
+    .header-basic {
+      padding-top: 64px;
+      .hb-container { height: 300px; border-radius: 12px; }
+      .hb-title { font-size: 32px; letter-spacing: -0.5px; }
+      .hb-desc { font-size: 14px; max-width: 100%; }
+      .hb-text { padding: 0 20px 36px; gap: 12px; }
+    }
+
     #top .navbar {
       .navbar-main {
         height: 64px;
@@ -1680,6 +1700,13 @@ body::-webkit-scrollbar {
   #pc-wrap {
     #top .navbar .navbar-main .container {
       .user-box .nav-search-expanded { width: 120px; }
+    }
+    .header-main { height: 340px; }
+    .header-basic {
+      .hb-container { height: 240px; }
+      .hb-title { font-size: 26px; }
+      .hb-desc { font-size: 13px; }
+      .hb-text { padding: 0 16px 28px; }
     }
   }
 }
