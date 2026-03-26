@@ -63,7 +63,7 @@ const CartDrawer = () => {
 			<div className="relative cursor-pointer mr-1" onClick={handleOpen}>
 				<ShoppingBag className={'notification-icon'} />
 				{totalItems > 0 && (
-					<span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-[3px] rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center leading-none">
+					<span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 px-0.75 rounded-full bg-danger text-white text-[10px] font-bold flex items-center justify-center leading-none">
 						{totalItems}
 					</span>
 				)}
@@ -74,7 +74,7 @@ const CartDrawer = () => {
 
 			{/* Drawer panel */}
 			<div
-				className="fixed top-0 right-0 h-full w-[420px] z-50 flex flex-col transition-transform duration-300"
+				className="fixed top-0 right-0 h-full w-105 z-50 flex flex-col transition-transform duration-300"
 				style={{
 					background: '#0f172a',
 					color: '#e2e8f0',

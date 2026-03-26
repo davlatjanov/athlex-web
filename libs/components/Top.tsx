@@ -139,7 +139,7 @@ const Top = () => {
 									<div className="relative cursor-pointer" onClick={() => setNotifOpen(!notifOpen)}>
 										<Bell className={'notification-icon'} />
 										{unreadCount > 0 && (
-											<span className="absolute -top-1 -right-1 w-4 h-4 bg-[#E92C28] rounded-full text-[10px] flex items-center justify-center text-white font-bold leading-none">
+											<span className="absolute -top-1 -right-1 w-4 h-4 bg-danger rounded-full text-[10px] flex items-center justify-center text-white font-bold leading-none">
 												{unreadCount}
 											</span>
 										)}
@@ -148,14 +148,14 @@ const Top = () => {
 									{notifOpen && (
 										<>
 											<div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
-											<div className="absolute right-0 top-full mt-1 w-80 max-h-96 overflow-y-auto bg-[#1a1f2e] border border-white/[0.08] rounded-lg shadow-xl z-50">
+											<div className="absolute right-0 top-full mt-1 w-80 max-h-96 overflow-y-auto bg-[#1a1f2e] border border-white/8 rounded-lg shadow-xl z-50">
 												{/* Header */}
-												<div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.08]">
+												<div className="flex items-center justify-between px-4 py-3 border-b border-white/8">
 													<strong className="text-[15px] text-white">Notifications</strong>
 													{unreadCount > 0 && (
 														<button
 															onClick={handleMarkAllRead}
-															className="text-[11px] text-[#E92C28] font-semibold bg-transparent border-none cursor-pointer"
+															className="text-[11px] text-danger font-semibold bg-transparent border-none cursor-pointer"
 														>
 															Mark all read
 														</button>
@@ -170,7 +170,7 @@ const Top = () => {
 														<div
 															key={n._id}
 															onClick={() => handleNotifClick(n)}
-															className={`flex items-start gap-2 px-4 py-3 cursor-pointer border-b border-white/[0.04] hover:bg-white/[0.04] ${!n.isRead ? 'bg-[rgba(233,44,40,0.06)]' : ''}`}
+															className={`flex items-start gap-2 px-4 py-3 cursor-pointer border-b border-white/4 hover:bg-white/4 ${!n.isRead ? 'bg-[rgba(233,44,40,0.06)]' : ''}`}
 														>
 															<span className="text-[18px] leading-snug shrink-0">{NOTIF_ICON[n.notificationType] ?? '🔔'}</span>
 															<div className="flex-1 min-w-0">
@@ -185,14 +185,14 @@ const Top = () => {
 																</div>
 															</div>
 															{!n.isRead && (
-																<span className="w-2 h-2 rounded-full bg-[#E92C28] shrink-0 mt-1" />
+																<span className="w-2 h-2 rounded-full bg-danger shrink-0 mt-1" />
 															)}
 														</div>
 													))
 												)}
 
 												{/* View all */}
-												<div className="border-t border-white/[0.08] px-4 py-2">
+												<div className="border-t border-white/8 px-4 py-2">
 													<a
 														href="/notifications"
 														onClick={() => setNotifOpen(false)}
@@ -223,12 +223,12 @@ const Top = () => {
 									{logoutOpen && (
 										<>
 											<div className="fixed inset-0 z-40" onClick={() => setLogoutOpen(false)} />
-											<div className="absolute right-0 top-full mt-1 bg-[#1a1f2e] border border-white/[0.08] rounded-lg shadow-xl z-50 min-w-[140px]">
+											<div className="absolute right-0 top-full mt-1 bg-[#1a1f2e] border border-white/8 rounded-lg shadow-xl z-50 min-w-35">
 												<button
 													onClick={() => logOut()}
-													className="flex items-center gap-2 px-4 py-2.5 text-sm text-white hover:bg-white/[0.05] w-full text-left"
+													className="flex items-center gap-2 px-4 py-2.5 text-sm text-white hover:bg-white/5 w-full text-left"
 												>
-													<LogOut size={16} className="text-[#E92C28]" />
+													<LogOut size={16} className="text-danger" />
 													Logout
 												</button>
 											</div>
