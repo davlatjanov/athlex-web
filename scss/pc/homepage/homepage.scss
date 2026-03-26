@@ -1035,6 +1035,14 @@ $border-accent: rgba(34, 197, 94, 0.4);
       .section-header { margin-bottom: 28px; }
     }
 
+    .trend-programs,
+    .popular-programs,
+    .top-programs {
+      padding: 56px 0;
+    }
+
+    .info-box { margin-bottom: 24px; }
+
     .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
     .products-grid { grid-template-columns: repeat(1, 1fr); }
@@ -1071,6 +1079,18 @@ $border-accent: rgba(34, 197, 94, 0.4);
         strong { font-size: 22px; }
         span { font-size: 10px; letter-spacing: 1px; }
       }
+    }
+
+    .trend-programs,
+    .popular-programs,
+    .top-programs {
+      padding: 36px 0;
+    }
+
+    .info-box {
+      margin-bottom: 16px;
+      gap: 12px;
+      .right { gap: 12px; }
     }
 
     .program-categories {
