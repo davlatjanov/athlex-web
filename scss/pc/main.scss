@@ -1623,6 +1623,30 @@ body::-webkit-scrollbar {
     .header-main {
       height: 420px;
       margin-top: 64px;
+
+      .hero-title {
+        font-size: 52px;
+        letter-spacing: -2px;
+        margin-bottom: 20px;
+      }
+
+      .hero-desc { font-size: 15px; margin-bottom: 24px; }
+
+      .hero-cta {
+        flex-wrap: wrap;
+        gap: 10px;
+        .btn-primary, .btn-secondary { padding: 13px 28px; font-size: 13px; }
+      }
+
+      .hero-stats-row {
+        margin-top: 28px;
+        padding-top: 20px;
+        flex-wrap: wrap;
+        gap: 12px 0;
+        .hero-stat-item { padding-right: 24px; }
+        .hero-stat-divider { display: none; }
+        .hsi-val { font-size: 20px; }
+      }
     }
     .header-basic {
       padding-top: 64px;
@@ -1701,7 +1725,26 @@ body::-webkit-scrollbar {
     #top .navbar .navbar-main .container {
       .user-box .nav-search-expanded { width: 120px; }
     }
-    .header-main { height: 340px; }
+    .header-main {
+      height: 340px;
+
+      .hero-title {
+        font-size: 38px;
+        letter-spacing: -1px;
+      }
+
+      .hero-desc { font-size: 14px; max-width: 100%; }
+
+      .hero-cta {
+        .btn-primary, .btn-secondary { padding: 11px 20px; font-size: 12px; width: 100%; justify-content: center; }
+      }
+
+      .hero-stats-row {
+        .hero-stat-item { padding-right: 16px; }
+        .hsi-val { font-size: 18px; }
+        .hsi-lbl { font-size: 10px; }
+      }
+    }
     .header-basic {
       .hb-container { height: 240px; }
       .hb-title { font-size: 26px; }
