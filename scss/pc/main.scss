@@ -1621,31 +1621,40 @@ body::-webkit-scrollbar {
 @media (max-width: 768px) {
   #pc-wrap {
     .header-main {
-      height: 420px;
+      height: auto;
+      min-height: 380px;
       margin-top: 64px;
+
+      .hero-content-wrapper {
+        padding-top: 32px;
+        padding-bottom: 36px;
+      }
 
       .hero-title {
         font-size: 52px;
         letter-spacing: -2px;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
       }
 
-      .hero-desc { font-size: 15px; margin-bottom: 24px; }
+      .hero-desc { font-size: 15px; margin-bottom: 20px; }
 
       .hero-cta {
-        flex-wrap: wrap;
         gap: 10px;
-        .btn-primary, .btn-secondary { padding: 13px 28px; font-size: 13px; }
+        margin-bottom: 20px;
+        .btn-primary, .btn-outline { padding: 13px 24px; font-size: 13px; }
       }
 
+      .hero-badges { display: none; }
+
       .hero-stats-row {
-        margin-top: 28px;
-        padding-top: 20px;
+        margin-top: 20px;
+        padding-top: 16px;
         flex-wrap: wrap;
-        gap: 12px 0;
-        .hero-stat-item { padding-right: 24px; }
+        gap: 8px 0;
+        .hero-stat-item { padding-right: 20px; }
         .hero-stat-divider { display: none; }
         .hsi-val { font-size: 20px; }
+        .hsi-lbl { font-size: 10px; }
       }
     }
     .header-basic {
@@ -1726,24 +1735,21 @@ body::-webkit-scrollbar {
       .user-box .nav-search-expanded { width: 120px; }
     }
     .header-main {
-      height: 340px;
+      min-height: 320px;
+      height: auto;
 
       .hero-title {
-        font-size: 38px;
+        font-size: 40px;
         letter-spacing: -1px;
       }
 
-      .hero-desc { font-size: 14px; max-width: 100%; }
+      .hero-desc { font-size: 14px; }
 
       .hero-cta {
-        .btn-primary, .btn-secondary { padding: 11px 20px; font-size: 12px; width: 100%; justify-content: center; }
+        .btn-primary, .btn-outline { padding: 11px 18px; font-size: 12px; }
       }
 
-      .hero-stats-row {
-        .hero-stat-item { padding-right: 16px; }
-        .hsi-val { font-size: 18px; }
-        .hsi-lbl { font-size: 10px; }
-      }
+      .hero-stats-row { display: none; }
     }
     .header-basic {
       .hb-container { height: 240px; }
