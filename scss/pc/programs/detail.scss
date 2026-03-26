@@ -228,27 +228,6 @@
 			&:hover { border-color: rgba(34, 197, 94, 0.2); }
 		}
 
-		// ─── MUI PAGINATION (review section) ──────────────────────
-		.MuiPagination-root {
-			margin-top: 8px;
-
-			.MuiPaginationItem-root {
-				color: #9CA3AF;
-				border-color: rgba(255, 255, 255, 0.1);
-				&:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
-			}
-
-			.MuiPaginationItem-root.Mui-selected {
-				background: #22C55E;
-				color: #fff;
-				&:hover { background: #16a34a; }
-			}
-
-			.MuiPaginationItem-previousNext {
-				color: #ffffff;
-				svg { color: #ffffff; }
-			}
-		}
 
 		.pdp-section-title {
 			color: #ffffff;

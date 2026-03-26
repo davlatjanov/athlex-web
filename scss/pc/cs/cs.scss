@@ -225,28 +225,9 @@
 					.wrap {
 						margin-top: 24px;
 
-						.MuiAccordion-root {
-							background: #1F2937;
-							border: 1px solid rgba(255,255,255,0.08);
-							border-radius: 10px !important;
-							margin-bottom: 8px;
-							box-shadow: none;
-							&::before { display: none; }
-							color: #fff;
-						}
 
-						.MuiAccordionSummary-root {
-							padding: 4px 20px;
-							&:hover { background: rgba(255,255,255,0.03); }
-						}
 
-						.MuiAccordionDetails-root {
-							padding: 16px 20px 20px;
-							background: rgba(255,255,255,0.03);
-							border-top: 1px solid rgba(255,255,255,0.07);
-						}
 
-						.MuiTypography-root { color: rgba(255,255,255,0.75); font-family: $font; }
 
 						.badge {
 							margin: 0 16px;

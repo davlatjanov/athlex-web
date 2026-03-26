@@ -3,38 +3,8 @@
   background: #0a0a0a;
   min-height: 100vh;
 
-  // ─── TOP BAR ───────────────────────────────────────────────────────────
-  .MuiAppBar-root {
-    height: 64px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 24px;
-    background: #0d1117 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: none !important;
-
-    .MuiToolbar-root {
-      width: 100%;
-      justify-content: flex-end;
-    }
-
-    .MuiAvatar-root {
-      border: 2px solid rgba(233, 44, 40, 0.4);
-      cursor: pointer;
-      transition: border-color 0.2s;
-      &:hover { border-color: #E92C28; }
-    }
-  }
-
   // ─── SIDEBAR ───────────────────────────────────────────────────────────
   .aside {
-    .MuiDrawer-paper {
-      background: #0d1117 !important;
-      border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
-    }
-
     .logo-box {
       display: flex;
       flex-direction: row;
@@ -48,30 +18,8 @@
       border-radius: 10px;
       margin: 0 12px;
 
-      .MuiTypography-root {
-        color: #e2e8f0;
-        font-family: $font;
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      .MuiAvatar-root {
-        border: 2px solid rgba(233, 44, 40, 0.3);
-        width: 36px;
-        height: 36px;
-      }
     }
 
-    .MuiDivider-root {
-      border-color: rgba(255, 255, 255, 0.07) !important;
-      margin: 12px 0;
-    }
-
-    .MuiListItemIcon-root {
-      margin-right: 12px;
-      min-width: 0 !important;
-      svg { color: #6B7280; }
-    }
   }
 
   // ─── SIDEBAR MENU ──────────────────────────────────────────────────────
@@ -96,16 +44,8 @@
         color: #ffffff;
         border: 1px solid rgba(233, 44, 40, 0.2);
 
-        .MuiListItemIcon-root svg { color: #E92C28; }
       }
 
-      .MuiListItemText-root span {
-        font-family: $font;
-        font-size: 14px;
-        font-weight: 600;
-      }
-
-      .MuiSvgIcon-root { color: #6B7280; }
     }
 
     .menu-list {
@@ -234,11 +174,6 @@
         td:first-child { padding-left: 24px; }
         td:last-child { padding-right: 24px; }
 
-        .MuiAvatar-root {
-          border: 2px solid rgba(255, 255, 255, 0.1);
-          width: 34px;
-          height: 34px;
-        }
       }
 
       .flex-box {
@@ -261,27 +196,6 @@
       margin: 16px 20px;
       gap: 12px;
 
-      .MuiOutlinedInput-root {
-        height: 42px;
-        background: rgba(255, 255, 255, 0.04);
-        color: #e2e8f0;
-        font-family: $font;
-        font-size: 13px;
-
-        fieldset { border-color: rgba(255, 255, 255, 0.1); }
-        &:hover fieldset { border-color: rgba(233, 44, 40, 0.4); }
-        &.Mui-focused fieldset { border-color: #E92C28; }
-        input { color: #e2e8f0; }
-        input::placeholder { color: #6B7280; }
-        .MuiSvgIcon-root { color: #6B7280; }
-      }
-
-      .MuiSelect-root,
-      .MuiSelect-select {
-        color: #e2e8f0;
-        font-family: $font;
-        font-size: 13px;
-      }
     }
 
     // ─── STATUS BADGES ────────────────────────────────────────────────
@@ -305,17 +219,6 @@
     .error-txt   { font-size: 13px; color: #E92C28; font-family: $font; }
     .delete-txt  { font-size: 13px; color: #9CA3AF; font-family: $font; }
 
-    // ─── PAGINATION ───────────────────────────────────────────────────
-    .MuiTablePagination-root {
-      color: #9CA3AF;
-      font-family: $font;
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-
-      .MuiSvgIcon-root { color: #9CA3AF; }
-      .MuiTablePagination-select { color: #e2e8f0; }
-      .Mui-disabled .MuiSvgIcon-root { color: #374151; }
-    }
-
     // ─── MISC ─────────────────────────────────────────────────────────
     .flex-space {
       display: flex;
@@ -332,41 +235,4 @@
   }
 }
 
-// ─── MUI DROPDOWN MENUS (portal, outside #pc-wrap) ───────────────────────────
-.MuiMenu-paper,
-.MuiPopover-paper {
-  background: #1a2236 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #e2e8f0 !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
 
-  .MuiMenuItem-root {
-    color: #D1D5DB;
-    font-family: $font;
-    font-size: 13px;
-    transition: background 0.15s;
-
-    &:hover { background: rgba(233, 44, 40, 0.1); color: #ffffff; }
-    &.Mui-selected { background: rgba(233, 44, 40, 0.15); color: #ffffff; }
-  }
-
-  .MuiDivider-root { border-color: rgba(255, 255, 255, 0.07) !important; }
-
-  .MuiTypography-root { color: #e2e8f0; font-family: $font; }
-}
-
-.pop-menu {
-  .MuiPaper-root {
-    background: #111827 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-
-    h6 { color: #ffffff; font-family: $font; font-weight: 700; }
-    p  { color: #6B7280; font-family: $font; font-size: 12px; }
-
-    .MuiMenuItem-root {
-      color: #D1D5DB;
-      font-family: $font;
-      &:hover { background: rgba(233, 44, 40, 0.1); color: #fff; }
-    }
-  }
-}
