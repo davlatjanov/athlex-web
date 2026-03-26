@@ -1030,6 +1030,11 @@ $border-accent: rgba(34, 197, 94, 0.4);
       .stat-item strong { font-size: 24px; }
     }
 
+    .program-categories {
+      padding: 56px 0;
+      .section-header { margin-bottom: 28px; }
+    }
+
     .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
     .products-grid { grid-template-columns: repeat(1, 1fr); }
@@ -1065,6 +1070,19 @@ $border-accent: rgba(34, 197, 94, 0.4);
         &::after { display: none; }
         strong { font-size: 22px; }
         span { font-size: 10px; letter-spacing: 1px; }
+      }
+    }
+
+    .program-categories {
+      padding: 36px 0;
+      .section-header { margin-bottom: 16px; }
+      .categories-grid { gap: 8px; }
+      .categories-grid .category-card {
+        min-height: 110px;
+        padding: 20px 12px;
+        gap: 6px;
+        .cat-name { font-size: 12px; }
+        .cat-count { font-size: 11px; }
       }
     }
 
