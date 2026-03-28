@@ -47,6 +47,7 @@ body {
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -56,9 +57,6 @@ body::-webkit-scrollbar {
 	#pc-wrap {
 		#top {
 			.navbar {
-				// Hidden on desktop — only shown via 768px media query
-				.mobile-menu { display: none !important; }
-
 				.navbar-main {
 					position: fixed;
 					top: 0;
@@ -1603,6 +1601,11 @@ body::-webkit-scrollbar {
     .header-basic .hb-container { height: 560px; }
     .header-basic .hb-title { font-size: 56px; }
   }
+}
+
+@media (min-width: 769px) {
+  #pc-wrap #top .navbar .mobile-menu { display: none !important; }
+  #pc-wrap #top .navbar .navbar-main .hamburger-btn { display: none !important; }
 }
 
 @media (max-width: 900px) {

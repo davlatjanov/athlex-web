@@ -88,8 +88,8 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 	const displayMembers = members >= 1000 ? `${(members / 1000).toFixed(1)}K` : String(members);
 
 	return (
-		<Link href={`/programs/${id}`}>
-			<div className={'program-card'}>
+		<div className={'program-card'}>
+			<Link href={`/programs/${id}`} style={{ display: 'flex', flexDirection: 'column', flex: 1, textDecoration: 'none' }}>
 				<div className={'card-visual'} style={{ background: gradient }}>
 					{image && (
 						<img
@@ -109,7 +109,7 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 							</button>
 						</div>
 					</div>
-						<div className={'card-name-overlay'}>
+					<div className={'card-name-overlay'}>
 						<strong className={'card-name'}>{name}</strong>
 					</div>
 				</div>
@@ -151,8 +151,8 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 						)}
 					</div>
 				</div>
-			</div>
-		</Link>
+			</Link>
+		</div>
 	);
 };
 
