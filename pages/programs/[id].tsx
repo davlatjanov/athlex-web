@@ -642,7 +642,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 								<span>{program?.programViews}</span>
 							</div>
 							<button className={`ec-action-btn ${programLiked ? 'liked' : ''}`} onClick={async (e) => { await toggleLike(e); getProgramRefetch({ programId: id }).then((res) => { const u = res.data?.getOneProgramWithMember; if (u) setProgram(u); }).catch(() => {}); }} title="Like">
-								<FavoriteBorderIcon size={16} />
+								<FavoriteBorderIcon size={16} fill={programLiked ? 'currentColor' : 'none'} />
 								<span>{program?.programLikes}</span>
 							</button>
 							<button className={`ec-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save">
@@ -740,7 +740,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 						<span>{program?.programViews}</span>
 					</div>
 					<button className={`ec-action-btn ${programLiked ? 'liked' : ''}`} onClick={async (e) => { await toggleLike(e); getProgramRefetch({ programId: id }).then((res) => { const u = res.data?.getOneProgramWithMember; if (u) setProgram(u); }).catch(() => {}); }} title="Like">
-						<FavoriteBorderIcon size={16} />
+						<FavoriteBorderIcon size={16} fill={programLiked ? 'currentColor' : 'none'} />
 						<span>{program?.programLikes}</span>
 					</button>
 					<button className={`ec-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save">

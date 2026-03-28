@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useLike } from '../../hooks/useInteractions';
+import { Heart } from 'lucide-react';
 import { JOIN_PROGRAM, LEAVE_PROGRAM } from '../../../apollo/user/mutation';
 import { userVar } from '../../../apollo/store';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
@@ -105,7 +106,7 @@ const ProgramCard = ({ id, name, type, level, duration, price, views, likes, mem
 						<div className={'card-top-right'}>
 							<span className={'level-top'}>{level}</span>
 							<button className={`card-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
-								{liked ? '♥' : '♡'}
+								<Heart size={15} fill={liked ? 'currentColor' : 'none'} />
 							</button>
 						</div>
 					</div>
