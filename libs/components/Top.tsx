@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter, withRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
-import { UserCircle, Bell, Bot, LogOut, Menu, X } from 'lucide-react';
+import { UserCircle, Bell, Bot, LogOut, Menu, X, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import CartDrawer from './common/CartDrawer';
 import NavSearch from './common/NavSearch';
@@ -34,6 +34,7 @@ const Top = () => {
 	const [logoutOpen, setLogoutOpen] = useState(false);
 	const [notifOpen, setNotifOpen] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [langOpen, setLangOpen] = useState(false);
 
 	/** APOLLO **/
 	const { data: countData, refetch: refetchCount } = useQuery(GET_UNREAD_NOTIFICATION_COUNT, {
@@ -89,6 +90,13 @@ const Top = () => {
 		return () => window.removeEventListener('click', close);
 	}, [logoutOpen]);
 
+	useEffect(() => {
+		if (!langOpen) return;
+		const close = () => setLangOpen(false);
+		window.addEventListener('click', close);
+		return () => window.removeEventListener('click', close);
+	}, [langOpen]);
+
 	/** HANDLERS **/
 	const changeNavbarColor = () => {
 		if (window.scrollY >= 50) {
@@ -142,16 +150,22 @@ const Top = () => {
 					<div className={'user-box'}>
 						<NavSearch />
 						{/* Language switcher */}
-						<div className={'lang-switcher'}>
-							{['en', 'kr', 'ru'].map((lang) => (
-								<button
-									key={lang}
-									className={`lang-btn ${router.locale === lang ? 'active' : ''}`}
-									onClick={() => router.push(router.asPath, router.asPath, { locale: lang })}
-								>
-									{lang.toUpperCase()}
-								</button>
-							))}
+						<div className={'lang-switcher'} onClick={(e) => { e.stopPropagation(); setLangOpen((v) => !v); }}>
+							<span className={'lang-current'}>{(router.locale ?? 'en').toUpperCase()}</span>
+							<ChevronDown size={12} className={`lang-chevron ${langOpen ? 'open' : ''}`} />
+							{langOpen && (
+								<div className={'lang-dropdown'} onClick={(e) => e.stopPropagation()}>
+									{['en', 'kr', 'ru'].map((lang) => (
+										<button
+											key={lang}
+											className={`lang-option ${router.locale === lang ? 'active' : ''}`}
+											onClick={() => { router.push(router.asPath, router.asPath, { locale: lang }); setLangOpen(false); }}
+										>
+											{lang === 'en' ? '🇺🇸 EN' : lang === 'kr' ? '🇰🇷 KR' : '🇷🇺 RU'}
+										</button>
+									))}
+								</div>
+							)}
 						</div>
 						<Link href={'/ai-coach'} className={'nav-ai-btn'} title="AI Coach">
 							<Bot className={'notification-icon'} />
