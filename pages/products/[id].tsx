@@ -266,6 +266,20 @@ const ProductDetail: NextPage = () => {
 							)}
 						</div>
 
+						<div className="ec-actions-row">
+							<div className="ec-action-stat">
+								<Eye size={16} />
+								<span>{displayViews}</span>
+							</div>
+							<button className={`ec-action-btn ${liked ? 'liked' : ''}`} onClick={handleLike} title="Like">
+								<Heart size={16} fill={liked ? 'currentColor' : 'none'} />
+								<span>{product.productLikes + (liked ? 1 : 0)}</span>
+							</button>
+							<button className="ec-action-btn" onClick={async () => { try { await navigator.clipboard.writeText(window.location.href); } catch {} }} title="Share">
+								<Share2 size={16} />
+							</button>
+						</div>
+
 						<div className="bc-status-row" style={{ color: status.color }}>
 							<span className="bc-status-dot" style={{ background: status.color }} />
 							{status.label}
