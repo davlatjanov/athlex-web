@@ -306,6 +306,42 @@
 			top: 100px;
 		}
 
+
+		.ec-actions-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+
+			.ec-action-stat {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				color: rgba(255,255,255,0.4);
+				font-size: 12px;
+				padding: 6px 10px;
+				border-radius: 8px;
+				background: rgba(255,255,255,0.04);
+				border: 1px solid rgba(255,255,255,0.06);
+			}
+
+			.ec-action-btn {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				color: rgba(255,255,255,0.4);
+				font-size: 12px;
+				padding: 6px 10px;
+				border-radius: 8px;
+				background: rgba(255,255,255,0.04);
+				border: 1px solid rgba(255,255,255,0.06);
+				cursor: pointer;
+				transition: all 0.2s;
+
+				&:hover { border-color: rgba(233,44,40,0.4); color: #E92C28; background: rgba(233,44,40,0.06); }
+				&.liked { color: #E92C28; border-color: rgba(233,44,40,0.5); background: rgba(233,44,40,0.08); }
+			}
+		}
+
 		.buy-card {
 			background: #1F2937;
 			border: 1px solid rgba(255, 255, 255, 0.08);

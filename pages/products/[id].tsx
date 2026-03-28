@@ -14,7 +14,7 @@ import { Message } from '../../libs/enums/common.enum';
 import { useCart } from '../../libs/context/CartContext';
 import { useLike } from '../../libs/hooks/useInteractions';
 import { trackProductVisit } from '../../libs/components/mypage/RecentlyVisited';
-import { Bookmark, BookmarkCheck, DollarSign, Package, Eye, Heart } from 'lucide-react';
+import { Bookmark, BookmarkCheck, DollarSign, Package, Eye, Heart, Share2 } from 'lucide-react';
 import moment from 'moment';
 
 export const getServerSideProps = async ({ locale }: any) => ({
@@ -330,6 +330,20 @@ const ProductDetail: NextPage = () => {
 						{product.productStock > 0 && product.productStock < 20 && (
 							<span className="bc-low-stock">Only {product.productStock} left!</span>
 						)}
+					</div>
+
+					<div className="ec-actions-row">
+						<div className="ec-action-stat">
+							<Eye size={16} />
+							<span>{displayViews}</span>
+						</div>
+						<button className={`ec-action-btn ${liked ? 'liked' : ''}`} onClick={handleLike} title="Like">
+							<Heart size={16} fill={liked ? 'currentColor' : 'none'} />
+							<span>{product.productLikes + (liked ? 1 : 0)}</span>
+						</button>
+						<button className="ec-action-btn" onClick={async () => { try { await navigator.clipboard.writeText(window.location.href); } catch {} }} title="Share">
+							<Share2 size={16} />
+						</button>
 					</div>
 
 					<div className="bc-status-row" style={{ color: status.color }}>
