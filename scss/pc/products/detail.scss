@@ -605,6 +605,7 @@
 
         &:hover { background: #c0211e; }
         &.disabled { background: #333; cursor: not-allowed; }
+        &.added { background: #4ecd64; cursor: default; &:hover { background: #4ecd64; } }
       }
     }
   }

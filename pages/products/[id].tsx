@@ -388,11 +388,11 @@ const ProductDetail: NextPage = () => {
 			<div className="mobile-sticky-cta">
 				<span className="msc-price">${product.productPrice?.toFixed(2)}</span>
 				<button
-					className={`msc-btn${isOutOfStock ? ' disabled' : ''}`}
+					className={`msc-btn${isOutOfStock ? ' disabled' : ''}${addedToCart ? ' added' : ''}`}
 					onClick={handleAddToCart}
-					disabled={isOutOfStock}
+					disabled={isOutOfStock || addedToCart}
 				>
-					{isOutOfStock ? 'Out of Stock' : 'Add to Cart →'}
+					{addedToCart ? '✓ Added!' : isOutOfStock ? 'Out of Stock' : 'Add to Cart →'}
 				</button>
 			</div>
 		</div>
