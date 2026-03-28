@@ -65,10 +65,10 @@ const CartDrawer = () => {
 	return (
 		<>
 			{/* Trigger button — stays in navbar */}
-			<div className="relative cursor-pointer mr-1" onClick={handleOpen}>
+			<div style={{ position: 'relative', cursor: 'pointer', marginRight: 4 }} onClick={handleOpen}>
 				<ShoppingBag className={'notification-icon'} />
 				{totalItems > 0 && (
-					<span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 px-0.75 rounded-full bg-danger text-white text-[10px] font-bold flex items-center justify-center leading-none">
+					<span style={{ position: 'absolute', top: -4, right: -4, minWidth: 18, height: 18, padding: '0 4px', borderRadius: '50%', background: '#E92C28', color: '#fff', fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}>
 						{totalItems}
 					</span>
 				)}
