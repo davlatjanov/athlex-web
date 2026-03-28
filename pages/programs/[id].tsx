@@ -732,6 +732,50 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 
 		{/* ── MOBILE BODY ── */}
 		<div className="pdp-mobile-body">
+			{/* Enroll card */}
+			<div className="enroll-card">
+				<div className="ec-actions-row">
+					<div className="ec-action-stat">
+						<RemoveRedEyeIcon size={16} />
+						<span>{program?.programViews}</span>
+					</div>
+					<button className={`ec-action-btn ${programLiked ? 'liked' : ''}`} onClick={async (e) => { await toggleLike(e); getProgramRefetch({ programId: id }).then((res) => { const u = res.data?.getOneProgramWithMember; if (u) setProgram(u); }).catch(() => {}); }} title="Like">
+						<FavoriteBorderIcon size={16} />
+						<span>{program?.programLikes}</span>
+					</button>
+					<button className={`ec-action-btn ${saved ? 'saved' : ''}`} onClick={toggleSavedHandler} title="Save">
+						{saved ? <BookmarkIcon size={16} /> : <BookmarkBorderIcon size={16} />}
+					</button>
+					<button className="ec-action-btn" onClick={shareHandler} title="Share">
+						<IosShareIcon size={16} />
+					</button>
+				</div>
+
+				<div className="trust-row">
+					<div className="trust-item">Instant access after enrollment</div>
+					<div className="trust-item">Cancel anytime</div>
+					<div className="trust-item">Trainer support included</div>
+				</div>
+
+				<div className="ec-divider" />
+
+				<div className="ec-details">
+					{[
+						{ label: 'Level', value: program?.programLevel },
+						{ label: 'Duration', value: `${program?.programDuration} weeks` },
+						{ label: 'Members', value: program?.programMembers },
+						{ label: 'Type', value: program?.programType },
+						{ label: 'Start', value: moment(program?.programStartDate).format('MMM DD, YYYY') },
+						{ label: 'End', value: moment(program?.programEndDate).format('MMM DD, YYYY') },
+					].map(({ label, value }) => (
+						<div key={label} className="ec-row">
+							<span className="ec-row-label">{label}</span>
+							<span className="ec-row-value">{value}</span>
+						</div>
+					))}
+				</div>
+			</div>
+
 			{statPills}
 
 			{program?.programDesc && (
