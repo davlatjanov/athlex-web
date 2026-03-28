@@ -284,6 +284,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	}
 
 	const displayPrice = program?.programPrice === 0 ? 'FREE' : `$${program?.programPrice?.toLocaleString()}`;
+	const displayViews = (program?.programViews ?? 0) >= 1000 ? `${((program?.programViews ?? 0) / 1000).toFixed(1)}K` : String(program?.programViews ?? 0);
 	const isPopular = (program?.programRank ?? 99) <= 10;
 
 	/** Shared UI blocks **/
@@ -639,7 +640,7 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 						<div className="ec-actions-row">
 							<div className="ec-action-stat">
 								<RemoveRedEyeIcon size={16} />
-								<span>{program?.programViews}</span>
+								<span>{displayViews}</span>
 							</div>
 							<button className={`ec-action-btn ${programLiked ? 'liked' : ''}`} onClick={async (e) => { await toggleLike(e); getProgramRefetch({ programId: id }).then((res) => { const u = res.data?.getOneProgramWithMember; if (u) setProgram(u); }).catch(() => {}); }} title="Like">
 								<FavoriteBorderIcon size={16} fill={programLiked ? 'currentColor' : 'none'} />
