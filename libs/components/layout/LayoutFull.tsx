@@ -4,7 +4,7 @@ import Top from '../Top';
 import Footer from '../Footer';
 
 import { getJwtToken, updateUserInfo } from '../../auth';
-import Chat from '../Chat';
+import AICoachWidget from '../AICoachWidget';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import 'swiper/css';
@@ -36,7 +36,7 @@ const withLayoutFull = (Component: any) => {
 						<Component {...props} />
 					</div>
 
-					<Chat />
+					<AICoachWidget />
 
 					<div id={'footer'}>
 						<Footer />
