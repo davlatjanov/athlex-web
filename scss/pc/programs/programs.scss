@@ -229,7 +229,7 @@
 				}
 
 				.btn-paid {
-					color: #aaaaaa;
+					color: #ffffff;
 					font-family: $font;
 					font-size: 12px;
 					font-weight: 600;
@@ -521,10 +521,10 @@
     .programs-sidebar {
       width: 100%;
       position: static;
-      display: flex;
+      flex-direction: row;
       flex-wrap: wrap;
-      gap: 12px;
-      .programs-filter-block { flex: 1; min-width: 200px; }
+      gap: 20px;
+      .programs-filter-block { flex: 1; min-width: 160px; }
     }
     .programs-grid { grid-template-columns: repeat(3, 1fr); }
   }
@@ -544,9 +544,10 @@
 @media (max-width: 480px) {
   #pc-wrap #programs-page {
     .programs-container { padding: 0 12px; }
-    .programs-grid { grid-template-columns: 1fr; }
     .programs-sidebar {
+      gap: 14px;
       .programs-filter-block { min-width: 100%; }
     }
+    .programs-grid { grid-template-columns: 1fr; }
   }
 }

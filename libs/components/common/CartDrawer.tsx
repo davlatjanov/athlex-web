@@ -74,7 +74,7 @@ const CartDrawer = () => {
 
 			{/* Drawer panel */}
 			<div
-				className="fixed top-0 right-0 h-full w-105 z-50 flex flex-col transition-transform duration-300"
+				className="fixed top-0 right-0 h-full w-full sm:w-105 z-50 flex flex-col transition-transform duration-300"
 				style={{
 					background: '#0f172a',
 					color: '#e2e8f0',
@@ -119,14 +119,22 @@ const CartDrawer = () => {
 								<div style={{ paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
 									{items.map((item) => (
 										<div key={item.productId} style={{ display: 'flex', gap: 12, padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+											{/* Product image */}
 											{item.productImage ? (
-												<img src={item.productImage} alt={item.productName} style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} />
+												<img
+													src={item.productImage}
+													alt={item.productName}
+													style={{ width: 90, height: 90, borderRadius: 8, objectFit: 'cover', flexShrink: 0, background: '#1f2937' }}
+													onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+												/>
 											) : (
-												<div style={{ width: 60, height: 60, borderRadius: 8, background: 'rgba(255,255,255,0.06)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>🛍️</div>
+												<div style={{ width: 90, height: 90, borderRadius: 8, background: 'rgba(255,255,255,0.06)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>🛍️</div>
 											)}
-											<div style={{ flex: 1, minWidth: 0 }}>
-												<p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#e2e8f0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.productName}</p>
-												<p style={{ margin: '0 0 8px', fontSize: 13, color: '#E92C28', fontWeight: 700 }}>${(item.productPrice * item.qty).toFixed(2)}</p>
+											<div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+												<div>
+													<p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.productName}</p>
+													<p style={{ margin: '0 0 8px', fontSize: 14, color: '#E92C28', fontWeight: 700 }}>${(item.productPrice * item.qty).toFixed(2)}</p>
+												</div>
 												<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 													<button onClick={() => updateQty(item.productId, item.qty - 1)} style={qtyBtn}> − </button>
 													<span style={{ fontSize: 13, minWidth: 20, textAlign: 'center' }}>{item.qty}</span>

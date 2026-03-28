@@ -56,8 +56,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 	const isOutOfStock = product.productStatus === 'OUT_OF_STOCK';
 	const image = product.productImages?.[0];
 
-	const handleAddToCart = (e: React.MouseEvent) => {
-		e.preventDefault();
+	const handleAddToCart = () => {
 		addItem({
 			productId: product._id,
 			productName: product.productName,
@@ -82,7 +81,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 					)}
 					<div className="pc-visual-overlay" />
 					<div className="pc-type-badge">{product.productType}</div>
-					<button className={`pc-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
+					<button className={`pc-like-btn ${liked ? 'liked' : ''}`} onClick={(e) => { e.preventDefault(); toggleLike(e); }}>
 						{liked ? '♥' : '♡'}
 					</button>
 					{isOutOfStock && <div className="pc-oos-overlay">OUT OF STOCK</div>}
@@ -94,14 +93,16 @@ const ProductCard = ({ product }: { product: Product }) => {
 					<div className="pc-views">
 						{product.productViews >= 1000 ? `${(product.productViews / 1000).toFixed(1)}K` : product.productViews} views · ♥ {product.productLikes}
 					</div>
-					<div className="pc-footer">
+					<div className="pc-price-row">
 						<span className="pc-price">${product.productPrice.toFixed(2)}</span>
-						<button className="pc-btn" disabled={isOutOfStock} onClick={isOutOfStock ? undefined : handleAddToCart}>
-							{isOutOfStock ? 'Out of Stock' : added ? '✓ Added' : 'Add to Cart'}
-						</button>
 					</div>
 				</div>
 			</Link>
+			<div className="pc-footer">
+				<button className="pc-btn" disabled={isOutOfStock} onClick={handleAddToCart}>
+					{isOutOfStock ? 'Out of Stock' : added ? '✓ Added' : 'Add to Cart'}
+				</button>
+			</div>
 		</div>
 	);
 };
