@@ -155,12 +155,22 @@ const CartDrawer = () => {
 										</span>
 									)}
 								</div>
-								<button
-									onClick={handleClose}
-									style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: 2 }}
-								>
-									<X size={16} />
-								</button>
+								<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+									{view === 'cart' && totalItems > 0 && (
+										<button
+											onClick={clearCart}
+											style={{ background: 'none', border: '1px solid rgba(233,44,40,0.35)', borderRadius: 6, color: '#E92C28', cursor: 'pointer', padding: '3px 10px', fontSize: 11, fontWeight: 700, letterSpacing: 0.5 }}
+										>
+											Clear All
+										</button>
+									)}
+									<button
+										onClick={handleClose}
+										style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: 2 }}
+									>
+										<X size={16} />
+									</button>
+								</div>
 							</div>
 
 							{/* Body */}
