@@ -29,7 +29,7 @@
 						border-radius: 50%;
 						object-fit: cover;
 						border: 3px solid $color-bg;
-						outline: 3px solid $color-accent;
+						outline: 3px solid #E92C28;
 						background: $color-card;
 						display: block;
 					}
@@ -65,11 +65,11 @@
 							font-weight: 700;
 							letter-spacing: 2px;
 							text-transform: uppercase;
-							color: $color-accent;
-							background: rgba(34, 197, 94, 0.12);
+							color: #E92C28;
+							background: rgba(233, 44, 40, 0.12);
 							padding: 3px 10px;
 							border-radius: 20px;
-							border: 1px solid rgba(34, 197, 94, 0.3);
+							border: 1px solid rgba(233, 44, 40, 0.3);
 						}
 
 						.stat {
@@ -105,11 +105,11 @@
 					}
 
 					.btn-follow {
-						background: $color-accent !important;
+						background: #E92C28 !important;
 						color: #fff !important;
 						border: none !important;
-						box-shadow: 0 0 20px rgba(34, 197, 94, 0.3) !important;
-						&:hover { background: $color-accent-dark !important; }
+						box-shadow: 0 0 20px rgba(233, 44, 40, 0.3) !important;
+						&:hover { background: #E92C28-dark !important; }
 					}
 
 					// Unfollow is a destructive action — intentionally red
@@ -293,7 +293,7 @@
 
 					&.active {
 						color: $color-text;
-						border-bottom-color: $color-accent;
+						border-bottom-color: #E92C28;
 					}
 
 					&:hover:not(.active) {
@@ -353,7 +353,7 @@
 		.mp-add-btn {
 			padding: 8px 18px;
 			border-radius: 8px;
-			background: $color-accent;
+			background: #E92C28;
 			color: #fff;
 			border: none;
 			font-size: 12px;
@@ -361,7 +361,7 @@
 			font-family: $font;
 			letter-spacing: 0.5px;
 			cursor: pointer;
-			&:hover { background: $color-accent-dark; }
+			&:hover { background: #E92C28-dark; }
 		}
 
 		.mp-delete-btn {
@@ -509,7 +509,7 @@
 		.mp-modal-submit {
 			padding: 9px 24px;
 			border-radius: 8px;
-			background: $color-accent;
+			background: #E92C28;
 			border: none;
 			color: #fff;
 			font-size: 13px;
@@ -517,7 +517,7 @@
 			font-family: $font;
 			cursor: pointer;
 			&:disabled { opacity: 0.4; cursor: not-allowed; }
-			&:not(:disabled):hover { background: $color-accent-dark; }
+			&:not(:disabled):hover { background: #E92C28-dark; }
 		}
 
 		.mp-empty {
@@ -643,7 +643,7 @@
 				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
 				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
@@ -726,7 +726,7 @@
 				font-family: $font;
 				cursor: pointer;
 				&:disabled { opacity: 0.3; cursor: default; }
-				&.active { background: $color-accent; border-color: $color-accent; color: #fff; }
+				&.active { background: #E92C28; border-color: #E92C28; color: #fff; }
 				&:hover:not(:disabled):not(.active) { background: rgba(255, 255, 255, 0.08); }
 			}
 		}
@@ -762,7 +762,7 @@
 			width: 12px;
 			height: 12px;
 			border-radius: 50%;
-			background: $color-accent;
+			background: #E92C28;
 			border: 2px solid $color-bg;
 			flex-shrink: 0;
 			margin-top: 4px;
@@ -772,7 +772,7 @@
 		.ma-line {
 			width: 2px;
 			flex: 1;
-			background: $color-accent;
+			background: #E92C28;
 			opacity: 0.25;
 			margin: 4px 0;
 			min-height: 20px;
@@ -869,7 +869,7 @@
 
 		.mjp-count {
 			font-size: 12px;
-			color: $color-accent;
+			color: #E92C28;
 			font-weight: 600;
 		}
 
