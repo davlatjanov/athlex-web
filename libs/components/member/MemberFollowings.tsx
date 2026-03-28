@@ -20,15 +20,18 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	const [total, setTotal] = useState(0);
 	const [members, setMembers] = useState<T[]>([]);
 
-	const memberId = (router.query.memberId as string) || (user as any)?._id;
+	const memberId = router.query.memberId as string;
 
 	const { refetch } = useQuery(GET_FOLLOWINGS, {
 		fetchPolicy: 'network-only',
 		variables: { memberId, input: { page, limit: 10 } },
-		skip: !memberId,
+		skip: !memberId || !router.isReady,
 		onCompleted: (data: T) => {
 			setMembers(data?.getFollowings?.list ?? []);
 			setTotal(data?.getFollowings?.metaCounter?.[0]?.total ?? 0);
+		},
+		onError: (err) => {
+			console.error('getFollowings error:', err.message);
 		},
 	});
 

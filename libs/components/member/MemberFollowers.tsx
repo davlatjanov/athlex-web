@@ -21,7 +21,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 	const [members, setMembers] = useState<T[]>([]);
 	const [followedIds, setFollowedIds] = useState<Set<string>>(new Set());
 
-	const memberId = (router.query.memberId as string) || (user as any)?._id;
+	const memberId = router.query.memberId as string;
 	const currentUserId = (user as any)?._id;
 
 	// Fetch who the current user already follows → pre-populate followedIds
@@ -38,10 +38,13 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 	const { refetch } = useQuery(GET_FOLLOWERS, {
 		fetchPolicy: 'network-only',
 		variables: { memberId, input: { page, limit: 10 } },
-		skip: !memberId,
+		skip: !memberId || !router.isReady,
 		onCompleted: (data: T) => {
 			setMembers(data?.getFollowers?.list ?? []);
 			setTotal(data?.getFollowers?.metaCounter?.[0]?.total ?? 0);
+		},
+		onError: (err) => {
+			console.error('getFollowers error:', err.message);
 		},
 	});
 

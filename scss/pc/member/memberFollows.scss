@@ -115,9 +115,10 @@
 				border: none;
 
 				&--follow {
-					background: #22C55E;
+					background: rgba(255,255,255,0.08);
 					color: #ffffff;
-					&:hover { background: #16a34a; }
+					border: 1px solid rgba(255,255,255,0.15);
+					&:hover { background: rgba(233,44,40,0.15); border-color: rgba(233,44,40,0.5); color: #E92C28; }
 				}
 
 				&--unfollow {
