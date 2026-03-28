@@ -32,6 +32,7 @@ const CartContext = createContext<CartContextType>({
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
 	const [items, setItems] = useState<CartItem[]>([]);
+	const [hydrated, setHydrated] = useState(false);
 
 	// Hydrate from localStorage on mount
 	useEffect(() => {
@@ -39,12 +40,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 			const stored = localStorage.getItem(CART_KEY);
 			if (stored) setItems(JSON.parse(stored));
 		} catch {}
+		setHydrated(true);
 	}, []);
 
-	// Persist to localStorage on change
+	// Persist to localStorage — only AFTER hydration so we don't overwrite on initial render
 	useEffect(() => {
+		if (!hydrated) return;
 		localStorage.setItem(CART_KEY, JSON.stringify(items));
-	}, [items]);
+	}, [items, hydrated]);
 
 	const addItem = useCallback((item: Omit<CartItem, 'qty'>, qty = 1) => {
 		setItems((prev) => {

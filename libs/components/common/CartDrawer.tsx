@@ -24,9 +24,13 @@ const CartDrawer = () => {
 	const handleOpen = () => {
 		setView('cart');
 		setOpen(true);
+		document.body.classList.add('cart-open');
 	};
 
-	const handleClose = () => setOpen(false);
+	const handleClose = () => {
+		setOpen(false);
+		document.body.classList.remove('cart-open');
+	};
 
 	const handlePlaceOrder = async () => {
 		if (!user?._id) return;
@@ -74,12 +78,20 @@ const CartDrawer = () => {
 
 			{/* Drawer panel */}
 			<div
-				className="fixed top-0 right-0 h-full w-full sm:w-105 z-50 flex flex-col transition-transform duration-300"
 				style={{
+					position: 'fixed',
+					top: 0,
+					right: 0,
+					height: '100dvh',
+					width: 'min(420px, 85vw)',
+					zIndex: 50,
+					display: 'flex',
+					flexDirection: 'column',
 					background: '#0f172a',
 					color: '#e2e8f0',
 					borderLeft: '1px solid rgba(255,255,255,0.08)',
 					transform: open ? 'translateX(0)' : 'translateX(100%)',
+					transition: 'transform 0.3s ease',
 				}}
 			>
 				{/* Header */}
@@ -118,7 +130,7 @@ const CartDrawer = () => {
 							) : (
 								<div style={{ paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
 									{items.map((item) => (
-										<div key={item.productId} style={{ display: 'flex', gap: 12, padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+										<div key={item.productId} style={{ display: 'flex', gap: 12, padding: '12px', background: '#1e293b', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)' }}>
 											{/* Product image */}
 											{item.productImage ? (
 												<img
