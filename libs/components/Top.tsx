@@ -141,6 +141,18 @@ const Top = () => {
 
 					<div className={'user-box'}>
 						<NavSearch />
+						{/* Language switcher */}
+						<div className={'lang-switcher'}>
+							{['en', 'kr', 'ru'].map((lang) => (
+								<button
+									key={lang}
+									className={`lang-btn ${router.locale === lang ? 'active' : ''}`}
+									onClick={() => router.push(router.asPath, router.asPath, { locale: lang })}
+								>
+									{lang.toUpperCase()}
+								</button>
+							))}
+						</div>
 						<Link href={'/ai-coach'} className={'nav-ai-btn'} title="AI Coach">
 							<Bot className={'notification-icon'} />
 						</Link>
