@@ -329,6 +329,61 @@ const ProductDetail: NextPage = () => {
 			</div>
 			{/* ── MOBILE BODY ── */}
 			<div className="pdp-mobile-body">
+				{/* Buy card */}
+				<div className="buy-card">
+					<div className="bc-price-row">
+						<span className="bc-price">${product.productPrice?.toFixed(2)}</span>
+						{product.productStock > 0 && product.productStock < 20 && (
+							<span className="bc-low-stock">Only {product.productStock} left!</span>
+						)}
+					</div>
+
+					<div className="bc-status-row" style={{ color: status.color }}>
+						<span className="bc-status-dot" style={{ background: status.color }} />
+						{status.label}
+					</div>
+
+					{!isOutOfStock && (
+						<div className="bc-qty-row">
+							<span className="bc-qty-label">Quantity</span>
+							<div className="bc-qty-ctrl">
+								<button className="bc-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+								<span className="bc-qty-val">{qty}</span>
+								<button className="bc-qty-btn" onClick={() => setQty((q) => Math.min(product.productStock, q + 1))}>+</button>
+							</div>
+						</div>
+					)}
+
+					<button className={`bc-wish-btn${bookmarked ? ' active' : ''}`} onClick={handleBookmark}>
+						{bookmarked ? '♥ Saved to Wishlist' : '♡ Add to Wishlist'}
+					</button>
+
+					<div className="bc-divider" />
+
+					<div className="bc-detail-rows">
+						<div className="bc-detail-row">
+							<span>Category</span>
+							<span>{product.productType}</span>
+						</div>
+						<div className="bc-detail-row">
+							<span>Brand</span>
+							<span>{brandLabel[product.productBrand] ?? product.productBrand}</span>
+						</div>
+						<div className="bc-detail-row">
+							<span>Liked by</span>
+							<span>{product.productLikes + (liked ? 1 : 0)} people</span>
+						</div>
+					</div>
+
+					<div className="bc-divider" />
+
+					<div className="bc-trust">
+						<div className="bc-trust-item">Secure Checkout</div>
+						<div className="bc-trust-item">Free Shipping over $50</div>
+						<div className="bc-trust-item">30-Day Returns</div>
+					</div>
+				</div>
+
 				<div className="stat-pills">
 					<div className="stat-pill">
 						<span className="sp-icon">💰</span>
