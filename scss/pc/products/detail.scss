@@ -440,6 +440,9 @@
 				font-weight: 700;
 				cursor: pointer;
 				transition: all 0.2s;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 
 				&:hover { border-color: rgba(233, 44, 40, 0.4); color: #E92C28; }
 

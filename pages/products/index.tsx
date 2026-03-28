@@ -50,7 +50,7 @@ const statusColor: Record<string, string> = {
 const PER_PAGE = 9;
 
 const ProductCard = ({ product }: { product: Product }) => {
-	const { liked, toggle: toggleLike } = useLike('programs', product._id);
+	const { liked, toggle: toggleLike } = useLike('products', product._id);
 	const { addItem } = useCart();
 	const [added, setAdded] = useState(false);
 	const isOutOfStock = product.productStatus === 'OUT_OF_STOCK';

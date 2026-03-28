@@ -14,6 +14,7 @@ import { Message } from '../../libs/enums/common.enum';
 import { useCart } from '../../libs/context/CartContext';
 import { useLike } from '../../libs/hooks/useInteractions';
 import { trackProductVisit } from '../../libs/components/mypage/RecentlyVisited';
+import { Bookmark, BookmarkCheck } from 'lucide-react';
 import moment from 'moment';
 
 export const getServerSideProps = async ({ locale }: any) => ({
@@ -290,7 +291,7 @@ const ProductDetail: NextPage = () => {
 						</button>
 
 						<button className={`bc-wish-btn${bookmarked ? ' active' : ''}`} onClick={handleBookmark}>
-							{bookmarked ? '♥ Saved to Wishlist' : '♡ Add to Wishlist'}
+							{bookmarked ? <><BookmarkCheck size={15} style={{ marginRight: 6 }} />Saved to Wishlist</> : <><Bookmark size={15} style={{ marginRight: 6 }} />Add to Wishlist</>}
 						</button>
 
 						<div className="bc-divider" />
@@ -348,7 +349,7 @@ const ProductDetail: NextPage = () => {
 					)}
 
 					<button className={`bc-wish-btn${bookmarked ? ' active' : ''}`} onClick={handleBookmark}>
-						{bookmarked ? '♥ Saved to Wishlist' : '♡ Add to Wishlist'}
+						{bookmarked ? <><BookmarkCheck size={15} style={{ marginRight: 6 }} />Saved to Wishlist</> : <><Bookmark size={15} style={{ marginRight: 6 }} />Add to Wishlist</>}
 					</button>
 
 					<div className="bc-divider" />
