@@ -74,6 +74,21 @@ const Top = () => {
 		setMenuOpen(false);
 	}, [router.pathname]);
 
+	// Close dropdowns on outside click
+	useEffect(() => {
+		if (!notifOpen) return;
+		const close = () => setNotifOpen(false);
+		window.addEventListener('click', close);
+		return () => window.removeEventListener('click', close);
+	}, [notifOpen]);
+
+	useEffect(() => {
+		if (!logoutOpen) return;
+		const close = () => setLogoutOpen(false);
+		window.addEventListener('click', close);
+		return () => window.removeEventListener('click', close);
+	}, [logoutOpen]);
+
 	/** HANDLERS **/
 	const changeNavbarColor = () => {
 		if (window.scrollY >= 50) {
@@ -136,7 +151,7 @@ const Top = () => {
 
 								{/* Notifications */}
 								<div className="relative">
-									<div className="relative cursor-pointer" onClick={() => setNotifOpen(!notifOpen)}>
+									<div className="relative cursor-pointer" onClick={(e) => { e.stopPropagation(); setNotifOpen((v) => !v); }}>
 										<Bell className={'notification-icon'} />
 										{unreadCount > 0 && (
 											<span className="absolute -top-1 -right-1 w-4 h-4 bg-danger rounded-full text-[10px] flex items-center justify-center text-white font-bold leading-none">
@@ -146,63 +161,42 @@ const Top = () => {
 									</div>
 
 									{notifOpen && (
-										<>
-											<div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
-											<div className="absolute right-0 top-full mt-1 w-80 max-h-96 overflow-y-auto bg-[#1a1f2e] border border-white/8 rounded-lg shadow-xl z-50">
-												{/* Header */}
-												<div className="flex items-center justify-between px-4 py-3 border-b border-white/8">
-													<strong className="text-[15px] text-white">Notifications</strong>
-													{unreadCount > 0 && (
-														<button
-															onClick={handleMarkAllRead}
-															className="text-[11px] text-danger font-semibold bg-transparent border-none cursor-pointer"
-														>
-															Mark all read
-														</button>
-													)}
-												</div>
-
-												{/* List */}
-												{notifications.length === 0 ? (
-													<div className="text-[#6b7280] text-[13px] text-center py-6">No new notifications</div>
-												) : (
-													notifications.map((n: any) => (
-														<div
-															key={n._id}
-															onClick={() => handleNotifClick(n)}
-															className={`flex items-start gap-2 px-4 py-3 cursor-pointer border-b border-white/4 hover:bg-white/4 ${!n.isRead ? 'bg-[rgba(233,44,40,0.06)]' : ''}`}
-														>
-															<span className="text-[18px] leading-snug shrink-0">{NOTIF_ICON[n.notificationType] ?? '🔔'}</span>
-															<div className="flex-1 min-w-0">
-																<div className={`text-[13px] text-[#e2e8f0] leading-snug ${!n.isRead ? 'font-semibold' : ''}`}>
-																	{n.notificationTitle}
-																</div>
-																<div className="text-[12px] text-[#6b7280] mt-0.5 whitespace-normal leading-snug">
-																	{n.notificationMessage}
-																</div>
-																<div className="text-[11px] text-[#4b5563] mt-1">
-																	{moment(n.createdAt).fromNow()}
-																</div>
-															</div>
-															{!n.isRead && (
-																<span className="w-2 h-2 rounded-full bg-danger shrink-0 mt-1" />
-															)}
-														</div>
-													))
+									<>
+										<div onClick={(e) => e.stopPropagation()} style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, width: 320, maxHeight: 384, overflowY: 'auto', background: '#1a1f2e', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, boxShadow: '0 8px 32px rgba(0,0,0,0.5)', zIndex: 99 }}>
+											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+												<strong style={{ fontSize: 15, color: '#fff' }}>Notifications</strong>
+												{unreadCount > 0 && (
+													<button onClick={handleMarkAllRead} style={{ fontSize: 11, color: '#E92C28', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>
+														Mark all read
+													</button>
 												)}
-
-												{/* View all */}
-												<div className="border-t border-white/8 px-4 py-2">
-													<a
-														href="/notifications"
-														onClick={() => setNotifOpen(false)}
-														className="text-[12px] text-[#9ca3af] block text-center"
-													>
-														View all notifications →
-													</a>
-												</div>
 											</div>
-										</>
+											{notifications.length === 0 ? (
+												<div style={{ color: '#6b7280', fontSize: 13, textAlign: 'center', padding: '24px 16px' }}>No new notifications</div>
+											) : (
+												notifications.map((n: any) => (
+													<div
+														key={n._id}
+														onClick={() => handleNotifClick(n)}
+														style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '12px 16px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.04)', background: !n.isRead ? 'rgba(233,44,40,0.06)' : 'transparent' }}
+													>
+														<span style={{ fontSize: 18, flexShrink: 0 }}>{NOTIF_ICON[n.notificationType] ?? '🔔'}</span>
+														<div style={{ flex: 1, minWidth: 0 }}>
+															<div style={{ fontSize: 13, color: '#e2e8f0', fontWeight: !n.isRead ? 600 : 400, lineHeight: 1.4 }}>{n.notificationTitle}</div>
+															<div style={{ fontSize: 12, color: '#6b7280', marginTop: 2, lineHeight: 1.4 }}>{n.notificationMessage}</div>
+															<div style={{ fontSize: 11, color: '#4b5563', marginTop: 4 }}>{moment(n.createdAt).fromNow()}</div>
+														</div>
+														{!n.isRead && <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#E92C28', flexShrink: 0, marginTop: 4 }} />}
+													</div>
+												))
+											)}
+											<div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '8px 16px' }}>
+												<a href="/notifications" onClick={() => setNotifOpen(false)} style={{ fontSize: 12, color: '#9ca3af', display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+													View all notifications →
+												</a>
+											</div>
+										</div>
+									</>
 									)}
 								</div>
 
@@ -210,7 +204,7 @@ const Top = () => {
 								<div className="relative">
 									<div
 										className={'login-user'}
-										onClick={() => setLogoutOpen(!logoutOpen)}
+										onClick={(e) => { e.stopPropagation(); setLogoutOpen((v) => !v); }}
 									>
 										{user?.memberImage ? (
 											<img src={user.memberImage} alt="" />
@@ -222,18 +216,19 @@ const Top = () => {
 
 									{logoutOpen && (
 										<>
-											<div className="fixed inset-0 z-40" onClick={() => setLogoutOpen(false)} />
-											<div className="absolute right-0 top-full mt-1 bg-[#1a1f2e] border border-white/8 rounded-lg shadow-xl z-50 min-w-35">
+											<div onClick={(e) => e.stopPropagation()} style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, minWidth: 140, background: '#1a1f2e', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, boxShadow: '0 8px 32px rgba(0,0,0,0.5)', zIndex: 99 }}>
 												<button
 													onClick={() => logOut()}
-													className="flex items-center gap-2 px-4 py-2.5 text-sm text-white hover:bg-white/5 w-full text-left"
+													style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', fontSize: 14, color: '#fff', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}
+													onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+													onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
 												>
-													<LogOut size={16} className="text-danger" />
+													<LogOut size={16} color="#E92C28" />
 													Logout
 												</button>
 											</div>
 										</>
-									)}
+										)}
 								</div>
 							</>
 						) : (

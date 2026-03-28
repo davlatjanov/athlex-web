@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ShoppingBag, X, ArrowLeft, Trash2 } from 'lucide-react';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
@@ -63,7 +64,7 @@ const CartDrawer = () => {
 
 	return (
 		<>
-			{/* Trigger button */}
+			{/* Trigger button — stays in navbar */}
 			<div className="relative cursor-pointer mr-1" onClick={handleOpen}>
 				<ShoppingBag className={'notification-icon'} />
 				{totalItems > 0 && (
@@ -73,224 +74,479 @@ const CartDrawer = () => {
 				)}
 			</div>
 
-			{/* Backdrop */}
-			{open && <div className="fixed inset-0 bg-black/50 z-40" onClick={handleClose} />}
-
-			{/* Drawer panel */}
-			<div
-				style={{
-					position: 'fixed',
-					top: 0,
-					right: 0,
-					height: '100dvh',
-					width: 'min(420px, 85vw)',
-					zIndex: 50,
-					display: 'flex',
-					flexDirection: 'column',
-					background: '#0f172a',
-					color: '#e2e8f0',
-					borderLeft: '1px solid rgba(255,255,255,0.08)',
-					transform: open ? 'translateX(0)' : 'translateX(100%)',
-					transition: 'transform 0.3s ease',
-				}}
-			>
-				{/* Header */}
-				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-					<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-						{view === 'checkout' && (
-							<button onClick={() => setView('cart')} style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: '2px 4px', marginRight: 2 }}>
-								<ArrowLeft size={16} />
-							</button>
+			{/* Backdrop + Drawer — portaled to document.body to escape navbar stacking context */}
+			{typeof window !== 'undefined' &&
+				createPortal(
+					<>
+						{open && (
+							<div
+								onClick={handleClose}
+								style={{
+									position: 'fixed',
+									top: 0,
+									left: 0,
+									right: 0,
+									bottom: 0,
+									background: 'rgba(0,0,0,0.5)',
+									zIndex: 100,
+									cursor: 'pointer',
+								}}
+							/>
 						)}
-						<span style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>
-							{view === 'cart' ? 'CART' : view === 'checkout' ? 'CHECKOUT' : 'ORDER PLACED'}
-						</span>
-						{view === 'cart' && totalItems > 0 && (
-							<span style={{ fontSize: 12, color: '#6b7280', background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: 20 }}>
-								{totalItems} item{totalItems !== 1 ? 's' : ''}
-							</span>
-						)}
-					</div>
-					<button onClick={handleClose} style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: 2 }}>
-						<X size={16} />
-					</button>
-				</div>
 
-				{/* Body */}
-				<div style={{ flex: 1, overflowY: 'auto', padding: '0 20px' }}>
-
-					{/* ── CART VIEW ── */}
-					{view === 'cart' && (
-						<>
-							{items.length === 0 ? (
-								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 300, gap: 12, color: '#6b7280' }}>
-									<ShoppingBag size={48} style={{ opacity: 0.3 }} />
-									<p style={{ margin: 0, fontSize: 14 }}>Your cart is empty</p>
+						{/* Drawer panel */}
+						<div
+							style={{
+								position: 'fixed',
+								top: 0,
+								right: 0,
+								height: '100dvh',
+								width: 'min(420px, 85vw)',
+								zIndex: 101,
+								display: 'flex',
+								flexDirection: 'column',
+								background: '#0f172a',
+								color: '#e2e8f0',
+								borderLeft: '1px solid rgba(255,255,255,0.08)',
+								transform: open ? 'translateX(0)' : 'translateX(100%)',
+								transition: 'transform 0.3s ease',
+							}}
+						>
+							{/* Header */}
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'space-between',
+									padding: '20px 20px 16px',
+									borderBottom: '1px solid rgba(255,255,255,0.08)',
+								}}
+							>
+								<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+									{view === 'checkout' && (
+										<button
+											onClick={() => setView('cart')}
+											style={{
+												background: 'none',
+												border: 'none',
+												color: '#9ca3af',
+												cursor: 'pointer',
+												padding: '2px 4px',
+												marginRight: 2,
+											}}
+										>
+											<ArrowLeft size={16} />
+										</button>
+									)}
+									<span style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1 }}>
+										{view === 'cart' ? 'CART' : view === 'checkout' ? 'CHECKOUT' : 'ORDER PLACED'}
+									</span>
+									{view === 'cart' && totalItems > 0 && (
+										<span
+											style={{
+												fontSize: 12,
+												color: '#6b7280',
+												background: 'rgba(255,255,255,0.06)',
+												padding: '2px 8px',
+												borderRadius: 20,
+											}}
+										>
+											{totalItems} item{totalItems !== 1 ? 's' : ''}
+										</span>
+									)}
 								</div>
-							) : (
-								<div style={{ paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-									{items.map((item) => (
-										<div key={item.productId} style={{ display: 'flex', gap: 12, padding: '12px', background: '#1e293b', borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)' }}>
-											{/* Product image */}
-											{item.productImage ? (
-												<img
-													src={item.productImage}
-													alt={item.productName}
-													style={{ width: 90, height: 90, borderRadius: 8, objectFit: 'cover', flexShrink: 0, background: '#1f2937' }}
-													onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-												/>
-											) : (
-												<div style={{ width: 90, height: 90, borderRadius: 8, background: 'rgba(255,255,255,0.06)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>🛍️</div>
-											)}
-											<div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-												<div>
-													<p style={{ margin: '0 0 4px', fontSize: 13, fontWeight: 600, color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.productName}</p>
-													<p style={{ margin: '0 0 8px', fontSize: 14, color: '#E92C28', fontWeight: 700 }}>${(item.productPrice * item.qty).toFixed(2)}</p>
-												</div>
-												<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-													<button onClick={() => updateQty(item.productId, item.qty - 1)} style={qtyBtn}> − </button>
-													<span style={{ fontSize: 13, minWidth: 20, textAlign: 'center' }}>{item.qty}</span>
-													<button onClick={() => updateQty(item.productId, item.qty + 1)} style={qtyBtn}> + </button>
-												</div>
-											</div>
-											<button onClick={() => removeItem(item.productId)} style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', alignSelf: 'flex-start', padding: 2 }}
-												onMouseEnter={(e) => (e.currentTarget.style.color = '#ef4444')}
-												onMouseLeave={(e) => (e.currentTarget.style.color = '#6b7280')}
+								<button
+									onClick={handleClose}
+									style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', padding: 2 }}
+								>
+									<X size={16} />
+								</button>
+							</div>
+
+							{/* Body */}
+							<div style={{ flex: 1, overflowY: 'auto', padding: '0 20px' }}>
+								{/* ── CART VIEW ── */}
+								{view === 'cart' && (
+									<>
+										{items.length === 0 ? (
+											<div
+												style={{
+													display: 'flex',
+													flexDirection: 'column',
+													alignItems: 'center',
+													justifyContent: 'center',
+													height: 300,
+													gap: 12,
+													color: '#6b7280',
+												}}
 											>
-												<Trash2 size={16} />
-											</button>
+												<ShoppingBag size={48} style={{ opacity: 0.3 }} />
+												<p style={{ margin: 0, fontSize: 14 }}>Your cart is empty</p>
+											</div>
+										) : (
+											<div style={{ paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+												{items.map((item) => (
+													<div
+														key={item.productId}
+														style={{
+															display: 'flex',
+															gap: 12,
+															padding: '12px',
+															background: '#1e293b',
+															borderRadius: 10,
+															border: '1px solid rgba(255,255,255,0.15)',
+														}}
+													>
+														{/* Product image */}
+														{item.productImage ? (
+															<img
+																src={item.productImage}
+																alt={item.productName}
+																style={{
+																	width: 90,
+																	height: 90,
+																	borderRadius: 8,
+																	objectFit: 'cover',
+																	flexShrink: 0,
+																	background: '#1f2937',
+																}}
+																onError={(e) => {
+																	(e.target as HTMLImageElement).style.display = 'none';
+																}}
+															/>
+														) : (
+															<div
+																style={{
+																	width: 90,
+																	height: 90,
+																	borderRadius: 8,
+																	background: 'rgba(255,255,255,0.06)',
+																	flexShrink: 0,
+																	display: 'flex',
+																	alignItems: 'center',
+																	justifyContent: 'center',
+																	fontSize: 28,
+																}}
+															>
+																🛍️
+															</div>
+														)}
+														<div
+															style={{
+																flex: 1,
+																minWidth: 0,
+																display: 'flex',
+																flexDirection: 'column',
+																justifyContent: 'space-between',
+															}}
+														>
+															<div>
+																<p
+																	style={{
+																		margin: '0 0 4px',
+																		fontSize: 13,
+																		fontWeight: 600,
+																		color: '#e2e8f0',
+																		overflow: 'hidden',
+																		textOverflow: 'ellipsis',
+																		whiteSpace: 'nowrap',
+																	}}
+																>
+																	{item.productName}
+																</p>
+																<p style={{ margin: '0 0 8px', fontSize: 14, color: '#E92C28', fontWeight: 700 }}>
+																	${(item.productPrice * item.qty).toFixed(2)}
+																</p>
+															</div>
+															<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+																<button onClick={() => updateQty(item.productId, item.qty - 1)} style={qtyBtn}>
+																	{' '}
+																	−{' '}
+																</button>
+																<span style={{ fontSize: 13, minWidth: 20, textAlign: 'center' }}>{item.qty}</span>
+																<button onClick={() => updateQty(item.productId, item.qty + 1)} style={qtyBtn}>
+																	{' '}
+																	+{' '}
+																</button>
+															</div>
+														</div>
+														<button
+															onClick={() => removeItem(item.productId)}
+															style={{
+																background: 'none',
+																border: 'none',
+																color: '#6b7280',
+																cursor: 'pointer',
+																alignSelf: 'flex-start',
+																padding: 2,
+															}}
+															onMouseEnter={(e) => (e.currentTarget.style.color = '#ef4444')}
+															onMouseLeave={(e) => (e.currentTarget.style.color = '#6b7280')}
+														>
+															<Trash2 size={16} />
+														</button>
+													</div>
+												))}
+											</div>
+										)}
+									</>
+								)}
+
+								{/* ── CHECKOUT VIEW ── */}
+								{view === 'checkout' && (
+									<div style={{ paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+										<p style={{ margin: '0 0 4px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}>
+											SHIPPING ADDRESS
+										</p>
+
+										<input
+											style={inputSx}
+											placeholder="Street address"
+											value={shipping.street}
+											onChange={(e) => setShipping({ ...shipping, street: e.target.value })}
+										/>
+										<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+											<input
+												style={inputSx}
+												placeholder="City"
+												value={shipping.city}
+												onChange={(e) => setShipping({ ...shipping, city: e.target.value })}
+											/>
+											<input
+												style={inputSx}
+												placeholder="State"
+												value={shipping.state}
+												onChange={(e) => setShipping({ ...shipping, state: e.target.value })}
+											/>
 										</div>
-									))}
-								</div>
-							)}
-						</>
-					)}
+										<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+											<input
+												style={inputSx}
+												placeholder="ZIP Code"
+												value={shipping.zipCode}
+												onChange={(e) => setShipping({ ...shipping, zipCode: e.target.value })}
+											/>
+											<input
+												style={inputSx}
+												placeholder="Country"
+												value={shipping.country}
+												onChange={(e) => setShipping({ ...shipping, country: e.target.value })}
+											/>
+										</div>
 
-					{/* ── CHECKOUT VIEW ── */}
-					{view === 'checkout' && (
-						<div style={{ paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-							<p style={{ margin: '0 0 4px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}>SHIPPING ADDRESS</p>
+										<p
+											style={{ margin: '8px 0 4px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}
+										>
+											PAYMENT METHOD
+										</p>
+										<div style={{ display: 'flex', gap: 10 }}>
+											{['CASH', 'CARD', 'TRANSFER'].map((method) => (
+												<button
+													key={method}
+													onClick={() => setPaymentMethod(method)}
+													style={{
+														flex: 1,
+														padding: '8px 0',
+														borderRadius: 8,
+														fontSize: 12,
+														fontWeight: 600,
+														cursor: 'pointer',
+														background: paymentMethod === method ? 'rgba(233,44,40,0.15)' : 'rgba(255,255,255,0.04)',
+														border: paymentMethod === method ? '1px solid #E92C28' : '1px solid rgba(255,255,255,0.1)',
+														color: paymentMethod === method ? '#E92C28' : '#9ca3af',
+													}}
+												>
+													{method}
+												</button>
+											))}
+										</div>
 
-							<input style={inputSx} placeholder="Street address" value={shipping.street} onChange={(e) => setShipping({ ...shipping, street: e.target.value })} />
-							<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-								<input style={inputSx} placeholder="City" value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })} />
-								<input style={inputSx} placeholder="State" value={shipping.state} onChange={(e) => setShipping({ ...shipping, state: e.target.value })} />
-							</div>
-							<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-								<input style={inputSx} placeholder="ZIP Code" value={shipping.zipCode} onChange={(e) => setShipping({ ...shipping, zipCode: e.target.value })} />
-								<input style={inputSx} placeholder="Country" value={shipping.country} onChange={(e) => setShipping({ ...shipping, country: e.target.value })} />
-							</div>
+										<p
+											style={{ margin: '8px 0 4px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}
+										>
+											NOTES (optional)
+										</p>
+										<textarea
+											style={{ ...inputSx, resize: 'none', height: 72, paddingTop: 8 } as React.CSSProperties}
+											placeholder="Any delivery instructions..."
+											value={notes}
+											onChange={(e) => setNotes(e.target.value)}
+										/>
 
-							<p style={{ margin: '8px 0 4px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}>PAYMENT METHOD</p>
-							<div style={{ display: 'flex', gap: 10 }}>
-								{['CASH', 'CARD', 'TRANSFER'].map((method) => (
-									<button
-										key={method}
-										onClick={() => setPaymentMethod(method)}
+										{/* Order summary */}
+										<div
+											style={{
+												marginTop: 8,
+												background: 'rgba(255,255,255,0.03)',
+												borderRadius: 10,
+												padding: 14,
+												border: '1px solid rgba(255,255,255,0.06)',
+											}}
+										>
+											<p
+												style={{ margin: '0 0 8px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}
+											>
+												ORDER SUMMARY
+											</p>
+											{items.map((item) => (
+												<div
+													key={item.productId}
+													style={{
+														display: 'flex',
+														justifyContent: 'space-between',
+														fontSize: 12,
+														color: '#9ca3af',
+														marginBottom: 4,
+													}}
+												>
+													<span>
+														{item.productName} × {item.qty}
+													</span>
+													<span>${(item.productPrice * item.qty).toFixed(2)}</span>
+												</div>
+											))}
+											<div
+												style={{
+													borderTop: '1px solid rgba(255,255,255,0.08)',
+													marginTop: 8,
+													paddingTop: 8,
+													display: 'flex',
+													justifyContent: 'space-between',
+													fontWeight: 700,
+													fontSize: 14,
+												}}
+											>
+												<span>Total</span>
+												<span style={{ color: '#E92C28' }}>${totalPrice.toFixed(2)}</span>
+											</div>
+										</div>
+									</div>
+								)}
+
+								{/* ── SUCCESS VIEW ── */}
+								{view === 'success' && (
+									<div
 										style={{
-											flex: 1, padding: '8px 0', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-											background: paymentMethod === method ? 'rgba(233,44,40,0.15)' : 'rgba(255,255,255,0.04)',
-											border: paymentMethod === method ? '1px solid #E92C28' : '1px solid rgba(255,255,255,0.1)',
-											color: paymentMethod === method ? '#E92C28' : '#9ca3af',
+											display: 'flex',
+											flexDirection: 'column',
+											alignItems: 'center',
+											justifyContent: 'center',
+											height: 360,
+											gap: 16,
+											textAlign: 'center',
 										}}
 									>
-										{method}
-									</button>
-								))}
-							</div>
-
-							<p style={{ margin: '8px 0 4px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}>NOTES (optional)</p>
-							<textarea
-								style={{ ...inputSx, resize: 'none', height: 72, paddingTop: 8 } as React.CSSProperties}
-								placeholder="Any delivery instructions..."
-								value={notes}
-								onChange={(e) => setNotes(e.target.value)}
-							/>
-
-							{/* Order summary */}
-							<div style={{ marginTop: 8, background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 14, border: '1px solid rgba(255,255,255,0.06)' }}>
-								<p style={{ margin: '0 0 8px', fontSize: 11, fontWeight: 700, letterSpacing: 2, color: '#6b7280' }}>ORDER SUMMARY</p>
-								{items.map((item) => (
-									<div key={item.productId} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#9ca3af', marginBottom: 4 }}>
-										<span>{item.productName} × {item.qty}</span>
-										<span>${(item.productPrice * item.qty).toFixed(2)}</span>
+										<div style={{ fontSize: 56 }}>✅</div>
+										<h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#22c55e' }}>Order Placed!</h3>
+										<p style={{ margin: 0, fontSize: 13, color: '#9ca3af', maxWidth: 260 }}>
+											Your order has been received. You can track it in your profile under My Orders.
+										</p>
+										<a
+											href="/mypage?category=myOrders"
+											onClick={handleClose}
+											style={{
+												marginTop: 8,
+												padding: '10px 24px',
+												borderRadius: 8,
+												background: '#E92C28',
+												color: '#fff',
+												fontSize: 13,
+												fontWeight: 700,
+												textDecoration: 'none',
+											}}
+										>
+											View My Orders
+										</a>
 									</div>
-								))}
-								<div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 8, paddingTop: 8, display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 14 }}>
-									<span>Total</span>
-									<span style={{ color: '#E92C28' }}>${totalPrice.toFixed(2)}</span>
-								</div>
+								)}
 							</div>
-						</div>
-					)}
 
-					{/* ── SUCCESS VIEW ── */}
-					{view === 'success' && (
-						<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 360, gap: 16, textAlign: 'center' }}>
-							<div style={{ fontSize: 56 }}>✅</div>
-							<h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#22c55e' }}>Order Placed!</h3>
-							<p style={{ margin: 0, fontSize: 13, color: '#9ca3af', maxWidth: 260 }}>Your order has been received. You can track it in your profile under My Orders.</p>
-							<a href="/mypage?category=myOrders" onClick={handleClose} style={{ marginTop: 8, padding: '10px 24px', borderRadius: 8, background: '#E92C28', color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
-								View My Orders
-							</a>
-						</div>
-					)}
-				</div>
+							{/* Footer */}
+							{view === 'cart' && items.length > 0 && (
+								<div
+									style={{
+										padding: '16px 20px',
+										borderTop: '1px solid rgba(255,255,255,0.08)',
+										display: 'flex',
+										flexDirection: 'column',
+										gap: 10,
+									}}
+								>
+									<div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, fontWeight: 700 }}>
+										<span style={{ color: '#9ca3af' }}>Subtotal</span>
+										<span style={{ color: '#E92C28' }}>${totalPrice.toFixed(2)}</span>
+									</div>
+									{user?._id ? (
+										<button onClick={() => setView('checkout')} style={checkoutBtn}>
+											Proceed to Checkout →
+										</button>
+									) : (
+										<a
+											href="/account/join"
+											style={{ ...checkoutBtn, textAlign: 'center', textDecoration: 'none' } as React.CSSProperties}
+										>
+											Sign in to Checkout
+										</a>
+									)}
+								</div>
+							)}
 
-				{/* Footer */}
-				{view === 'cart' && items.length > 0 && (
-					<div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', gap: 10 }}>
-						<div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, fontWeight: 700 }}>
-							<span style={{ color: '#9ca3af' }}>Subtotal</span>
-							<span style={{ color: '#E92C28' }}>${totalPrice.toFixed(2)}</span>
+							{view === 'checkout' && (
+								<div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+									<button
+										onClick={handlePlaceOrder}
+										disabled={loading}
+										style={{ ...checkoutBtn, opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+									>
+										{loading ? 'Placing Order...' : `Place Order — $${totalPrice.toFixed(2)}`}
+									</button>
+								</div>
+							)}
 						</div>
-						{user?._id ? (
-							<button onClick={() => setView('checkout')} style={checkoutBtn}>Proceed to Checkout →</button>
-						) : (
-							<a href="/account/join" style={{ ...checkoutBtn, textAlign: 'center', textDecoration: 'none' } as React.CSSProperties}>
-								Sign in to Checkout
-							</a>
-						)}
-					</div>
+					</>,
+					document.body,
 				)}
-
-				{view === 'checkout' && (
-					<div style={{ padding: '16px 20px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-						<button
-							onClick={handlePlaceOrder}
-							disabled={loading}
-							style={{ ...checkoutBtn, opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
-						>
-							{loading ? 'Placing Order...' : `Place Order — $${totalPrice.toFixed(2)}`}
-						</button>
-					</div>
-				)}
-			</div>
 		</>
 	);
 };
 
 const qtyBtn: React.CSSProperties = {
-	width: 26, height: 26, borderRadius: 6,
+	width: 26,
+	height: 26,
+	borderRadius: 6,
 	background: 'rgba(255,255,255,0.06)',
 	border: '1px solid rgba(255,255,255,0.1)',
-	color: '#e2e8f0', fontSize: 16, cursor: 'pointer',
-	display: 'flex', alignItems: 'center', justifyContent: 'center',
+	color: '#e2e8f0',
+	fontSize: 16,
+	cursor: 'pointer',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
 };
 
 const inputSx: React.CSSProperties = {
-	width: '100%', padding: '9px 12px', borderRadius: 8,
+	width: '100%',
+	padding: '9px 12px',
+	borderRadius: 8,
 	background: 'rgba(255,255,255,0.05)',
 	border: '1px solid rgba(255,255,255,0.1)',
-	color: '#e2e8f0', fontSize: 13, outline: 'none',
+	color: '#e2e8f0',
+	fontSize: 13,
+	outline: 'none',
 	boxSizing: 'border-box',
 };
 
 const checkoutBtn: React.CSSProperties = {
-	width: '100%', padding: '12px 0', borderRadius: 10,
-	background: '#E92C28', color: '#fff',
-	fontSize: 14, fontWeight: 700, cursor: 'pointer',
-	border: 'none', letterSpacing: 0.5,
+	width: '100%',
+	padding: '12px 0',
+	borderRadius: 10,
+	background: '#E92C28',
+	color: '#fff',
+	fontSize: 14,
+	fontWeight: 700,
+	cursor: 'pointer',
+	border: 'none',
+	letterSpacing: 0.5,
 };
 
 export default CartDrawer;
