@@ -242,7 +242,8 @@
 
 // ─── PROGRAMS LISTING PAGE ─────────────────────────────────────────────────────
 #pc-wrap {
-	#programs-page {
+	#programs-page,
+	#member-properties-page {
 		min-height: 100vh;
 		background: #0F172A;
 		padding: 40px 0 80px;
@@ -516,7 +517,7 @@
 // ─── RESPONSIVE ────────────────────────────────────────────────────────────────
 
 @media (max-width: 900px) {
-  #pc-wrap #programs-page {
+  #pc-wrap #programs-page, #pc-wrap #member-properties-page {
     .programs-container { flex-direction: column; }
     .programs-sidebar {
       width: 100%;
@@ -531,7 +532,7 @@
 }
 
 @media (max-width: 768px) {
-  #pc-wrap #programs-page {
+  #pc-wrap #programs-page, #pc-wrap #member-properties-page {
     padding: 24px 0 60px;
     .programs-container { padding: 0 16px; }
     .programs-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
@@ -542,7 +543,7 @@
 }
 
 @media (max-width: 480px) {
-  #pc-wrap #programs-page {
+  #pc-wrap #programs-page, #pc-wrap #member-properties-page {
     .programs-container { padding: 0 12px; }
     .programs-sidebar {
       gap: 14px;

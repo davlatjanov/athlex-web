@@ -124,15 +124,15 @@ const MemberPrograms: NextPage = () => {
 
 	return (
 		<div id="member-properties-page" style={{ width: '100%' }}>
-			<div className={'programs-container'}>
-				<aside className={'filter-sidebar'}>
-					<div className={'filter-block'}>
-						<h4>Program Type</h4>
-						<div className={'chip-group'}>
+			<div className="programs-container">
+				<aside className="programs-sidebar">
+					<div className="programs-filter-block">
+						<h4 className="programs-filter-title">Program Type</h4>
+						<div className="programs-chip-group">
 							{TYPE_OPTIONS.map((opt) => (
 								<button
 									key={opt.value}
-									className={`chip ${programType === opt.value ? 'active' : ''}`}
+									className={`programs-chip ${programType === opt.value ? 'active' : ''}`}
 									onClick={() => setProgramType(opt.value)}
 								>
 									{opt.label}
@@ -141,13 +141,13 @@ const MemberPrograms: NextPage = () => {
 						</div>
 					</div>
 
-					<div className={'filter-block'}>
-						<h4>Level</h4>
-						<div className={'chip-group'}>
+					<div className="programs-filter-block">
+						<h4 className="programs-filter-title">Level</h4>
+						<div className="programs-chip-group">
 							{LEVEL_OPTIONS.map((opt) => (
 								<button
 									key={opt.value}
-									className={`chip ${programLevel === opt.value ? 'active' : ''}`}
+									className={`programs-chip ${programLevel === opt.value ? 'active' : ''}`}
 									onClick={() => setProgramLevel(opt.value)}
 								>
 									{opt.label}
@@ -156,11 +156,11 @@ const MemberPrograms: NextPage = () => {
 						</div>
 					</div>
 
-					<div className={'filter-block'}>
-						<h4>Price</h4>
-						<div className={'radio-group'}>
+					<div className="programs-filter-block">
+						<h4 className="programs-filter-title">Price</h4>
+						<div className="programs-radio-group">
 							{PRICE_FILTERS.map((pf) => (
-								<label key={pf.value} className={`radio-item ${selectedPrice === pf.value ? 'active' : ''}`}>
+								<label key={pf.value} className={`programs-radio-item ${selectedPrice === pf.value ? 'active' : ''}`}>
 									<input
 										type="radio"
 										name="price"
@@ -175,32 +175,32 @@ const MemberPrograms: NextPage = () => {
 					</div>
 				</aside>
 
-				<main className={'programs-main'}>
-					<form className={'search-bar'} onSubmit={handleSearch}>
+				<main className="programs-main">
+					<form className="programs-search-bar" onSubmit={handleSearch}>
 						<input
-							className={'search-input'}
+							className="programs-search-input"
 							type="text"
 							placeholder="Search programs…"
 							value={searchInput}
 							onChange={(e) => setSearchInput(e.target.value)}
 						/>
 						{searchText && (
-							<button type="button" className={'search-clear'} onClick={() => { setSearchInput(''); setSearchText(''); setPage(1); }}>✕</button>
+							<button type="button" className="programs-search-clear" onClick={() => { setSearchInput(''); setSearchText(''); setPage(1); }}>✕</button>
 						)}
-						<button type="submit" className={'search-btn'}>Search</button>
+						<button type="submit" className="programs-search-btn">Search</button>
 					</form>
 
-					<div className={'top-bar'}>
-						<span className={'results-count'}>
-							<strong>{total}</strong> program{total === 1 ? '' : 's'} found
+					<div className="programs-top-bar">
+						<span className="programs-count">
+							{loading ? 'Loading…' : <><strong>{total}</strong> programs found</>}
 						</span>
-						<div className={'sort-row'}>
-							<span>Sort by:</span>
-							<div className={'sort-buttons'}>
+						<div className="programs-sort-row">
+							<span>Sort:</span>
+							<div className="programs-sort-buttons">
 								{SORT_OPTIONS.map((opt, idx) => (
 									<button
 										key={`${opt.value}-${opt.direction}`}
-										className={`sort-btn ${sortIdx === idx ? 'active' : ''}`}
+										className={`programs-sort-btn ${sortIdx === idx ? 'active' : ''}`}
 										onClick={() => setSortIdx(idx)}
 									>
 										{opt.label}
@@ -210,17 +210,20 @@ const MemberPrograms: NextPage = () => {
 						</div>
 					</div>
 
-					{loading ? (
-						<div className={'loading-state'}>Loading programs...</div>
+					{loading && programs.length === 0 ? (
+						<div className="programs-grid">
+							{[...Array(6)].map((_, i) => <div key={i} className="program-card-skeleton" />)}
+						</div>
 					) : filtered.length === 0 ? (
-						<div className={'empty-state'}>
-							<span>No programs found.</span>
+						<div className="programs-empty">
+							<span>🏋️</span>
+							<p>No programs found.</p>
 							<button onClick={() => { setProgramType(''); setProgramLevel(''); setSelectedPrice('all'); }}>
 								Clear Filters
 							</button>
 						</div>
 					) : (
-						<div className={'programs-grid'}>
+						<div className="programs-grid">
 							{filtered.map((prog) => (
 								<ProgramCard
 									key={prog._id}
@@ -242,22 +245,18 @@ const MemberPrograms: NextPage = () => {
 					)}
 
 					{totalPages > 1 && (
-						<div className={'pagination'}>
-							<button className={'page-btn'} disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-								Prev
-							</button>
+						<div className="programs-pagination">
+							<button className="programs-page-btn" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>← Prev</button>
 							{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
 								<button
 									key={p}
-									className={`page-btn ${page === p ? 'active' : ''}`}
+									className={`programs-page-btn ${page === p ? 'active' : ''}`}
 									onClick={() => setPage(p)}
 								>
 									{p}
 								</button>
 							))}
-							<button className={'page-btn'} disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>
-								Next
-							</button>
+							<button className="programs-page-btn" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>Next →</button>
 						</div>
 					)}
 				</main>
