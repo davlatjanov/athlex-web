@@ -7,6 +7,7 @@ import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useQuery } from '@apollo/client';
 import { GET_TRAINERS } from '../../apollo/user/query';
 import { useLike } from '../../libs/hooks/useInteractions';
+import { Heart } from 'lucide-react';
 import { T } from '../../libs/types/common';
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -54,7 +55,7 @@ const TrainerCard = ({ trainer }: { trainer: any }) => {
 				)}
 				<div className="tc-header-overlay" />
 				<button className={`tc-like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
-					{liked ? '♥' : '♡'}
+					<Heart size={15} fill={liked ? "currentColor" : "none"} />
 				</button>
 			</div>
 			<div className="tc-body">

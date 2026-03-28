@@ -7,12 +7,13 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { GET_MEMBER, GET_PROGRAMS, GET_FEEDBACKS } from '../../apollo/user/query';
-import { FOLLOW_MEMBER, LIKE_TARGET_ITEM, CREATE_FEEDBACK } from '../../apollo/user/mutation';
+import { FOLLOW_MEMBER, CREATE_FEEDBACK } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { T } from '../../libs/types/common';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
-import { LikeGroup } from '../../libs/enums/like.enum';
+import { useLike } from '../../libs/hooks/useInteractions';
+import { Heart } from 'lucide-react';
 import { Feedback, FeedbackGroup } from '../../libs/types/feedback/feedback';
 import { Program } from '../../libs/types/program/program';
 import moment from 'moment';
@@ -71,14 +72,13 @@ const TrainerDetail: NextPage = () => {
 	const trainerId = typeof id === 'string' ? id : '';
 
 	const [followed, setFollowed] = useState(false);
-	const [liked, setLiked] = useState(false);
 	const [feedbackContent, setFeedbackContent] = useState('');
 	const [feedbackScale, setFeedbackScale] = useState(5);
 	const [trainerPrograms, setTrainerPrograms] = useState<Program[]>([]);
 	const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
 
+	const { liked, toggle: toggleLike } = useLike('trainers', trainerId);
 	const [followMember] = useMutation(FOLLOW_MEMBER);
-	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 	const [createFeedback] = useMutation(CREATE_FEEDBACK);
 
 	const { data: memberData, loading: memberLoading } = useQuery(GET_MEMBER, {
@@ -116,15 +116,8 @@ const TrainerDetail: NextPage = () => {
 		}
 	};
 
-	const handleLike = async () => {
-		try {
-			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.MEMBER, likeRefId: trainerId } } });
-			setLiked(!liked);
-			await sweetTopSmallSuccessAlert(liked ? 'Unliked' : 'Liked!', 800);
-		} catch (err: any) {
-			sweetMixinErrorAlert(err.message).then();
-		}
+	const handleLike = async (e: React.MouseEvent) => {
+		await toggleLike(e);
 	};
 
 	const handleFeedbackSubmit = async () => {
@@ -375,7 +368,7 @@ const TrainerDetail: NextPage = () => {
 								<button className={`tdp-ac-follow ${followed ? 'following' : ''}`} onClick={handleFollow}>
 									{followed ? '✓ Following' : '+ Follow'}
 								</button>
-								<button className={`tdp-ac-like ${liked ? 'liked' : ''}`} onClick={handleLike}>{liked ? '♥' : '♡'}</button>
+								<button className={`tdp-ac-like ${liked ? 'liked' : ''}`} onClick={handleLike}><Heart size={16} fill={liked ? 'currentColor' : 'none'} /></button>
 							</div>
 							<Link
 								href={`/member?memberId=${trainerId}&category=programs`}
