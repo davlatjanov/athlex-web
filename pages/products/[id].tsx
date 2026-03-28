@@ -6,13 +6,13 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import { GET_ONE_PRODUCT } from '../../apollo/user/query';
-import { LIKE_TARGET_ITEM, TOGGLE_BOOKMARK } from '../../apollo/user/mutation';
+import { TOGGLE_BOOKMARK } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { T } from '../../libs/types/common';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
-import { LikeGroup } from '../../libs/enums/like.enum';
 import { useCart } from '../../libs/context/CartContext';
+import { useLike } from '../../libs/hooks/useInteractions';
 import { trackProductVisit } from '../../libs/components/mypage/RecentlyVisited';
 import moment from 'moment';
 
@@ -54,10 +54,9 @@ const ProductDetail: NextPage = () => {
 			return list.includes(productId as string);
 		} catch { return false; }
 	});
-	const [liked, setLiked] = useState(false);
 	const [selectedImage, setSelectedImage] = useState<string>('');
 
-	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
+	const { liked, toggle: handleLikeToggle } = useLike('products', productId);
 	const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK);
 
 	const { data, loading } = useQuery(GET_ONE_PRODUCT, {
@@ -73,15 +72,9 @@ const ProductDetail: NextPage = () => {
 
 	const product = data?.getOneProduct;
 
-	const handleLike = async () => {
-		try {
-			if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-			await likeTargetItem({ variables: { input: { likeGroup: LikeGroup.PRODUCT, likeRefId: productId } } });
-			setLiked((prev) => !prev);
-			await sweetTopSmallSuccessAlert(liked ? 'Unliked' : 'Liked!', 800);
-		} catch (err: any) {
-			sweetMixinErrorAlert(err.message).then();
-		}
+	const handleLike = async (e: React.MouseEvent) => {
+		await handleLikeToggle(e);
+		await sweetTopSmallSuccessAlert(liked ? 'Unliked' : 'Liked!', 800);
 	};
 
 	const handleBookmark = async () => {

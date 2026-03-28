@@ -10,14 +10,49 @@ import { Message } from '../enums/common.enum';
 const LIKE_GROUP_MAP: Record<string, LikeGroup> = {
 	programs: LikeGroup.PROGRAM,
 	trainers: LikeGroup.MEMBER,
+	products: LikeGroup.PRODUCT,
 };
 
-export function useLike(group: 'programs' | 'trainers', id: string, initialLiked = false) {
+const LIKE_STORAGE_KEY: Record<string, string> = {
+	programs: 'athlex_liked_programs',
+	trainers: 'athlex_liked_trainers',
+	products: 'athlex_liked_products',
+};
+
+function getLikedFromStorage(key: string, id: string): boolean {
+	try {
+		const list: string[] = JSON.parse(localStorage.getItem(key) ?? '[]');
+		return list.includes(id);
+	} catch { return false; }
+}
+
+function setLikedInStorage(key: string, id: string, liked: boolean) {
+	try {
+		const list: string[] = JSON.parse(localStorage.getItem(key) ?? '[]');
+		const updated = liked
+			? Array.from(new Set([...list, id]))
+			: list.filter((i) => i !== id);
+		localStorage.setItem(key, JSON.stringify(updated));
+	} catch {}
+}
+
+export function useLike(group: 'programs' | 'trainers' | 'products', id: string, initialLiked = false) {
 	const user = useReactiveVar(userVar);
-	const [liked, setLiked] = useState(initialLiked);
+	const storageKey = LIKE_STORAGE_KEY[group];
+
+	const [liked, setLiked] = useState(() => {
+		if (typeof window === 'undefined') return initialLiked;
+		return getLikedFromStorage(storageKey, id) || initialLiked;
+	});
+
 	const [likeTargetItem] = useMutation(LIKE_TARGET_ITEM);
 
-	React.useEffect(() => { setLiked(initialLiked); }, [initialLiked]);
+	React.useEffect(() => {
+		if (initialLiked) {
+			setLiked(true);
+			setLikedInStorage(storageKey, id, true);
+		}
+	}, [initialLiked, id, storageKey]);
 
 	const toggle = async (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -33,7 +68,11 @@ export function useLike(group: 'programs' | 'trainers', id: string, initialLiked
 					},
 				},
 			});
-			setLiked((prev) => !prev);
+			setLiked((prev) => {
+				const next = !prev;
+				setLikedInStorage(storageKey, id, next);
+				return next;
+			});
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
