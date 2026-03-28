@@ -556,7 +556,19 @@
 
     .stat-pills { grid-template-columns: repeat(2, 1fr); }
 
-    .pdp-mobile-body { display: flex; }
+    .pdp-mobile-body {
+      display: flex;
+      padding-bottom: 110px;
+    }
+
+    .pdp-section {
+      padding: 16px;
+      gap: 10px;
+    }
+
+    .pdp-section-title {
+      font-size: 11px;
+    }
 
     .mobile-sticky-cta {
       display: flex;
