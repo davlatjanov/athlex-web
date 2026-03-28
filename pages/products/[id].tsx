@@ -327,6 +327,74 @@ const ProductDetail: NextPage = () => {
 					</div>
 				</div>
 			</div>
+			{/* ── MOBILE BODY ── */}
+			<div className="pdp-mobile-body">
+				<div className="stat-pills">
+					<div className="stat-pill">
+						<span className="sp-icon">💰</span>
+						<span className="sp-val">${product.productPrice?.toFixed(2)}</span>
+						<span className="sp-lbl">Price</span>
+					</div>
+					<div className="stat-pill">
+						<span className="sp-icon">📦</span>
+						<span className="sp-val">{product.productStock > 0 ? product.productStock : '—'}</span>
+						<span className="sp-lbl">In Stock</span>
+					</div>
+					<div className="stat-pill">
+						<span className="sp-icon">👁</span>
+						<span className="sp-val">{displayViews}</span>
+						<span className="sp-lbl">Views</span>
+					</div>
+					<div className="stat-pill">
+						<span className="sp-icon">♥</span>
+						<span className="sp-val">{product.productLikes + (liked ? 1 : 0)}</span>
+						<span className="sp-lbl">Likes</span>
+					</div>
+				</div>
+
+				{product.productDesc && (
+					<div className="pdp-section">
+						<h3 className="pdp-section-title">About This Product</h3>
+						<p className="pdp-desc">{product.productDesc}</p>
+					</div>
+				)}
+
+				<div className="pdp-section">
+					<h3 className="pdp-section-title">Product Details</h3>
+					<div className="spec-rows">
+						<div className="spec-row">
+							<span className="sr-label">Category</span>
+							<span className="sr-value">{product.productType}</span>
+						</div>
+						<div className="spec-row">
+							<span className="sr-label">Brand</span>
+							<span className="sr-value">{brandLabel[product.productBrand] ?? product.productBrand}</span>
+						</div>
+						<div className="spec-row">
+							<span className="sr-label">Status</span>
+							<span className="sr-value" style={{ color: status.color }}>{status.label}</span>
+						</div>
+						{product.productStock > 0 && (
+							<div className="spec-row">
+								<span className="sr-label">Stock</span>
+								<span className="sr-value">{product.productStock} units</span>
+							</div>
+						)}
+					</div>
+				</div>
+			</div>
+
+			{/* ── MOBILE STICKY CTA ── */}
+			<div className="mobile-sticky-cta">
+				<span className="msc-price">${product.productPrice?.toFixed(2)}</span>
+				<button
+					className={`msc-btn${isOutOfStock ? ' disabled' : ''}`}
+					onClick={handleAddToCart}
+					disabled={isOutOfStock}
+				>
+					{isOutOfStock ? 'Out of Stock' : 'Add to Cart →'}
+				</button>
+			</div>
 		</div>
 	);
 };

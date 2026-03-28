@@ -730,6 +730,44 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 				</aside>
 			</div>
 
+		{/* ── MOBILE BODY ── */}
+		<div className="pdp-mobile-body">
+			{statPills}
+
+			{program?.programDesc && (
+				<section className="pdp-section">
+					<h2 className="pdp-section-title">About This Program</h2>
+					<p className="pdp-desc">{program.programDesc}</p>
+				</section>
+			)}
+
+			{(program?.targetAudience?.length ?? 0) > 0 && (
+				<section className="pdp-section">
+					<h2 className="pdp-section-title">Who Is This For?</h2>
+					<div className="req-list">
+						{program?.targetAudience?.map((t, i) => (
+							<div key={i} className="req-item"><span className="req-dot" />{t}</div>
+						))}
+					</div>
+				</section>
+			)}
+
+			{trainerSection}
+		</div>
+
+		{/* ── MOBILE STICKY CTA ── */}
+		<div className="mobile-sticky-cta">
+			<span className="msc-price">{displayPrice}</span>
+			{joined ? (
+				<>
+					<div className="msc-btn enrolled">✓ ENROLLED</div>
+					<button className="msc-leave-btn" onClick={leaveProgramHandler}>Leave</button>
+				</>
+			) : (
+				<button className="msc-btn" onClick={joinProgramHandler}>Enroll Now →</button>
+			)}
+		</div>
+
 			{/* ── Full-width: Reviews + Rating ── */}
 			<div className="pdp-full-width">
 				{enrolledWorkoutPlan}
