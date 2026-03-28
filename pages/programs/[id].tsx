@@ -321,10 +321,10 @@ const ProgramDetailPage: NextPage = ({ initialComment }: any) => {
 	const statPills = (
 		<div className="stat-pills">
 			{[
-				{ icon: '🗓', val: program?.programDuration, lbl: 'WEEKS' },
-				{ icon: '👥', val: program?.programMembers, lbl: 'ENROLLED' },
-				{ icon: '💬', val: program?.programComments, lbl: 'REVIEWS' },
-				{ icon: '🏆', val: program?.programRank, lbl: 'RANK' },
+				{ icon: <DateRangeIcon size={18} />, val: program?.programDuration, lbl: 'WEEKS' },
+				{ icon: <GroupIcon size={18} />, val: program?.programMembers, lbl: 'ENROLLED' },
+				{ icon: <ChatBubbleOutlineIcon size={18} />, val: program?.programComments, lbl: 'REVIEWS' },
+				{ icon: <EmojiEventsIcon size={18} />, val: program?.programRank, lbl: 'RANK' },
 			].map(({ icon, val, lbl }) => (
 				<div key={lbl} className="stat-pill">
 					<span className="sp-icon">{icon}</span>

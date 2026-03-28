@@ -12,6 +12,7 @@ import { ProductType, ProductBrand } from '../../libs/enums/product.enum';
 import { useLike } from '../../libs/hooks/useInteractions';
 import { T } from '../../libs/types/common';
 import { useCart } from '../../libs/context/CartContext';
+import { Heart } from 'lucide-react';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -82,7 +83,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 					<div className="pc-visual-overlay" />
 					<div className="pc-type-badge">{product.productType}</div>
 					<button className={`pc-like-btn ${liked ? 'liked' : ''}`} onClick={(e) => { e.preventDefault(); toggleLike(e); }}>
-						{liked ? '♥' : '♡'}
+						<Heart size={13} fill={liked ? 'currentColor' : 'none'} />
 					</button>
 					{isOutOfStock && <div className="pc-oos-overlay">OUT OF STOCK</div>}
 					<div className="pc-status-dot" style={{ background: statusColor[product.productStatus] }} />

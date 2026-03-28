@@ -212,7 +212,7 @@
 				transition: all 0.25s;
 				&:hover { border-color: rgba(233, 44, 40, 0.4); transform: translateY(-2px); }
 
-				.sp-icon { font-size: 20px; }
+				.sp-icon { display: flex; align-items: center; justify-content: center; color: #E92C28; }
 
 				.sp-val {
 					color: #E92C28;

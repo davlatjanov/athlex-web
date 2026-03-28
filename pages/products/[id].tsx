@@ -14,7 +14,7 @@ import { Message } from '../../libs/enums/common.enum';
 import { useCart } from '../../libs/context/CartContext';
 import { useLike } from '../../libs/hooks/useInteractions';
 import { trackProductVisit } from '../../libs/components/mypage/RecentlyVisited';
-import { Bookmark, BookmarkCheck } from 'lucide-react';
+import { Bookmark, BookmarkCheck, DollarSign, Package, Eye, Heart } from 'lucide-react';
 import moment from 'moment';
 
 export const getServerSideProps = async ({ locale }: any) => ({
@@ -197,22 +197,22 @@ const ProductDetail: NextPage = () => {
 					{/* Stat pills */}
 					<div className="stat-pills">
 						<div className="stat-pill">
-							<span className="sp-icon">💰</span>
+							<span className="sp-icon"><DollarSign size={18} /></span>
 							<span className="sp-val">${product.productPrice?.toFixed(2)}</span>
 							<span className="sp-lbl">Price</span>
 						</div>
 						<div className="stat-pill">
-							<span className="sp-icon">📦</span>
+							<span className="sp-icon"><Package size={18} /></span>
 							<span className="sp-val">{product.productStock > 0 ? product.productStock : '—'}</span>
 							<span className="sp-lbl">In Stock</span>
 						</div>
 						<div className="stat-pill">
-							<span className="sp-icon">👁</span>
+							<span className="sp-icon"><Eye size={18} /></span>
 							<span className="sp-val">{displayViews}</span>
 							<span className="sp-lbl">Views</span>
 						</div>
 						<div className="stat-pill">
-							<span className="sp-icon">♥</span>
+							<span className="sp-icon"><Heart size={18} /></span>
 							<span className="sp-val">{product.productLikes + (liked ? 1 : 0)}</span>
 							<span className="sp-lbl">Likes</span>
 						</div>
@@ -380,22 +380,22 @@ const ProductDetail: NextPage = () => {
 
 				<div className="stat-pills">
 					<div className="stat-pill">
-						<span className="sp-icon">💰</span>
+						<span className="sp-icon"><DollarSign size={18} /></span>
 						<span className="sp-val">${product.productPrice?.toFixed(2)}</span>
 						<span className="sp-lbl">Price</span>
 					</div>
 					<div className="stat-pill">
-						<span className="sp-icon">📦</span>
+						<span className="sp-icon"><Package size={18} /></span>
 						<span className="sp-val">{product.productStock > 0 ? product.productStock : '—'}</span>
 						<span className="sp-lbl">In Stock</span>
 					</div>
 					<div className="stat-pill">
-						<span className="sp-icon">👁</span>
+						<span className="sp-icon"><Eye size={18} /></span>
 						<span className="sp-val">{displayViews}</span>
 						<span className="sp-lbl">Views</span>
 					</div>
 					<div className="stat-pill">
-						<span className="sp-icon">♥</span>
+						<span className="sp-icon"><Heart size={18} /></span>
 						<span className="sp-val">{product.productLikes + (liked ? 1 : 0)}</span>
 						<span className="sp-lbl">Likes</span>
 					</div>

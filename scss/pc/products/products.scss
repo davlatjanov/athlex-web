@@ -84,11 +84,11 @@
 				transition: all 0.2s;
 				z-index: 3;
 
-				&:hover { color: #22C55E; border-color: rgba(34, 197, 94, 0.4); }
+				&:hover { color: #E92C28; border-color: rgba(233, 44, 40, 0.4); }
 				&.liked {
-					color: #22C55E;
-					border-color: rgba(34, 197, 94, 0.5);
-					background: rgba(34, 197, 94, 0.1);
+					color: #E92C28;
+					border-color: rgba(233, 44, 40, 0.5);
+					background: rgba(233, 44, 40, 0.1);
 				}
 			}
 
