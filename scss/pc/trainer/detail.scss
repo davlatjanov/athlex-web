@@ -481,14 +481,15 @@
 
 			.tdp-ac-follow {
 				flex: 1; padding: 11px;
-				background: #E92C28; border: none; border-radius: 8px;
+				background: #22C55E; border: none; border-radius: 8px;
 				color: #fff; font-family: $font; font-size: 13px; font-weight: 700;
 				cursor: pointer; transition: background 0.2s;
-				&:hover { background: #c0211e; }
+				&:hover { background: #16a34a; }
 				&.following {
-					background: rgba(233, 44, 40, 0.1);
-					border: 1px solid rgba(233, 44, 40, 0.3);
-					color: #E92C28;
+					background: #E92C28;
+					border: none;
+					color: #fff;
+					&:hover { background: #c0211e; }
 				}
 			}
 
