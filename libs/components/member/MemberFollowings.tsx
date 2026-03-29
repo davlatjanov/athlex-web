@@ -13,22 +13,43 @@ interface MemberFollowingsProps {
 }
 
 const MemberFollowings = (props: MemberFollowingsProps) => {
-	const { unsubscribeHandler, redirectToMemberPageHandler } = props;
+	const { subscribeHandler, unsubscribeHandler, redirectToMemberPageHandler } = props;
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const [page, setPage] = useState(1);
 	const [total, setTotal] = useState(0);
 	const [members, setMembers] = useState<T[]>([]);
+	const [followedIds, setFollowedIds] = useState<Set<string>>(new Set());
 
-	const memberId = router.query.memberId as string;
+	const currentUserId = (user as any)?._id;
+	const memberId = router.isReady
+		? ((router.query.memberId as string) || currentUserId)
+		: undefined;
+	const isOwnPage = !router.query.memberId || router.query.memberId === currentUserId;
+
+	// Fetch current user's own followings to know which buttons to show
+	useQuery(GET_FOLLOWINGS, {
+		fetchPolicy: 'network-only',
+		variables: { memberId: currentUserId, input: { page: 1, limit: 100 } },
+		skip: !currentUserId || isOwnPage,
+		onCompleted: (data: T) => {
+			const ids = (data?.getFollowings?.list ?? []).map((m: T) => m._id as string);
+			setFollowedIds(new Set(ids));
+		},
+	});
 
 	const { refetch } = useQuery(GET_FOLLOWINGS, {
 		fetchPolicy: 'network-only',
 		variables: { memberId, input: { page, limit: 10 } },
-		skip: !memberId || !router.isReady,
+		skip: !memberId,
 		onCompleted: (data: T) => {
 			setMembers(data?.getFollowings?.list ?? []);
 			setTotal(data?.getFollowings?.metaCounter?.[0]?.total ?? 0);
+			// If viewing own page, all listed members are ones we follow
+			if (isOwnPage) {
+				const ids = (data?.getFollowings?.list ?? []).map((m: T) => m._id as string);
+				setFollowedIds(new Set(ids));
+			}
 		},
 		onError: (err) => {
 			console.error('getFollowings error:', err.message);
@@ -37,10 +58,19 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 
 	const totalPages = Math.ceil(total / 10);
 
+	const handleFollow = async (e: React.MouseEvent, id: string) => {
+		e.stopPropagation();
+		setFollowedIds((prev) => new Set(prev).add(id));
+		await subscribeHandler(id, async () => {}, {});
+	};
+
 	const handleUnfollow = async (e: React.MouseEvent, id: string) => {
 		e.stopPropagation();
-		setMembers((prev) => prev.filter((m) => m._id !== id));
-		setTotal((prev) => prev - 1);
+		if (isOwnPage) {
+			setMembers((prev) => prev.filter((m) => m._id !== id));
+			setTotal((prev) => prev - 1);
+		}
+		setFollowedIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
 		await unsubscribeHandler(id, async () => {}, {});
 	};
 
@@ -53,29 +83,38 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 				</div>
 			) : (
 				<div className="follows-list">
-					{members.map((m: T) => (
-						<div className="follows-card" key={m._id} onClick={() => redirectToMemberPageHandler(m._id)}>
-							<div className="follows-avatar">
-								{m.memberImage ? (
-									<img src={m.memberImage} alt={m.memberNick} />
-								) : (
-									<div className="follows-avatar-initial">{(m.memberNick || 'A')[0].toUpperCase()}</div>
+					{members.map((m: T) => {
+						const isFollowing = isOwnPage || followedIds.has(m._id);
+						return (
+							<div className="follows-card" key={m._id} onClick={() => redirectToMemberPageHandler(m._id)}>
+								<div className="follows-avatar">
+									{m.memberImage ? (
+										<img src={m.memberImage} alt={m.memberNick} />
+									) : (
+										<div className="follows-avatar-initial">{(m.memberNick || 'A')[0].toUpperCase()}</div>
+									)}
+								</div>
+								<div className="follows-info">
+									<p className="follows-nick">{m.memberNick}</p>
+									<p className="follows-meta">
+										<span>{m.memberFollowers ?? 0} followers</span>
+										<span>{m.memberFollowings ?? 0} following</span>
+									</p>
+								</div>
+								{currentUserId && currentUserId !== m._id && (
+									isFollowing ? (
+										<button className="follows-btn follows-btn--unfollow" onClick={(e) => handleUnfollow(e, m._id)}>
+											Unfollow
+										</button>
+									) : (
+										<button className="follows-btn follows-btn--follow" onClick={(e) => handleFollow(e, m._id)}>
+											Follow
+										</button>
+									)
 								)}
 							</div>
-							<div className="follows-info">
-								<p className="follows-nick">{m.memberNick}</p>
-								<p className="follows-meta">
-									<span>{m.memberFollowers ?? 0} followers</span>
-									<span>{m.memberFollowings ?? 0} following</span>
-								</p>
-							</div>
-							{(user as any)?._id && (user as any)._id !== m._id && (
-								<button className="follows-btn follows-btn--unfollow" onClick={(e) => handleUnfollow(e, m._id)}>
-									Unfollow
-								</button>
-							)}
-						</div>
-					))}
+						);
+					})}
 				</div>
 			)}
 			{totalPages > 1 && (
