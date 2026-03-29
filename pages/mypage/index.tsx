@@ -141,7 +141,7 @@ const MyPage: NextPage = () => {
 	const tabs = getTabs();
 
 	/** APOLLO REQUESTS **/
-	const { data: memberData } = useQuery(GET_MEMBER, {
+	const { data: memberData, refetch: refetchMember } = useQuery(GET_MEMBER, {
 		variables: { memberId: u?._id },
 		skip: !u?._id,
 		fetchPolicy: 'network-only',
@@ -159,6 +159,7 @@ const MyPage: NextPage = () => {
 			await followMember({ variables: { input: { followingId: id } } });
 			await sweetTopSmallSuccessAlert('Subscribed', 800);
 			await refetch(query);
+			refetchMember();
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
@@ -171,6 +172,7 @@ const MyPage: NextPage = () => {
 			await followMember({ variables: { input: { followingId: id } } });
 			await sweetTopSmallSuccessAlert('UnSubscribed', 800);
 			await refetch(query);
+			refetchMember();
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
