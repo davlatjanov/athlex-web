@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { GET_MEMBER, GET_PROGRAMS, GET_FEEDBACKS } from '../../apollo/user/query';
+import { GET_MEMBER, GET_PROGRAMS, GET_FEEDBACKS, GET_FOLLOWINGS } from '../../apollo/user/query';
 import { FOLLOW_MEMBER, CREATE_FEEDBACK } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { T } from '../../libs/types/common';
@@ -79,6 +79,16 @@ const TrainerDetail: NextPage = () => {
 
 	const { liked, toggle: toggleLike } = useLike('trainers', trainerId);
 	const [followMember] = useMutation(FOLLOW_MEMBER);
+
+	useQuery(GET_FOLLOWINGS, {
+		variables: { memberId: (user as any)?._id, input: { page: 1, limit: 100 } },
+		skip: !(user as any)?._id || !trainerId,
+		fetchPolicy: 'network-only',
+		onCompleted: (data: T) => {
+			const ids = (data?.getFollowings?.list ?? []).map((m: T) => m._id as string);
+			setFollowed(ids.includes(trainerId));
+		},
+	});
 	const [createFeedback] = useMutation(CREATE_FEEDBACK);
 
 	const { data: memberData, loading: memberLoading } = useQuery(GET_MEMBER, {
