@@ -74,6 +74,8 @@ const ADMIN_TABS = [
 	{ key: 'adminOrders', label: 'Orders' },
 	{ key: 'adminComments', label: 'Comments' },
 	{ key: 'adminFeedback', label: 'Reviews' },
+	{ key: 'followers', label: 'Followers' },
+	{ key: 'followings', label: 'Following' },
 ];
 
 const PLAN_LABEL: Record<string, string> = {
